@@ -10,6 +10,7 @@ import Speech
 
 struct SettingsView: View {
     @StateObject var viewModel = SettingsViewModel()
+    @State private var isShowingHelp = false
     
     var body: some View {
         NavigationStack {
@@ -78,12 +79,21 @@ struct SettingsView: View {
             .sheet(isPresented: $viewModel.isShowingRecommend) {
                 RecommendedSEView(SearchEngine: $viewModel.defaultSE)
             }
+            .sheet(isPresented: $isShowingHelp) {
+                HelpView()
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: { viewModel.isAssistantActivated = true }) {
                         Label("Activate Assistant", systemImage: "mic")
                     }
                 }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: { isShowingHelp = true }) {
+                        Label("Help", systemImage: "questionmark")
+                    }
+                }
+                    
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button {
