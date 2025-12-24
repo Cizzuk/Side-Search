@@ -88,6 +88,7 @@ struct AssistantView: View {
             }) {
                 if let url = viewModel.searchURL {
                     SafariView(url: url)
+                        .ignoresSafeArea()
                 }
             }
             .alert("Error", isPresented: $viewModel.showError) {
