@@ -18,10 +18,16 @@ class SettingsViewModel: ObservableObject {
            let engine = SearchEngineModel.fromJSON(rawData) {
             return engine
         }
-        return SearchEngineModel(
+        
+        // Create Default
+        let se = SearchEngineModel(
             name: "ChatGPT",
             url: "https://chatgpt.com/?q=%s",
         )
+        if let data = se.toJSON() {
+            UserDefaults.standard.set(data, forKey: "defaultSearchEngine")
+        }
+        return se
     }() {
         didSet {
             if let data = defaultSE.toJSON() {
@@ -41,11 +47,13 @@ class SettingsViewModel: ObservableObject {
         for lang in preferredLanguages {
             let locale = Locale(identifier: lang)
             if SFSpeechRecognizer.supportedLocales().contains(locale) {
+                UserDefaults.standard.set(locale.identifier, forKey: "speechLocale")
                 return locale
             }
         }
         
         // Fallback to en-US if not available
+        UserDefaults.standard.set("en-US", forKey: "speechLocale")
         return Locale(identifier: "en-US")
     }() {
         didSet {

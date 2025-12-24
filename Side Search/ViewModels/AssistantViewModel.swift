@@ -35,15 +35,6 @@ class AssistantViewModel: ObservableObject {
             return SFSpeechRecognizer(locale: Locale(identifier: speechLocale))
         }
         
-        // Default Preferred Language
-        let preferredLanguages = Locale.preferredLanguages
-        for lang in preferredLanguages {
-            let locale = Locale(identifier: lang)
-            if SFSpeechRecognizer.supportedLocales().contains(locale) {
-                return SFSpeechRecognizer(locale: locale)
-            }
-        }
-        
         // Fallback to en-US if not available
         return SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     }
