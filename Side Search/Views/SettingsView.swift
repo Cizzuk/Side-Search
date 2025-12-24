@@ -38,12 +38,12 @@ struct SettingsView: View {
                 } header: { Text("Advanced Settings")
                 } footer: { Text("Blank to disable") }
             }
-            .navigationTitle("Settings")
+            .navigationTitle("Side Search")
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 viewModel.isAssistantActivated = true
             }
             .fullScreenCover(isPresented: $viewModel.isAssistantActivated) {
-                MainView()
+                AssistantView()
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
