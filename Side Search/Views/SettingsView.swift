@@ -53,7 +53,18 @@ struct SettingsView: View {
                                 .tag(locale)
                         }
                     }
-                }
+                    
+                    Toggle("Auto Search on Silence", isOn: $viewModel.autoSearchOnSilence)
+                    if viewModel.autoSearchOnSilence {
+                        HStack {
+                            Text("Silence Duration")
+                            Spacer()
+                            Text("\(viewModel.silenceDuration, specifier: "%.0f")s")
+                            Stepper("", value: $viewModel.silenceDuration, in: 1...10, step: 1)
+                                .labelsHidden()
+                        }
+                    }
+                } header: { Text("Speech Settings") }
             }
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)

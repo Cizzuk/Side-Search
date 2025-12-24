@@ -48,4 +48,20 @@ class SettingsViewModel: ObservableObject {
             UserDefaults.standard.set(speechLocale.identifier, forKey: "speechLocale")
         }
     }
+    
+    // Auto Search on Silence
+    @Published var autoSearchOnSilence: Bool = UserDefaults.standard.bool(forKey: "autoSearchOnSilence") {
+        didSet {
+            UserDefaults.standard.set(autoSearchOnSilence, forKey: "autoSearchOnSilence")
+        }
+    }
+    
+    @Published var silenceDuration: Double = {
+        let value = UserDefaults.standard.double(forKey: "silenceDuration")
+        return value > 0 ? value : 2.0
+    }() {
+        didSet {
+            UserDefaults.standard.set(silenceDuration, forKey: "silenceDuration")
+        }
+    }
 }

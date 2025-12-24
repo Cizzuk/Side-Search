@@ -38,6 +38,16 @@ class AssistantViewModel: ObservableObject {
     private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
     
+    // Silence Detection Settings
+    private var silenceTimer: Timer?
+    private var autoSearchOnSilence: Bool {
+        UserDefaults.standard.bool(forKey: "autoSearchOnSilence")
+    }
+    private var silenceDuration: Double {
+        let val = UserDefaults.standard.double(forKey: "silenceDuration")
+        return val > 0 ? val : 2.0
+    }
+    
     // MARK: - Public Methods
     
     func startRecording() {
@@ -84,10 +94,12 @@ class AssistantViewModel: ObservableObject {
             if let result = result {
                 self.recognizedText = result.bestTranscription.formattedString
                 isFinal = result.isFinal
+                self.startSilenceTimer()
             }
             
             // Handle final
             if error != nil || isFinal {
+                self.stopSilenceTimer()
                 self.audioEngine.stop()
                 inputNode.removeTap(onBus: 0)
                 
@@ -114,6 +126,7 @@ class AssistantViewModel: ObservableObject {
         do {
             try audioEngine.start()
             isRecording = true
+            startSilenceTimer()
         } catch {
             errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
             showError = true
@@ -122,6 +135,7 @@ class AssistantViewModel: ObservableObject {
     }
     
     func stopRecording() {
+        stopSilenceTimer()
         if audioEngine.isRunning {
             audioEngine.stop()
             recognitionRequest?.endAudio()
@@ -236,5 +250,28 @@ class AssistantViewModel: ObservableObject {
         
         // Create a URL object
         return URL(string: urlString)
+    }
+    
+    private func startSilenceTimer() {
+        guard autoSearchOnSilence else { return }
+        stopSilenceTimer()
+        
+        DispatchQueue.main.async {
+            self.silenceTimer = Timer.scheduledTimer(withTimeInterval: self.silenceDuration, repeats: false) { [weak self] _ in
+                self?.silenceTimerFired()
+            }
+        }
+    }
+    
+    private func stopSilenceTimer() {
+        silenceTimer?.invalidate()
+        silenceTimer = nil
+    }
+    
+    private func silenceTimerFired() {
+        guard isRecording else { return }
+        if !recognizedText.isEmpty {
+            performSearch()
+        }
     }
 }
