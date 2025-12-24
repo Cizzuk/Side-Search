@@ -7,12 +7,17 @@
 
 import AppIntents
 
+extension Notification.Name {
+    static let activateIntentDidActivate = Notification.Name("activateIntentDidActivate")
+}
+
 @AppIntent(schema: .assistant.activate)
 struct ActivateIntent: AppIntent {
     static let supportedModes: IntentModes = .foreground
     
     @MainActor
     func perform() async throws -> some IntentResult {
+        NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
         return .result()
     }
 }
