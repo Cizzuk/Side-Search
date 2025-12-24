@@ -11,6 +11,7 @@ import Speech
 
 class SettingsViewModel: ObservableObject {
     @Published var isAssistantActivated = false
+    @Published var isShowingRecommend = false
     
     @Published var defaultSE: SearchEngineModel = {
         if let rawData = UserDefaults.standard.data(forKey: "defaultSearchEngine"),

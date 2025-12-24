@@ -40,6 +40,10 @@ struct SettingsView: View {
                 } header: { Text("Advanced Settings")
                 } footer: { Text("Blank to disable") }
                 
+                Button(action: { viewModel.isShowingRecommend = true }) {
+                    Label("Recommended Search Engines", systemImage: "sparkle.magnifyingglass")
+                }
+                
                 // Speech Recognition Locale Settings
                 Section {
                     Picker("Speech Language", selection: Binding(
@@ -70,6 +74,9 @@ struct SettingsView: View {
             .scrollDismissesKeyboard(.interactively)
             .fullScreenCover(isPresented: $viewModel.isAssistantActivated) {
                 AssistantView()
+            }
+            .sheet(isPresented: $viewModel.isShowingRecommend) {
+                RecommendedSEView(SearchEngine: $viewModel.defaultSE)
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
