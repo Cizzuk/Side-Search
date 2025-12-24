@@ -260,12 +260,12 @@
         }
       }
     },
-    "Recommended Search Engines" : {
+    "Recommended Assistants" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "おすすめの検索エンジン"
+            "value" : "おすすめのアシスタント"
           }
         }
       }

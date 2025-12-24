@@ -41,7 +41,7 @@ struct RecommendedSEView: View {
                     })
                 } header: { Text("Normal Search Engines") }
             }
-            .navigationTitle("Recommended Search Engines")
+            .navigationTitle("Recommended Assistants")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
