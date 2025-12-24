@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Speech
 
 struct SettingsView: View {
     @StateObject var viewModel = SettingsViewModel()
@@ -24,6 +25,7 @@ struct SettingsView: View {
                 } header: { Text("Search URL")
                 } footer: { Text("Replace query with %s") }
                 
+                // Advanced Settings
                 Section {
                     Toggle("Disable Percent-encoding", isOn: $viewModel.defaultSE.disablePercentEncoding)
                     HStack {
@@ -37,6 +39,21 @@ struct SettingsView: View {
                     }
                 } header: { Text("Advanced Settings")
                 } footer: { Text("Blank to disable") }
+                
+                // Speech Recognition Locale Settings
+                Section {
+                    Picker("Speech Language", selection: Binding(
+                        get: { viewModel.speechLocale },
+                        set: { newValue in
+                            viewModel.speechLocale = newValue
+                        }
+                    )) {
+                        ForEach(SFSpeechRecognizer.supportedLocales().sorted(by: { $0.identifier < $1.identifier }), id: \.self) { locale in
+                            Text("\(locale.localizedString(forIdentifier: locale.identifier) ?? locale.identifier)")
+                                .tag(locale)
+                        }
+                    }
+                }
             }
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)
@@ -44,6 +61,11 @@ struct SettingsView: View {
                 AssistantView()
             }
             .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(action: { viewModel.isAssistantActivated = true }) {
+                        Label("Activate Assistant", systemImage: "mic")
+                    }
+                }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button {

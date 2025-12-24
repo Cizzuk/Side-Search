@@ -5,12 +5,20 @@
 //  Created by Cizzuk on 2025/12/24.
 //
 
+import AVFoundation
 import Combine
+import Speech
 import UIKit
 
 class AssistantViewModel: ObservableObject {
-    @Published var isAssistantActivated = false
+    @Published var recognizedText = ""
+    @Published var isRecording = false
+    @Published var searchURL: URL?
+    @Published var shouldShowSafari = false
+    @Published var errorMessage = ""
+    @Published var showError = false
     
+    // Get SearchEngine Settings
     @Published var SearchEngine: SearchEngineModel = {
         if let rawData = UserDefaults.standard.data(forKey: "defaultSearchEngine"),
            let engine = SearchEngineModel.fromJSON(rawData) {
@@ -18,4 +26,215 @@ class AssistantViewModel: ObservableObject {
         }
         return SearchEngineModel()
     }()
+    
+    // MARK: - Private Properties
+    
+    private var speechRecognizer: SFSpeechRecognizer? {
+        // Get a Locale Setting
+        let speechLocale = UserDefaults.standard.string(forKey: "speechLocale") ?? "en-US"
+        return SFSpeechRecognizer(locale: Locale(identifier: speechLocale))
+    }
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private let audioEngine = AVAudioEngine()
+    
+    // MARK: - Public Methods
+    
+    func startRecording() {
+        // Cancel any existing recognition task
+        if recognitionTask != nil {
+            recognitionTask?.cancel()
+            recognitionTask = nil
+        }
+        
+        // Configure the audio session
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.record, mode: .measurement)
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            errorMessage = "Audio session setup failed: \(error.localizedDescription)"
+            showError = true
+            return
+        }
+        
+        // Create the recognition request
+        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        
+        // Configure the input node
+        let inputNode = audioEngine.inputNode
+        
+        // Ensure the recognition request is valid
+        guard let recognitionRequest = recognitionRequest else {
+            errorMessage = "Unable to create a recognition request."
+            showError = true
+            return
+        }
+        
+        // Configure recognition request
+        recognitionRequest.shouldReportPartialResults = true
+        
+        // Start the recognition task
+        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
+            guard let self = self else { return }
+            
+            var isFinal = false
+            
+            // Handle speech result
+            if let result = result {
+                self.recognizedText = result.bestTranscription.formattedString
+                isFinal = result.isFinal
+            }
+            
+            // Handle final
+            if error != nil || isFinal {
+                self.audioEngine.stop()
+                inputNode.removeTap(onBus: 0)
+                
+                self.recognitionRequest = nil
+                self.recognitionTask = nil
+                self.isRecording = false
+                
+                // If it was a successful final result, perform search
+                if isFinal && !self.recognizedText.isEmpty {
+                    self.performSearch()
+                }
+            }
+        }
+        
+        // Configure the microphone input
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+            self.recognitionRequest?.append(buffer)
+        }
+        
+        audioEngine.prepare()
+        
+        // Start audio engine
+        do {
+            try audioEngine.start()
+            isRecording = true
+        } catch {
+            errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
+            showError = true
+            return
+        }
+    }
+    
+    func stopRecording() {
+        if audioEngine.isRunning {
+            audioEngine.stop()
+            recognitionRequest?.endAudio()
+            isRecording = false
+            
+            // Deactivate the audio session
+            do {
+                try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            } catch {
+                print("Failed to deactivate audio session: \(error)")
+            }
+        }
+    }
+    
+    func performSearch() {
+        guard !recognizedText.isEmpty else { return }
+        
+        // Stop recording before searching
+        stopRecording()
+        
+        if let url = makeSearchURL(query: recognizedText) {
+            self.searchURL = url
+            self.shouldShowSafari = true
+        } else {
+            // Handle invalid URL error
+            self.errorMessage = "Invalid URL. Please check your search engine settings."
+            self.showError = true
+        }
+    }
+    
+    func checkAssistantAvailability() async -> Bool {
+        // 1. Check URL Validity
+        guard makeSearchURL(query: "test") != nil else {
+            self.errorMessage = "Invalid search engine URL. Please check your settings."
+            self.showError = true
+            return false
+        }
+        
+        // 2. Check Microphone Authorization
+        switch AVAudioApplication.shared.recordPermission {
+        case .granted:
+            break
+        case .denied:
+            self.errorMessage = "Microphone access denied. Please enable it in Settings."
+            self.showError = true
+            return false
+        case .undetermined:
+            AVAudioApplication.requestRecordPermission { granted in
+                if !granted {
+                    self.errorMessage = "Microphone access denied. Please enable it in Settings."
+                    self.showError = true
+                }
+            }
+        default:
+            self.errorMessage = "Unknown microphone authorization status."
+            self.showError = true
+            return false
+        }
+        
+        // 3. Check Speech Recognition Authorization
+        let speechStatus = await withCheckedContinuation { continuation in
+            SFSpeechRecognizer.requestAuthorization { status in
+                continuation.resume(returning: status)
+            }
+        }
+        
+        switch speechStatus {
+        case .authorized:
+            return true
+        case .denied:
+            self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
+            self.showError = true
+            return false
+        case .restricted:
+            self.errorMessage = "Speech recognition is restricted on this device."
+            self.showError = true
+            return false
+        default:
+            self.errorMessage = "Unknown speech recognition status."
+            self.showError = true
+            return false
+        }
+    }
+    
+    func makeSearchURL(query: String) -> URL? {
+        var searchQuery = query
+        
+        // Handle Max Query Length
+        if let maxLength = SearchEngine.maxQueryLength {
+            if searchQuery.count > maxLength {
+                searchQuery = String(searchQuery.prefix(maxLength))
+            }
+        }
+        
+        // Handle Percent Encoding
+        if !SearchEngine.disablePercentEncoding {
+            if let encoded = searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                searchQuery = encoded
+            }
+        }
+        
+        // Prepare the URL
+        var urlString = SearchEngine.url
+        
+        // Replace the placeholder with the query
+        urlString = urlString.replacingOccurrences(of: "%s", with: searchQuery)
+        
+        // URL Validation
+        if !urlString.lowercased().hasPrefix("https://") && !urlString.lowercased().hasPrefix("http://") {
+            return nil
+        }
+        
+        // Create a URL object
+        return URL(string: urlString)
+    }
 }
