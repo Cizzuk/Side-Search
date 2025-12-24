@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BE1377E62EFBAAE70060D7E0 /* ActivateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivateIntent.swift; sourceTree = "<group>"; };
 		BEB06C4A2EFBA9AE0026CC6E /* Side Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Side Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -32,6 +37,7 @@
 		BEB06C412EFBA9AE0026CC6E = {
 			isa = PBXGroup;
 			children = (
+				BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */,
 				BEB06C4C2EFBA9AE0026CC6E /* Side Search */,
 				BEB06C4B2EFBA9AE0026CC6E /* Products */,
 			);
@@ -119,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE1377E62EFBAAE70060D7E0 /* ActivateIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
