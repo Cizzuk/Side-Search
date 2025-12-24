@@ -39,9 +39,7 @@ struct SettingsView: View {
                 } footer: { Text("Blank to disable") }
             }
             .navigationTitle("Side Search")
-            .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
-                viewModel.isAssistantActivated = true
-            }
+            .scrollDismissesKeyboard(.interactively)
             .fullScreenCover(isPresented: $viewModel.isAssistantActivated) {
                 AssistantView()
             }
@@ -54,6 +52,9 @@ struct SettingsView: View {
                         Label("Done", systemImage: "checkmark")
                     }
                 }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+                viewModel.isAssistantActivated = true
             }
         }
     }
