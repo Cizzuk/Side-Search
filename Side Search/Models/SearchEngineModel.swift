@@ -9,6 +9,7 @@ import Foundation
 
 struct SearchEngineModel: Identifiable, Codable {
     var id = UUID()
+    var name: LocalizedStringResource = ""
     var url = ""
     var disablePercentEncoding: Bool = false
     var maxQueryLength: Int? = nil
