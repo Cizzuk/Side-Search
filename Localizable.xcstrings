@@ -230,16 +230,6 @@
         }
       }
     },
-    "Normal Search Engines" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通常の検索エンジン"
-          }
-        }
-      }
-    },
     "OK" : {
       "localizations" : {
         "ja" : {
@@ -260,12 +250,12 @@
         }
       }
     },
-    "Recommended Assistants" : {
+    "Recommended Assistants & Search Engines" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "おすすめのアシスタント"
+            "value" : "おすすめのアシスタントと検索エンジン"
           }
         }
       }
@@ -286,6 +276,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索"
+          }
+        }
+      }
+    },
+    "Search Engines" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索エンジン"
           }
         }
       }

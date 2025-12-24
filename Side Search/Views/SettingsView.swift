@@ -26,7 +26,7 @@ struct SettingsView: View {
                 } footer: { Text("Replace query with %s") }
                 
                 Button(action: { viewModel.isShowingRecommend = true }) {
-                    Label("Recommended Assistants", systemImage: "sparkle.magnifyingglass")
+                    Label("Recommended Assistants & Search Engines", systemImage: "sparkle.magnifyingglass")
                 }
                 
                 // Speech Settings
