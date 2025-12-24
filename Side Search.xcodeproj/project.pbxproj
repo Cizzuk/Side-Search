@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		BE1377E62EFBAAE70060D7E0 /* ActivateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */; };
+		BE8AA7612EFC2EB100C02260 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivateIntent.swift; sourceTree = "<group>"; };
+		BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		BEB06C4A2EFBA9AE0026CC6E /* Side Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Side Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -37,6 +39,7 @@
 		BEB06C412EFBA9AE0026CC6E = {
 			isa = PBXGroup;
 			children = (
+				BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */,
 				BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */,
 				BEB06C4C2EFBA9AE0026CC6E /* Side Search */,
 				BEB06C4B2EFBA9AE0026CC6E /* Products */,
@@ -97,6 +100,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = BEB06C412EFBA9AE0026CC6E;
 			minimizedProjectReferenceProxies = 1;
@@ -115,6 +119,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE8AA7612EFC2EB100C02260 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +197,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -249,6 +255,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
