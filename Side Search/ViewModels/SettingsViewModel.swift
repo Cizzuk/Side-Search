@@ -18,7 +18,10 @@ class SettingsViewModel: ObservableObject {
            let engine = SearchEngineModel.fromJSON(rawData) {
             return engine
         }
-        return SearchEngineModel()
+        return SearchEngineModel(
+            name: "ChatGPT",
+            url: "https://chatgpt.com/?q=%s",
+        )
     }() {
         didSet {
             if let data = defaultSE.toJSON() {
