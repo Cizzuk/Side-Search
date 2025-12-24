@@ -25,26 +25,11 @@ struct SettingsView: View {
                 } header: { Text("Search URL")
                 } footer: { Text("Replace query with %s") }
                 
-                // Advanced Settings
-                Section {
-                    Toggle("Disable Percent-encoding", isOn: $viewModel.defaultSE.disablePercentEncoding)
-                    HStack {
-                        Text("Max Query Length")
-                        Spacer()
-                        TextField("Max Query Length", value: $viewModel.defaultSE.maxQueryLength, format: .number, prompt: Text("32"))
-                            .keyboardType(.numberPad)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .multilineTextAlignment(.trailing)
-                            .submitLabel(.done)
-                    }
-                } header: { Text("Advanced Settings")
-                } footer: { Text("Blank to disable") }
-                
                 Button(action: { viewModel.isShowingRecommend = true }) {
                     Label("Recommended Search Engines", systemImage: "sparkle.magnifyingglass")
                 }
                 
-                // Speech Recognition Locale Settings
+                // Speech Settings
                 Section {
                     Picker("Speech Language", selection: Binding(
                         get: { viewModel.speechLocale },
@@ -69,6 +54,21 @@ struct SettingsView: View {
                         }
                     }
                 } header: { Text("Speech Settings") }
+                
+                // Advanced Settings
+                Section {
+                    Toggle("Disable Percent-encoding", isOn: $viewModel.defaultSE.disablePercentEncoding)
+                    HStack {
+                        Text("Max Query Length")
+                        Spacer()
+                        TextField("Max Query Length", value: $viewModel.defaultSE.maxQueryLength, format: .number, prompt: Text("32"))
+                            .keyboardType(.numberPad)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .multilineTextAlignment(.trailing)
+                            .submitLabel(.done)
+                    }
+                } header: { Text("Advanced Settings")
+                } footer: { Text("Blank to disable") }
             }
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)
