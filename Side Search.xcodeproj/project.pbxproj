@@ -264,6 +264,7 @@
 				DEVELOPMENT_TEAM = Z8R89S24YT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "To recognize speech and perform searches.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "To recognize speech and perform searches.";
@@ -304,6 +305,7 @@
 				DEVELOPMENT_TEAM = Z8R89S24YT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "To recognize speech and perform searches.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "To recognize speech and perform searches.";
