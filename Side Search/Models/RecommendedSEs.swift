@@ -36,7 +36,7 @@ class RecommendSEs {
                 ),
                 SearchEngineModel(
                     name: "Google AI Mode",
-                    url: "https://google.com/?q=test&udm=50",
+                    url: "https://google.com/?q=%s&udm=50",
                 ),
                 SearchEngineModel(
                     name: "Microsoft Copilot",
