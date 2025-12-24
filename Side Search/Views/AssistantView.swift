@@ -1,0 +1,113 @@
+//
+//  AssistantView.swift
+//  Side Search
+//
+//  Created by Cizzuk on 2025/12/24.
+//
+
+import SwiftUI
+import Speech
+
+struct AssistantView: View {
+    @Environment(\.dismiss) var dismiss
+    @FocusState private var isInputFocused: Bool
+    @StateObject private var viewModel = AssistantViewModel()
+    
+    var body: some View {
+        NavigationStack {
+            VStack {
+                // Search Query
+                TextField(isInputFocused ? "Type to Search" : "Listening...",
+                          text: $viewModel.recognizedText, axis: .vertical)
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .focused($isInputFocused)
+                    .onChange(of: isInputFocused) {
+                        if isInputFocused {
+                            viewModel.stopRecording()
+                        } else {
+                            viewModel.startRecording()
+                        }
+                    }
+                    .onSubmit {
+                        viewModel.performSearch()
+                    }
+                    .onTapGesture {
+                        if viewModel.isRecording {
+                            viewModel.stopRecording()
+                        }
+                    }
+                
+                // URL Preview
+                Text(viewModel.SearchEngine.url)
+                    .lineLimit(1)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 10)
+                
+                Spacer()
+                
+                // Search Button
+                Button(action: {
+                    viewModel.performSearch()
+                }) {
+                    Label("Search", systemImage: "magnifyingglass")
+                        .labelStyle(.iconOnly)
+                        .font(.system(size: 30))
+                        .padding(30)
+                        .background(viewModel.recognizedText.isEmpty ? Color.gray : Color.blue)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                        .glassEffect()
+                }
+                .buttonStyle(.plain)
+                .disabled(viewModel.recognizedText.isEmpty)
+                .opacity(viewModel.recognizedText.isEmpty ? 0.5 : 1.0)
+                
+                Spacer()
+            }
+            .padding()
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark") {
+                        dismiss()
+                    }
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    } label: {
+                        Label("Done", systemImage: "checkmark")
+                    }
+                }
+            }
+            .fullScreenCover(isPresented: $viewModel.shouldShowSafari, onDismiss: {
+                dismiss()
+            }) {
+                if let url = viewModel.searchURL {
+                    SafariView(url: url)
+                        .ignoresSafeArea()
+                }
+            }
+            .alert("Error", isPresented: $viewModel.showError) {
+                Button("OK") {
+                    dismiss()
+                }
+            } message: {
+                Text(viewModel.errorMessage)
+            }
+            .onAppear {
+                Task {
+                    if await viewModel.checkAssistantAvailability() {
+                        viewModel.startRecording()
+                    }
+                }
+            }
+            .onDisappear() {
+                viewModel.stopRecording()
+            }
+        }
+    }
+}
