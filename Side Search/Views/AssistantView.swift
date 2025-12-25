@@ -67,6 +67,7 @@ struct AssistantView: View {
                 
                 Spacer()
             }
+            .accessibilityAction(.escape) { dismiss() }
             .padding()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
