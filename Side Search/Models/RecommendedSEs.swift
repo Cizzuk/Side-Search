@@ -31,6 +31,10 @@ class RecommendSEs {
                     url: "https://chatgpt.com/?q=%s",
                 ),
                 SearchEngineModel(
+                    name: "Claude",
+                    url: "https://claude.ai/new?q=%s",
+                ),
+                SearchEngineModel(
                     name: "Grok",
                     url: "https://grok.com/?q=%s",
                 ),
