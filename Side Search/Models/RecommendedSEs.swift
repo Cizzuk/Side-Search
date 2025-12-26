@@ -24,7 +24,7 @@ class RecommendSEs {
         
     class func aiAssistants() -> [SearchEngineModel] {
         var aiCSEs: [SearchEngineModel] = []
-        if currentRegion != "CN" && currentRegion != "RU" {
+        if currentRegion != "CN" {
             aiCSEs.append(contentsOf: [
                 SearchEngineModel(
                     name: "ChatGPT",
