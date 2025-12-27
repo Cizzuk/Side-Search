@@ -31,11 +31,6 @@ struct AssistantView: View {
                     .onSubmit {
                         viewModel.performSearch()
                     }
-                    .onTapGesture {
-                        if viewModel.isRecording {
-                            viewModel.stopRecording()
-                        }
-                    }
                 
                 // URL Preview
                 Text(viewModel.SearchEngine.url)

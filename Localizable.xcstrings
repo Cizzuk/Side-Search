@@ -184,6 +184,16 @@
         }
       }
     },
+    "Clear In-App Browser Data" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ内ブラウザのデータを削除"
+          }
+        }
+      }
+    },
     "Default App" : {
       "localizations" : {
         "ja" : {
