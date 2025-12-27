@@ -71,6 +71,16 @@
         }
       }
     },
+    "Assistant Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントの設定"
+          }
+        }
+      }
+    },
     "Auto Search on Silence" : {
       "localizations" : {
         "ja" : {
@@ -143,6 +153,26 @@
     },
     "Cizzuk" : {
       "shouldTranslate" : false
+    },
+    "Claude" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude"
+          }
+        }
+      }
+    },
+    "Default App" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトのアプリ"
+          }
+        }
+      }
     },
     "Developer" : {
       "localizations" : {
@@ -264,12 +294,32 @@
         }
       }
     },
+    "If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトのアプリで開く場合、検索URLに対応したアプリか、デフォルトのブラウザが開かれます。"
+          }
+        }
+      }
+    },
     "If you want to set a custom Search URL, you need to set a URL where the search query is replaced with \"%s\"." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "カスタムの検索URLを設定したい場合は、検索クエリを「%s」で置き換えたURLを設定する必要があります。"
+          }
+        }
+      }
+    },
+    "In-App Browser" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ内ブラウザ"
           }
         }
       }
@@ -320,6 +370,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        }
+      }
+    },
+    "Open in" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次で開く"
           }
         }
       }
@@ -453,16 +513,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "話す言語"
-          }
-        }
-      }
-    },
-    "Speech Settings" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "スピーチの設定"
           }
         }
       }

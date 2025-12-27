@@ -21,14 +21,32 @@ class RecommendSEs {
             return locale.language.languageCode?.identifier == languageCode
         }
     }
-        
+    
+    static var defaultSearchEngine: SearchEngineModel {
+        if currentRegion == "CN" {
+            return SearchEngineModel(
+                name: "百度AI搜索",
+                url: "https://chat.baidu.com/search?query=%s",
+            )
+        } else {
+            return SearchEngineModel(
+                name: "ChatGPT",
+                url: "https://chatgpt.com/?q=%s",
+            )
+        }
+    }
+    
     class func aiAssistants() -> [SearchEngineModel] {
         var aiCSEs: [SearchEngineModel] = []
-        if currentRegion != "CN" && currentRegion != "RU" {
+        if currentRegion != "CN" {
             aiCSEs.append(contentsOf: [
                 SearchEngineModel(
                     name: "ChatGPT",
                     url: "https://chatgpt.com/?q=%s",
+                ),
+                SearchEngineModel(
+                    name: "Claude",
+                    url: "https://claude.ai/new?q=%s",
                 ),
                 SearchEngineModel(
                     name: "Grok",
@@ -127,5 +145,4 @@ class RecommendSEs {
         
         return normalCSEs
     }
-        
 }

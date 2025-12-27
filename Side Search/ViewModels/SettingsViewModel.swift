@@ -20,10 +20,7 @@ class SettingsViewModel: ObservableObject {
         }
         
         // Create Default
-        let se = SearchEngineModel(
-            name: "ChatGPT",
-            url: "https://chatgpt.com/?q=%s",
-        )
+        let se = RecommendSEs.defaultSearchEngine
         if let data = se.toJSON() {
             UserDefaults.standard.set(data, forKey: "defaultSearchEngine")
         }
@@ -74,6 +71,32 @@ class SettingsViewModel: ObservableObject {
     }() {
         didSet {
             UserDefaults.standard.set(silenceDuration, forKey: "silenceDuration")
+        }
+    }
+    
+    // Open in...
+    enum OpenInOption: String, CaseIterable {
+        case inAppBrowser, defaultApp
+        
+        var localizedName: LocalizedStringResource {
+            switch self {
+            case .inAppBrowser:
+                return "In-App Browser"
+            case .defaultApp:
+                return "Default App"
+            }
+        }
+    }
+    
+    @Published var openIn: OpenInOption = {
+        if let rawValue = UserDefaults.standard.string(forKey: "openIn"),
+           let option = OpenInOption(rawValue: rawValue) {
+            return option
+        }
+        return .inAppBrowser
+    }() {
+        didSet {
+            UserDefaults.standard.set(openIn.rawValue, forKey: "openIn")
         }
     }
 }

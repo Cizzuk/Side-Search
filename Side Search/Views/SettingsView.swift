@@ -30,7 +30,7 @@ struct SettingsView: View {
                     Label("Recommended Assistants & Search Engines", systemImage: "sparkle.magnifyingglass")
                 }
                 
-                // Speech Settings
+                // Assistant Settings
                 Section {
                     Picker("Speech Language", selection: Binding(
                         get: { viewModel.speechLocale },
@@ -54,7 +54,16 @@ struct SettingsView: View {
                                 .labelsHidden()
                         }
                     }
-                } header: { Text("Speech Settings") }
+                    
+                    Picker("Open in", selection: $viewModel.openIn) {
+                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
+                            Text(option.localizedName).tag(option)
+                        }
+                    }
+                } header: { Text("Assistant Settings") }
+                footer: {
+                    Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                }
                 
                 // Advanced Settings
                 Section {

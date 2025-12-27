@@ -67,6 +67,7 @@ struct AssistantView: View {
                 
                 Spacer()
             }
+            .accessibilityAction(.escape) { dismiss() }
             .padding()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -99,6 +100,7 @@ struct AssistantView: View {
                 Text(viewModel.errorMessage)
             }
             .onAppear {
+                viewModel.onDismiss = { dismiss() }
                 Task {
                     if await viewModel.checkAssistantAvailability() {
                         viewModel.startRecording()
