@@ -299,7 +299,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルトのアプリで開く場合、検索URLに対応したアプリか、デフォルトのブラウザが開かれます。"
+            "value" : "デフォルトのアプリで開く場合、検索URLに対応するアプリか、デフォルトのブラウザが開かれます。"
           }
         }
       }
@@ -464,6 +464,16 @@
         }
       }
     },
+    "Search with Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントで検索"
+          }
+        }
+      }
+    },
     "Shortcut Tip" : {
       "localizations" : {
         "ja" : {
@@ -517,6 +527,26 @@
         }
       }
     },
+    "Start Speech Recognition" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識を開始"
+          }
+        }
+      }
+    },
+    "Start with Mic Muted" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイクミュートで開始"
+          }
+        }
+      }
+    },
     "Startpage" : {
       "localizations" : {
         "ja" : {
@@ -527,22 +557,22 @@
         }
       }
     },
+    "Stop Speech Recognition" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識を停止"
+          }
+        }
+      }
+    },
     "The Search URL is necessary to set your preferred AI assistant or search engine URL." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。"
-          }
-        }
-      }
-    },
-    "Type to Search" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "入力して検索"
           }
         }
       }

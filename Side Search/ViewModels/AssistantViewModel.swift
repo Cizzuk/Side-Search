@@ -17,6 +17,7 @@ class AssistantViewModel: ObservableObject {
     @Published var searchURL: URL?
     @Published var shouldShowSafari = false
     @Published var errorMessage = ""
+    @Published var isCriticalError = false
     @Published var showError = false
     
     // Get SearchEngine Settings
@@ -29,6 +30,11 @@ class AssistantViewModel: ObservableObject {
     }()
     
     // MARK: - Private Properties
+    
+    // Get Start with Mic Muted Setting
+    private var startWithMicMuted: Bool {
+        UserDefaults.standard.bool(forKey: "startWithMicMuted")
+    }
     
     // Get OpenIn Setting
     private var openIn: SettingsViewModel.OpenInOption {
@@ -64,87 +70,102 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Public Methods
     
+    func startAssistant() {
+        if !checkAvailability() {
+            return
+        }
+        if !startWithMicMuted {
+            startRecording()
+        }
+    }
+    
+    @MainActor
     func startRecording() {
-        // Cancel any existing recognition task
-        if recognitionTask != nil {
-            recognitionTask?.cancel()
-            recognitionTask = nil
-        }
-        
-        // Configure the audio session
-        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setCategory(.record, mode: .measurement)
-            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            errorMessage = "Audio session setup failed: \(error.localizedDescription)"
-            showError = true
-            return
-        }
-        
-        // Create the recognition request
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        
-        // Configure the input node
-        let inputNode = audioEngine.inputNode
-        
-        // Ensure the recognition request is valid
-        guard let recognitionRequest = recognitionRequest else {
-            errorMessage = "Unable to create a recognition request."
-            showError = true
-            return
-        }
-        
-        // Configure recognition request
-        recognitionRequest.shouldReportPartialResults = true
-        
-        // Start the recognition task
-        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
-            guard let self = self else { return }
-            
-            var isFinal = false
-            
-            // Handle speech result
-            if let result = result {
-                self.recognizedText = result.bestTranscription.formattedString
-                isFinal = result.isFinal
-                self.startSilenceTimer()
+        Task {
+            // Cancel any existing recognition task
+            if recognitionTask != nil {
+                recognitionTask?.cancel()
+                recognitionTask = nil
             }
             
-            // Handle final
-            if error != nil || isFinal {
-                self.stopSilenceTimer()
-                self.audioEngine.stop()
-                inputNode.removeTap(onBus: 0)
+            // Check Availability
+            if !(await checkMicAvailability()) {
+                return
+            }
+            
+            // Erase previous text
+            recognizedText = ""
+            
+            // Configure the audio session
+            let audioSession = AVAudioSession.sharedInstance()
+            do {
+                try audioSession.setCategory(.record, mode: .measurement)
+                try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+            } catch {
+                errorMessage = "Audio session setup failed: \(error.localizedDescription)"
+                showError = true
+                return
+            }
+            
+            // Create the recognition request
+            recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            
+            // Configure the input node
+            let inputNode = audioEngine.inputNode
+            
+            // Ensure the recognition request is valid
+            guard let recognitionRequest = recognitionRequest else {
+                errorMessage = "Unable to create a recognition request."
+                showError = true
+                return
+            }
+            
+            // Configure recognition request
+            recognitionRequest.shouldReportPartialResults = true
+            
+            // Start the recognition task
+            recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
+                guard let self = self else { return }
                 
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
-                self.isRecording = false
+                var isFinal = false
                 
-                // If it was a successful final result, perform search
-                if isFinal && !self.recognizedText.isEmpty {
-                    self.performSearch()
+                // Handle speech result
+                if let result = result {
+                    self.recognizedText = result.bestTranscription.formattedString
+                    isFinal = result.isFinal
+                    self.startSilenceTimer()
+                }
+                
+                // Handle final
+                if error != nil || isFinal {
+                    self.stopSilenceTimer()
+                    self.audioEngine.stop()
+                    inputNode.removeTap(onBus: 0)
+                    
+                    self.recognitionRequest = nil
+                    self.recognitionTask = nil
+                    self.isRecording = false
                 }
             }
-        }
-        
-        // Configure the microphone input
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
-            self.recognitionRequest?.append(buffer)
-        }
-        
-        audioEngine.prepare()
-        
-        // Start audio engine
-        do {
-            try audioEngine.start()
-            isRecording = true
-            startSilenceTimer()
-        } catch {
-            errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
-            showError = true
-            return
+            
+            // Configure the microphone input
+            let recordingFormat = inputNode.outputFormat(forBus: 0)
+            inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+                self.recognitionRequest?.append(buffer)
+            }
+            
+            audioEngine.prepare()
+            
+            // Start audio engine
+            do {
+                try audioEngine.start()
+                isRecording = true
+                startSilenceTimer()
+            } catch {
+                errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
+                showError = true
+                return
+            }
         }
     }
     
@@ -186,15 +207,20 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func checkAssistantAvailability() async -> Bool {
-        // 1. Check URL Validity
-        guard makeSearchURL(query: "test") != nil else {
-            self.errorMessage = "Invalid search engine URL. Please check your settings."
-            self.showError = true
+    func checkAvailability() -> Bool {
+        if makeSearchURL(query: "test") == nil {
+            errorMessage = "Invalid search engine URL. Please check your settings."
+            isCriticalError = true
+            showError = true
             return false
         }
         
-        // 2. Check Microphone Authorization
+        return true
+    }
+    
+    @MainActor
+    func checkMicAvailability() async -> Bool {
+        // 1. Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
             break
@@ -203,11 +229,16 @@ class AssistantViewModel: ObservableObject {
             self.showError = true
             return false
         case .undetermined:
-            AVAudioApplication.requestRecordPermission { granted in
-                if !granted {
-                    self.errorMessage = "Microphone access denied. Please enable it in Settings."
-                    self.showError = true
+            // Wait for user authorization
+            let granted = await withCheckedContinuation { continuation in
+                AVAudioApplication.requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
                 }
+            }
+            if !granted {
+                self.errorMessage = "Microphone access denied. Please enable it in Settings."
+                self.showError = true
+                return false
             }
         default:
             self.errorMessage = "Unknown microphone authorization status."
@@ -215,16 +246,10 @@ class AssistantViewModel: ObservableObject {
             return false
         }
         
-        // 3. Check Speech Recognition Authorization
-        let speechStatus = await withCheckedContinuation { continuation in
-            SFSpeechRecognizer.requestAuthorization { status in
-                continuation.resume(returning: status)
-            }
-        }
-        
-        switch speechStatus {
+        // 2. Check Speech Recognition Authorization
+        switch SFSpeechRecognizer.authorizationStatus() {
         case .authorized:
-            return true
+            break
         case .denied:
             self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
             self.showError = true
@@ -233,11 +258,25 @@ class AssistantViewModel: ObservableObject {
             self.errorMessage = "Speech recognition is restricted on this device."
             self.showError = true
             return false
+        case .notDetermined:
+            // Wait for user authorization
+            let status = await withCheckedContinuation { continuation in
+                SFSpeechRecognizer.requestAuthorization { status in
+                    continuation.resume(returning: status)
+                }
+            }
+            if status != .authorized {
+                self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
+                self.showError = true
+                return false
+            }
         default:
             self.errorMessage = "Unknown speech recognition status."
             self.showError = true
             return false
         }
+        
+        return true
     }
     
     func makeSearchURL(query: String) -> URL? {

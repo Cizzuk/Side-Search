@@ -17,7 +17,7 @@ struct AssistantView: View {
         NavigationStack {
             VStack {
                 // Search Query
-                TextField(isInputFocused ? "Type to Search" : "Listening...",
+                TextField(viewModel.isRecording ? "Listening..." : "Search with Assistant",
                           text: $viewModel.recognizedText, axis: .vertical)
                     .font(.title)
                     .multilineTextAlignment(.center)
@@ -26,8 +26,6 @@ struct AssistantView: View {
                     .onChange(of: isInputFocused) {
                         if isInputFocused {
                             viewModel.stopRecording()
-                        } else {
-                            viewModel.startRecording()
                         }
                     }
                     .onSubmit {
@@ -75,6 +73,18 @@ struct AssistantView: View {
                         dismiss()
                     }
                 }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        if viewModel.isRecording {
+                            viewModel.stopRecording()
+                        } else {
+                            viewModel.startRecording()
+                        }
+                    } label: {
+                        Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
+                              systemImage: viewModel.isRecording ? "mic" : "mic.slash")
+                    }
+                }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button {
@@ -94,18 +104,16 @@ struct AssistantView: View {
             }
             .alert("Error", isPresented: $viewModel.showError) {
                 Button("OK") {
-                    dismiss()
+                    if viewModel.isCriticalError {
+                        dismiss()
+                    }
                 }
             } message: {
                 Text(viewModel.errorMessage)
             }
             .onAppear {
                 viewModel.onDismiss = { dismiss() }
-                Task {
-                    if await viewModel.checkAssistantAvailability() {
-                        viewModel.startRecording()
-                    }
-                }
+                viewModel.startAssistant()
             }
             .onDisappear() {
                 viewModel.stopRecording()
