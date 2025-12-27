@@ -32,12 +32,6 @@ struct SettingsView: View {
                 
                 // Assistant Settings
                 Section {
-                    Picker("Open in", selection: $viewModel.openIn) {
-                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
-                            Text(option.localizedName).tag(option)
-                        }
-                    }
-                    
                     Picker("Speech Language", selection: Binding(
                         get: { viewModel.speechLocale },
                         set: { newValue in
@@ -60,7 +54,16 @@ struct SettingsView: View {
                                 .labelsHidden()
                         }
                     }
+                    
+                    Picker("Open in", selection: $viewModel.openIn) {
+                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
+                            Text(option.localizedName).tag(option)
+                        }
+                    }
                 } header: { Text("Assistant Settings") }
+                footer: {
+                    Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                }
                 
                 // Advanced Settings
                 Section {

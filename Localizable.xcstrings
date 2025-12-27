@@ -164,12 +164,12 @@
         }
       }
     },
-    "Default Browser" : {
+    "Default App" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルトのブラウザ"
+            "value" : "デフォルトのアプリ"
           }
         }
       }
@@ -290,6 +290,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "もし、サイドボタンのカスタマイズが有効な地域にお住まいの場合、サイドボタンを長押しすることでSide Searchの音声アシスタントをすぐに起動できます。"
+          }
+        }
+      }
+    },
+    "If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトのアプリで開く場合、検索URLに対応したアプリか、デフォルトのブラウザが開かれます。"
           }
         }
       }

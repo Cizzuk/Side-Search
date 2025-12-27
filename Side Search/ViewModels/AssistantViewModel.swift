@@ -175,7 +175,7 @@ class AssistantViewModel: ObservableObject {
             case .inAppBrowser:
                 self.searchURL = url
                 self.shouldShowSafari = true
-            case .defaultBrowser:
+            case .defaultApp:
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 onDismiss?()
             }
