@@ -79,7 +79,8 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func startRecording() {
+    @MainActor
+    func startRecording() { Task {
         // Cancel any existing recognition task
         if recognitionTask != nil {
             recognitionTask?.cancel()
@@ -87,7 +88,7 @@ class AssistantViewModel: ObservableObject {
         }
         
         // Check Availability
-        if !checkMicAvailability() {
+        if !(await checkMicAvailability()) {
             return
         }
         
@@ -164,7 +165,7 @@ class AssistantViewModel: ObservableObject {
             showError = true
             return
         }
-    }
+    } }
     
     func stopRecording() {
         stopSilenceTimer()
@@ -215,7 +216,8 @@ class AssistantViewModel: ObservableObject {
         return true
     }
     
-    func checkMicAvailability() -> Bool {
+    @MainActor
+    func checkMicAvailability() async -> Bool {
         // 1. Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
@@ -225,13 +227,17 @@ class AssistantViewModel: ObservableObject {
             self.showError = true
             return false
         case .undetermined:
-            AVAudioApplication.requestRecordPermission { granted in
-                if !granted {
-                    self.errorMessage = "Microphone access denied. Please enable it in Settings."
-                    self.showError = true
+            // Wait for user authorization
+            let granted = await withCheckedContinuation { continuation in
+                AVAudioApplication.requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
                 }
             }
-            return false
+            if !granted {
+                self.errorMessage = "Microphone access denied. Please enable it in Settings."
+                self.showError = true
+                return false
+            }
         default:
             self.errorMessage = "Unknown microphone authorization status."
             self.showError = true
@@ -251,13 +257,17 @@ class AssistantViewModel: ObservableObject {
             self.showError = true
             return false
         case .notDetermined:
-            SFSpeechRecognizer.requestAuthorization { status in
-                if status != .authorized {
-                    self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
-                    self.showError = true
+            // Wait for user authorization
+            let status = await withCheckedContinuation { continuation in
+                SFSpeechRecognizer.requestAuthorization { status in
+                    continuation.resume(returning: status)
                 }
             }
-            return false
+            if status != .authorized {
+                self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
+                self.showError = true
+                return false
+            }
         default:
             self.errorMessage = "Unknown speech recognition status."
             self.showError = true
