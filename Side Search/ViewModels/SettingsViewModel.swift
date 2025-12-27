@@ -20,10 +20,7 @@ class SettingsViewModel: ObservableObject {
         }
         
         // Create Default
-        let se = SearchEngineModel(
-            name: "ChatGPT",
-            url: "https://chatgpt.com/?q=%s",
-        )
+        let se = RecommendSEs.defaultSearchEngine
         if let data = se.toJSON() {
             UserDefaults.standard.set(data, forKey: "defaultSearchEngine")
         }

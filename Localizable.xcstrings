@@ -144,6 +144,16 @@
     "Cizzuk" : {
       "shouldTranslate" : false
     },
+    "Claude" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude"
+          }
+        }
+      }
+    },
     "Developer" : {
       "localizations" : {
         "ja" : {
