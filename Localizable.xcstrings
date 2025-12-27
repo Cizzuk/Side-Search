@@ -71,6 +71,16 @@
         }
       }
     },
+    "Assistant Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントの設定"
+          }
+        }
+      }
+    },
     "Auto Search on Silence" : {
       "localizations" : {
         "ja" : {
@@ -150,6 +160,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Claude"
+          }
+        }
+      }
+    },
+    "Default Browser" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトのブラウザ"
           }
         }
       }
@@ -284,6 +304,16 @@
         }
       }
     },
+    "In-App Browser" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ内ブラウザ"
+          }
+        }
+      }
+    },
     "Kagi" : {
       "localizations" : {
         "ja" : {
@@ -330,6 +360,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        }
+      }
+    },
+    "Open in" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次で開く"
           }
         }
       }
@@ -463,16 +503,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "話す言語"
-          }
-        }
-      }
-    },
-    "Speech Settings" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "スピーチの設定"
           }
         }
       }

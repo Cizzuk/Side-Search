@@ -11,6 +11,7 @@ import Speech
 import UIKit
 
 class AssistantViewModel: ObservableObject {
+    var onDismiss: (() -> Void)?
     @Published var recognizedText = ""
     @Published var isRecording = false
     @Published var searchURL: URL?
@@ -28,6 +29,15 @@ class AssistantViewModel: ObservableObject {
     }()
     
     // MARK: - Private Properties
+    
+    // Get OpenIn Setting
+    private var openIn: SettingsViewModel.OpenInOption {
+        if let rawValue = UserDefaults.standard.string(forKey: "openIn"),
+           let option = SettingsViewModel.OpenInOption(rawValue: rawValue) {
+            return option
+        }
+        return .inAppBrowser
+    }
     
     private var speechRecognizer: SFSpeechRecognizer? {
         // Get a Locale Setting
@@ -161,8 +171,14 @@ class AssistantViewModel: ObservableObject {
         stopRecording()
         
         if let url = makeSearchURL(query: recognizedText) {
-            self.searchURL = url
-            self.shouldShowSafari = true
+            switch openIn {
+            case .inAppBrowser:
+                self.searchURL = url
+                self.shouldShowSafari = true
+            case .defaultBrowser:
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                onDismiss?()
+            }
         } else {
             // Handle invalid URL error
             self.errorMessage = "Invalid URL. Please check your search engine settings."

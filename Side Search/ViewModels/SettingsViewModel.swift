@@ -33,6 +33,33 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
+    // Open in...
+    enum OpenInOption: String, CaseIterable {
+        case inAppBrowser, defaultBrowser
+        
+        var localizedName: LocalizedStringResource {
+            switch self {
+            case .inAppBrowser:
+                return "In-App Browser"
+            case .defaultBrowser:
+                return "Default Browser"
+            }
+        }
+    }
+    
+    @Published var openIn: OpenInOption = {
+        if let rawValue = UserDefaults.standard.string(forKey: "openIn"),
+           let option = OpenInOption(rawValue: rawValue) {
+            return option
+        }
+        return .inAppBrowser
+    }() {
+        didSet {
+            UserDefaults.standard.set(openIn.rawValue, forKey: "openIn")
+        }
+    }
+        
+    
     // Speech Recognition Locale
     @Published var speechLocale: Locale = {
         if let localeIdentifier = UserDefaults.standard.string(forKey: "speechLocale") {

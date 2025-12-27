@@ -100,6 +100,7 @@ struct AssistantView: View {
                 Text(viewModel.errorMessage)
             }
             .onAppear {
+                viewModel.onDismiss = { dismiss() }
                 Task {
                     if await viewModel.checkAssistantAvailability() {
                         viewModel.startRecording()

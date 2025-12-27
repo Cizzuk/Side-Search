@@ -30,8 +30,14 @@ struct SettingsView: View {
                     Label("Recommended Assistants & Search Engines", systemImage: "sparkle.magnifyingglass")
                 }
                 
-                // Speech Settings
+                // Assistant Settings
                 Section {
+                    Picker("Open in", selection: $viewModel.openIn) {
+                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
+                            Text(option.localizedName).tag(option)
+                        }
+                    }
+                    
                     Picker("Speech Language", selection: Binding(
                         get: { viewModel.speechLocale },
                         set: { newValue in
@@ -54,7 +60,7 @@ struct SettingsView: View {
                                 .labelsHidden()
                         }
                     }
-                } header: { Text("Speech Settings") }
+                } header: { Text("Assistant Settings") }
                 
                 // Advanced Settings
                 Section {
