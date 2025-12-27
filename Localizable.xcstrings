@@ -517,12 +517,32 @@
         }
       }
     },
+    "Start Speech Recognition" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識を開始"
+          }
+        }
+      }
+    },
     "Startpage" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Startpage"
+          }
+        }
+      }
+    },
+    "Stop Speech Recognition" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識を停止"
           }
         }
       }

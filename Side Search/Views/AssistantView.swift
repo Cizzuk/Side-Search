@@ -17,7 +17,7 @@ struct AssistantView: View {
         NavigationStack {
             VStack {
                 // Search Query
-                TextField(isInputFocused ? "Type to Search" : "Listening...",
+                TextField(viewModel.isRecording ? "Listening..." : "Type to Search",
                           text: $viewModel.recognizedText, axis: .vertical)
                     .font(.title)
                     .multilineTextAlignment(.center)
@@ -73,6 +73,18 @@ struct AssistantView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark") {
                         dismiss()
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        if viewModel.isRecording {
+                            viewModel.stopRecording()
+                        } else {
+                            viewModel.startRecording()
+                        }
+                    } label: {
+                        Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
+                              systemImage: viewModel.isRecording ? "mic" : "mic.slash")
                     }
                 }
                 ToolbarItemGroup(placement: .keyboard) {

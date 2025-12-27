@@ -71,6 +71,9 @@ class AssistantViewModel: ObservableObject {
             recognitionTask = nil
         }
         
+        // Erase previous text
+        recognizedText = ""
+        
         // Configure the audio session
         let audioSession = AVAudioSession.sharedInstance()
         do {
@@ -120,11 +123,6 @@ class AssistantViewModel: ObservableObject {
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 self.isRecording = false
-                
-                // If it was a successful final result, perform search
-                if isFinal && !self.recognizedText.isEmpty {
-                    self.performSearch()
-                }
             }
         }
         
