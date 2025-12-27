@@ -80,92 +80,94 @@ class AssistantViewModel: ObservableObject {
     }
     
     @MainActor
-    func startRecording() { Task {
-        // Cancel any existing recognition task
-        if recognitionTask != nil {
-            recognitionTask?.cancel()
-            recognitionTask = nil
-        }
-        
-        // Check Availability
-        if !(await checkMicAvailability()) {
-            return
-        }
-        
-        // Erase previous text
-        recognizedText = ""
-        
-        // Configure the audio session
-        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setCategory(.record, mode: .measurement)
-            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            errorMessage = "Audio session setup failed: \(error.localizedDescription)"
-            showError = true
-            return
-        }
-        
-        // Create the recognition request
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        
-        // Configure the input node
-        let inputNode = audioEngine.inputNode
-        
-        // Ensure the recognition request is valid
-        guard let recognitionRequest = recognitionRequest else {
-            errorMessage = "Unable to create a recognition request."
-            showError = true
-            return
-        }
-        
-        // Configure recognition request
-        recognitionRequest.shouldReportPartialResults = true
-        
-        // Start the recognition task
-        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
-            guard let self = self else { return }
-            
-            var isFinal = false
-            
-            // Handle speech result
-            if let result = result {
-                self.recognizedText = result.bestTranscription.formattedString
-                isFinal = result.isFinal
-                self.startSilenceTimer()
+    func startRecording() {
+        Task {
+            // Cancel any existing recognition task
+            if recognitionTask != nil {
+                recognitionTask?.cancel()
+                recognitionTask = nil
             }
             
-            // Handle final
-            if error != nil || isFinal {
-                self.stopSilenceTimer()
-                self.audioEngine.stop()
-                inputNode.removeTap(onBus: 0)
+            // Check Availability
+            if !(await checkMicAvailability()) {
+                return
+            }
+            
+            // Erase previous text
+            recognizedText = ""
+            
+            // Configure the audio session
+            let audioSession = AVAudioSession.sharedInstance()
+            do {
+                try audioSession.setCategory(.record, mode: .measurement)
+                try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+            } catch {
+                errorMessage = "Audio session setup failed: \(error.localizedDescription)"
+                showError = true
+                return
+            }
+            
+            // Create the recognition request
+            recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            
+            // Configure the input node
+            let inputNode = audioEngine.inputNode
+            
+            // Ensure the recognition request is valid
+            guard let recognitionRequest = recognitionRequest else {
+                errorMessage = "Unable to create a recognition request."
+                showError = true
+                return
+            }
+            
+            // Configure recognition request
+            recognitionRequest.shouldReportPartialResults = true
+            
+            // Start the recognition task
+            recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
+                guard let self = self else { return }
                 
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
-                self.isRecording = false
+                var isFinal = false
+                
+                // Handle speech result
+                if let result = result {
+                    self.recognizedText = result.bestTranscription.formattedString
+                    isFinal = result.isFinal
+                    self.startSilenceTimer()
+                }
+                
+                // Handle final
+                if error != nil || isFinal {
+                    self.stopSilenceTimer()
+                    self.audioEngine.stop()
+                    inputNode.removeTap(onBus: 0)
+                    
+                    self.recognitionRequest = nil
+                    self.recognitionTask = nil
+                    self.isRecording = false
+                }
+            }
+            
+            // Configure the microphone input
+            let recordingFormat = inputNode.outputFormat(forBus: 0)
+            inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+                self.recognitionRequest?.append(buffer)
+            }
+            
+            audioEngine.prepare()
+            
+            // Start audio engine
+            do {
+                try audioEngine.start()
+                isRecording = true
+                startSilenceTimer()
+            } catch {
+                errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
+                showError = true
+                return
             }
         }
-        
-        // Configure the microphone input
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
-            self.recognitionRequest?.append(buffer)
-        }
-        
-        audioEngine.prepare()
-        
-        // Start audio engine
-        do {
-            try audioEngine.start()
-            isRecording = true
-            startSilenceTimer()
-        } catch {
-            errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
-            showError = true
-            return
-        }
-    } }
+    }
     
     func stopRecording() {
         stopSilenceTimer()
