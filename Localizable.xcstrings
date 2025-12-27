@@ -464,6 +464,16 @@
         }
       }
     },
+    "Search with Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントで検索"
+          }
+        }
+      }
+    },
     "Shortcut Tip" : {
       "localizations" : {
         "ja" : {
@@ -563,16 +573,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。"
-          }
-        }
-      }
-    },
-    "Type to Search" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "入力して検索"
           }
         }
       }

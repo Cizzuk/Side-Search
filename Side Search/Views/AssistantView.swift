@@ -17,7 +17,7 @@ struct AssistantView: View {
         NavigationStack {
             VStack {
                 // Search Query
-                TextField(viewModel.isRecording ? "Listening..." : "Type to Search",
+                TextField(viewModel.isRecording ? "Listening..." : "Search with Assistant",
                           text: $viewModel.recognizedText, axis: .vertical)
                     .font(.title)
                     .multilineTextAlignment(.center)
