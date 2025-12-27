@@ -81,6 +81,26 @@
         }
       }
     },
+    "Audio engine couldn't start: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オーディオエンジンを開始できませんでした: %@"
+          }
+        }
+      }
+    },
+    "Audio session setup failed: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オーディオセッションのセットアップに失敗しました: %@"
+          }
+        }
+      }
+    },
     "Auto Search on Silence" : {
       "localizations" : {
         "ja" : {
@@ -324,6 +344,16 @@
         }
       }
     },
+    "Invalid Search URL. Please check your settings." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索URLが無効です。設定を確認してください。"
+          }
+        }
+      }
+    },
     "Kagi" : {
       "localizations" : {
         "ja" : {
@@ -350,6 +380,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "クエリの最大文字数"
+          }
+        }
+      }
+    },
+    "Microphone access denied. Please enable it in Settings." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイクへのアクセスが拒否されています。設定で有効にしてください。"
           }
         }
       }
@@ -527,6 +567,26 @@
         }
       }
     },
+    "Speech recognition authorization denied. Please enable it in Settings." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識の承認が拒否されています。設定で有効にしてください。"
+          }
+        }
+      }
+    },
+    "Speech recognition is restricted on this device." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このデバイスでは音声認識が制限されています。"
+          }
+        }
+      }
+    },
     "Start Speech Recognition" : {
       "localizations" : {
         "ja" : {
@@ -573,6 +633,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。"
+          }
+        }
+      }
+    },
+    "Unable to create a recognition request." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "認識リクエストを作成できませんでした。"
+          }
+        }
+      }
+    },
+    "Unknown microphone authorization status." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不明なマイクの認証ステータスです。"
+          }
+        }
+      }
+    },
+    "Unknown speech recognition authorization status." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不明な音声認識の認証ステータスです。"
           }
         }
       }

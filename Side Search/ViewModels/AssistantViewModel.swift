@@ -16,7 +16,7 @@ class AssistantViewModel: ObservableObject {
     @Published var isRecording = false
     @Published var searchURL: URL?
     @Published var shouldShowSafari = false
-    @Published var errorMessage = ""
+    @Published var errorMessage: LocalizedStringResource = ""
     @Published var isCriticalError = false
     @Published var showError = false
     
@@ -202,14 +202,14 @@ class AssistantViewModel: ObservableObject {
             }
         } else {
             // Handle invalid URL error
-            self.errorMessage = "Invalid URL. Please check your search engine settings."
+            self.errorMessage = "Invalid Search URL. Please check your settings."
             self.showError = true
         }
     }
     
     func checkAvailability() -> Bool {
         if makeSearchURL(query: "test") == nil {
-            errorMessage = "Invalid search engine URL. Please check your settings."
+            errorMessage = "Invalid Search URL. Please check your settings."
             isCriticalError = true
             showError = true
             return false
@@ -271,7 +271,7 @@ class AssistantViewModel: ObservableObject {
                 return false
             }
         default:
-            self.errorMessage = "Unknown speech recognition status."
+            self.errorMessage = "Unknown speech recognition authorization status."
             self.showError = true
             return false
         }
