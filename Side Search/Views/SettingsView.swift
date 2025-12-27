@@ -5,8 +5,9 @@
 //  Created by Cizzuk on 2025/12/24.
 //
 
-import SwiftUI
+import SafariServices
 import Speech
+import SwiftUI
 
 struct SettingsView: View {
     @StateObject var viewModel = SettingsViewModel()
@@ -62,6 +63,14 @@ struct SettingsView: View {
                             Text(option.localizedName).tag(option)
                         }
                     }
+                    
+                    if viewModel.openIn == .inAppBrowser {
+                        Button() {
+                            SFSafariViewController.DataStore.default.clearWebsiteData()
+                        } label: {
+                            Text("Clear In-App Browser Data")
+                        }
+                    }
                 } header: { Text("Assistant Settings") }
                 footer: {
                     Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
@@ -70,6 +79,7 @@ struct SettingsView: View {
                 // Advanced Settings
                 Section {
                     Toggle("Disable Percent-encoding", isOn: $viewModel.defaultSE.disablePercentEncoding)
+                    
                     HStack {
                         Text("Max Query Length")
                         Spacer()
