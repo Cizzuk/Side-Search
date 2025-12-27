@@ -105,19 +105,13 @@ struct AssistantView: View {
                 }
             }
             .alert("Error", isPresented: $viewModel.showError) {
-                Button("OK") {
-                    dismiss()
-                }
+                Button("OK") { }
             } message: {
                 Text(viewModel.errorMessage)
             }
             .onAppear {
                 viewModel.onDismiss = { dismiss() }
-                Task {
-                    if await viewModel.checkAssistantAvailability() {
-                        viewModel.startRecording()
-                    }
-                }
+                viewModel.startAssistant()
             }
             .onDisappear() {
                 viewModel.stopRecording()

@@ -74,6 +74,13 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
+    // Start with Mic Muted
+    @Published var startWithMicMuted: Bool = UserDefaults.standard.bool(forKey: "startWithMicMuted") {
+        didSet {
+            UserDefaults.standard.set(startWithMicMuted, forKey: "startWithMicMuted")
+        }
+    }
+    
     // Open in...
     enum OpenInOption: String, CaseIterable {
         case inAppBrowser, defaultApp

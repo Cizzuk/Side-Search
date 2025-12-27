@@ -527,6 +527,16 @@
         }
       }
     },
+    "Start with Mic Muted" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイクミュートで開始"
+          }
+        }
+      }
+    },
     "Startpage" : {
       "localizations" : {
         "ja" : {

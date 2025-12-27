@@ -54,6 +54,8 @@ struct SettingsView: View {
                                 .labelsHidden()
                         }
                     }
+
+                    Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
                     
                     Picker("Open in", selection: $viewModel.openIn) {
                         ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in

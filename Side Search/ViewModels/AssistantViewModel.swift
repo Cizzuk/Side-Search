@@ -30,6 +30,11 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Private Properties
     
+    // Get Start with Mic Muted Setting
+    private var startWithMicMuted: Bool {
+        UserDefaults.standard.bool(forKey: "startWithMicMuted")
+    }
+    
     // Get OpenIn Setting
     private var openIn: SettingsViewModel.OpenInOption {
         if let rawValue = UserDefaults.standard.string(forKey: "openIn"),
@@ -64,11 +69,22 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Public Methods
     
+    func startAssistant() {
+        if !startWithMicMuted {
+            startRecording()
+        }
+    }
+    
     func startRecording() {
         // Cancel any existing recognition task
         if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
+        }
+        
+        // Check Availability
+        if !checkAssistantAvailability() {
+            return
         }
         
         // Erase previous text
@@ -184,7 +200,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func checkAssistantAvailability() async -> Bool {
+    func checkAssistantAvailability() -> Bool {
         // 1. Check URL Validity
         guard makeSearchURL(query: "test") != nil else {
             self.errorMessage = "Invalid search engine URL. Please check your settings."
@@ -214,13 +230,7 @@ class AssistantViewModel: ObservableObject {
         }
         
         // 3. Check Speech Recognition Authorization
-        let speechStatus = await withCheckedContinuation { continuation in
-            SFSpeechRecognizer.requestAuthorization { status in
-                continuation.resume(returning: status)
-            }
-        }
-        
-        switch speechStatus {
+        switch SFSpeechRecognizer.authorizationStatus() {
         case .authorized:
             return true
         case .denied:
