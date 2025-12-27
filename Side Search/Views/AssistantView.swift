@@ -26,8 +26,6 @@ struct AssistantView: View {
                     .onChange(of: isInputFocused) {
                         if isInputFocused {
                             viewModel.stopRecording()
-                        } else {
-                            viewModel.startRecording()
                         }
                     }
                     .onSubmit {
