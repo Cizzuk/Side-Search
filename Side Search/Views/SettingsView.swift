@@ -73,7 +73,9 @@ struct SettingsView: View {
                     }
                 } header: { Text("Assistant Settings") }
                 footer: {
-                    Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                    if viewModel.openIn == .defaultApp {
+                        Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                    }
                 }
                 
                 // Advanced Settings
@@ -92,6 +94,8 @@ struct SettingsView: View {
                 } header: { Text("Advanced Settings")
                 } footer: { Text("Blank to disable") }
             }
+            .animation(.default, value: viewModel.autoSearchOnSilence)
+            .animation(.default, value: viewModel.openIn)
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)
             .fullScreenCover(isPresented: $viewModel.isAssistantActivated) {
@@ -106,7 +110,7 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: { viewModel.isAssistantActivated = true }) {
-                        Label("Activate Assistant", systemImage: "mic")
+                        Label("Activate Assistant", systemImage: viewModel.startWithMicMuted ? "magnifyingglass" : "mic")
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
