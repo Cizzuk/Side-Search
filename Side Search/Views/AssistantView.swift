@@ -105,7 +105,11 @@ struct AssistantView: View {
                 }
             }
             .alert("Error", isPresented: $viewModel.showError) {
-                Button("OK") { }
+                Button("OK") {
+                    if viewModel.isCriticalError {
+                        dismiss()
+                    }
+                }
             } message: {
                 Text(viewModel.errorMessage)
             }

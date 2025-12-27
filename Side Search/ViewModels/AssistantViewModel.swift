@@ -17,6 +17,7 @@ class AssistantViewModel: ObservableObject {
     @Published var searchURL: URL?
     @Published var shouldShowSafari = false
     @Published var errorMessage = ""
+    @Published var isCriticalError = false
     @Published var showError = false
     
     // Get SearchEngine Settings
@@ -70,6 +71,9 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Public Methods
     
     func startAssistant() {
+        if !checkAvailability() {
+            return
+        }
         if !startWithMicMuted {
             startRecording()
         }
@@ -83,7 +87,7 @@ class AssistantViewModel: ObservableObject {
         }
         
         // Check Availability
-        if !checkAssistantAvailability() {
+        if !checkMicAvailability() {
             return
         }
         
@@ -200,15 +204,19 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func checkAssistantAvailability() -> Bool {
-        // 1. Check URL Validity
-        guard makeSearchURL(query: "test") != nil else {
-            self.errorMessage = "Invalid search engine URL. Please check your settings."
-            self.showError = true
+    func checkAvailability() -> Bool {
+        if makeSearchURL(query: "test") == nil {
+            errorMessage = "Invalid search engine URL. Please check your settings."
+            isCriticalError = true
+            showError = true
             return false
         }
         
-        // 2. Check Microphone Authorization
+        return true
+    }
+    
+    func checkMicAvailability() -> Bool {
+        // 1. Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
             break
@@ -223,16 +231,17 @@ class AssistantViewModel: ObservableObject {
                     self.showError = true
                 }
             }
+            return false
         default:
             self.errorMessage = "Unknown microphone authorization status."
             self.showError = true
             return false
         }
         
-        // 3. Check Speech Recognition Authorization
+        // 2. Check Speech Recognition Authorization
         switch SFSpeechRecognizer.authorizationStatus() {
         case .authorized:
-            return true
+            break
         case .denied:
             self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
             self.showError = true
@@ -241,11 +250,21 @@ class AssistantViewModel: ObservableObject {
             self.errorMessage = "Speech recognition is restricted on this device."
             self.showError = true
             return false
+        case .notDetermined:
+            SFSpeechRecognizer.requestAuthorization { status in
+                if status != .authorized {
+                    self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
+                    self.showError = true
+                }
+            }
+            return false
         default:
             self.errorMessage = "Unknown speech recognition status."
             self.showError = true
             return false
         }
+        
+        return true
     }
     
     func makeSearchURL(query: String) -> URL? {
