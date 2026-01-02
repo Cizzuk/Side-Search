@@ -247,32 +247,25 @@ class AssistantViewModel: ObservableObject {
             return false
         }
         
-        // 2. Check Speech Recognition Authorization
-        switch SFSpeechRecognizer.authorizationStatus() {
-        case .authorized:
-            break
-        case .denied:
-            self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
+        
+        // 2. Check Speech Recognition Availability
+        
+        // Check supported locales
+        guard !SFSpeechRecognizer.supportedLocales().isEmpty else {
+            self.errorMessage = "Speech recognition is currently unavailable on this device."
             self.showError = true
             return false
-        case .restricted:
-            self.errorMessage = "Speech recognition is restricted on this device."
-            self.showError = true
-            return false
-        case .notDetermined:
-            // Wait for user authorization
-            let status = await withCheckedContinuation { continuation in
-                SFSpeechRecognizer.requestAuthorization { status in
-                    continuation.resume(returning: status)
-                }
-            }
-            if status != .authorized {
-                self.errorMessage = "Speech recognition authorization denied. Please enable it in Settings."
+        }
+        
+        // Check supportsOnDeviceRecognition & initialization
+        if let recognizer = speechRecognizer {
+            if !recognizer.supportsOnDeviceRecognition {
+                self.errorMessage = "Speech recognition is currently unavailable on this device."
                 self.showError = true
                 return false
             }
-        default:
-            self.errorMessage = "Unknown speech recognition authorization status."
+        } else {
+            self.errorMessage = "Speech recognizer could not be initialized."
             self.showError = true
             return false
         }

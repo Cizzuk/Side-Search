@@ -603,22 +603,22 @@
         }
       }
     },
-    "Speech recognition authorization denied. Please enable it in Settings." : {
+    "Speech recognition is currently unavailable on this device." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "音声認識の承認が拒否されています。設定で有効にしてください。"
+            "value" : "音声認識は現在、このデバイスでは利用できません。"
           }
         }
       }
     },
-    "Speech recognition is restricted on this device." : {
+    "Speech recognizer could not be initialized." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このデバイスでは音声認識が制限されています。"
+            "value" : "音声認識の初期化に失敗しました。"
           }
         }
       }
@@ -689,16 +689,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不明なマイクの認証ステータスです。"
-          }
-        }
-      }
-    },
-    "Unknown speech recognition authorization status." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "不明な音声認識の認証ステータスです。"
           }
         }
       }
