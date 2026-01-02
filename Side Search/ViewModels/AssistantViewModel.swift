@@ -110,9 +110,6 @@ class AssistantViewModel: ObservableObject {
             // Create the recognition request
             recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
             
-            // Configure the input node
-            let inputNode = audioEngine.inputNode
-            
             // Ensure the recognition request is valid
             guard let recognitionRequest = recognitionRequest else {
                 errorMessage = "Unable to create a recognition request."
@@ -121,7 +118,11 @@ class AssistantViewModel: ObservableObject {
             }
             
             // Configure recognition request
+            recognitionRequest.requiresOnDeviceRecognition = true
             recognitionRequest.shouldReportPartialResults = true
+            
+            // Configure the input node
+            let inputNode = audioEngine.inputNode
             
             // Start the recognition task
             recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
