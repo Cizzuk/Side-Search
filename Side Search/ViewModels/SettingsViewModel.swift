@@ -34,27 +34,40 @@ class SettingsViewModel: ObservableObject {
     }
     
     // Speech Recognition Locale
-    @Published var speechLocale: Locale = {
-        if let localeIdentifier = UserDefaults.standard.string(forKey: "speechLocale") {
+    @Published var speechLocale: Locale? = {
+        let supportedLocales = SFSpeechRecognizer.supportedLocales()
+        
+        // If saved locale exists and is supported
+        if let localeIdentifier = UserDefaults.standard.string(forKey: "speechLocale"),
+           supportedLocales.contains(Locale(identifier: localeIdentifier)) {
             return Locale(identifier: localeIdentifier)
         }
         
-        // Default Preferred Language
+        // Else find from preferred languages
         let preferredLanguages = Locale.preferredLanguages
         for lang in preferredLanguages {
             let locale = Locale(identifier: lang)
-            if SFSpeechRecognizer.supportedLocales().contains(locale) {
+            if supportedLocales.contains(locale) {
                 UserDefaults.standard.set(locale.identifier, forKey: "speechLocale")
                 return locale
             }
+            
+            // Special case for English - if region is not specified, use en-US
+            if let languageCode = locale.language.languageCode?.identifier, languageCode == "en" {
+                let enUSLocale = Locale(identifier: "en-US")
+                if supportedLocales.contains(enUSLocale) {
+                    UserDefaults.standard.set(enUSLocale.identifier, forKey: "speechLocale")
+                    return enUSLocale
+                }
+            }
         }
         
-        // Fallback to en-US if not available
-        UserDefaults.standard.set("en-US", forKey: "speechLocale")
-        return Locale(identifier: "en-US")
+        return nil
     }() {
         didSet {
-            UserDefaults.standard.set(speechLocale.identifier, forKey: "speechLocale")
+            if let locale = speechLocale {
+                UserDefaults.standard.set(locale.identifier, forKey: "speechLocale")
+            }
         }
     }
     

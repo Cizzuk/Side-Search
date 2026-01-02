@@ -172,7 +172,20 @@
       }
     },
     "Cizzuk" : {
-      "shouldTranslate" : false
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cizzuk"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cizzuk"
+          }
+        }
+      }
     },
     "Claude" : {
       "localizations" : {
@@ -374,6 +387,16 @@
         }
       }
     },
+    "License" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライセンス"
+          }
+        }
+      }
+    },
     "Listening..." : {
       "localizations" : {
         "ja" : {
@@ -413,6 +436,9 @@
           }
         }
       }
+    },
+    "MIT License\n\nCopyright (c) 2025 Cizzuk\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE." : {
+      "shouldTranslate" : false
     },
     "OK" : {
       "localizations" : {
@@ -577,22 +603,22 @@
         }
       }
     },
-    "Speech recognition authorization denied. Please enable it in Settings." : {
+    "Speech recognition is currently unavailable on this device." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "音声認識の承認が拒否されています。設定で有効にしてください。"
+            "value" : "音声認識は現在、このデバイスでは利用できません。"
           }
         }
       }
     },
-    "Speech recognition is restricted on this device." : {
+    "Speech recognizer could not be initialized." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このデバイスでは音声認識が制限されています。"
+            "value" : "音声認識の初期化に失敗しました。"
           }
         }
       }
@@ -663,16 +689,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不明なマイクの認証ステータスです。"
-          }
-        }
-      }
-    },
-    "Unknown speech recognition authorization status." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "不明な音声認識の認証ステータスです。"
           }
         }
       }
