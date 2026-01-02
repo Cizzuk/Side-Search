@@ -7,3 +7,4 @@
 */
 
 NSMicrophoneUsageDescription = "音声認識で検索をするためにマイクを使用します。";
+NSSpeechRecognitionUsageDescription = "音声認識を使用して検索をします。";
