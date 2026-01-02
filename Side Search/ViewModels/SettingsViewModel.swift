@@ -51,6 +51,15 @@ class SettingsViewModel: ObservableObject {
                 UserDefaults.standard.set(locale.identifier, forKey: "speechLocale")
                 return locale
             }
+            
+            // Special case for English - if region is not specified, use en-US
+            if let languageCode = locale.language.languageCode?.identifier, languageCode == "en" {
+                let enUSLocale = Locale(identifier: "en-US")
+                if supportedLocales.contains(enUSLocale) {
+                    UserDefaults.standard.set(enUSLocale.identifier, forKey: "speechLocale")
+                    return enUSLocale
+                }
+            }
         }
         
         return nil
