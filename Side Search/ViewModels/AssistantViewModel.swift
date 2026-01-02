@@ -51,8 +51,8 @@ class AssistantViewModel: ObservableObject {
             return SFSpeechRecognizer(locale: Locale(identifier: speechLocale))
         }
         
-        // Fallback to en-US if not available
-        return SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+        // Fallback if no locale is set
+        return SFSpeechRecognizer()
     }
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
