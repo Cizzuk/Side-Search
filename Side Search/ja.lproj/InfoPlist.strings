@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  Side Search
+
+  Created by Cizzuk on 2026/01/02.
+  
+*/
+
+NSSpeechRecognitionUsageDescription = "音声認識を使用して検索をします。";
+NSSpeechRecognitionUsageDescription = "音声認識を使用して検索をします。";
