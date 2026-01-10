@@ -134,6 +134,8 @@ struct SettingsView: View {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+                isShowingHelp = false
+                viewModel.isShowingRecommend = false
                 viewModel.isAssistantActivated = true
             }
         }
