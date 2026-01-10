@@ -106,7 +106,7 @@ struct AssistantView: View {
             } message: {
                 Text(viewModel.errorMessage)
             }
-            .alert("Voice Over is currently enabled", isPresented: $viewModel.showVoiceOverAlert) {
+            .alert("VoiceOver is currently enabled", isPresented: $viewModel.showVoiceOverAlert) {
                 Button("Continue", role: .confirm) {
                     viewModel.handleVoiceOverAlertAction(.proceed)
                 }
@@ -117,7 +117,7 @@ struct AssistantView: View {
                     viewModel.handleVoiceOverAlertAction(.cancel)
                 }
             } message: {
-                Text("While using speech recognition, Voice Over may stop reading. Do you want to continue?")
+                Text("While using speech recognition, VoiceOver may stop reading. Do you want to continue?")
             }
             .onAppear {
                 viewModel.onDismiss = { dismiss() }

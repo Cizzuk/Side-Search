@@ -783,22 +783,22 @@
         }
       }
     },
-    "Voice Over is currently enabled" : {
+    "VoiceOver is currently enabled" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Voice Overがオンになっています"
+            "value" : "VoiceOverがオンになっています"
           }
         }
       }
     },
-    "While using speech recognition, Voice Over may stop reading. Do you want to continue?" : {
+    "While using speech recognition, VoiceOver may stop reading. Do you want to continue?" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "音声認識の使用中はVoice Overの読み上げが停止する可能性があります。続けますか？"
+            "value" : "音声認識の使用中はVoiceOverの読み上げが停止する可能性があります。続けますか？"
           }
         }
       }
