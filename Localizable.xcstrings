@@ -31,6 +31,16 @@
     "32" : {
       "shouldTranslate" : false
     },
+    "About" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "情報"
+          }
+        }
+      }
+    },
     "Activate Assistant" : {
       "localizations" : {
         "ja" : {
@@ -67,16 +77,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AIアシスタント"
-          }
-        }
-      }
-    },
-    "App Info" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリの情報"
           }
         }
       }
