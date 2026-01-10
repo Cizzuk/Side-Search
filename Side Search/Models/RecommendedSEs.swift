@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class RecommendSEs {
     // Helpers
@@ -75,6 +76,14 @@ class RecommendSEs {
         }
         
         return aiCSEs
+    }
+    
+    class func appURLSchemes() -> [SearchEngineModel] {
+        var appCSEs: [SearchEngineModel] = []
+        
+        // canOpenURL checks
+        
+        return appCSEs
     }
     
     class func normalSearchEngines() -> [SearchEngineModel] {

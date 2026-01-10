@@ -81,6 +81,16 @@
         }
       }
     },
+    "App URL Schemes" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリのURLスキーム"
+          }
+        }
+      }
+    },
     "Assistant Settings" : {
       "localizations" : {
         "ja" : {
@@ -170,6 +180,9 @@
           }
         }
       }
+    },
+    "ChatGPT App" : {
+
     },
     "Cizzuk" : {
       "localizations" : {
