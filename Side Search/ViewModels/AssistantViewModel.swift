@@ -129,7 +129,7 @@ class AssistantViewModel: ObservableObject {
             // Configure the audio session
             let audioSession = AVAudioSession.sharedInstance()
             do {
-                try audioSession.setCategory(.record, mode: .measurement)
+                try audioSession.setCategory(.playAndRecord, mode: .measurement, options: .allowBluetoothA2DP)
                 try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
             } catch {
                 errorMessage = "Audio session setup failed: \(error.localizedDescription)"
