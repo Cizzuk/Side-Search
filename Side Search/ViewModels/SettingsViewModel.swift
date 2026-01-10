@@ -12,6 +12,22 @@ import Speech
 class SettingsViewModel: ObservableObject {
     @Published var isAssistantActivated = false
     @Published var isShowingRecommend = false
+    @Published var shouldLockOpenInToDefaultApp: Bool = false
+    
+    init() {
+        checkShouldLockOpenIn()
+    }
+    
+    // Check if search url scheme is not http/https, shouldLockOpenInToDefaultApp
+    func checkShouldLockOpenIn() {
+        if let scheme = URL(string: defaultSE.url)?.scheme?.lowercased(),
+           scheme != "http" && scheme != "https" {
+            shouldLockOpenInToDefaultApp = true
+            openIn = .defaultApp
+        } else {
+            shouldLockOpenInToDefaultApp = false
+        }
+    }
     
     @Published var defaultSE: SearchEngineModel = {
         if let rawData = UserDefaults.standard.data(forKey: "defaultSearchEngine"),
@@ -29,6 +45,7 @@ class SettingsViewModel: ObservableObject {
         didSet {
             if let data = defaultSE.toJSON() {
                 UserDefaults.standard.set(data, forKey: "defaultSearchEngine")
+                checkShouldLockOpenIn()
             }
         }
     }

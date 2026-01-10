@@ -63,6 +63,7 @@ struct SettingsView: View {
                             Text(option.localizedName).tag(option)
                         }
                     }
+                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
                     
                     if viewModel.openIn == .inAppBrowser {
                         Button() {
@@ -74,7 +75,11 @@ struct SettingsView: View {
                 } header: { Text("Assistant Settings") }
                 footer: {
                     if viewModel.openIn == .defaultApp {
-                        Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                        if viewModel.shouldLockOpenInToDefaultApp {
+                            Text("This option is locked to Default App because the Search URL scheme is not http or https.")
+                        } else {
+                            Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                        }
                     }
                 }
                 

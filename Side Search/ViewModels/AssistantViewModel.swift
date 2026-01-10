@@ -297,7 +297,13 @@ class AssistantViewModel: ObservableObject {
         urlString = urlString.replacingOccurrences(of: "%s", with: searchQuery)
         
         // URL Validation
-        if !urlString.lowercased().hasPrefix("https://") && !urlString.lowercased().hasPrefix("http://") {
+        guard let createdURL = URL(string: urlString),
+              let scheme = createdURL.scheme else {
+            return nil
+        }
+        
+        // Check openIn
+        if openIn != .defaultApp && scheme.lowercased() != "http" && scheme.lowercased() != "https" {
             return nil
         }
         
