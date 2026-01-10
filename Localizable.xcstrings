@@ -520,6 +520,16 @@
         }
       }
     },
+    "Run a shortcut using a URL scheme" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLスキームを使用してショートカットを実行する"
+          }
+        }
+      }
+    },
     "Search" : {
       "localizations" : {
         "ja" : {
@@ -769,6 +779,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アクションボタンにもショートカットを設定できます。"
+          }
+        }
+      }
+    },
+    "You can also use the app's URL scheme for the Search URL. You can use supported apps or run shortcuts." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索URLにはアプリのURLスキームを使用することもできます。対応するアプリを使用したり、ショートカットを実行したりできます。"
           }
         }
       }
