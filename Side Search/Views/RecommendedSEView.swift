@@ -30,19 +30,6 @@ struct RecommendedSEView: View {
                     } header: { Text("AI Assistants") }
                 }
                 
-                // App URL Scheme List
-                if !RecommendSEs.appURLSchemes().isEmpty {
-                    Section {
-                        ForEach(RecommendSEs.appURLSchemes().indices, id: \.self, content: { index in
-                            let cse = RecommendSEs.appURLSchemes()[index]
-                            RecommendedSEButton(action: {
-                                SearchEngine = cse
-                                dismiss()
-                            }, cse: cse)
-                        })
-                    } header: { Text("App URL Schemes") }
-                }
-                
                 // Normal Search Engine List
                 Section {
                     ForEach(normalCSEList.indices, id: \.self, content: { index in

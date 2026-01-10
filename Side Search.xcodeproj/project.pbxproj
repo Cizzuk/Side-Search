@@ -17,9 +17,22 @@
 		BEB06C4A2EFBA9AE0026CC6E /* Side Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Side Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BE73219E2F128F3600F17CEE /* Exceptions for "Side Search" folder in "Side Search" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Side-Search-Info.plist",
+			);
+			target = BEB06C492EFBA9AE0026CC6E /* Side Search */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BEB06C4C2EFBA9AE0026CC6E /* Side Search */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BE73219E2F128F3600F17CEE /* Exceptions for "Side Search" folder in "Side Search" target */,
+			);
 			path = "Side Search";
 			sourceTree = "<group>";
 		};
@@ -271,6 +284,7 @@
 				DEVELOPMENT_TEAM = Z8R89S24YT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Side-Search-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use the microphone to search with speech recognition.";
@@ -312,6 +326,7 @@
 				DEVELOPMENT_TEAM = Z8R89S24YT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Side-Search-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use the microphone to search with speech recognition.";
