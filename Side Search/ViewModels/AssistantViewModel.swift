@@ -21,28 +21,6 @@ class AssistantViewModel: ObservableObject {
     @Published var isCriticalError = false
     @Published var showError = false
     
-    // VoiceOver Alert
-    @Published var showVoiceOverAlert = false
-    private var dontShowVoiceOverAlert: Bool = UserDefaults.standard.bool(forKey: "dontShowVoiceOverAlert")
-    enum VoiceOverAlertAction {
-        case proceed
-        case dontShowAgain
-        case cancel
-    }
-    func handleVoiceOverAlertAction(_ action: VoiceOverAlertAction) {
-        switch action {
-        case .proceed:
-            dontShowVoiceOverAlert = true
-            startRecording()
-        case .dontShowAgain:
-            UserDefaults.standard.set(true, forKey: "dontShowVoiceOverAlert")
-            dontShowVoiceOverAlert = true
-            startRecording()
-        case .cancel:
-            break
-        }
-    }
-    
     // Get SearchEngine Settings
     @Published var SearchEngine: SearchEngineModel = {
         if let rawData = UserDefaults.standard.data(forKey: "defaultSearchEngine"),
@@ -111,13 +89,6 @@ class AssistantViewModel: ObservableObject {
                 recognitionTask = nil
             }
             
-            // Check VoiceOver
-            let isVoiceOverRunning = UIAccessibility.isVoiceOverRunning
-            if isVoiceOverRunning && !dontShowVoiceOverAlert {
-                showVoiceOverAlert = true
-                return
-            }
-            
             // Check Availability
             if !(await checkMicAvailability()) {
                 return
@@ -129,7 +100,7 @@ class AssistantViewModel: ObservableObject {
             // Configure the audio session
             let audioSession = AVAudioSession.sharedInstance()
             do {
-                try audioSession.setCategory(.record, mode: .measurement)
+                try audioSession.setCategory(.playAndRecord, mode: .measurement, options: .allowBluetoothA2DP)
                 try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
             } catch {
                 errorMessage = "Audio session setup failed: \(error.localizedDescription)"
