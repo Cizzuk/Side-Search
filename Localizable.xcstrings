@@ -31,12 +31,12 @@
     "32" : {
       "shouldTranslate" : false
     },
-    "Activate Assistant" : {
+    "About" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アシスタントを起動"
+            "value" : "情報"
           }
         }
       }
@@ -57,16 +57,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AIアシスタント"
-          }
-        }
-      }
-    },
-    "App Info" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリの情報"
           }
         }
       }
@@ -111,16 +101,6 @@
         }
       }
     },
-    "Besides the Side Button, you can also launch the Side Search voice assistant using the Shortcuts app." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サイドボタン以外にも、ショートカットアプリを使ってSide Searchの音声アシスタントを起動することもできます。"
-          }
-        }
-      }
-    },
     "Bing" : {
       "localizations" : {
         "ja" : {
@@ -147,6 +127,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Brave Search"
+          }
+        }
+      }
+    },
+    "By setting up automation in the Shortcuts, you can perform other actions when Side Search is launched." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ショートカットのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。"
           }
         }
       }
@@ -207,6 +197,26 @@
         }
       }
     },
+    "Continue" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "続ける"
+          }
+        }
+      }
+    },
+    "Create a new personal automation in Shortcuts" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「ショートカット」で新規パーソナルオートメーションを作成する"
+          }
+        }
+      }
+    },
     "Default App" : {
       "localizations" : {
         "ja" : {
@@ -233,6 +243,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "パーセントエンコーディングを無効にする"
+          }
+        }
+      }
+    },
+    "Don't Show Again and Continue" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次回以降表示しないで続ける"
           }
         }
       }
@@ -327,12 +347,12 @@
         }
       }
     },
-    "If you are in a region where Side Button customization is enabled, you can quickly launch the Side Search voice assistant by pressing and holding the Side Button." : {
+    "If you are in a region where Side Button customization is enabled, you can quickly launch the Side Search assistant by pressing and holding the Side Button." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "もし、サイドボタンのカスタマイズが有効な地域にお住まいの場合、サイドボタンを長押しすることでSide Searchの音声アシスタントをすぐに起動できます。"
+            "value" : "サイドボタンのカスタマイズが可能な地域では、サイドボタンを長押しすることでSide Searchのアシスタントをすぐに起動できます。"
           }
         }
       }
@@ -460,6 +480,26 @@
         }
       }
     },
+    "Open Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定を開く"
+          }
+        }
+      }
+    },
+    "Open Shortcuts App" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ショートカットアプリを開く"
+          }
+        }
+      }
+    },
     "Perplexity" : {
       "localizations" : {
         "ja" : {
@@ -496,6 +536,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "クエリを%sで置き換えます"
+          }
+        }
+      }
+    },
+    "Run a shortcut using a URL scheme" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLスキームを使用してショートカットを実行する"
           }
         }
       }
@@ -623,6 +673,16 @@
         }
       }
     },
+    "Start Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを開始"
+          }
+        }
+      }
+    },
     "Start Speech Recognition" : {
       "localizations" : {
         "ja" : {
@@ -673,6 +733,16 @@
         }
       }
     },
+    "This option is locked to Default App because the Search URL scheme is not http or https." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索URLのスキームがhttpまたはhttpsではないため、この設定はデフォルトのアプリに固定されます。"
+          }
+        }
+      }
+    },
     "Unable to create a recognition request." : {
       "localizations" : {
         "ja" : {
@@ -713,12 +783,22 @@
         }
       }
     },
-    "With Shortcuts, you can also set up launching it from the Action Button." : {
+    "VoiceOver is currently enabled" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ショートカットなら、アクションボタンからの起動も設定できます。"
+            "value" : "VoiceOverがオンになっています"
+          }
+        }
+      }
+    },
+    "While using speech recognition, VoiceOver may stop reading. Do you want to continue?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識の使用中はVoiceOverの読み上げが停止する可能性があります。続けますか？"
           }
         }
       }
@@ -743,22 +823,42 @@
         }
       }
     },
-    "You can find it in the Shortcuts app under \"Side Search\" by selecting the \"Enable Assistant\" action." : {
+    "You can find it in the Shortcuts under \"Side Search\" by selecting the \"Enable Assistant\" action." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ショートカットアプリで「Side Search」の「アシスタントを有効にする」アクションから利用できます。"
+            "value" : "ショートカットで「Side Search」の「アシスタントを有効にする」アクションから利用できます。"
           }
         }
       }
     },
-    "You can set this up by going to Settings → Side Button and selecting \"Side Search\"." : {
+    "You can launch the Side Search assistant using the Shortcuts." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "設定 → サイドボタン で「Side Search」を選択することで設定できます。"
+            "value" : "ショートカットを使ってSide Searchのアシスタントを起動することができます。"
+          }
+        }
+      }
+    },
+    "You can set it up by going to Settings → Apps → Side Search and turning on \"Press Side Button for Side Search\"." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定 → アプリ → Side Searchで「サイドボタンを押してSide Searchを使用」をオンにすることで設定できます。"
+          }
+        }
+      }
+    },
+    "You can use the app's URL scheme for the Search URL. If you set the assistant to Open in Default App, you can also use Universal Links." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索URLにはアプリのURLスキームを使用することができます。アシスタントをデフォルトのアプリで開くように設定すれば、ユニバーサルリンクも使用できます。"
           }
         }
       }

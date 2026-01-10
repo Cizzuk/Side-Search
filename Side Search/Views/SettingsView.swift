@@ -63,6 +63,7 @@ struct SettingsView: View {
                             Text(option.localizedName).tag(option)
                         }
                     }
+                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
                     
                     if viewModel.openIn == .inAppBrowser {
                         Button() {
@@ -74,7 +75,11 @@ struct SettingsView: View {
                 } header: { Text("Assistant Settings") }
                 footer: {
                     if viewModel.openIn == .defaultApp {
-                        Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                        if viewModel.shouldLockOpenInToDefaultApp {
+                            Text("This option is locked to Default App because the Search URL scheme is not http or https.")
+                        } else {
+                            Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                        }
                     }
                 }
                 
@@ -110,7 +115,7 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: { viewModel.isAssistantActivated = true }) {
-                        Label("Activate Assistant", systemImage: viewModel.startWithMicMuted ? "magnifyingglass" : "mic")
+                        Label("Start Assistant", systemImage: viewModel.startWithMicMuted ? "magnifyingglass" : "mic")
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
@@ -129,6 +134,8 @@ struct SettingsView: View {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+                isShowingHelp = false
+                viewModel.isShowingRecommend = false
                 viewModel.isAssistantActivated = true
             }
         }

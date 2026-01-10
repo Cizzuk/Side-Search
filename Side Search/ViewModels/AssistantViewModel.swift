@@ -16,9 +16,32 @@ class AssistantViewModel: ObservableObject {
     @Published var isRecording = false
     @Published var searchURL: URL?
     @Published var shouldShowSafari = false
+    
     @Published var errorMessage: LocalizedStringResource = ""
     @Published var isCriticalError = false
     @Published var showError = false
+    
+    // VoiceOver Alert
+    @Published var showVoiceOverAlert = false
+    private var dontShowVoiceOverAlert: Bool = UserDefaults.standard.bool(forKey: "dontShowVoiceOverAlert")
+    enum VoiceOverAlertAction {
+        case proceed
+        case dontShowAgain
+        case cancel
+    }
+    func handleVoiceOverAlertAction(_ action: VoiceOverAlertAction) {
+        switch action {
+        case .proceed:
+            dontShowVoiceOverAlert = true
+            startRecording()
+        case .dontShowAgain:
+            UserDefaults.standard.set(true, forKey: "dontShowVoiceOverAlert")
+            dontShowVoiceOverAlert = true
+            startRecording()
+        case .cancel:
+            break
+        }
+    }
     
     // Get SearchEngine Settings
     @Published var SearchEngine: SearchEngineModel = {
@@ -86,6 +109,13 @@ class AssistantViewModel: ObservableObject {
             if recognitionTask != nil {
                 recognitionTask?.cancel()
                 recognitionTask = nil
+            }
+            
+            // Check VoiceOver
+            let isVoiceOverRunning = UIAccessibility.isVoiceOverRunning
+            if isVoiceOverRunning && !dontShowVoiceOverAlert {
+                showVoiceOverAlert = true
+                return
             }
             
             // Check Availability
@@ -297,7 +327,13 @@ class AssistantViewModel: ObservableObject {
         urlString = urlString.replacingOccurrences(of: "%s", with: searchQuery)
         
         // URL Validation
-        if !urlString.lowercased().hasPrefix("https://") && !urlString.lowercased().hasPrefix("http://") {
+        guard let createdURL = URL(string: urlString),
+              let scheme = createdURL.scheme else {
+            return nil
+        }
+        
+        // Check openIn
+        if openIn != .defaultApp && scheme.lowercased() != "http" && scheme.lowercased() != "https" {
             return nil
         }
         
