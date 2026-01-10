@@ -51,16 +51,6 @@
         }
       }
     },
-    "Additionally, by setting up an automation in the Shortcuts app, you can trigger other actions when Side Search is launched." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "また、ショートカットアプリのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。"
-          }
-        }
-      }
-    },
     "Advanced Settings" : {
       "localizations" : {
         "ja" : {
@@ -151,6 +141,16 @@
         }
       }
     },
+    "By setting up automation in the Shortcuts, you can perform other actions when Side Search is launched." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ショートカットのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "ja" : {
@@ -203,6 +203,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アプリ内ブラウザのデータを削除"
+          }
+        }
+      }
+    },
+    "Create a new personal automation in Shortcuts" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「ショートカット」で新規パーソナルオートメーションを作成する"
           }
         }
       }
@@ -773,42 +783,22 @@
         }
       }
     },
-    "You can also set the shortcut to the Action Button." : {
+    "You can find it in the Shortcuts under \"Side Search\" by selecting the \"Enable Assistant\" action." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アクションボタンにもショートカットを設定できます。"
+            "value" : "ショートカットで「Side Search」の「アシスタントを有効にする」アクションから利用できます。"
           }
         }
       }
     },
-    "You can also use the app's URL scheme for the Search URL. You can use supported apps or run shortcuts." : {
+    "You can launch the Side Search assistant using the Shortcuts." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "検索URLにはアプリのURLスキームを使用することもできます。対応するアプリを使用したり、ショートカットを実行したりできます。"
-          }
-        }
-      }
-    },
-    "You can find it in the Shortcuts app under \"Side Search\" by selecting the \"Enable Assistant\" action." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ショートカットアプリで「Side Search」の「アシスタントを有効にする」アクションから利用できます。"
-          }
-        }
-      }
-    },
-    "You can launch the Side Search assistant using the Shortcuts app." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ショートカットアプリを使ってSide Searchのアシスタントを起動することができます。"
+            "value" : "ショートカットを使ってSide Searchのアシスタントを起動することができます。"
           }
         }
       }
@@ -819,6 +809,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "設定 → アプリ → Side Searchで「サイドボタンを押してSide Searchを使用」をオンにすることで設定できます。"
+          }
+        }
+      }
+    },
+    "You can use the app's URL scheme for the Search URL. If you set the assistant to Open in Default App, you can also use Universal Links." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索URLにはアプリのURLスキームを使用することができます。アシスタントをデフォルトのアプリで開くように設定すれば、ユニバーサルリンクも使用できます。"
           }
         }
       }

@@ -34,11 +34,11 @@ struct HelpView: View {
                     // 検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。
                     // もし設定が難しい場合は、「おすすめのアシスタントと検索エンジン」からお好きなものを選んで簡単に設定することができます。
                     // カスタムの検索URLを設定したい場合は、検索クエリを「%s」で置き換えたURLを設定する必要があります。
-                    // 検索URLにはアプリのURLスキームを使用することもできます。対応するアプリを使用したり、ショートカットを実行したりできます。
+                    // 検索URLにはアプリのURLスキームを使用することができます。アシスタントをデフォルトのアプリで開くように設定すれば、ユニバーサルリンクも使用できます。
                     Text("The Search URL is necessary to set your preferred AI assistant or search engine URL.")
                     Text("If setting it up is difficult, you can easily set it up by choosing from \"Recommended Assistants & Search Engines.\"")
                     Text("If you want to set a custom Search URL, you need to set a URL where the search query is replaced with \"%s\".")
-                    Text("You can also use the app's URL scheme for the Search URL. You can use supported apps or run shortcuts.")
+                    Text("You can use the app's URL scheme for the Search URL. If you set the assistant to Open in Default App, you can also use Universal Links.")
                     Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios")!) {
                         Label("Run a shortcut using a URL scheme", systemImage: "book")
                     }
@@ -47,14 +47,15 @@ struct HelpView: View {
                 
                 // MARK: - Shortcut Tip
                 Section {
-                    // ショートカットアプリを使ってSide Searchのアシスタントを起動することができます。
-                    // ショートカットアプリで「Side Search」から「アシスタントを有効にする」アクションから利用できます。
-                    // アクションボタンにもショートカットを設定できます。
-                    // また、ショートカットアプリのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。
-                    Text("You can launch the Side Search assistant using the Shortcuts app.")
-                    Text("You can find it in the Shortcuts app under \"Side Search\" by selecting the \"Enable Assistant\" action.")
-                    Text("You can also set the shortcut to the Action Button.")
-                    Text("Additionally, by setting up an automation in the Shortcuts app, you can trigger other actions when Side Search is launched.")
+                    // ショートカットを使ってSide Searchのアシスタントを起動することができます。
+                    // ショートカットで「Side Search」から「アシスタントを有効にする」アクションから利用できます。
+                    // ショートカットのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。
+                    Text("You can launch the Side Search assistant using the Shortcuts.")
+                    Text("You can find it in the Shortcuts under \"Side Search\" by selecting the \"Enable Assistant\" action.")
+                    Text("By setting up automation in the Shortcuts, you can perform other actions when Side Search is launched.")
+                    Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/create-a-new-personal-automation-apdfbdbd7123/ios")!) {
+                        Label("Create a new personal automation in Shortcuts", systemImage: "book")
+                    }
                     Button() {
                         guard let shortcutsURL = URL(string: "shortcuts://") else { return }
                         if UIApplication.shared.canOpenURL(shortcutsURL) {
