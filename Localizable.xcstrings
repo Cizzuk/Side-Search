@@ -41,16 +41,6 @@
         }
       }
     },
-    "Activate Assistant" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アシスタントを起動"
-          }
-        }
-      }
-    },
     "Advanced Settings" : {
       "localizations" : {
         "ja" : {
@@ -659,6 +649,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "音声認識の初期化に失敗しました。"
+          }
+        }
+      }
+    },
+    "Start Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを開始"
           }
         }
       }

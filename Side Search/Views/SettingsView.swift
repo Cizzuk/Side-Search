@@ -115,7 +115,7 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: { viewModel.isAssistantActivated = true }) {
-                        Label("Activate Assistant", systemImage: viewModel.startWithMicMuted ? "magnifyingglass" : "mic")
+                        Label("Start Assistant", systemImage: viewModel.startWithMicMuted ? "magnifyingglass" : "mic")
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
