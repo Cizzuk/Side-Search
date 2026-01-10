@@ -27,7 +27,7 @@ struct HelpView: View {
                         Label("Run a shortcut using a URL scheme", systemImage: "book")
                     }
                         
-                } header: { Text("Search URL Tip") }
+                } header: { Label("Search URL Tip", systemImage: "magnifyingglass") }
                 
                 // Side Button Access Tip
                 Section {
@@ -43,7 +43,7 @@ struct HelpView: View {
                     } label: {
                         Label("Open Settings", systemImage: "gear")
                     }
-                } header: { Text("Side Button Tip") }
+                } header: { Label("Side Button Tip", systemImage: "button.vertical.right.press") }
                 
                 // Shortcut Tip
                 Section {
@@ -63,7 +63,7 @@ struct HelpView: View {
                     } label: {
                         Label("Open Shortcuts App", systemImage: "square.2.layers.3d")
                     }
-                } header: { Text("Shortcut Tip") }
+                } header: { Label("Shortcut Tip", systemImage: "square.2.layers.3d") }
                 
                 // MARK: - App Info Section
                 
