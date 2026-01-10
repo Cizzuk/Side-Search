@@ -106,6 +106,19 @@ struct AssistantView: View {
             } message: {
                 Text(viewModel.errorMessage)
             }
+            .alert("Voice Over is currently enabled", isPresented: $viewModel.showVoiceOverAlert) {
+                Button("Continue", role: .confirm) {
+                    viewModel.handleVoiceOverAlertAction(.proceed)
+                }
+                Button("Don't Show Again and Continue") {
+                    viewModel.handleVoiceOverAlertAction(.dontShowAgain)
+                }
+                Button("Cancel", role: .cancel) {
+                    viewModel.handleVoiceOverAlertAction(.cancel)
+                }
+            } message: {
+                Text("While using speech recognition, Voice Over may stop reading. Do you want to continue?")
+            }
             .onAppear {
                 viewModel.onDismiss = { dismiss() }
                 viewModel.startAssistant()

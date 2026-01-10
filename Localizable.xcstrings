@@ -197,6 +197,16 @@
         }
       }
     },
+    "Continue" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "続ける"
+          }
+        }
+      }
+    },
     "Create a new personal automation in Shortcuts" : {
       "localizations" : {
         "ja" : {
@@ -233,6 +243,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "パーセントエンコーディングを無効にする"
+          }
+        }
+      }
+    },
+    "Don't Show Again and Continue" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次回以降表示しないで続ける"
           }
         }
       }
@@ -759,6 +779,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "バージョン"
+          }
+        }
+      }
+    },
+    "Voice Over is currently enabled" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voice Overがオンになっています"
+          }
+        }
+      }
+    },
+    "While using speech recognition, Voice Over may stop reading. Do you want to continue?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識の使用中はVoice Overの読み上げが停止する可能性があります。続けますか？"
           }
         }
       }
