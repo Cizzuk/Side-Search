@@ -32,7 +32,6 @@ struct HelpView: View {
                     Button() {
                         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
                         if UIApplication.shared.canOpenURL(settingsURL) {
-                            print(settingsURL.absoluteString)
                             UIApplication.shared.open(settingsURL)
                         }
                     } label: {
@@ -42,12 +41,22 @@ struct HelpView: View {
                 
                 // Shortcut Tip
                 Section {
-                    // サイドボタン以外にも、ショートカットアプリを使ってSide Searchの音声アシスタントを起動することもできます。
+                    // ショートカットアプリを使ってSide Searchの音声アシスタントを起動することができます。
                     // ショートカットアプリで「Side Search」から「アシスタントを有効にする」アクションから利用できます。
-                    // ショートカットなら、アクションボタンからの起動も設定できます。
-                    Text("Besides the Side Button, you can also launch the Side Search voice assistant using the Shortcuts app.")
+                    // アクションボタンにもショートカットを設定できます。
+                    // また、ショートカットアプリのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。
+                    Text("You can launch the Side Search assistant using the Shortcuts app.")
                     Text("You can find it in the Shortcuts app under \"Side Search\" by selecting the \"Enable Assistant\" action.")
-                    Text("With Shortcuts, you can also set up launching it from the Action Button.")
+                    Text("You can also set the shortcut to the Action Button.")
+                    Text("Additionally, by setting up an automation in the Shortcuts app, you can trigger other actions when Side Search is launched.")
+                    Button() {
+                        guard let shortcutsURL = URL(string: "shortcuts://") else { return }
+                        if UIApplication.shared.canOpenURL(shortcutsURL) {
+                            UIApplication.shared.open(shortcutsURL)
+                        }
+                    } label: {
+                        Label("Open Shortcuts App", systemImage: "square.2.layers.3d")
+                    }
                 } header: { Text("Shortcut Tip") }
                 
                 // MARK: - App Info Section

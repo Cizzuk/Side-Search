@@ -41,6 +41,16 @@
         }
       }
     },
+    "Additionally, by setting up an automation in the Shortcuts app, you can trigger other actions when Side Search is launched." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "また、ショートカットアプリのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。"
+          }
+        }
+      }
+    },
     "Advanced Settings" : {
       "localizations" : {
         "ja" : {
@@ -107,16 +117,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "話すのを止めて検索"
-          }
-        }
-      }
-    },
-    "Besides the Side Button, you can also launch the Side Search voice assistant using the Shortcuts app." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サイドボタン以外にも、ショートカットアプリを使ってSide Searchの音声アシスタントを起動することもできます。"
           }
         }
       }
@@ -470,6 +470,16 @@
         }
       }
     },
+    "Open Shortcuts App" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ショートカットアプリを開く"
+          }
+        }
+      }
+    },
     "Perplexity" : {
       "localizations" : {
         "ja" : {
@@ -723,16 +733,6 @@
         }
       }
     },
-    "With Shortcuts, you can also set up launching it from the Action Button." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ショートカットなら、アクションボタンからの起動も設定できます。"
-          }
-        }
-      }
-    },
     "Yahoo" : {
       "localizations" : {
         "ja" : {
@@ -753,12 +753,32 @@
         }
       }
     },
+    "You can also set the shortcut to the Action Button." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクションボタンにもショートカットを設定できます。"
+          }
+        }
+      }
+    },
     "You can find it in the Shortcuts app under \"Side Search\" by selecting the \"Enable Assistant\" action." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "ショートカットアプリで「Side Search」の「アシスタントを有効にする」アクションから利用できます。"
+          }
+        }
+      }
+    },
+    "You can launch the Side Search assistant using the Shortcuts app." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ショートカットアプリを使ってSide Searchのアシスタントを起動することができます。"
           }
         }
       }
