@@ -13,23 +13,7 @@ struct HelpView: View {
     var body: some View {
         NavigationStack {
             List {
-                // Search URL Tip
-                Section {
-                    // 検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。
-                    // もし設定が難しい場合は、「おすすめのアシスタントと検索エンジン」からお好きなものを選んで簡単に設定することができます。
-                    // カスタムの検索URLを設定したい場合は、検索クエリを「%s」で置き換えたURLを設定する必要があります。
-                    // 検索URLにはアプリのURLスキームを使用することもできます。対応するアプリを使用したり、ショートカットを実行したりできます。
-                    Text("The Search URL is necessary to set your preferred AI assistant or search engine URL.")
-                    Text("If setting it up is difficult, you can easily set it up by choosing from \"Recommended Assistants & Search Engines.\"")
-                    Text("If you want to set a custom Search URL, you need to set a URL where the search query is replaced with \"%s\".")
-                    Text("You can also use the app's URL scheme for the Search URL. You can use supported apps or run shortcuts.")
-                    Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios")!) {
-                        Label("Run a shortcut using a URL scheme", systemImage: "book")
-                    }
-                        
-                } header: { Label("Search URL Tip", systemImage: "magnifyingglass") }
-                
-                // Side Button Access Tip
+                // MARK: - Side Button Access Tip
                 Section {
                     // サイドボタンのカスタマイズが可能な地域では、サイドボタンを長押しすることでSide Searchのアシスタントをすぐに起動できます。
                     // 設定 → アプリ → Side Searchで「サイドボタンを押してSide Searchを使用」をオンにすることで設定できます。
@@ -45,7 +29,23 @@ struct HelpView: View {
                     }
                 } header: { Label("Side Button Tip", systemImage: "button.vertical.right.press") }
                 
-                // Shortcut Tip
+                // MARK: - Search URL Tip
+                Section {
+                    // 検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。
+                    // もし設定が難しい場合は、「おすすめのアシスタントと検索エンジン」からお好きなものを選んで簡単に設定することができます。
+                    // カスタムの検索URLを設定したい場合は、検索クエリを「%s」で置き換えたURLを設定する必要があります。
+                    // 検索URLにはアプリのURLスキームを使用することもできます。対応するアプリを使用したり、ショートカットを実行したりできます。
+                    Text("The Search URL is necessary to set your preferred AI assistant or search engine URL.")
+                    Text("If setting it up is difficult, you can easily set it up by choosing from \"Recommended Assistants & Search Engines.\"")
+                    Text("If you want to set a custom Search URL, you need to set a URL where the search query is replaced with \"%s\".")
+                    Text("You can also use the app's URL scheme for the Search URL. You can use supported apps or run shortcuts.")
+                    Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios")!) {
+                        Label("Run a shortcut using a URL scheme", systemImage: "book")
+                    }
+                        
+                } header: { Label("Search URL Tip", systemImage: "magnifyingglass") }
+                
+                // MARK: - Shortcut Tip
                 Section {
                     // ショートカットアプリを使ってSide Searchのアシスタントを起動することができます。
                     // ショートカットアプリで「Side Search」から「アシスタントを有効にする」アクションから利用できます。
@@ -66,7 +66,6 @@ struct HelpView: View {
                 } header: { Label("Shortcut Tip", systemImage: "square.2.layers.3d") }
                 
                 // MARK: - App Info Section
-                
                 Section {
                     HStack {
                         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
