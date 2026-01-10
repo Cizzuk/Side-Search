@@ -460,6 +460,16 @@
         }
       }
     },
+    "Open Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定を開く"
+          }
+        }
+      }
+    },
     "Perplexity" : {
       "localizations" : {
         "ja" : {
@@ -753,12 +763,12 @@
         }
       }
     },
-    "You can set this up by going to Settings → Side Button and selecting \"Side Search\"." : {
+    "You can set it up by going to Settings → Apps → Side Search and turning on \"Press Side Button for Side Search\"." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "設定 → サイドボタン で「Side Search」を選択することで設定できます。"
+            "value" : "設定 → アプリ → Side Searchで「サイドボタンを押してSide Searchを使用」をオンにすることで設定できます。"
           }
         }
       }
