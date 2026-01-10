@@ -31,7 +31,7 @@ struct HelpView: View {
                 
                 // Side Button Access Tip
                 Section {
-                    // もし、サイドボタンのカスタマイズが有効な地域にお住まいの場合、サイドボタンを長押しすることでSide Searchの音声アシスタントをすぐに起動できます。
+                    // サイドボタンのカスタマイズが可能な地域にお住まいの場合、サイドボタンを長押しすることでSide Searchの音声アシスタントをすぐに起動できます。
                     // 設定 → アプリ → Side Searchで「サイドボタンを押してSide Searchを使用」をオンにすることで設定できます。
                     Text("If you are in a region where Side Button customization is enabled, you can quickly launch the Side Search voice assistant by pressing and holding the Side Button.")
                     Text("You can set it up by going to Settings → Apps → Side Search and turning on \"Press Side Button for Side Search\".")
