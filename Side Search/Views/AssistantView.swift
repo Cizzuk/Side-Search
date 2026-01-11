@@ -49,14 +49,14 @@ struct AssistantView: View {
                         .labelStyle(.iconOnly)
                         .font(.system(size: 30))
                         .padding(30)
-                        .background(viewModel.recognizedText.isEmpty ? Color.gray : Color.blue)
+                        .background(isSearchable ? Color.blue : Color.gray)
                         .foregroundColor(.white)
                         .clipShape(Circle())
                         .glassEffect()
                 }
                 .buttonStyle(.plain)
-                .disabled(viewModel.recognizedText.isEmpty)
-                .opacity(viewModel.recognizedText.isEmpty ? 0.5 : 1.0)
+                .disabled(!isSearchable)
+                .opacity(isSearchable ? 1.0 : 0.5)
                 
                 Spacer()
             }
@@ -114,5 +114,15 @@ struct AssistantView: View {
                 viewModel.stopRecording()
             }
         }
+    }
+    
+    private var isSearchable: Bool {
+        // Check if Search URL does not contain "%s"
+        if !viewModel.SearchEngine.url.contains("%s") {
+            return true
+        }
+        
+        // Check if recognized text is not empty
+        return !viewModel.recognizedText.isEmpty
     }
 }

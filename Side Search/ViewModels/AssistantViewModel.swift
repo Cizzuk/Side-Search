@@ -188,8 +188,6 @@ class AssistantViewModel: ObservableObject {
     }
     
     func performSearch() {
-        guard !recognizedText.isEmpty else { return }
-        
         // Stop recording before searching
         stopRecording()
         
