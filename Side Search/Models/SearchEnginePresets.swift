@@ -49,10 +49,6 @@ class SearchEnginePresets {
                     url: "https://claude.ai/new?q=%s",
                 ),
                 SearchEngineModel(
-                    name: "Grok",
-                    url: "https://grok.com/?q=%s",
-                ),
-                SearchEngineModel(
                     name: "Google AI Mode",
                     url: "https://google.com/?q=%s&udm=50",
                 ),
