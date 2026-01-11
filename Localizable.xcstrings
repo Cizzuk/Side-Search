@@ -287,16 +287,6 @@
         }
       }
     },
-    "Grok" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Grok"
-          }
-        }
-      }
-    },
     "Help" : {
       "localizations" : {
         "ja" : {
