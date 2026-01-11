@@ -91,16 +91,6 @@
         }
       }
     },
-    "Auto Search on Silence" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "話すのを止めて検索"
-          }
-        }
-      }
-    },
     "Bing" : {
       "localizations" : {
         "ja" : {
@@ -689,6 +679,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Startpage"
+          }
+        }
+      }
+    },
+    "Stop Speech and Search" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "話すのを止めて検索"
           }
         }
       }

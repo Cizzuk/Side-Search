@@ -45,7 +45,7 @@ struct SettingsView: View {
                         }
                     }
                     
-                    Toggle("Auto Search on Silence", isOn: $viewModel.autoSearchOnSilence)
+                    Toggle("Stop Speech and Search", isOn: $viewModel.autoSearchOnSilence)
                     if viewModel.autoSearchOnSilence {
                         HStack {
                             Text("Silence Duration")
