@@ -1,5 +1,5 @@
 //
-//  RecommendedSEView.swift
+//  SearchEnginePresetsView.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2025/12/24.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct RecommendedSEView: View {
+struct SearchEnginePresetsView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var SearchEngine: SearchEngineModel
     
-    private let aiCSEList = RecommendSEs.aiAssistants()
-    private let normalCSEList = RecommendSEs.normalSearchEngines()
+    private let aiCSEList = SearchEnginePresets.aiAssistants()
+    private let normalCSEList = SearchEnginePresets.normalSearchEngines()
     
     var body: some View {
         NavigationStack {
@@ -22,7 +22,7 @@ struct RecommendedSEView: View {
                     Section {
                         ForEach(aiCSEList.indices, id: \.self, content: { index in
                             let cse = aiCSEList[index]
-                            RecommendedSEButton(action: {
+                            PresetSEButton(action: {
                                 SearchEngine = cse
                                 dismiss()
                             }, cse: cse)
@@ -34,14 +34,14 @@ struct RecommendedSEView: View {
                 Section {
                     ForEach(normalCSEList.indices, id: \.self, content: { index in
                         let cse = normalCSEList[index]
-                        RecommendedSEButton(action: {
+                        PresetSEButton(action: {
                             SearchEngine = cse
                             dismiss()
                         }, cse: cse)
                     })
                 } header: { Text("Search Engines") }
             }
-            .navigationTitle("Recommended Assistants & Search Engines")
+            .navigationTitle("Search URL Presets")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -53,7 +53,7 @@ struct RecommendedSEView: View {
         }
     }
     
-    struct RecommendedSEButton: View {
+    struct PresetSEButton: View {
         let action: () -> Void
         let cse: SearchEngineModel
         

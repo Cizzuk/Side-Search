@@ -27,8 +27,8 @@ struct SettingsView: View {
                 } header: { Text("Search URL")
                 } footer: { Text("Replace query with %s") }
                 
-                Button(action: { viewModel.isShowingRecommend = true }) {
-                    Label("Recommended Assistants & Search Engines", systemImage: "sparkle.magnifyingglass")
+                Button(action: { viewModel.isShowingPresets = true }) {
+                    Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
                 }
                 
                 // Assistant Settings
@@ -106,8 +106,8 @@ struct SettingsView: View {
             .fullScreenCover(isPresented: $viewModel.isAssistantActivated) {
                 AssistantView()
             }
-            .sheet(isPresented: $viewModel.isShowingRecommend) {
-                RecommendedSEView(SearchEngine: $viewModel.defaultSE)
+            .sheet(isPresented: $viewModel.isShowingPresets) {
+                SearchEnginePresetsView(SearchEngine: $viewModel.defaultSE)
             }
             .sheet(isPresented: $isShowingHelp) {
                 HelpView()
@@ -135,7 +135,7 @@ struct SettingsView: View {
             }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 isShowingHelp = false
-                viewModel.isShowingRecommend = false
+                viewModel.isShowingPresets = false
                 viewModel.isAssistantActivated = true
             }
         }

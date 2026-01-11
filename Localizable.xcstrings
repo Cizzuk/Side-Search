@@ -317,12 +317,12 @@
         }
       }
     },
-    "If setting it up is difficult, you can easily set it up by choosing from \"Recommended Assistants & Search Engines.\"" : {
+    "If setting it up is difficult, you can easily set it up by choosing from \"Search URL Presets\"." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "もし設定が難しい場合は、「おすすめのアシスタントと検索エンジン」からお好きなものを選んで簡単に設定することができます。"
+            "value" : "もし設定が難しい場合は、「検索URLのプリセット」からお好きなものを選んで簡単に設定することができます。"
           }
         }
       }
@@ -500,16 +500,6 @@
         }
       }
     },
-    "Recommended Assistants & Search Engines" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "おすすめのアシスタントと検索エンジン"
-          }
-        }
-      }
-    },
     "Replace query with %s" : {
       "localizations" : {
         "ja" : {
@@ -556,6 +546,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索URL"
+          }
+        }
+      }
+    },
+    "Search URL Presets" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索URLのプリセット"
           }
         }
       }

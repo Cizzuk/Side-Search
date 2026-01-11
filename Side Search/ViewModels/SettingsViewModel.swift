@@ -11,7 +11,7 @@ import Speech
 
 class SettingsViewModel: ObservableObject {
     @Published var isAssistantActivated = false
-    @Published var isShowingRecommend = false
+    @Published var isShowingPresets = false
     @Published var shouldLockOpenInToDefaultApp: Bool = false
     
     init() {
@@ -36,7 +36,7 @@ class SettingsViewModel: ObservableObject {
         }
         
         // Create Default
-        let se = RecommendSEs.defaultSearchEngine
+        let se = SearchEnginePresets.defaultSearchEngine
         if let data = se.toJSON() {
             UserDefaults.standard.set(data, forKey: "defaultSearchEngine")
         }
