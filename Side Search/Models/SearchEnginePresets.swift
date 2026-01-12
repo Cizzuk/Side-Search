@@ -53,7 +53,7 @@ class SearchEnginePresets {
                     url: "https://google.com/?q=%s&udm=50",
                 ),
                 SearchEngineModel(
-                    name: "Microsoft Copilot",
+                    name: "Copilot Search",
                     url: "https://www.bing.com/copilotsearch?q=%s",
                 ),
                 SearchEngineModel(

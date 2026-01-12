@@ -187,6 +187,16 @@
         }
       }
     },
+    "Copilot Search" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copilot検索"
+          }
+        }
+      }
+    },
     "Create a new personal automation in Shortcuts" : {
       "localizations" : {
         "ja" : {
@@ -403,16 +413,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "マイクへのアクセスが拒否されています。設定で有効にしてください。"
-          }
-        }
-      }
-    },
-    "Microsoft Copilot" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Microsoft Copilot"
           }
         }
       }
