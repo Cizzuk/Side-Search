@@ -25,7 +25,7 @@ struct SettingsView: View {
                         .environment(\.layoutDirection, .leftToRight)
                         .submitLabel(.done)
                 } header: { Text("Search URL")
-                } footer: { Text("Replace query with %s") }
+                } footer: { Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.") }
                 
                 Button(action: { viewModel.showPresets = true }) {
                     Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")

@@ -121,6 +121,16 @@
         }
       }
     },
+    "By setting the query part to \"%s\", you can use Side Search's speech recognition." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クエリ部分を「%s」にすると、Side Searchの音声認識を利用できます。"
+          }
+        }
+      }
+    },
     "By setting up automation in the Shortcuts, you can perform other actions when Side Search is launched." : {
       "localizations" : {
         "ja" : {
@@ -486,16 +496,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "プライバシーポリシー"
-          }
-        }
-      }
-    },
-    "Replace query with %s" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "クエリを%sで置き換えます"
           }
         }
       }
