@@ -10,12 +10,34 @@ import UIKit
 import Speech
 
 class SettingsViewModel: ObservableObject {
-    @Published var isAssistantActivated = false
-    @Published var isShowingPresets = false
+    @Published var showAssistant = false
+    @Published var showSafariView = false
+    @Published var showPresets = false
+    @Published var showHelp = false
+    
     @Published var shouldLockOpenInToDefaultApp: Bool = false
     
     init() {
         checkShouldLockOpenIn()
+    }
+    
+    func activateAssistant() {
+        showPresets = false
+        showHelp = false
+        
+        // Check if search url does not contain "%s"
+        if !defaultSE.url.contains("%s") {
+            switch openIn {
+            case .inAppBrowser:
+                showSafariView = true
+            case .defaultApp:
+                if let url = URL(string: defaultSE.url) {
+                    UIApplication.shared.open(url)
+                }
+            }
+        } else {
+            showAssistant = true
+        }
     }
     
     // Check if search url scheme is not http/https, shouldLockOpenInToDefaultApp

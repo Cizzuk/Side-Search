@@ -11,7 +11,6 @@ import SwiftUI
 
 struct SettingsView: View {
     @StateObject var viewModel = SettingsViewModel()
-    @State private var isShowingHelp = false
     
     var body: some View {
         NavigationStack {
@@ -27,7 +26,7 @@ struct SettingsView: View {
                 } header: { Text("Search URL")
                 } footer: { Text("Replace query with %s") }
                 
-                Button(action: { viewModel.isShowingPresets = true }) {
+                Button(action: { viewModel.showPresets = true }) {
                     Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
                 }
                 
@@ -103,23 +102,29 @@ struct SettingsView: View {
             .animation(.default, value: viewModel.openIn)
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)
-            .fullScreenCover(isPresented: $viewModel.isAssistantActivated) {
+            .fullScreenCover(isPresented: $viewModel.showAssistant) {
                 AssistantView()
             }
-            .sheet(isPresented: $viewModel.isShowingPresets) {
+            .fullScreenCover(isPresented: $viewModel.showSafariView) {
+                if let url = URL(string: viewModel.defaultSE.url) {
+                    SafariView(url: url)
+                        .ignoresSafeArea()
+                }
+            }
+            .sheet(isPresented: $viewModel.showPresets) {
                 SearchEnginePresetsView(SearchEngine: $viewModel.defaultSE)
             }
-            .sheet(isPresented: $isShowingHelp) {
+            .sheet(isPresented: $viewModel.showHelp) {
                 HelpView()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(action: { viewModel.isAssistantActivated = true }) {
+                    Button(action: { viewModel.activateAssistant() }) {
                         Label("Start Assistant", systemImage: viewModel.startWithMicMuted ? "magnifyingglass" : "mic")
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(action: { isShowingHelp = true }) {
+                    Button(action: { viewModel.showHelp = true }) {
                         Label("Help", systemImage: "questionmark")
                     }
                 }
@@ -134,9 +139,7 @@ struct SettingsView: View {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
-                isShowingHelp = false
-                viewModel.isShowingPresets = false
-                viewModel.isAssistantActivated = true
+                viewModel.activateAssistant()
             }
         }
     }

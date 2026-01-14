@@ -89,7 +89,7 @@ struct AssistantView: View {
                     }
                 }
             }
-            .fullScreenCover(isPresented: $viewModel.shouldShowSafari, onDismiss: {
+            .fullScreenCover(isPresented: $viewModel.showSafariView, onDismiss: {
                 dismiss()
             }) {
                 if let url = viewModel.searchURL {

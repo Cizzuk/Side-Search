@@ -15,7 +15,7 @@ class AssistantViewModel: ObservableObject {
     @Published var recognizedText = ""
     @Published var isRecording = false
     @Published var searchURL: URL?
-    @Published var shouldShowSafari = false
+    @Published var showSafariView = false
     
     @Published var errorMessage: LocalizedStringResource = ""
     @Published var isCriticalError = false
@@ -195,7 +195,7 @@ class AssistantViewModel: ObservableObject {
             switch openIn {
             case .inAppBrowser:
                 self.searchURL = url
-                self.shouldShowSafari = true
+                self.showSafariView = true
             case .defaultApp:
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 onDismiss?()
