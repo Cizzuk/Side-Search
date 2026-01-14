@@ -12,7 +12,14 @@ struct SafariView: UIViewControllerRepresentable {
     let url: URL
 
     func makeUIViewController(context: Context) -> SFSafariViewController {
-        return SFSafariViewController(url: url)
+        let config = SFSafariViewController.Configuration()
+        config.entersReaderIfAvailable = false
+        config.barCollapsingEnabled = true
+        
+        let safari = SFSafariViewController(url: url, configuration: config)
+        safari.dismissButtonStyle = .close
+        safari.modalPresentationStyle = .overFullScreen
+        return safari
     }
 
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) { }
