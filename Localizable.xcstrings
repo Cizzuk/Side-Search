@@ -187,6 +187,16 @@
         }
       }
     },
+    "Close Curtain" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カーテンを閉じる"
+          }
+        }
+      }
+    },
     "Copilot Search" : {
       "localizations" : {
         "ja" : {

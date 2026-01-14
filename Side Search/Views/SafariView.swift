@@ -10,13 +10,19 @@ import SafariServices
 
 struct SafariView: UIViewControllerRepresentable {
     let url: URL
+    
+    static func checkAvailability(at url: URL) -> Bool {
+        guard let scheme = url.scheme?.lowercased(), (scheme == "http" || scheme == "https") else {
+            return false
+        }
+        return true
+    }
 
     func makeUIViewController(context: Context) -> UIViewController {
         // Check URL
-        guard let scheme = url.scheme?.lowercased(), (scheme == "http" || scheme == "https") else {
+        guard SafariView.checkAvailability(at: url) else {
             UIApplication.shared.open(url)
-            // TODO: Replace Curtain
-            return UIViewController()
+            return UIHostingController(rootView: DummyCurtainView())
         }
         
         let config = SFSafariViewController.Configuration()

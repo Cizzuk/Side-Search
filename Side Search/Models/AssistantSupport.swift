@@ -48,7 +48,6 @@ struct AssistantSupport {
         if AssistantSupport.makeSearchURL(query: "test") == nil {
             return false
         }
-        
         return true
     }
 }
