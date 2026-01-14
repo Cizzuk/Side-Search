@@ -72,7 +72,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Public Methods
     
     func startAssistant() {
-        if !checkAvailability() {
+        if !AssistantSupport.checkAvailability() {
             return
         }
         if !startWithMicMuted {
@@ -191,7 +191,7 @@ class AssistantViewModel: ObservableObject {
         // Stop recording before searching
         stopRecording()
         
-        if let url = makeSearchURL(query: recognizedText) {
+        if let url = AssistantSupport.makeSearchURL(query: recognizedText) {
             switch openIn {
             case .inAppBrowser:
                 self.searchURL = url
@@ -205,17 +205,6 @@ class AssistantViewModel: ObservableObject {
             self.errorMessage = "Invalid Search URL. Please check your settings."
             self.showError = true
         }
-    }
-    
-    func checkAvailability() -> Bool {
-        if makeSearchURL(query: "test") == nil {
-            errorMessage = "Invalid Search URL. Please check your settings."
-            isCriticalError = true
-            showError = true
-            return false
-        }
-        
-        return true
     }
     
     @MainActor
@@ -270,44 +259,6 @@ class AssistantViewModel: ObservableObject {
         }
         
         return true
-    }
-    
-    func makeSearchURL(query: String) -> URL? {
-        var searchQuery = query
-        
-        // Handle Max Query Length
-        if let maxLength = SearchEngine.maxQueryLength {
-            if searchQuery.count > maxLength {
-                searchQuery = String(searchQuery.prefix(maxLength))
-            }
-        }
-        
-        // Handle Percent Encoding
-        if !SearchEngine.disablePercentEncoding {
-            if let encoded = searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                searchQuery = encoded
-            }
-        }
-        
-        // Prepare the URL
-        var urlString = SearchEngine.url
-        
-        // Replace the placeholder with the query
-        urlString = urlString.replacingOccurrences(of: "%s", with: searchQuery)
-        
-        // URL Validation
-        guard let createdURL = URL(string: urlString),
-              let scheme = createdURL.scheme else {
-            return nil
-        }
-        
-        // Check openIn
-        if openIn != .defaultApp && scheme.lowercased() != "http" && scheme.lowercased() != "https" {
-            return nil
-        }
-        
-        // Create a URL object
-        return URL(string: urlString)
     }
     
     private func startSilenceTimer() {
