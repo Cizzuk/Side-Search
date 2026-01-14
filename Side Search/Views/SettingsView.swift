@@ -10,6 +10,7 @@ import Speech
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject var viewModel = SettingsViewModel()
     
     var body: some View {
@@ -138,9 +139,14 @@ struct SettingsView: View {
                     }
                 }
             }
+            // MARK: - Events
+            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 viewModel.activateAssistant()
             }
         }
+        // MARK: - Dummy Curtain
+        .opacity(viewModel.showDummyCurtain ? 0.0 : 1.0)
+        .fullScreenCover(isPresented: $viewModel.showDummyCurtain) { DummyCurtainView() }
     }
 }

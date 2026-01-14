@@ -8,17 +8,32 @@
 import Combine
 import UIKit
 import Speech
+import SwiftUI
 
 class SettingsViewModel: ObservableObject {
     @Published var showAssistant = false
     @Published var showSafariView = false
     @Published var showPresets = false
     @Published var showHelp = false
+    @Published var showDummyCurtain = false
     
     @Published var shouldLockOpenInToDefaultApp: Bool = false
     
     init() {
         checkShouldLockOpenIn()
+    }
+    
+    func onChange(scenePhase: ScenePhase) {
+        switch scenePhase {
+        case .active:
+            break
+        case .inactive:
+            showDummyCurtain = false
+        case .background:
+            break
+        @unknown default:
+            break
+        }
     }
     
     func activateAssistant() {
@@ -32,6 +47,12 @@ class SettingsViewModel: ObservableObject {
                 showSafariView = true
             case .defaultApp:
                 if let url = URL(string: defaultSE.url) {
+                    // Show dummy curtain without animation
+                    var transaction = Transaction(animation: .none)
+                    transaction.disablesAnimations = true
+                    withTransaction(transaction) {
+                        showDummyCurtain = true
+                    }
                     UIApplication.shared.open(url)
                 }
             }
