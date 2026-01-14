@@ -72,7 +72,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Public Methods
     
     func startAssistant() {
-        if !AssistantSupport.checkAvailability() {
+        if !AssistantSupport.checkURLAvailability() {
             return
         }
         if !startWithMicMuted {

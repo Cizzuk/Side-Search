@@ -44,11 +44,20 @@ struct AssistantSupport {
         }
     }
     
-    static func checkAvailability() -> Bool {
+    static func checkURLAvailability() -> Bool {
         if AssistantSupport.makeSearchURL(query: "test") == nil {
             return false
         }
         return true
+    }
+    
+    static func checkSafariViewAvailability() -> Bool {
+        if let url = AssistantSupport.makeSearchURL(query: "test"),
+           SafariView.checkAvailability(at: url) {
+            return true
+        } else {
+            return false
+        }
     }
     
     static func needQueryInput() -> Bool {

@@ -63,8 +63,7 @@ class SettingsViewModel: ObservableObject {
     
     // Check if search url scheme is not http/https, shouldLockOpenInToDefaultApp
     func checkShouldLockOpenIn() {
-        if let scheme = URL(string: defaultSE.url)?.scheme?.lowercased(),
-           scheme != "http" && scheme != "https" {
+        if !AssistantSupport.checkSafariViewAvailability() {
             shouldLockOpenInToDefaultApp = true
             openIn = .defaultApp
         } else {
