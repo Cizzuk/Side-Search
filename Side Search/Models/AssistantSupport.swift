@@ -38,7 +38,7 @@ struct AssistantSupport {
         
         // Create the URL
         if let createdURL = URL(string: urlString) {
-            return URL(string: urlString)
+            return createdURL
         } else {
             return nil
         }
