@@ -149,4 +149,16 @@ struct SettingsView: View {
         .opacity(viewModel.showDummyCurtain ? 0.0 : 1.0)
         .fullScreenCover(isPresented: $viewModel.showDummyCurtain) { DummyCurtainView() }
     }
+    
+    func assistantButtonImage() -> String {
+        if !AssistantSupport.needQueryInput() {
+            return "magnifyingglass"
+        }
+        
+        if viewModel.startWithMicMuted {
+            return "magnifyingglass"
+        }
+        
+        return "mic"
+    }
 }

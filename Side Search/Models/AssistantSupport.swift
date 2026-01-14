@@ -50,4 +50,13 @@ struct AssistantSupport {
         }
         return true
     }
+    
+    static func needQueryInput() -> Bool {
+        // Get defaultSearchEngine
+        guard let rawData = UserDefaults.standard.data(forKey: "defaultSearchEngine"),
+              let engine: SearchEngineModel = SearchEngineModel.fromJSON(rawData)
+        else { return false }
+        
+        return engine.url.contains("%s")
+    }
 }

@@ -117,12 +117,16 @@ struct AssistantView: View {
     }
     
     private var isSearchable: Bool {
-        // Check if Search URL does not contain "%s"
-        if !viewModel.SearchEngine.url.contains("%s") {
+        // If no query is needed, always searchable
+        if !AssistantSupport.needQueryInput() {
             return true
         }
         
-        // Check if recognized text is not empty
-        return !viewModel.recognizedText.isEmpty
+        // Check if recognized text is empty
+        if viewModel.recognizedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return false
+        }
+            
+        return true
     }
 }

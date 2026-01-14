@@ -40,8 +40,10 @@ class SettingsViewModel: ObservableObject {
         showPresets = false
         showHelp = false
         
-        // Check if search url does not contain "%s"
-        if !defaultSE.url.contains("%s") {
+        // Check if query input is needed
+        if AssistantSupport.needQueryInput() {
+            showAssistant = true
+        } else {
             switch openIn {
             case .inAppBrowser:
                 showSafariView = true
@@ -56,8 +58,6 @@ class SettingsViewModel: ObservableObject {
                     UIApplication.shared.open(url)
                 }
             }
-        } else {
-            showAssistant = true
         }
     }
     
