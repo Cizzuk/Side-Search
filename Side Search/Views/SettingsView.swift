@@ -76,7 +76,7 @@ struct SettingsView: View {
                 footer: {
                     if viewModel.openIn == .defaultApp {
                         if viewModel.shouldLockOpenInToDefaultApp {
-                            Text("This option is locked to Default App because the Search URL scheme is not http or https.")
+                            Text("This option is locked to Default App because the In-App Browser does not support the Search URL.")
                         } else {
                             Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
                         }

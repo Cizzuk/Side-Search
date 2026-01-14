@@ -713,12 +713,12 @@
         }
       }
     },
-    "This option is locked to Default App because the Search URL scheme is not http or https." : {
+    "This option is locked to Default App because the In-App Browser does not support the Search URL." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "検索URLのスキームがhttpまたはhttpsではないため、この設定はデフォルトのアプリに固定されます。"
+            "value" : "アプリ内ブラウザが検索URLをサポートしていないため、この設定はデフォルトのアプリに固定されます。"
           }
         }
       }
