@@ -13,7 +13,7 @@ struct SafariView: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> UIViewController {
         // Check URL
-        if let scheme = url.scheme?.lowercased(), scheme != "http" && scheme != "https" {
+        guard let scheme = url.scheme?.lowercased(), (scheme == "http" || scheme == "https") else {
             UIApplication.shared.open(url)
             // TODO: Replace Curtain
             return UIViewController()
