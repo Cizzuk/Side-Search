@@ -11,7 +11,14 @@ import SafariServices
 struct SafariView: UIViewControllerRepresentable {
     let url: URL
 
-    func makeUIViewController(context: Context) -> SFSafariViewController {
+    func makeUIViewController(context: Context) -> UIViewController {
+        // Check URL
+        if let scheme = url.scheme?.lowercased(), scheme != "http" && scheme != "https" {
+            UIApplication.shared.open(url)
+            // TODO: Replace Curtain
+            return UIViewController()
+        }
+        
         let config = SFSafariViewController.Configuration()
         config.entersReaderIfAvailable = false
         config.barCollapsingEnabled = true
@@ -22,5 +29,5 @@ struct SafariView: UIViewControllerRepresentable {
         return safari
     }
 
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
 }
