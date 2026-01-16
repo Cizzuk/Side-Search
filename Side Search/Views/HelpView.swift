@@ -33,11 +33,11 @@ struct HelpView: View {
                 Section {
                     // 検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。
                     // もし設定が難しい場合は、「検索URLのプリセット」からお好きなものを選んで簡単に設定することができます。
-                    // カスタムの検索URLを設定したい場合は、検索クエリを「%s」で置き換えたURLを設定する必要があります。
+                    // クエリ部分を「%s」にすると、Side Searchの音声認識を利用できます。
                     // 検索URLにはアプリのURLスキームを使用することができます。アシスタントをデフォルトのアプリで開くように設定すれば、ユニバーサルリンクも使用できます。
                     Text("The Search URL is necessary to set your preferred AI assistant or search engine URL.")
                     Text("If setting it up is difficult, you can easily set it up by choosing from \"Search URL Presets\".")
-                    Text("If you want to set a custom Search URL, you need to set a URL where the search query is replaced with \"%s\".")
+                    Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.")
                     Text("You can use the app's URL scheme for the Search URL. If you set the assistant to Open in Default App, you can also use Universal Links.")
                     Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios")!) {
                         Label("Run a shortcut using a URL scheme", systemImage: "book")

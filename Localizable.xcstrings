@@ -357,16 +357,6 @@
         }
       }
     },
-    "If you want to set a custom Search URL, you need to set a URL where the search query is replaced with \"%s\"." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カスタムの検索URLを設定したい場合は、検索クエリを「%s」で置き換えたURLを設定する必要があります。"
-          }
-        }
-      }
-    },
     "In-App Browser" : {
       "localizations" : {
         "ja" : {
