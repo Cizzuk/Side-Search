@@ -10,8 +10,8 @@ import Speech
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject var viewModel = SettingsViewModel()
-    @State private var isShowingHelp = false
     
     var body: some View {
         NavigationStack {
@@ -25,10 +25,10 @@ struct SettingsView: View {
                         .environment(\.layoutDirection, .leftToRight)
                         .submitLabel(.done)
                 } header: { Text("Search URL")
-                } footer: { Text("Replace query with %s") }
+                } footer: { Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.") }
                 
-                Button(action: { viewModel.isShowingRecommend = true }) {
-                    Label("Recommended Assistants & Search Engines", systemImage: "sparkle.magnifyingglass")
+                Button(action: { viewModel.showPresets = true }) {
+                    Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
                 }
                 
                 // Assistant Settings
@@ -45,7 +45,7 @@ struct SettingsView: View {
                         }
                     }
                     
-                    Toggle("Auto Search on Silence", isOn: $viewModel.autoSearchOnSilence)
+                    Toggle("Stop Speech and Search", isOn: $viewModel.autoSearchOnSilence)
                     if viewModel.autoSearchOnSilence {
                         HStack {
                             Text("Silence Duration")
@@ -76,7 +76,7 @@ struct SettingsView: View {
                 footer: {
                     if viewModel.openIn == .defaultApp {
                         if viewModel.shouldLockOpenInToDefaultApp {
-                            Text("This option is locked to Default App because the Search URL scheme is not http or https.")
+                            Text("This option is locked to Default App because the In-App Browser does not support the Search URL.")
                         } else {
                             Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
                         }
@@ -103,23 +103,29 @@ struct SettingsView: View {
             .animation(.default, value: viewModel.openIn)
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)
-            .fullScreenCover(isPresented: $viewModel.isAssistantActivated) {
+            .fullScreenCover(isPresented: $viewModel.showAssistant) {
                 AssistantView()
             }
-            .sheet(isPresented: $viewModel.isShowingRecommend) {
-                RecommendedSEView(SearchEngine: $viewModel.defaultSE)
+            .fullScreenCover(isPresented: $viewModel.showSafariView) {
+                if let url = URL(string: viewModel.defaultSE.url) {
+                    SafariView(url: url)
+                        .ignoresSafeArea()
+                }
             }
-            .sheet(isPresented: $isShowingHelp) {
+            .sheet(isPresented: $viewModel.showPresets) {
+                SearchEnginePresetsView(SearchEngine: $viewModel.defaultSE)
+            }
+            .sheet(isPresented: $viewModel.showHelp) {
                 HelpView()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(action: { viewModel.isAssistantActivated = true }) {
-                        Label("Start Assistant", systemImage: viewModel.startWithMicMuted ? "magnifyingglass" : "mic")
+                    Button(action: { viewModel.activateAssistant() }) {
+                        Label("Start Assistant", systemImage: assistantButtonImage())
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(action: { isShowingHelp = true }) {
+                    Button(action: { viewModel.showHelp = true }) {
                         Label("Help", systemImage: "questionmark")
                     }
                 }
@@ -133,11 +139,26 @@ struct SettingsView: View {
                     }
                 }
             }
+            // MARK: - Events
+            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
-                isShowingHelp = false
-                viewModel.isShowingRecommend = false
-                viewModel.isAssistantActivated = true
+                viewModel.activateAssistant()
             }
         }
+        // MARK: - Dummy Curtain
+        .opacity(viewModel.showDummyCurtain ? 0.0 : 1.0)
+        .fullScreenCover(isPresented: $viewModel.showDummyCurtain) { DummyCurtainView() }
+    }
+    
+    func assistantButtonImage() -> String {
+        if !AssistantSupport.needQueryInput() {
+            return "magnifyingglass"
+        }
+        
+        if viewModel.startWithMicMuted {
+            return "magnifyingglass"
+        }
+        
+        return "mic"
     }
 }

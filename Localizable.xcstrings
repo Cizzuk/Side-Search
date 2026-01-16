@@ -91,16 +91,6 @@
         }
       }
     },
-    "Auto Search on Silence" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "話すのを止めて検索"
-          }
-        }
-      }
-    },
     "Bing" : {
       "localizations" : {
         "ja" : {
@@ -127,6 +117,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Brave Search"
+          }
+        }
+      }
+    },
+    "By setting the query part to \"%s\", you can use Side Search's speech recognition." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クエリ部分を「%s」にすると、Side Searchの音声認識を利用できます。"
           }
         }
       }
@@ -193,6 +193,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アプリ内ブラウザのデータを削除"
+          }
+        }
+      }
+    },
+    "Close Curtain" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カーテンを閉じる"
+          }
+        }
+      }
+    },
+    "Copilot Search" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copilot検索"
           }
         }
       }
@@ -297,16 +317,6 @@
         }
       }
     },
-    "Grok" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Grok"
-          }
-        }
-      }
-    },
     "Help" : {
       "localizations" : {
         "ja" : {
@@ -317,12 +327,12 @@
         }
       }
     },
-    "If setting it up is difficult, you can easily set it up by choosing from \"Recommended Assistants & Search Engines.\"" : {
+    "If setting it up is difficult, you can easily set it up by choosing from \"Search URL Presets\"." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "もし設定が難しい場合は、「おすすめのアシスタントと検索エンジン」からお好きなものを選んで簡単に設定することができます。"
+            "value" : "もし設定が難しい場合は、「検索URLのプリセット」からお好きなものを選んで簡単に設定することができます。"
           }
         }
       }
@@ -343,16 +353,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "デフォルトのアプリで開く場合、検索URLに対応するアプリか、デフォルトのブラウザが開かれます。"
-          }
-        }
-      }
-    },
-    "If you want to set a custom Search URL, you need to set a URL where the search query is replaced with \"%s\"." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カスタムの検索URLを設定したい場合は、検索クエリを「%s」で置き換えたURLを設定する必要があります。"
           }
         }
       }
@@ -427,16 +427,6 @@
         }
       }
     },
-    "Microsoft Copilot" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Microsoft Copilot"
-          }
-        }
-      }
-    },
     "MIT License\n\nCopyright (c) 2025 Cizzuk\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE." : {
       "shouldTranslate" : false
     },
@@ -500,26 +490,6 @@
         }
       }
     },
-    "Recommended Assistants & Search Engines" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "おすすめのアシスタントと検索エンジン"
-          }
-        }
-      }
-    },
-    "Replace query with %s" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "クエリを%sで置き換えます"
-          }
-        }
-      }
-    },
     "Run a shortcut using a URL scheme" : {
       "localizations" : {
         "ja" : {
@@ -556,6 +526,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索URL"
+          }
+        }
+      }
+    },
+    "Search URL Presets" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索URLのプリセット"
           }
         }
       }
@@ -693,6 +673,16 @@
         }
       }
     },
+    "Stop Speech and Search" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "話すのを止めて検索"
+          }
+        }
+      }
+    },
     "Stop Speech Recognition" : {
       "localizations" : {
         "ja" : {
@@ -713,12 +703,12 @@
         }
       }
     },
-    "This option is locked to Default App because the Search URL scheme is not http or https." : {
+    "This option is locked to Default App because the In-App Browser does not support the Search URL." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "検索URLのスキームがhttpまたはhttpsではないため、この設定はデフォルトのアプリに固定されます。"
+            "value" : "アプリ内ブラウザが検索URLをサポートしていないため、この設定はデフォルトのアプリに固定されます。"
           }
         }
       }

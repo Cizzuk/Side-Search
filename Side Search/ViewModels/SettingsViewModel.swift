@@ -8,20 +8,62 @@
 import Combine
 import UIKit
 import Speech
+import SwiftUI
 
 class SettingsViewModel: ObservableObject {
-    @Published var isAssistantActivated = false
-    @Published var isShowingRecommend = false
+    @Published var showAssistant = false
+    @Published var showSafariView = false
+    @Published var showPresets = false
+    @Published var showHelp = false
+    @Published var showDummyCurtain = false
+    
     @Published var shouldLockOpenInToDefaultApp: Bool = false
     
     init() {
         checkShouldLockOpenIn()
     }
     
+    func onChange(scenePhase: ScenePhase) {
+        switch scenePhase {
+        case .active:
+            break
+        case .inactive:
+            showDummyCurtain = false
+        case .background:
+            break
+        @unknown default:
+            break
+        }
+    }
+    
+    func activateAssistant() {
+        showPresets = false
+        showHelp = false
+        
+        // Check if query input is needed
+        if AssistantSupport.needQueryInput() {
+            showAssistant = true
+        } else {
+            switch openIn {
+            case .inAppBrowser:
+                showSafariView = true
+            case .defaultApp:
+                if let url = URL(string: defaultSE.url) {
+                    // Show dummy curtain without animation
+                    var transaction = Transaction(animation: .none)
+                    transaction.disablesAnimations = true
+                    withTransaction(transaction) {
+                        showDummyCurtain = true
+                    }
+                    UIApplication.shared.open(url)
+                }
+            }
+        }
+    }
+    
     // Check if search url scheme is not http/https, shouldLockOpenInToDefaultApp
     func checkShouldLockOpenIn() {
-        if let scheme = URL(string: defaultSE.url)?.scheme?.lowercased(),
-           scheme != "http" && scheme != "https" {
+        if !AssistantSupport.checkSafariViewAvailability() {
             shouldLockOpenInToDefaultApp = true
             openIn = .defaultApp
         } else {
@@ -36,7 +78,7 @@ class SettingsViewModel: ObservableObject {
         }
         
         // Create Default
-        let se = RecommendSEs.defaultSearchEngine
+        let se = SearchEnginePresets.defaultSearchEngine
         if let data = se.toJSON() {
             UserDefaults.standard.set(data, forKey: "defaultSearchEngine")
         }

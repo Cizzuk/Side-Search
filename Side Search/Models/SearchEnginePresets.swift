@@ -1,5 +1,5 @@
 //
-//  RecommendedSEs.swift
+//  SearchEnginePresets.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2025/12/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class RecommendSEs {
+class SearchEnginePresets {
     // Helpers
     private static let currentRegion = Locale.current.region?.identifier
     private static let preferredLanguages = Locale.preferredLanguages
@@ -49,15 +49,11 @@ class RecommendSEs {
                     url: "https://claude.ai/new?q=%s",
                 ),
                 SearchEngineModel(
-                    name: "Grok",
-                    url: "https://grok.com/?q=%s",
-                ),
-                SearchEngineModel(
                     name: "Google AI Mode",
                     url: "https://google.com/?q=%s&udm=50",
                 ),
                 SearchEngineModel(
-                    name: "Microsoft Copilot",
+                    name: "Copilot Search",
                     url: "https://www.bing.com/copilotsearch?q=%s",
                 ),
                 SearchEngineModel(

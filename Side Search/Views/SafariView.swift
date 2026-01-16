@@ -10,10 +10,30 @@ import SafariServices
 
 struct SafariView: UIViewControllerRepresentable {
     let url: URL
-
-    func makeUIViewController(context: Context) -> SFSafariViewController {
-        return SFSafariViewController(url: url)
+    
+    static func checkAvailability(at url: URL) -> Bool {
+        guard let scheme = url.scheme?.lowercased(), (scheme == "http" || scheme == "https") else {
+            return false
+        }
+        return true
     }
 
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) { }
+    func makeUIViewController(context: Context) -> UIViewController {
+        // Check URL
+        guard SafariView.checkAvailability(at: url) else {
+            UIApplication.shared.open(url)
+            return UIHostingController(rootView: DummyCurtainView())
+        }
+        
+        let config = SFSafariViewController.Configuration()
+        config.entersReaderIfAvailable = false
+        config.barCollapsingEnabled = true
+        
+        let safari = SFSafariViewController(url: url, configuration: config)
+        safari.dismissButtonStyle = .close
+        safari.modalPresentationStyle = .overFullScreen
+        return safari
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
 }

@@ -49,14 +49,14 @@ struct AssistantView: View {
                         .labelStyle(.iconOnly)
                         .font(.system(size: 30))
                         .padding(30)
-                        .background(viewModel.recognizedText.isEmpty ? Color.gray : Color.blue)
+                        .background(isSearchable ? Color.blue : Color.gray)
                         .foregroundColor(.white)
                         .clipShape(Circle())
                         .glassEffect()
                 }
                 .buttonStyle(.plain)
-                .disabled(viewModel.recognizedText.isEmpty)
-                .opacity(viewModel.recognizedText.isEmpty ? 0.5 : 1.0)
+                .disabled(!isSearchable)
+                .opacity(isSearchable ? 1.0 : 0.5)
                 
                 Spacer()
             }
@@ -89,7 +89,7 @@ struct AssistantView: View {
                     }
                 }
             }
-            .fullScreenCover(isPresented: $viewModel.shouldShowSafari, onDismiss: {
+            .fullScreenCover(isPresented: $viewModel.showSafariView, onDismiss: {
                 dismiss()
             }) {
                 if let url = viewModel.searchURL {
@@ -114,5 +114,19 @@ struct AssistantView: View {
                 viewModel.stopRecording()
             }
         }
+    }
+    
+    private var isSearchable: Bool {
+        // If no query is needed, always searchable
+        if !AssistantSupport.needQueryInput() {
+            return true
+        }
+        
+        // Check if recognized text is empty
+        if viewModel.recognizedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return false
+        }
+            
+        return true
     }
 }

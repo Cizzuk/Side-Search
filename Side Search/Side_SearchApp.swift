@@ -12,6 +12,14 @@ struct Side_SearchApp: App {
     var body: some Scene {
         WindowGroup {
             SettingsView()
+                .onOpenURL { url in
+                    switch url.host {
+                    case "assistant":
+                        NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
+                    default:
+                        break
+                    }
+                }
         }
     }
 }
