@@ -297,22 +297,22 @@
         }
       }
     },
+    "Gemini" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini"
+          }
+        }
+      }
+    },
     "Google" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Google"
-          }
-        }
-      }
-    },
-    "Google AI Mode" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google AIモード"
           }
         }
       }

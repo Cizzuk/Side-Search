@@ -41,16 +41,16 @@ class SearchEnginePresets {
         if currentRegion != "CN" {
             aiCSEs.append(contentsOf: [
                 SearchEngineModel(
+                    name: "Gemini",
+                    url: "https://gemini.google.com/?prompt_text=%s",
+                ),
+                SearchEngineModel(
                     name: "ChatGPT",
                     url: "https://chatgpt.com/?q=%s",
                 ),
                 SearchEngineModel(
                     name: "Claude",
                     url: "https://claude.ai/new?q=%s",
-                ),
-                SearchEngineModel(
-                    name: "Google AI Mode",
-                    url: "https://google.com/?q=%s&udm=50",
                 ),
                 SearchEngineModel(
                     name: "Copilot Search",
