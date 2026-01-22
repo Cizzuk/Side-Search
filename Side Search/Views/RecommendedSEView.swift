@@ -11,8 +11,8 @@ struct SearchEnginePresetsView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var SearchEngine: SearchEngineModel
     
-    private let aiCSEList = SearchEnginePresets.aiAssistants()
-    private let normalCSEList = SearchEnginePresets.normalSearchEngines()
+    private let aiCSEList = SearchEnginePresets.aiAssistants
+    private let normalCSEList = SearchEnginePresets.normalSearchEngines
     
     var body: some View {
         NavigationStack {

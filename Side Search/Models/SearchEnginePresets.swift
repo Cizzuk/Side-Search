@@ -36,7 +36,7 @@ class SearchEnginePresets {
         }
     }
     
-    class func aiAssistants() -> [SearchEngineModel] {
+    static var aiAssistants: [SearchEngineModel] {
         var aiCSEs: [SearchEngineModel] = []
         if currentRegion != "CN" {
             aiCSEs.append(contentsOf: [
@@ -73,7 +73,7 @@ class SearchEnginePresets {
         return aiCSEs
     }
     
-    class func normalSearchEngines() -> [SearchEngineModel] {
+    static var normalSearchEngines: [SearchEngineModel] {
         var normalCSEs: [SearchEngineModel] = []
         
         let localizedYahoo: SearchEngineModel
