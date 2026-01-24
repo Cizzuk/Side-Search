@@ -102,7 +102,6 @@ class SearchEnginePresets {
             SearchEngineModel(
                 name: "DuckDuckGo",
                 url: "https://duckduckgo.com/?q=%s",
-                maxQueryLength: 500,
             ),
             SearchEngineModel(
                 name: "Ecosia",

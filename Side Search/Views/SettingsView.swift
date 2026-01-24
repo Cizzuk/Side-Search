@@ -82,22 +82,6 @@ struct SettingsView: View {
                         }
                     }
                 }
-                
-                // Advanced Settings
-                Section {
-                    Toggle("Disable Percent-encoding", isOn: $viewModel.defaultSE.disablePercentEncoding)
-                    
-                    HStack {
-                        Text("Max Query Length")
-                        Spacer()
-                        TextField("Max Query Length", value: $viewModel.defaultSE.maxQueryLength, format: .number, prompt: Text("32"))
-                            .keyboardType(.numberPad)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .multilineTextAlignment(.trailing)
-                            .submitLabel(.done)
-                    }
-                } header: { Text("Advanced Settings")
-                } footer: { Text("Blank to disable") }
             }
             .animation(.default, value: viewModel.autoSearchOnSilence)
             .animation(.default, value: viewModel.openIn)

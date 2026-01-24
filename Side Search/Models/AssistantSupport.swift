@@ -17,21 +17,7 @@ struct AssistantSupport {
         var urlString = engine.url
         
         // Handle query if provided
-        if var searchQuery = query {
-            // Handle Max Query Length
-            if let maxLength = engine.maxQueryLength {
-                if searchQuery.count > maxLength {
-                    searchQuery = String(searchQuery.prefix(maxLength))
-                }
-            }
-            
-            // Handle Percent Encoding
-            if !engine.disablePercentEncoding {
-                if let encoded = searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                    searchQuery = encoded
-                }
-            }
-            
+        if let searchQuery = query {
             // Replace the placeholder with the query
             urlString = urlString.replacingOccurrences(of: "%s", with: searchQuery)
         }
