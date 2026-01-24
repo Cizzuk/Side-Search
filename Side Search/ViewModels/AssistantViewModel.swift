@@ -76,9 +76,7 @@ class AssistantViewModel: ObservableObject {
         if !AssistantSupport.checkURLAvailability() {
             return
         }
-        if startWithMicMuted {
-            shouldInputFocused = true
-        } else {
+        if !startWithMicMuted {
             startRecording()
         }
     }
