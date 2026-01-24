@@ -112,6 +112,7 @@ struct SettingsView: View {
                     Button(action: { viewModel.activateAssistant() }) {
                         Label("Start Assistant", systemImage: assistantButtonImage())
                     }
+                    .tint(.dropblue)
                     .buttonStyle(.glassProminent)
                     .popover(isPresented: $viewModel.showAssistant) {
                         AssistantView()
