@@ -16,47 +16,6 @@ struct AssistantView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                //                // Search Query
-                //                TextField(viewModel.isRecording ? "Listening..." : "Search with Assistant",
-                //                          text: $viewModel.recognizedText, axis: .vertical)
-                //                    .font(.title)
-                //                    .multilineTextAlignment(.center)
-                //                    .padding()
-                //                    .focused($isInputFocused)
-                //                    .onChange(of: isInputFocused) {
-                //                        if isInputFocused {
-                //                            viewModel.stopRecording()
-                //                        }
-                //                    }
-                //                    .onSubmit {
-                //                        viewModel.performSearch()
-                //                    }
-                
-                //                // URL Preview
-                //                Text(viewModel.SearchEngine.url)
-                //                    .lineLimit(1)
-                //                    .font(.caption)
-                //                    .foregroundColor(.secondary)
-                //                    .padding(.horizontal, 10)
-                
-                //                Spacer()
-                //
-                //                // Search Button
-                //                Button(action: {
-                //                    viewModel.performSearch()
-                //                }) {
-                //                    Label("Search", systemImage: "magnifyingglass")
-                //                        .labelStyle(.iconOnly)
-                //                        .font(.system(size: 30))
-                //                        .frame(width: 80, height: 90)
-                //                }
-                //                .tint(.dropblue)
-                //                .buttonStyle(.glassProminent)
-                //                .foregroundColor(.white)
-                //                .disabled(!isSearchable)
-                //                .opacity(isSearchable ? 1.0 : 0.8)
-                //
-                
                 TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
                           text: $viewModel.recognizedText, axis: .vertical)
                 .font(.headline)
@@ -78,7 +37,6 @@ struct AssistantView: View {
                 }
             }
             .scrollDismissesKeyboard(.interactively)
-            .animation(.default, value: isSearchable)
             .accessibilityAction(.escape) { dismiss() }
             .padding()
             .toolbar {
@@ -140,20 +98,6 @@ struct AssistantView: View {
             endPoint: .bottom
         ).ignoresSafeArea())
         .animation(.smooth, value: viewModel.bgIllumination)
-        .presentationDetents([.fraction(0.3), .medium, .large])
-    }
-    
-    private var isSearchable: Bool {
-        // If no query is needed, always searchable
-        if !AssistantSupport.needQueryInput() {
-            return true
-        }
-        
-        // Check if recognized text is empty
-        if viewModel.recognizedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return false
-        }
-            
-        return true
+        .presentationDetents([.fraction(0.3), .large])
     }
 }
