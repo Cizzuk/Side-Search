@@ -130,19 +130,10 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
-    // Auto Search on Silence
-    @Published var autoSearchOnSilence: Bool = UserDefaults.standard.bool(forKey: "autoSearchOnSilence") {
+    // Manually Confirm Speech
+    @Published var manuallyConfirmSpeech: Bool = UserDefaults.standard.bool(forKey: "manuallyConfirmSpeech") {
         didSet {
-            UserDefaults.standard.set(autoSearchOnSilence, forKey: "autoSearchOnSilence")
-        }
-    }
-    
-    @Published var silenceDuration: Double = {
-        let value = UserDefaults.standard.double(forKey: "silenceDuration")
-        return value > 0 ? value : 2.0
-    }() {
-        didSet {
-            UserDefaults.standard.set(silenceDuration, forKey: "silenceDuration")
+            UserDefaults.standard.set(manuallyConfirmSpeech, forKey: "manuallyConfirmSpeech")
         }
     }
     

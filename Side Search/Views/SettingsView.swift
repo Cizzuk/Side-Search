@@ -70,21 +70,11 @@ struct SettingsView: View {
                         }
                     }
                     
-                    Toggle("Stop Speech and Search", isOn: $viewModel.autoSearchOnSilence)
-                    if viewModel.autoSearchOnSilence {
-                        HStack {
-                            Text("Silence Duration")
-                            Spacer()
-                            Text("\(viewModel.silenceDuration, specifier: "%.0f")s")
-                            Stepper("", value: $viewModel.silenceDuration, in: 1...10, step: 1)
-                                .labelsHidden()
-                        }
-                    }
+                    Toggle("Manually Confirm Speech", isOn: $viewModel.manuallyConfirmSpeech)
 
                     Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
                 } header: { Text("Speech Settings") }
             }
-            .animation(.default, value: viewModel.autoSearchOnSilence)
             .animation(.default, value: viewModel.openIn)
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)

@@ -64,12 +64,8 @@ class AssistantViewModel: ObservableObject {
     
     // Silence Detection Settings
     private var silenceTimer: Timer?
-    private var autoSearchOnSilence: Bool {
-        UserDefaults.standard.bool(forKey: "autoSearchOnSilence")
-    }
-    private var silenceDuration: Double {
-        let val = UserDefaults.standard.double(forKey: "silenceDuration")
-        return val > 0 ? val : 2.0
+    private var manuallyConfirmSpeech: Bool {
+        UserDefaults.standard.bool(forKey: "manuallyConfirmSpeech")
     }
     
     // MARK: - Public Methods
@@ -190,7 +186,7 @@ class AssistantViewModel: ObservableObject {
                         DispatchQueue.main.async {
                             self.isRecording = true
                         }
-                        startSilenceTimer()
+                        startSilenceTimer(timeout: 10.0)
                     } catch {
                         DispatchQueue.main.async {
                             self.errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
@@ -293,12 +289,13 @@ class AssistantViewModel: ObservableObject {
         return true
     }
     
-    private func startSilenceTimer() {
-        guard autoSearchOnSilence else { return }
+    private func startSilenceTimer(timeout: Double? = nil) {
+        guard !manuallyConfirmSpeech else { return }
+        let interval = timeout ?? 1
         stopSilenceTimer()
         
         DispatchQueue.main.async {
-            self.silenceTimer = Timer.scheduledTimer(withTimeInterval: self.silenceDuration, repeats: false) { [weak self] _ in
+            self.silenceTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
                 self?.silenceTimerFired()
             }
         }
@@ -313,6 +310,8 @@ class AssistantViewModel: ObservableObject {
         guard isRecording else { return }
         if !recognizedText.isEmpty {
             performSearch()
+        } else {
+            stopRecording()
         }
     }
 }
