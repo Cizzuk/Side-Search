@@ -31,7 +31,32 @@ struct SettingsView: View {
                     Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
                 }
                 
-                // Assistant Settings
+                Section {
+                    Picker("Open in", selection: $viewModel.openIn) {
+                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
+                            Text(option.localizedName).tag(option)
+                        }
+                    }
+                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
+                    
+                    if viewModel.openIn == .inAppBrowser {
+                        Button() {
+                            SFSafariViewController.DataStore.default.clearWebsiteData()
+                        } label: {
+                            Text("Clear In-App Browser Data")
+                        }
+                    }
+                } footer: {
+                    if viewModel.openIn == .defaultApp {
+                        if viewModel.shouldLockOpenInToDefaultApp {
+                            Text("This option is locked to Default App because the In-App Browser does not support the Search URL.")
+                        } else {
+                            Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                        }
+                    }
+                }
+                
+                // Speech Recognition Settings
                 Section {
                     Picker("Speech Language", selection: Binding(
                         get: { viewModel.speechLocale },
@@ -57,31 +82,7 @@ struct SettingsView: View {
                     }
 
                     Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
-                    
-                    Picker("Open in", selection: $viewModel.openIn) {
-                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
-                            Text(option.localizedName).tag(option)
-                        }
-                    }
-                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
-                    
-                    if viewModel.openIn == .inAppBrowser {
-                        Button() {
-                            SFSafariViewController.DataStore.default.clearWebsiteData()
-                        } label: {
-                            Text("Clear In-App Browser Data")
-                        }
-                    }
-                } header: { Text("Assistant Settings") }
-                footer: {
-                    if viewModel.openIn == .defaultApp {
-                        if viewModel.shouldLockOpenInToDefaultApp {
-                            Text("This option is locked to Default App because the In-App Browser does not support the Search URL.")
-                        } else {
-                            Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
-                        }
-                    }
-                }
+                } header: { Text("Speech Settings") }
             }
             .animation(.default, value: viewModel.autoSearchOnSilence)
             .animation(.default, value: viewModel.openIn)
