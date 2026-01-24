@@ -19,6 +19,7 @@ struct AssistantView: View {
                 TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
                           text: $viewModel.recognizedText, axis: .vertical)
                 .font(.headline)
+                .padding(.horizontal)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .submitLabel(.return)
                 .focused($isInputFocused)
