@@ -80,7 +80,6 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func startRecording() {
         Task {
             // Cancel any existing recognition task
@@ -159,14 +158,17 @@ class AssistantViewModel: ObservableObject {
             audioEngine.prepare()
             
             // Start audio engine
-            do {
-                try audioEngine.start()
-                isRecording = true
-                startSilenceTimer()
-            } catch {
-                errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
-                showError = true
-                return
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard let self = self else { return }
+                do {
+                    try audioEngine.start()
+                    isRecording = true
+                    startSilenceTimer()
+                } catch {
+                    errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
+                    showError = true
+                    return
+                }
             }
         }
     }
