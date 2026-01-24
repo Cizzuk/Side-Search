@@ -22,6 +22,8 @@ class AssistantViewModel: ObservableObject {
     @Published var showError = false
     @Published var shouldInputFocused = false
     
+    @Published var bgIllumination: Double = 0.0
+    
     // Get SearchEngine Settings
     @Published var SearchEngine: SearchEngineModel = {
         if let rawData = UserDefaults.standard.data(forKey: "defaultSearchEngine"),
@@ -165,6 +167,17 @@ class AssistantViewModel: ObservableObject {
                 let recordingFormat = inputNode.outputFormat(forBus: 0)
                 inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
                     self.recognitionRequest?.append(buffer)
+                    
+                    // bgIllumination update
+                    guard let channelData = buffer.floatChannelData?[0] else { return }
+                    let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
+                    let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
+                    let avgPower = 20 * log10(rms)
+                    let minDb: Float = -80.0
+                    let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
+                    DispatchQueue.main.async {
+                        self.bgIllumination = Double(normalizedPower)
+                    }
                 }
                 
                 audioEngine.prepare()

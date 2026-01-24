@@ -135,10 +135,11 @@ struct AssistantView: View {
         }
         .background(LinearGradient(
             colors: [Color.clear.opacity(0),
-                     Color.dropblue.opacity(0.15)],
-            startPoint: UnitPoint(x: 0.5, y: 0.0),
+                     Color.dropblue.opacity(0.15 + viewModel.bgIllumination*0.25)],
+            startPoint: UnitPoint(x: 0.5, y: (0.0 - viewModel.bgIllumination)),
             endPoint: .bottom
         ).ignoresSafeArea())
+        .animation(.smooth, value: viewModel.bgIllumination)
         .presentationDetents([.fraction(0.3), .medium, .large])
     }
     
