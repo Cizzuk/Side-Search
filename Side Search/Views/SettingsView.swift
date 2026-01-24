@@ -103,9 +103,6 @@ struct SettingsView: View {
             .animation(.default, value: viewModel.openIn)
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)
-            .fullScreenCover(isPresented: $viewModel.showAssistant) {
-                AssistantView()
-            }
             .fullScreenCover(isPresented: $viewModel.showSafariView) {
                 if let url = URL(string: viewModel.defaultSE.url) {
                     SafariView(url: url)
@@ -119,9 +116,22 @@ struct SettingsView: View {
                 HelpView()
             }
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    // TODO: Replace with Switch Assistant Button
+                    Picker("Open in", selection: $viewModel.openIn) {
+                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
+                            Text(option.localizedName).tag(option)
+                        }
+                    }
+                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
+                    Spacer()
                     Button(action: { viewModel.activateAssistant() }) {
                         Label("Start Assistant", systemImage: assistantButtonImage())
+                    }
+                    .buttonStyle(.glassProminent)
+                    .popover(isPresented: $viewModel.showAssistant) {
+                        AssistantView()
+                            .presentationDetents([.fraction(0.3), .medium])
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
