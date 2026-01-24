@@ -20,6 +20,7 @@ class AssistantViewModel: ObservableObject {
     @Published var errorMessage: LocalizedStringResource = ""
     @Published var isCriticalError = false
     @Published var showError = false
+    @Published var shouldInputFocused = false
     
     // Get SearchEngine Settings
     @Published var SearchEngine: SearchEngineModel = {
@@ -75,7 +76,9 @@ class AssistantViewModel: ObservableObject {
         if !AssistantSupport.checkURLAvailability() {
             return
         }
-        if !startWithMicMuted {
+        if startWithMicMuted {
+            shouldInputFocused = true
+        } else {
             startRecording()
         }
     }

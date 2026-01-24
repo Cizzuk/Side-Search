@@ -116,7 +116,6 @@ struct SettingsView: View {
                     .buttonStyle(.glassProminent)
                     .popover(isPresented: $viewModel.showAssistant) {
                         AssistantView()
-                            .presentationDetents([.fraction(0.3), .medium])
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {

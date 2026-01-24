@@ -16,50 +16,69 @@ struct AssistantView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                // Search Query
-                TextField(viewModel.isRecording ? "Listening..." : "Search with Assistant",
+                //                // Search Query
+                //                TextField(viewModel.isRecording ? "Listening..." : "Search with Assistant",
+                //                          text: $viewModel.recognizedText, axis: .vertical)
+                //                    .font(.title)
+                //                    .multilineTextAlignment(.center)
+                //                    .padding()
+                //                    .focused($isInputFocused)
+                //                    .onChange(of: isInputFocused) {
+                //                        if isInputFocused {
+                //                            viewModel.stopRecording()
+                //                        }
+                //                    }
+                //                    .onSubmit {
+                //                        viewModel.performSearch()
+                //                    }
+                
+                //                // URL Preview
+                //                Text(viewModel.SearchEngine.url)
+                //                    .lineLimit(1)
+                //                    .font(.caption)
+                //                    .foregroundColor(.secondary)
+                //                    .padding(.horizontal, 10)
+                
+                //                Spacer()
+                //
+                //                // Search Button
+                //                Button(action: {
+                //                    viewModel.performSearch()
+                //                }) {
+                //                    Label("Search", systemImage: "magnifyingglass")
+                //                        .labelStyle(.iconOnly)
+                //                        .font(.system(size: 30))
+                //                        .frame(width: 80, height: 90)
+                //                }
+                //                .tint(.dropblue)
+                //                .buttonStyle(.glassProminent)
+                //                .foregroundColor(.white)
+                //                .disabled(!isSearchable)
+                //                .opacity(isSearchable ? 1.0 : 0.8)
+                //
+                
+                TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
                           text: $viewModel.recognizedText, axis: .vertical)
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                    .focused($isInputFocused)
-                    .onChange(of: isInputFocused) {
-                        if isInputFocused {
-                            viewModel.stopRecording()
-                        }
+                .font(.headline)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .submitLabel(.return)
+                .focused($isInputFocused)
+                .onChange(of: isInputFocused) {
+                    if isInputFocused {
+                        viewModel.stopRecording()
                     }
-                    .onSubmit {
-                        viewModel.performSearch()
-                    }
-                
-                // URL Preview
-                Text(viewModel.SearchEngine.url)
-                    .lineLimit(1)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 10)
-                
-                Spacer()
-                
-                // Search Button
-                Button(action: {
-                    viewModel.performSearch()
-                }) {
-                    Label("Search", systemImage: "magnifyingglass")
-                        .labelStyle(.iconOnly)
-                        .font(.system(size: 30))
-                        .padding(30)
-                        .background(isSearchable ? Color.blue : Color.gray)
-                        .foregroundColor(.white)
-                        .clipShape(Circle())
-                        .glassEffect()
                 }
-                .buttonStyle(.plain)
-                .disabled(!isSearchable)
-                .opacity(isSearchable ? 1.0 : 0.5)
-                
-                Spacer()
+                .onChange(of: viewModel.shouldInputFocused) {
+                    if viewModel.shouldInputFocused {
+                        isInputFocused = true
+                    }
+                }
+                .onSubmit {
+                    viewModel.performSearch()
+                }
             }
+            .scrollDismissesKeyboard(.interactively)
+            .animation(.default, value: isSearchable)
             .accessibilityAction(.escape) { dismiss() }
             .padding()
             .toolbar {
@@ -68,7 +87,7 @@ struct AssistantView: View {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItemGroup(placement: .primaryAction) {
                     Button {
                         if viewModel.isRecording {
                             viewModel.stopRecording()
@@ -77,16 +96,16 @@ struct AssistantView: View {
                         }
                     } label: {
                         Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
-                              systemImage: viewModel.isRecording ? "mic" : "mic.slash")
+                              systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
                     }
-                }
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    } label: {
-                        Label("Done", systemImage: "checkmark")
+                    .tint(viewModel.isRecording ? .orange : .primary)
+                    Button(action: {
+                        viewModel.performSearch()
+                    }) {
+                        Label("Search", systemImage: "magnifyingglass")
                     }
+                    .tint(.dropblue)
+                    .buttonStyle(.glassProminent)
                 }
             }
             .fullScreenCover(isPresented: $viewModel.showSafariView, onDismiss: {
@@ -114,6 +133,13 @@ struct AssistantView: View {
                 viewModel.stopRecording()
             }
         }
+        .background(LinearGradient(
+            colors: [Color.clear.opacity(0),
+                     Color.dropblue.opacity(0.15)],
+            startPoint: UnitPoint(x: 0.5, y: 0.0),
+            endPoint: .bottom
+        ).ignoresSafeArea())
+        .presentationDetents([.fraction(0.3), .medium, .large])
     }
     
     private var isSearchable: Bool {
