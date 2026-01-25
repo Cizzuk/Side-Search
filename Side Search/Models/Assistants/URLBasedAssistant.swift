@@ -22,10 +22,20 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
 struct URLBasedAssistantModel: AssistantModel {
     var name: LocalizedStringResource = ""
     var url = ""
+    var openIn: OpenInOption = .inAppBrowser
     
     static func fromJSON(_ data: Data) -> URLBasedAssistantModel? {
         let decoder = JSONDecoder()
-        return try? decoder.decode(URLBasedAssistantModel.self, from: data)
+        var model = try? decoder.decode(URLBasedAssistantModel.self, from: data)
+        
+        // Get previous OpenIn setting
+        if let previousOpenIn = UserDefaults.standard.string(forKey: "openIn") {
+            if let option = OpenInOption(rawValue: previousOpenIn) {
+                model?.openIn = option
+                UserDefaults.standard.removeObject(forKey: "openIn")
+            }
+        }
+        return model
     }
     
     func toJSON() -> Data? {
@@ -39,6 +49,19 @@ struct URLBasedAssistantModel: AssistantModel {
 }
 
 extension URLBasedAssistantModel {
+    enum OpenInOption: String, Codable, CaseIterable {
+        case inAppBrowser, defaultApp
+        
+        var localizedName: LocalizedStringResource {
+            switch self {
+            case .inAppBrowser:
+                return "In-App Browser"
+            case .defaultApp:
+                return "Default App"
+            }
+        }
+    }
+    
     func makeSearchURL(query: String? = nil) -> URL? {
         var urlString = self.url
         

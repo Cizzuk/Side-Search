@@ -41,15 +41,6 @@ class AssistantViewModel: ObservableObject {
         UserDefaults.standard.bool(forKey: "startWithMicMuted")
     }
     
-    // Get OpenIn Setting
-    private var openIn: SettingsViewModel.OpenInOption {
-        if let rawValue = UserDefaults.standard.string(forKey: "openIn"),
-           let option = SettingsViewModel.OpenInOption(rawValue: rawValue) {
-            return option
-        }
-        return .inAppBrowser
-    }
-    
     // MARK: - Initialization
     
     init() {
@@ -116,7 +107,7 @@ class AssistantViewModel: ObservableObject {
         stopRecording()
         
         if let url = SearchEngine.makeSearchURL(query: recognizedText) {
-            switch openIn {
+            switch SearchEngine.openIn {
             case .inAppBrowser:
                 self.searchURL = url
                 self.showSafariView = true

@@ -18,7 +18,7 @@ struct SettingsView: View {
             List {
                 // URL
                 Section {
-                    TextField("URL", text: $viewModel.defaultSE.url, prompt: Text(verbatim: "https://example.com/search?q=%s"))
+                    TextField("URL", text: $viewModel.SearchEngine.url, prompt: Text(verbatim: "https://example.com/search?q=%s"))
                         .disableAutocorrection(true)
                         .keyboardType(.URL)
                         .textInputAutocapitalization(.never)
@@ -32,14 +32,14 @@ struct SettingsView: View {
                 }
                 
                 Section {
-                    Picker("Open in", selection: $viewModel.openIn) {
-                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
+                    Picker("Open in", selection: $viewModel.SearchEngine.openIn) {
+                        ForEach(URLBasedAssistantModel.OpenInOption.allCases, id: \.self) { option in
                             Text(option.localizedName).tag(option)
                         }
                     }
                     .disabled(viewModel.shouldLockOpenInToDefaultApp)
                     
-                    if viewModel.openIn == .inAppBrowser {
+                    if viewModel.SearchEngine.openIn == .inAppBrowser {
                         Button() {
                             SFSafariViewController.DataStore.default.clearWebsiteData()
                         } label: {
@@ -47,7 +47,7 @@ struct SettingsView: View {
                         }
                     }
                 } footer: {
-                    if viewModel.openIn == .defaultApp {
+                    if viewModel.SearchEngine.openIn == .defaultApp {
                         if viewModel.shouldLockOpenInToDefaultApp {
                             Text("This option is locked to Default App because the In-App Browser does not support the Search URL.")
                         } else {
@@ -75,17 +75,17 @@ struct SettingsView: View {
                     Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
                 } header: { Text("Speech Settings") }
             }
-            .animation(.default, value: viewModel.openIn)
+            .animation(.default, value: viewModel.SearchEngine.openIn)
             .navigationTitle("Side Search")
             .scrollDismissesKeyboard(.interactively)
             .fullScreenCover(isPresented: $viewModel.showSafariView) {
-                if let url = URL(string: viewModel.defaultSE.url) {
+                if let url = URL(string: viewModel.SearchEngine.url) {
                     SafariView(url: url)
                         .ignoresSafeArea()
                 }
             }
             .sheet(isPresented: $viewModel.showPresets) {
-                SearchEnginePresetsView(SearchEngine: $viewModel.defaultSE)
+                SearchEnginePresetsView(SearchEngine: $viewModel.SearchEngine)
             }
             .sheet(isPresented: $viewModel.showHelp) {
                 HelpView()
@@ -93,12 +93,12 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     // TODO: Replace with Switch Assistant Button
-                    Picker("Open in", selection: $viewModel.openIn) {
-                        ForEach(SettingsViewModel.OpenInOption.allCases, id: \.self) { option in
-                            Text(option.localizedName).tag(option)
-                        }
-                    }
-                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
+//                    Picker("Open in", selection: $viewModel.SearchEngine.openIn) {
+//                        ForEach(URLBasedAssistantModel.OpenInOption.allCases, id: \.self) { option in
+//                            Text(option.localizedName).tag(option)
+//                        }
+//                    }
+//                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
                     Spacer()
                     Button(action: { viewModel.activateAssistant() }) {
                         Label("Start Assistant", systemImage: assistantButtonImage())
@@ -136,7 +136,7 @@ struct SettingsView: View {
     }
     
     func assistantButtonImage() -> String {
-        if !viewModel.defaultSE.needQueryInput() {
+        if !viewModel.SearchEngine.needQueryInput() {
             return "magnifyingglass"
         }
         

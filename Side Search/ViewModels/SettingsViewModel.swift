@@ -41,14 +41,14 @@ class SettingsViewModel: ObservableObject {
         showHelp = false
         
         // Check if query input is needed
-        if defaultSE.needQueryInput() {
+        if SearchEngine.needQueryInput() {
             showAssistant = true
         } else {
-            switch openIn {
+            switch SearchEngine.openIn {
             case .inAppBrowser:
                 showSafariView = true
             case .defaultApp:
-                if let url = URL(string: defaultSE.url) {
+                if let url = URL(string: SearchEngine.url) {
                     // Show dummy curtain without animation
                     var transaction = Transaction(animation: .none)
                     transaction.disablesAnimations = true
@@ -63,15 +63,15 @@ class SettingsViewModel: ObservableObject {
     
     // Check if search url scheme is not http/https, shouldLockOpenInToDefaultApp
     func checkShouldLockOpenIn() {
-        if !defaultSE.checkSafariViewAvailability() {
+        if !SearchEngine.checkSafariViewAvailability() {
             shouldLockOpenInToDefaultApp = true
-            openIn = .defaultApp
+            SearchEngine.openIn = .defaultApp
         } else {
             shouldLockOpenInToDefaultApp = false
         }
     }
     
-    @Published var defaultSE: URLBasedAssistantModel = {
+    @Published var SearchEngine: URLBasedAssistantModel = {
         if let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
            let engine = URLBasedAssistantModel.fromJSON(rawData) {
             return engine
@@ -85,7 +85,7 @@ class SettingsViewModel: ObservableObject {
         return se
     }() {
         didSet {
-            if let data = defaultSE.toJSON() {
+            if let data = SearchEngine.toJSON() {
                 UserDefaults.standard.set(data, forKey: URLBasedAssistant.userDefaultsKey)
                 checkShouldLockOpenIn()
             }
@@ -141,32 +141,6 @@ class SettingsViewModel: ObservableObject {
     @Published var startWithMicMuted: Bool = UserDefaults.standard.bool(forKey: "startWithMicMuted") {
         didSet {
             UserDefaults.standard.set(startWithMicMuted, forKey: "startWithMicMuted")
-        }
-    }
-    
-    // Open in...
-    enum OpenInOption: String, CaseIterable {
-        case inAppBrowser, defaultApp
-        
-        var localizedName: LocalizedStringResource {
-            switch self {
-            case .inAppBrowser:
-                return "In-App Browser"
-            case .defaultApp:
-                return "Default App"
-            }
-        }
-    }
-    
-    @Published var openIn: OpenInOption = {
-        if let rawValue = UserDefaults.standard.string(forKey: "openIn"),
-           let option = OpenInOption(rawValue: rawValue) {
-            return option
-        }
-        return .inAppBrowser
-    }() {
-        didSet {
-            UserDefaults.standard.set(openIn.rawValue, forKey: "openIn")
         }
     }
 }
