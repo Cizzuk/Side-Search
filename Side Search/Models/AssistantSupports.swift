@@ -29,7 +29,7 @@ enum AssistantType: String, CaseIterable {
 
 protocol AssistantDescriptionProvider {
     // Metadata
-    static var assistantName: LocalizedStringResource { get }
+    static var assistantName: LocalizedStringResource { get } // Keep this short
     static var assistantDescription: LocalizedStringResource { get }
     static var assistantSystemImage: String { get }
     
