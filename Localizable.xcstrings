@@ -650,16 +650,6 @@
         }
       }
     },
-    "This option is locked to Default App because the In-App Browser does not support the Search URL." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリ内ブラウザが検索URLをサポートしていないため、この設定はデフォルトのアプリに固定されます。"
-          }
-        }
-      }
-    },
     "Unable to create a recognition request." : {
       "localizations" : {
         "ja" : {
