@@ -680,6 +680,16 @@
         }
       }
     },
+    "This is an assistant that can converse using Foundation Models provided by Apple. To use it, Apple Intelligence must be available on your device. This assistant cannot search the internet." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appleの提供するFoundation Modelsを使用して会話を行うことができるアシスタントです。使用するにはデバイスでApple Intelligenceが利用可能である必要があります。このアシスタントではインターネット上を検索することはできません。"
+          }
+        }
+      }
+    },
     "Unable to create a recognition request." : {
       "localizations" : {
         "ja" : {
