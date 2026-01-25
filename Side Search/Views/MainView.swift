@@ -13,6 +13,7 @@ struct MainView: View {
     @Environment(\.scenePhase) private var scenePhase
     @StateObject var viewModel = MainViewModel()
     @State private var showingChangeIconView = false
+    @State private var showingSwitchAssistantView = false
     
     var body: some View {
         NavigationStack {
@@ -73,27 +74,15 @@ struct MainView: View {
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Menu {
-                        // TODO: Migrate to Sheet View
-                        Section {
-                            ForEach(AssistantType.allCases, id: \.self) { type in
-                                Button(action: { viewModel.currentAssistant = type }) {
-                                    HStack {
-                                        if viewModel.currentAssistant == type {
-                                            Image(systemName: "checkmark")
-                                        }
-                                        Text(type.DescriptionProviderType.assistantName)
-                                    }
-                                }
-                                .accessibility(addTraits: viewModel.currentAssistant == type ? [.isSelected] : [])
-                            }
-                        }
-                    } label: {
+                    Button(action: { showingSwitchAssistantView = true }) {
                         HStack {
                             Image(systemName: viewModel.currentAssistant.DescriptionProviderType.assistantSystemImage)
                             Text(viewModel.currentAssistant.DescriptionProviderType.assistantName)
                         }
                         .padding()
+                    }
+                    .popover(isPresented: $showingSwitchAssistantView) {
+                        SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
                     }
                     
                     Button(action: { viewModel.activateAssistant() }) {

@@ -1,0 +1,53 @@
+//
+//  SwitchAssistantView.swift
+//  Side Search
+//
+//  Created by Cizzuk on 2026/01/25.
+//
+
+import SwiftUI
+
+struct SwitchAssistantView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var currentAssistant: AssistantType
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    ForEach(AssistantType.allCases, id: \.self) { type in
+                        Button() {
+                            currentAssistant = type
+                            dismiss()
+                        } label: {
+                            VStack(alignment: .leading, spacing: 10) {
+                                HStack {
+                                    Text(type.DescriptionProviderType.assistantName)
+                                        .font(.title3)
+                                    Spacer()
+                                    Image(systemName: type.DescriptionProviderType.assistantSystemImage)
+                                        .font(.title3)
+                                }
+                                Text(type.DescriptionProviderType.assistantDescription)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .foregroundColor(.primary)
+                        .accessibility(addTraits: currentAssistant == type ? [.isSelected] : [])
+                    }
+                }
+            }
+            .navigationTitle("Switch Assistant")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: { dismiss() }) {
+                        Label("Cancel", systemImage: "xmark")
+                    }
+                }
+            }
+        }
+        .presentationDetents([.medium, .fraction(0.9)])
+    }
+}
