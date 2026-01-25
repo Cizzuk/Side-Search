@@ -39,7 +39,14 @@
       }
     },
     "Apple Foundation Models" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Foundation Models"
+          }
+        }
+      }
     },
     "Ask to Assistant" : {
       "localizations" : {
