@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum AssistantTypes: String, CaseIterable {
+enum AssistantType: String, CaseIterable {
     case urlBased
 //    case appleFoundation
     
