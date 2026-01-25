@@ -55,6 +55,7 @@ struct MainView: View {
                     }
                 }
             }
+            .animation(.default, value: viewModel.currentAssistant)
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
