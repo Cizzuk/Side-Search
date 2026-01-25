@@ -172,6 +172,7 @@ class SpeechRecognizer: ObservableObject {
             audioEngine.stop()
             recognitionRequest?.endAudio()
             isRecording = false
+            micLevel = 0.0
             
             // Deactivate the audio session
             do {
