@@ -2,7 +2,7 @@
   "fill" : "automatic",
   "groups" : [
     {
-      "blur-material" : 0.5,
+      "blur-material" : null,
       "hidden" : false,
       "layers" : [
         {
@@ -10,25 +10,6 @@
             {
               "value" : {
                 "solid" : "srgb:0.20000,0.40000,1.00000,1.00000"
-              }
-            },
-            {
-              "appearance" : "dark",
-              "value" : {
-                "linear-gradient" : [
-                  "srgb:0.20000,0.40000,1.00000,1.00000",
-                  "srgb:0.20000,0.46667,1.00000,1.00000"
-                ],
-                "orientation" : {
-                  "start" : {
-                    "x" : 0.5,
-                    "y" : 0
-                  },
-                  "stop" : {
-                    "x" : 0.5,
-                    "y" : 0.7
-                  }
-                }
               }
             },
             {
@@ -56,21 +37,10 @@
         "opacity" : 0.5
       },
       "specular" : true,
-      "translucency-specializations" : [
-        {
-          "value" : {
-            "enabled" : true,
-            "value" : 0.25
-          }
-        },
-        {
-          "appearance" : "tinted",
-          "value" : {
-            "enabled" : true,
-            "value" : 0.5
-          }
-        }
-      ]
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
     }
   ],
   "supported-platforms" : {
