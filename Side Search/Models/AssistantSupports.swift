@@ -10,12 +10,14 @@ import SwiftUI
 
 enum AssistantType: String, CaseIterable {
     case urlBased
-//    case appleFoundation
+    case appleFoundation
     
     var DescriptionProviderType: any AssistantDescriptionProvider.Type {
         switch self {
         case .urlBased:
             return URLBasedAssistant.self
+        case .appleFoundation:
+            return AppleFoundationAssistant.self
         }
     }
     
@@ -23,6 +25,8 @@ enum AssistantType: String, CaseIterable {
         switch self {
         case .urlBased:
             return URLBasedAssistantModel.self
+        case .appleFoundation:
+            return AppleFoundationAssistantModel.self
         }
     }
 }
@@ -34,8 +38,7 @@ protocol AssistantDescriptionProvider {
     static var assistantSystemImage: String { get }
     
     // Settings
-    associatedtype SettingsView: View
-    static func makeSettingsView() -> SettingsView
+    static var makeSettingsView: any View { get }
     static var userDefaultsKey: String { get }
     
     // Availability Check

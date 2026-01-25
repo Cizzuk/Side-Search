@@ -19,7 +19,7 @@ struct MainView: View {
         NavigationStack {
             List {
                 // MARK: Assistant Settings
-                URLBasedAssistant.makeSettingsView()
+                AnyView(viewModel.currentAssistant.DescriptionProviderType.makeSettingsView)
                 
                 // MARK: - Shared Settings
                 
