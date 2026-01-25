@@ -1,5 +1,5 @@
 //
-//  AssistantProtocols.swift
+//  AssistantSupports.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/25.
@@ -7,6 +7,25 @@
 
 import Foundation
 import SwiftUI
+
+enum AssistantTypes: String, CaseIterable {
+    case urlBased
+//    case appleFoundation
+    
+    var DescriptionProviderType: AssistantDescriptionProvider.Type {
+        switch self {
+        case .urlBased:
+            return URLBasedAssistant.self
+        }
+    }
+    
+    var ModelType: AssistantModel.Type {
+        switch self {
+        case .urlBased:
+            return URLBasedAssistantModel.self
+        }
+    }
+}
 
 protocol AssistantDescriptionProvider {
     // Metadata
