@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Speech
 
 struct AssistantView: View {
     @Environment(\.dismiss) var dismiss
