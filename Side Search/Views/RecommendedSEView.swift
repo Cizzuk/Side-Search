@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SearchEnginePresetsView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var SearchEngine: SearchEngineModel
+    @Binding var SearchEngine: URLBasedAssistantModel
     
     private let aiCSEList = SearchEnginePresets.aiAssistants
     private let normalCSEList = SearchEnginePresets.normalSearchEngines
@@ -55,7 +55,7 @@ struct SearchEnginePresetsView: View {
     
     struct PresetSEButton: View {
         let action: () -> Void
-        let cse: SearchEngineModel
+        let cse: URLBasedAssistantModel
         
         var body: some View {
             Button {

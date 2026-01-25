@@ -71,22 +71,22 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
-    @Published var defaultSE: SearchEngineModel = {
-        if let rawData = UserDefaults.standard.data(forKey: "defaultSearchEngine"),
-           let engine = SearchEngineModel.fromJSON(rawData) {
+    @Published var defaultSE: URLBasedAssistantModel = {
+        if let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
+           let engine = URLBasedAssistantModel.fromJSON(rawData) {
             return engine
         }
         
         // Create Default
         let se = SearchEnginePresets.defaultSearchEngine
         if let data = se.toJSON() {
-            UserDefaults.standard.set(data, forKey: "defaultSearchEngine")
+            UserDefaults.standard.set(data, forKey: URLBasedAssistant.userDefaultsKey)
         }
         return se
     }() {
         didSet {
             if let data = defaultSE.toJSON() {
-                UserDefaults.standard.set(data, forKey: "defaultSearchEngine")
+                UserDefaults.standard.set(data, forKey: URLBasedAssistant.userDefaultsKey)
                 checkShouldLockOpenIn()
             }
         }

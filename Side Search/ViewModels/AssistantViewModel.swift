@@ -22,12 +22,12 @@ class AssistantViewModel: ObservableObject {
     @Published var shouldInputFocused = false
     
     // Get SearchEngine Settings
-    @Published var SearchEngine: SearchEngineModel = {
-        if let rawData = UserDefaults.standard.data(forKey: "defaultSearchEngine"),
-           let engine = SearchEngineModel.fromJSON(rawData) {
+    @Published var SearchEngine: URLBasedAssistantModel = {
+        if let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
+           let engine = URLBasedAssistantModel.fromJSON(rawData) {
             return engine
         }
-        return SearchEngineModel()
+        return URLBasedAssistantModel()
     }()
     
     // Speech Recognizer

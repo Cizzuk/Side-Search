@@ -1,22 +1,31 @@
 //
-//  SearchEngineModel.swift
+//  URLBasedAssistant.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2025/12/24.
 //
 
 import Foundation
+import SwiftUI
 
-struct SearchEngineModel: Identifiable, Codable {
-    var id = UUID()
-    var name: LocalizedStringResource = ""
-    var url = ""
+struct URLBasedAssistant: AssistantDescriptionProvider {
+    static var assistantName = LocalizedStringResource("")
+    static var assistantDescription = LocalizedStringResource("")
+    static var assistantSystemImage = ""
+    
+    static var settingsView: any View { EmptyView() }
+    static var userDefaultsKey = "defaultSearchEngine"
+    
+    static func isAvailable() -> Bool { return true }
 }
 
-extension SearchEngineModel {
-    static func fromJSON(_ data: Data) -> SearchEngineModel? {
+struct URLBasedAssistantModel: AssistantModel {
+    var name: LocalizedStringResource = ""
+    var url = ""
+    
+    static func fromJSON(_ data: Data) -> URLBasedAssistantModel? {
         let decoder = JSONDecoder()
-        return try? decoder.decode(SearchEngineModel.self, from: data)
+        return try? decoder.decode(URLBasedAssistantModel.self, from: data)
     }
     
     func toJSON() -> Data? {
@@ -24,6 +33,12 @@ extension SearchEngineModel {
         return try? encoder.encode(self)
     }
     
+    func isValidSettings() -> Bool {
+        return checkURLAvailability()
+    }
+}
+
+extension URLBasedAssistantModel {
     func makeSearchURL(query: String? = nil) -> URL? {
         var urlString = self.url
         
