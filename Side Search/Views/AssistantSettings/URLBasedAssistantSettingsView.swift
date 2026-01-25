@@ -52,6 +52,7 @@ struct URLBasedAssistantSettingsView: View {
         }
         .onAppear {
             migrateUserDefaults()
+            saveSettings()
         }
     }
     
