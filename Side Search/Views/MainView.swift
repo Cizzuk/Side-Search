@@ -86,6 +86,7 @@ struct MainView: View {
             }
             .animation(.default, value: viewModel.SearchEngine.openIn)
             .navigationTitle("Side Search")
+            .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
             .fullScreenCover(isPresented: $viewModel.showSafariView) {
                 if let url = URL(string: viewModel.SearchEngine.url) {
