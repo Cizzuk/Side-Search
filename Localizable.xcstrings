@@ -4,16 +4,6 @@
     "" : {
       "shouldTranslate" : false
     },
-    "%.0fs" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%.0f秒"
-          }
-        }
-      }
-    },
     "%@" : {
       "shouldTranslate" : false
     },
@@ -28,25 +18,12 @@
       },
       "shouldTranslate" : false
     },
-    "32" : {
-      "shouldTranslate" : false
-    },
     "About" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "情報"
-          }
-        }
-      }
-    },
-    "Advanced Settings" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "高度な設定"
           }
         }
       }
@@ -61,12 +38,12 @@
         }
       }
     },
-    "Assistant Settings" : {
+    "Ask to Assistant" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アシスタントの設定"
+            "value" : "アシスタントに質問する"
           }
         }
       }
@@ -97,16 +74,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bing"
-          }
-        }
-      }
-    },
-    "Blank to disable" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "空白にすると無効化"
           }
         }
       }
@@ -243,16 +210,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開発者"
-          }
-        }
-      }
-    },
-    "Disable Percent-encoding" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "パーセントエンコーディングを無効にする"
           }
         }
       }
@@ -407,12 +364,12 @@
         }
       }
     },
-    "Max Query Length" : {
+    "Manually Confirm Speech" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "クエリの最大文字数"
+            "value" : "手動で音声認識を完了する"
           }
         }
       }
@@ -550,16 +507,6 @@
         }
       }
     },
-    "Search with Assistant" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アシスタントで検索"
-          }
-        }
-      }
-    },
     "Shortcut Tip" : {
       "localizations" : {
         "ja" : {
@@ -582,16 +529,6 @@
     },
     "Side Search" : {
       "shouldTranslate" : false
-    },
-    "Silence Duration" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "話さない時間"
-          }
-        }
-      }
     },
     "Source" : {
       "localizations" : {
@@ -633,6 +570,16 @@
         }
       }
     },
+    "Speech Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識の設定"
+          }
+        }
+      }
+    },
     "Start Assistant" : {
       "localizations" : {
         "ja" : {
@@ -669,16 +616,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Startpage"
-          }
-        }
-      }
-    },
-    "Stop Speech and Search" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "話すのを止めて検索"
           }
         }
       }
