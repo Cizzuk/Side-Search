@@ -12,6 +12,7 @@ import SwiftUI
 struct MainView: View {
     @Environment(\.scenePhase) private var scenePhase
     @StateObject var viewModel = MainViewModel()
+    @State private var showingChangeIconView = false
     
     var body: some View {
         NavigationStack {
@@ -78,6 +79,10 @@ struct MainView: View {
 
                     Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
                 } header: { Text("Speech Settings") }
+                
+                Button(action: { showingChangeIconView = true }) {
+                    Label("Change App Icon", systemImage: "app.dashed")
+                }
             }
             .animation(.default, value: viewModel.SearchEngine.openIn)
             .navigationTitle("Side Search")
@@ -93,6 +98,9 @@ struct MainView: View {
             }
             .sheet(isPresented: $viewModel.showHelp) {
                 HelpView()
+            }
+            .sheet(isPresented: $showingChangeIconView) {
+                ChangeIconView()
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
