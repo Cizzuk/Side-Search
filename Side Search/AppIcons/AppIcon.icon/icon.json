@@ -42,7 +42,7 @@
           "image-name" : "sidefish.png",
           "name" : "sidefish",
           "position" : {
-            "scale" : 0.8,
+            "scale" : 0.75,
             "translation-in-points" : [
               0,
               0
