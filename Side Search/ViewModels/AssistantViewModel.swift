@@ -22,7 +22,7 @@ class AssistantViewModel: ObservableObject {
     @Published var showError = false
     @Published var shouldInputFocused = false
     
-    @Published var bgIllumination: Double = 0.0
+    @Published var micLevel: Float = 0.0
     
     // Get SearchEngine Settings
     @Published var SearchEngine: SearchEngineModel = {
@@ -172,7 +172,7 @@ class AssistantViewModel: ObservableObject {
                     let minDb: Float = -80.0
                     let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
                     DispatchQueue.main.async {
-                        self.bgIllumination = Double(normalizedPower)
+                        self.micLevel = normalizedPower
                     }
                 }
                 

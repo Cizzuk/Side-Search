@@ -94,11 +94,11 @@ struct AssistantView: View {
         }
         .background(LinearGradient(
             colors: [Color.clear.opacity(0),
-                     Color.dropblue.opacity(0.15 + viewModel.bgIllumination*0.25)],
-            startPoint: UnitPoint(x: 0.5, y: (0.0 - viewModel.bgIllumination)),
+                     Color.dropblue.opacity(0.15 + Double(viewModel.micLevel)*0.25)],
+            startPoint: UnitPoint(x: 0.5, y: (0.0 - CGFloat(viewModel.micLevel))),
             endPoint: .bottom
         ).ignoresSafeArea())
-        .animation(.smooth, value: viewModel.bgIllumination)
+        .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents([.fraction(0.3), .large])
     }
 }
