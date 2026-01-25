@@ -680,6 +680,16 @@
         }
       }
     },
+    "URL Based Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLベースのアシスタント"
+          }
+        }
+      }
+    },
     "Version" : {
       "localizations" : {
         "ja" : {

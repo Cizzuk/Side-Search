@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 
 struct URLBasedAssistant: AssistantDescriptionProvider {
-    static var assistantName = LocalizedStringResource("")
+    static var assistantName = LocalizedStringResource("URL Based Assistant")
     static var assistantDescription = LocalizedStringResource("")
-    static var assistantSystemImage = ""
+    static var assistantSystemImage = "magnifyingglass"
     
     static func makeSettingsView() -> some View {
         URLBasedAssistantSettingsView()

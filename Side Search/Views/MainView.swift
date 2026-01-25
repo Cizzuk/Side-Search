@@ -72,14 +72,29 @@ struct MainView: View {
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    // TODO: Replace with Switch Assistant Button
-//                    Picker("Open in", selection: $viewModel.SearchEngine.openIn) {
-//                        ForEach(URLBasedAssistantModel.OpenInOption.allCases, id: \.self) { option in
-//                            Text(option.localizedName).tag(option)
-//                        }
-//                    }
-//                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
-                    Spacer()
+                    Menu {
+                        // TODO: Migrate to Sheet View
+                        Section {
+                            ForEach(AssistantType.allCases, id: \.self) { type in
+                                Button(action: { viewModel.currentAssistant = type }) {
+                                    HStack {
+                                        if viewModel.currentAssistant == type {
+                                            Image(systemName: "checkmark")
+                                        }
+                                        Text(type.DescriptionProviderType.assistantName)
+                                    }
+                                }
+                                .accessibility(addTraits: viewModel.currentAssistant == type ? [.isSelected] : [])
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: viewModel.currentAssistant.DescriptionProviderType.assistantSystemImage)
+                            Text(viewModel.currentAssistant.DescriptionProviderType.assistantName)
+                        }
+                        .padding()
+                    }
+                    
                     Button(action: { viewModel.activateAssistant() }) {
                         Label("Start Assistant", image: "Sidefish")
                     }

@@ -31,7 +31,11 @@ class MainViewModel: ObservableObject {
     }
     
     func activateAssistant() {
-        // TODO: if .urlBased ...
+        // Check current assistant type
+        if currentAssistant != .urlBased {
+            showAssistant = true
+            return
+        }
         
         guard let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
               let SearchEngine = URLBasedAssistantModel.fromJSON(rawData) else {
@@ -59,6 +63,18 @@ class MainViewModel: ObservableObject {
                 showDummyCurtain = true
             }
             UIApplication.shared.open(url)
+        }
+    }
+    
+    @Published var currentAssistant: AssistantType = {
+        if let rawValue = UserDefaults.standard.string(forKey: "currentAssistant"),
+           let type = AssistantType(rawValue: rawValue) {
+            return type
+        }
+        return .urlBased
+    }() {
+        didSet {
+            UserDefaults.standard.set(currentAssistant.rawValue, forKey: "currentAssistant")
         }
     }
     
