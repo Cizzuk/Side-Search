@@ -31,10 +31,13 @@ struct SwitchAssistantView: View {
                                 Text(type.DescriptionProviderType.assistantDescription)
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
+                                    .accessibilityHidden(true)
                             }
                         }
                         .foregroundColor(.primary)
                         .accessibility(addTraits: currentAssistant == type ? [.isSelected] : [])
+                        .accessibilityHint(type.DescriptionProviderType.assistantDescription)
+                        .disabled(!type.DescriptionProviderType.isAvailable())
                     }
                 }
             }
