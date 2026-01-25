@@ -640,12 +640,32 @@
         }
       }
     },
+    "Switch Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントの切り替え"
+          }
+        }
+      }
+    },
     "The Search URL is necessary to set your preferred AI assistant or search engine URL." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。"
+          }
+        }
+      }
+    },
+    "This can be used by setting URLs for AI assistants, search engines, etc. The assistant will open in the in-app browser or the default app. Side Search's speech recognition is optional." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AIアシスタントや検索エンジンなどのURLを設定して使用するアシスタントです。アシスタントはアプリ内ブラウザかデフォルトのアプリで開きます。Side Searchの音声認識はオプションです。"
           }
         }
       }
