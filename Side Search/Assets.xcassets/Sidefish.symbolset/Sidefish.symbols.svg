@@ -7,11 +7,11 @@ PUBLIC "-//W3C//DTD SVG 1.1//EN"
  <!--glyph: "", point size: 100.0, font version: "21.1d1e1", template writer version: "138.0.0"-->
  <style>.defaults {-sfsymbols-variable-value-mode:color;-sfsymbols-draw-reverses-motion-groups:true}
 
-.monochrome-0 {-sfsymbols-motion-group:0;-sfsymbols-layer-tags:-68c9088ab1cc147}
+.monochrome-0 {-sfsymbols-motion-group:0;-sfsymbols-layer-tags:4f74eb29133d22e5}
 
-.multicolor-0:tintColor {-sfsymbols-motion-group:0;-sfsymbols-layer-tags:-68c9088ab1cc147}
+.multicolor-0:tintColor {-sfsymbols-motion-group:0;-sfsymbols-layer-tags:4f74eb29133d22e5}
 
-.hierarchical-0:primary {-sfsymbols-motion-group:0;-sfsymbols-layer-tags:-68c9088ab1cc147}
+.hierarchical-0:primary {-sfsymbols-motion-group:0;-sfsymbols-layer-tags:4f74eb29133d22e5}
 
 .SFSymbolsPreviewWireframe {fill:none;opacity:1.0;stroke:black;stroke-width:0.5}
 </style>
@@ -82,22 +82,22 @@ PUBLIC "-//W3C//DTD SVG 1.1//EN"
   </g>
   <line id="Baseline-L" style="fill:none;stroke:#27AAE1;opacity:1;stroke-width:0.5;" x1="263" x2="3036" y1="1556" y2="1556"/>
   <line id="Capline-L" style="fill:none;stroke:#27AAE1;opacity:1;stroke-width:0.5;" x1="263" x2="3036" y1="1485.54" y2="1485.54"/>
-  <line id="right-margin-Black-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="2982.73" x2="2982.73" y1="600.785" y2="720.121"/>
-  <line id="left-margin-Black-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="2884.07" x2="2884.07" y1="600.785" y2="720.121"/>
-  <line id="right-margin-Regular-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="1499.32" x2="1499.32" y1="600.785" y2="720.121"/>
-  <line id="left-margin-Regular-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="1400.37" x2="1400.37" y1="600.785" y2="720.121"/>
-  <line id="right-margin-Ultralight-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="609.402" x2="609.402" y1="600.785" y2="720.121"/>
-  <line id="left-margin-Ultralight-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="510.02" x2="510.02" y1="600.785" y2="720.121"/>
+  <line id="right-margin-Black-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="2983.54" x2="2983.54" y1="600.785" y2="720.121"/>
+  <line id="left-margin-Black-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="2883.26" x2="2883.26" y1="600.785" y2="720.121"/>
+  <line id="right-margin-Regular-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="1500.16" x2="1500.16" y1="600.785" y2="720.121"/>
+  <line id="left-margin-Regular-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="1399.53" x2="1399.53" y1="600.785" y2="720.121"/>
+  <line id="right-margin-Ultralight-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="610.491" x2="610.491" y1="600.785" y2="720.121"/>
+  <line id="left-margin-Ultralight-S" style="fill:none;stroke:#00AEEF;stroke-width:0.5;opacity:1.0;" x1="508.931" x2="508.931" y1="600.785" y2="720.121"/>
  </g>
  <g id="Symbols">
-  <g id="Black-S" transform="matrix(1.00656 0 0 1.00656 2884.07 696)">
-   <path class="monochrome-0 multicolor-0:tintColor hierarchical-0:primary SFSymbolsPreviewWireframe" d="M51.021-44.652L51.021-63.956C51.021-69.33 44.523-72.021 40.723-68.221L11.767-39.266C9.412-36.91 9.412-33.09 11.767-30.734L40.723-1.779C44.523 2.021 51.021-0.67 51.021-6.044C51.021-23.006 65.334-38.619 81.987-38.619L75.955-44.652L75.955-25.348L81.987-31.381L71.531-31.381C68.199-31.381 65.499-28.68 65.499-25.348C65.499-22.017 68.199-19.316 71.531-19.316L81.987-19.316C85.319-19.316 88.02-22.017 88.02-25.348L88.02-44.652C88.02-47.983 85.319-50.684 81.987-50.684C58.425-50.684 38.956-29.446 38.956-6.044L49.254-10.31L20.298-39.266L20.298-30.734L49.254-59.69L38.956-63.956L38.956-44.652C38.956-41.32 41.657-38.619 44.988-38.619C48.32-38.619 51.021-41.32 51.021-44.652Z"/>
+  <g id="Black-S" transform="matrix(1.00656 0 0 1.00656 2883.26 696)">
+   <path class="monochrome-0 multicolor-0:tintColor hierarchical-0:primary SFSymbolsPreviewWireframe" d="M51.02-44.652L51.02-63.956C51.02-69.33 44.523-72.021 40.723-68.221L11.767-39.266C9.411-36.91 9.411-33.09 11.767-30.734L40.723-1.779C44.523 2.021 51.02-0.67 51.02-6.044C51.02-22.606 66.59-38.619 83.595-38.619L77.563-44.652L77.563-25.348L83.595-31.381L73.944-31.381C70.612-31.381 67.911-28.68 67.911-25.348C67.911-22.017 70.612-19.316 73.944-19.316L83.595-19.316C86.927-19.316 89.628-22.017 89.628-25.348L89.628-44.652C89.628-47.983 86.927-50.684 83.595-50.684C59.849-50.684 38.956-29.194 38.956-6.044L49.254-10.31L20.298-39.266L20.298-30.734L49.254-59.69L38.956-63.956L38.956-44.652C38.956-41.32 41.656-38.619 44.988-38.619C48.32-38.619 51.02-41.32 51.02-44.652Z"/>
   </g>
-  <g id="Regular-S" transform="matrix(1.00656 0 0 1.00656 1400.37 696)">
-   <path class="monochrome-0 multicolor-0:tintColor hierarchical-0:primary SFSymbolsPreviewWireframe" d="M49.988-44.997L49.988-64.991C49.988-69.445 44.604-71.675 41.455-68.526L11.464-38.535C9.512-36.582 9.512-33.418 11.464-31.465L41.455-1.474C44.604 1.675 49.988-0.555 49.988-5.009C49.988-23.243 65.347-39.999 83.312-39.999L78.313-44.997L78.313-25.003L83.312-30.001L72.482-30.001C69.721-30.001 67.483-27.763 67.483-25.003C67.483-22.242 69.721-20.004 72.482-20.004L83.312-20.004C86.073-20.004 88.31-22.242 88.31-25.003L88.31-44.997C88.31-47.758 86.073-49.996 83.312-49.996C59.622-49.996 39.991-28.58 39.991-5.009L48.524-8.543L18.533-38.535L18.533-31.465L48.524-61.457L39.991-64.991L39.991-44.997C39.991-42.237 42.229-39.999 44.99-39.999C47.75-39.999 49.988-42.237 49.988-44.997Z"/>
+  <g id="Regular-S" transform="matrix(1.00656 0 0 1.00656 1399.53 696)">
+   <path class="monochrome-0 multicolor-0:tintColor hierarchical-0:primary SFSymbolsPreviewWireframe" d="M49.989-44.997L49.989-64.991C49.989-69.445 44.605-71.675 41.456-68.526L11.465-38.535C9.512-36.582 9.512-33.418 11.465-31.465L41.456-1.474C44.605 1.675 49.989-0.555 49.989-5.009C49.989-22.845 66.667-39.999 84.979-39.999L79.98-44.997L79.98-25.003L84.979-30.001L74.982-30.001C72.221-30.001 69.983-27.763 69.983-25.003C69.983-22.242 72.221-20.004 74.982-20.004L84.979-20.004C87.74-20.004 89.978-22.242 89.978-25.003L89.978-44.997C89.978-47.758 87.74-49.996 84.979-49.996C61.081-49.996 39.992-28.304 39.992-5.009L48.525-8.543L18.534-38.535L18.534-31.465L48.525-61.457L39.992-64.991L39.992-44.997C39.992-42.237 42.23-39.999 44.99-39.999C47.751-39.999 49.989-42.237 49.989-44.997Z"/>
   </g>
-  <g id="Ultralight-S" transform="matrix(1.00656 0 0 1.00656 510.02 696)">
-   <path class="monochrome-0 multicolor-0:tintColor hierarchical-0:primary SFSymbolsPreviewWireframe" d="M48.492-45.498L48.492-66.494C48.492-69.611 44.723-71.172 42.518-68.968L11.025-37.474C9.658-36.108 9.658-33.892 11.025-32.526L42.518-1.032C44.723 1.172 48.492-0.389 48.492-3.506C48.492-23.589 65.368-41.999 85.235-41.999L81.735-45.498L81.735-24.502L85.235-28.001L73.862-28.001C71.929-28.001 70.363-26.435 70.363-24.502C70.363-22.57 71.929-21.003 73.862-21.003L85.235-21.003C87.167-21.003 88.734-22.57 88.734-24.502L88.734-45.498C88.734-47.431 87.167-48.997 85.235-48.997C61.36-48.997 41.494-27.324 41.494-3.506L47.467-5.981L15.974-37.474L15.974-32.526L47.467-64.019L41.494-66.494L41.494-45.498C41.494-43.565 43.06-41.999 44.993-41.999C46.926-41.999 48.492-43.565 48.492-45.498Z"/>
+  <g id="Ultralight-S" transform="matrix(1.00656 0 0 1.00656 508.931 696)">
+   <path class="monochrome-0 multicolor-0:tintColor hierarchical-0:primary SFSymbolsPreviewWireframe" d="M47.268-45.908L47.268-67.723C47.268-69.748 44.82-70.761 43.388-69.33L10.665-36.607C9.778-35.719 9.778-34.281 10.665-33.393L43.388-0.67C44.82 0.761 47.268-0.252 47.268-2.277C47.268-23.475 66.868-43.635 88.626-43.635L86.353-45.908L86.353-24.092L88.626-26.365L77.718-26.365C76.463-26.365 75.446-25.347 75.446-24.092C75.446-22.837 76.463-21.82 77.718-21.82L88.626-21.82C89.881-21.82 90.898-22.837 90.898-24.092L90.898-45.908C90.898-47.163 89.881-48.18 88.626-48.18C64.329-48.18 42.723-25.957 42.723-2.277L46.602-3.884L13.879-36.607L13.879-33.393L46.602-66.116L42.723-67.723L42.723-45.908C42.723-44.653 43.74-43.635 44.995-43.635C46.25-43.635 47.268-44.653 47.268-45.908Z"/>
   </g>
  </g>
 </svg>
