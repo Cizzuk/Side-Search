@@ -17,9 +17,10 @@ struct ChangeIconView: View {
                     iconItem(iconName: "OG Like", iconID: "OGLike")
                 }
             }
+            .navigationTitle("Change App Icon")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationTitle("Change App Icon")
-        .navigationBarTitleDisplayMode(.inline)
+        .presentationDetents([.medium, .large])
     }
     
     private func iconItem(iconName: String, iconID: String) -> some View {
