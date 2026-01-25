@@ -136,7 +136,7 @@ struct SettingsView: View {
     }
     
     func assistantButtonImage() -> String {
-        if !AssistantSupport.needQueryInput() {
+        if !viewModel.defaultSE.needQueryInput() {
             return "magnifyingglass"
         }
         

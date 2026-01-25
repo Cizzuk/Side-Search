@@ -95,7 +95,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Public Methods
     
     func startAssistant() {
-        if !AssistantSupport.checkURLAvailability() {
+        if !SearchEngine.checkURLAvailability() {
             return
         }
         if !startWithMicMuted {
@@ -115,7 +115,7 @@ class AssistantViewModel: ObservableObject {
         // Stop recording before searching
         stopRecording()
         
-        if let url = AssistantSupport.makeSearchURL(query: recognizedText) {
+        if let url = SearchEngine.makeSearchURL(query: recognizedText) {
             switch openIn {
             case .inAppBrowser:
                 self.searchURL = url

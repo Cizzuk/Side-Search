@@ -41,7 +41,7 @@ class SettingsViewModel: ObservableObject {
         showHelp = false
         
         // Check if query input is needed
-        if AssistantSupport.needQueryInput() {
+        if defaultSE.needQueryInput() {
             showAssistant = true
         } else {
             switch openIn {
@@ -63,7 +63,7 @@ class SettingsViewModel: ObservableObject {
     
     // Check if search url scheme is not http/https, shouldLockOpenInToDefaultApp
     func checkShouldLockOpenIn() {
-        if !AssistantSupport.checkSafariViewAvailability() {
+        if !defaultSE.checkSafariViewAvailability() {
             shouldLockOpenInToDefaultApp = true
             openIn = .defaultApp
         } else {
