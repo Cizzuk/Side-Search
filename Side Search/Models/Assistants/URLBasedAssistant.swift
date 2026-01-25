@@ -28,15 +28,7 @@ struct URLBasedAssistantModel: AssistantModel {
     
     static func fromJSON(_ data: Data) -> URLBasedAssistantModel? {
         let decoder = JSONDecoder()
-        var model = try? decoder.decode(URLBasedAssistantModel.self, from: data)
-        
-        // Get previous OpenIn setting
-        if let previousOpenIn = UserDefaults.standard.string(forKey: "openIn") {
-            if let option = OpenInOption(rawValue: previousOpenIn) {
-                model?.openIn = option
-                UserDefaults.standard.removeObject(forKey: "openIn")
-            }
-        }
+        let model = try? decoder.decode(URLBasedAssistantModel.self, from: data)
         return model
     }
     
