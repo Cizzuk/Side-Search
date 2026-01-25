@@ -16,14 +16,14 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static func makeSettingsView() -> some View {
         URLBasedAssistantSettingsView()
     }
-    static var userDefaultsKey = "defaultSearchEngine"
+    static var userDefaultsKey = "urlBasedAssistantSettings"
     
     static func isAvailable() -> Bool { return true }
 }
 
 struct URLBasedAssistantModel: AssistantModel {
     var name: LocalizedStringResource = ""
-    var url = ""
+    var url: String = ""
     var openIn: OpenInOption = .inAppBrowser
     
     static func fromJSON(_ data: Data) -> URLBasedAssistantModel? {

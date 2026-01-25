@@ -50,11 +50,36 @@ struct URLBasedAssistantSettingsView: View {
         .onChange(of: searchEngine) {
             saveSettings()
         }
+        .onAppear {
+            migrateUserDefaults()
+        }
     }
     
     private func saveSettings() {
         if let data = searchEngine.toJSON() {
             UserDefaults.standard.set(data, forKey: URLBasedAssistant.userDefaultsKey)
         }
+    }
+    
+    private func migrateUserDefaults() {
+        guard let previousData = UserDefaults.standard.data(forKey: "defaultSearchEngine")
+        else { return }
+        defer {
+            UserDefaults.standard.removeObject(forKey: "defaultSearchEngine")
+            UserDefaults.standard.removeObject(forKey: "openIn")
+        }
+        
+        // Migrate URL
+        guard let jsonDict = try? JSONSerialization.jsonObject(with: previousData) as? [String: Any]
+        else { return }
+        if let url = jsonDict["url"] as? String {
+            searchEngine.url = url
+        }
+        
+        // Migrate OpenIn
+        guard let previousOpenIn = UserDefaults.standard.string(forKey: "openIn"),
+              let option = URLBasedAssistantModel.OpenInOption(rawValue: previousOpenIn)
+        else { return }
+        searchEngine.openIn = option
     }
 }
