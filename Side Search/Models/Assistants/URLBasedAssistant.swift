@@ -10,7 +10,7 @@ import SwiftUI
 
 struct URLBasedAssistant: AssistantDescriptionProvider {
     static var assistantName = LocalizedStringResource("URL Based Assistant")
-    static var assistantDescription = LocalizedStringResource("")
+    static var assistantDescription = LocalizedStringResource("This can be used by setting URLs for AI assistants, search engines, etc. The assistant will open in the in-app browser or the default app. Side Search's speech recognition is optional.")
     static var assistantSystemImage = "magnifyingglass"
     
     static func makeSettingsView() -> some View {
