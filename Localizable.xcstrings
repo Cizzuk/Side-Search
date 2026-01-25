@@ -119,7 +119,14 @@
       }
     },
     "Change App Icon" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アイコンを変更"
+          }
+        }
+      }
     },
     "ChatGPT" : {
       "localizations" : {
