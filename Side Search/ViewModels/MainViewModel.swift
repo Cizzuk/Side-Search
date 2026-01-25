@@ -1,5 +1,5 @@
 //
-//  SettingsViewModel.swift
+//  MainViewModel.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2025/12/24.
@@ -10,7 +10,7 @@ import UIKit
 import Speech
 import SwiftUI
 
-class SettingsViewModel: ObservableObject {
+class MainViewModel: ObservableObject {
     @Published var showAssistant = false
     @Published var showSafariView = false
     @Published var showPresets = false

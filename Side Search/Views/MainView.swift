@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  MainView.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2025/12/24.
@@ -9,13 +9,15 @@ import SafariServices
 import Speech
 import SwiftUI
 
-struct SettingsView: View {
+struct MainView: View {
     @Environment(\.scenePhase) private var scenePhase
-    @StateObject var viewModel = SettingsViewModel()
+    @StateObject var viewModel = MainViewModel()
     
     var body: some View {
         NavigationStack {
             List {
+                // MARK: Assistant Settings
+                
                 // URL
                 Section {
                     TextField("URL", text: $viewModel.SearchEngine.url, prompt: Text(verbatim: "https://example.com/search?q=%s"))
@@ -55,6 +57,8 @@ struct SettingsView: View {
                         }
                     }
                 }
+                
+                // MARK: - Shared Settings
                 
                 // Speech Recognition Settings
                 Section {
@@ -101,7 +105,7 @@ struct SettingsView: View {
 //                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
                     Spacer()
                     Button(action: { viewModel.activateAssistant() }) {
-                        Label("Start Assistant", systemImage: assistantButtonImage())
+                        Label("Start Assistant", systemImage: "arrowshape.left.fill")
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
@@ -133,17 +137,5 @@ struct SettingsView: View {
         // MARK: - Dummy Curtain
         .opacity(viewModel.showDummyCurtain ? 0.0 : 1.0)
         .fullScreenCover(isPresented: $viewModel.showDummyCurtain) { DummyCurtainView() }
-    }
-    
-    func assistantButtonImage() -> String {
-        if !viewModel.SearchEngine.needQueryInput() {
-            return "magnifyingglass"
-        }
-        
-        if viewModel.startWithMicMuted {
-            return "magnifyingglass"
-        }
-        
-        return "mic"
     }
 }
