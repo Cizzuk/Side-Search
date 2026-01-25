@@ -105,7 +105,7 @@ struct MainView: View {
 //                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
                     Spacer()
                     Button(action: { viewModel.activateAssistant() }) {
-                        Label("Start Assistant", systemImage: "arrowshape.left.fill")
+                        Label("Start Assistant", image: "Sidefish")
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
