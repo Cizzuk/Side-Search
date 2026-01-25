@@ -94,15 +94,6 @@ struct MainView: View {
                         Label("Help", systemImage: "questionmark")
                     }
                 }
-                    
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    } label: {
-                        Label("Done", systemImage: "checkmark")
-                    }
-                }
             }
             // MARK: - Events
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
