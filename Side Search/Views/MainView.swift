@@ -18,46 +18,7 @@ struct MainView: View {
         NavigationStack {
             List {
                 // MARK: Assistant Settings
-                
-                // URL
-                Section {
-                    TextField("URL", text: $viewModel.SearchEngine.url, prompt: Text(verbatim: "https://example.com/search?q=%s"))
-                        .disableAutocorrection(true)
-                        .keyboardType(.URL)
-                        .textInputAutocapitalization(.never)
-                        .environment(\.layoutDirection, .leftToRight)
-                        .submitLabel(.done)
-                } header: { Text("Search URL")
-                } footer: { Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.") }
-                
-                Button(action: { viewModel.showPresets = true }) {
-                    Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
-                }
-                
-                Section {
-                    Picker("Open in", selection: $viewModel.SearchEngine.openIn) {
-                        ForEach(URLBasedAssistantModel.OpenInOption.allCases, id: \.self) { option in
-                            Text(option.localizedName).tag(option)
-                        }
-                    }
-                    .disabled(viewModel.shouldLockOpenInToDefaultApp)
-                    
-                    if viewModel.SearchEngine.openIn == .inAppBrowser {
-                        Button() {
-                            SFSafariViewController.DataStore.default.clearWebsiteData()
-                        } label: {
-                            Text("Clear In-App Browser Data")
-                        }
-                    }
-                } footer: {
-                    if viewModel.SearchEngine.openIn == .defaultApp {
-                        if viewModel.shouldLockOpenInToDefaultApp {
-                            Text("This option is locked to Default App because the In-App Browser does not support the Search URL.")
-                        } else {
-                            Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
-                        }
-                    }
-                }
+                URLBasedAssistant.makeSettingsView()
                 
                 // MARK: - Shared Settings
                 
@@ -80,22 +41,28 @@ struct MainView: View {
                     Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
                 } header: { Text("Speech Settings") }
                 
-                Button(action: { showingChangeIconView = true }) {
-                    Label("Change App Icon", systemImage: "app.dashed")
+                Section {
+                    Button() {
+                        SFSafariViewController.DataStore.default.clearWebsiteData()
+                    } label: {
+                        Label("Clear In-App Browser Data", systemImage: "trash")
+                    }
+                }
+                
+                Section {
+                    Button(action: { showingChangeIconView = true }) {
+                        Label("Change App Icon", systemImage: "app.dashed")
+                    }
                 }
             }
-            .animation(.default, value: viewModel.SearchEngine.openIn)
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
             .fullScreenCover(isPresented: $viewModel.showSafariView) {
-                if let url = URL(string: viewModel.SearchEngine.url) {
+                if let url = viewModel.safariViewURL {
                     SafariView(url: url)
                         .ignoresSafeArea()
                 }
-            }
-            .sheet(isPresented: $viewModel.showPresets) {
-                SearchEnginePresetsView(SearchEngine: $viewModel.SearchEngine)
             }
             .sheet(isPresented: $viewModel.showHelp) {
                 HelpView()

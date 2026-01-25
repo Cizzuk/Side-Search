@@ -12,14 +12,14 @@ enum AssistantTypes: String, CaseIterable {
     case urlBased
 //    case appleFoundation
     
-    var DescriptionProviderType: AssistantDescriptionProvider.Type {
+    var DescriptionProviderType: any AssistantDescriptionProvider.Type {
         switch self {
         case .urlBased:
             return URLBasedAssistant.self
         }
     }
     
-    var ModelType: AssistantModel.Type {
+    var ModelType: any AssistantModel.Type {
         switch self {
         case .urlBased:
             return URLBasedAssistantModel.self
@@ -34,14 +34,15 @@ protocol AssistantDescriptionProvider {
     static var assistantSystemImage: String { get }
     
     // Settings
-    static var settingsView: any View { get }
+    associatedtype SettingsView: View
+    static func makeSettingsView() -> SettingsView
     static var userDefaultsKey: String { get }
     
     // Availability Check
     static func isAvailable() -> Bool
 }
 
-protocol AssistantModel: Codable {
+protocol AssistantModel: Codable, Equatable {
     static func fromJSON(_ data: Data) -> Self?
     func toJSON() -> Data?
     func isValidSettings() -> Bool

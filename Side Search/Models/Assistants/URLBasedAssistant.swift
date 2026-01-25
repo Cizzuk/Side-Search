@@ -13,7 +13,9 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static var assistantDescription = LocalizedStringResource("")
     static var assistantSystemImage = ""
     
-    static var settingsView: any View { EmptyView() }
+    static func makeSettingsView() -> some View {
+        URLBasedAssistantSettingsView()
+    }
     static var userDefaultsKey = "defaultSearchEngine"
     
     static func isAvailable() -> Bool { return true }

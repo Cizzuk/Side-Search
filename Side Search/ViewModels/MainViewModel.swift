@@ -13,15 +13,9 @@ import SwiftUI
 class MainViewModel: ObservableObject {
     @Published var showAssistant = false
     @Published var showSafariView = false
-    @Published var showPresets = false
+    @Published var safariViewURL: URL?
     @Published var showHelp = false
     @Published var showDummyCurtain = false
-    
-    @Published var shouldLockOpenInToDefaultApp: Bool = false
-    
-    init() {
-        checkShouldLockOpenIn()
-    }
     
     func onChange(scenePhase: ScenePhase) {
         switch scenePhase {
@@ -37,60 +31,38 @@ class MainViewModel: ObservableObject {
     }
     
     func activateAssistant() {
-        showPresets = false
-        showHelp = false
+        // TODO: if .urlBased ...
+        
+        guard let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
+              let SearchEngine = URLBasedAssistantModel.fromJSON(rawData) else {
+            return
+        }
         
         // Check if query input is needed
         if SearchEngine.needQueryInput() {
             showAssistant = true
-        } else {
-            switch SearchEngine.openIn {
-            case .inAppBrowser:
-                showSafariView = true
-            case .defaultApp:
-                if let url = URL(string: SearchEngine.url) {
-                    // Show dummy curtain without animation
-                    var transaction = Transaction(animation: .none)
-                    transaction.disablesAnimations = true
-                    withTransaction(transaction) {
-                        showDummyCurtain = true
-                    }
-                    UIApplication.shared.open(url)
-                }
-            }
-        }
-    }
-    
-    // Check if search url scheme is not http/https, shouldLockOpenInToDefaultApp
-    func checkShouldLockOpenIn() {
-        if !SearchEngine.checkSafariViewAvailability() {
-            shouldLockOpenInToDefaultApp = true
-            SearchEngine.openIn = .defaultApp
-        } else {
-            shouldLockOpenInToDefaultApp = false
-        }
-    }
-    
-    @Published var SearchEngine: URLBasedAssistantModel = {
-        if let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
-           let engine = URLBasedAssistantModel.fromJSON(rawData) {
-            return engine
+            return
         }
         
-        // Create Default
-        let se = SearchEnginePresets.defaultSearchEngine
-        if let data = se.toJSON() {
-            UserDefaults.standard.set(data, forKey: URLBasedAssistant.userDefaultsKey)
+        // Check if SafariView is available
+        if SearchEngine.openIn == .inAppBrowser && SearchEngine.checkSafariViewAvailability() {
+            safariViewURL = URL(string: SearchEngine.url)
+            showSafariView = true
+            return
         }
-        return se
-    }() {
-        didSet {
-            if let data = SearchEngine.toJSON() {
-                UserDefaults.standard.set(data, forKey: URLBasedAssistant.userDefaultsKey)
-                checkShouldLockOpenIn()
+        
+        if let url = URL(string: SearchEngine.url) {
+            // Show dummy curtain without animation
+            var transaction = Transaction(animation: .none)
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                showDummyCurtain = true
             }
+            UIApplication.shared.open(url)
         }
     }
+    
+    // MARK: - Speech Settings
     
     // Speech Recognition Locale
     @Published var speechLocale: Locale? = {
