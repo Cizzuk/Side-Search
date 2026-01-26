@@ -36,26 +36,14 @@ class AssistantViewModel: ObservableObject {
     @Published var isCriticalError = false
     @Published var showError = false
     
-    // Speech Recognizer=
+    // Speech Recognizer
     @Published var isRecording = false
     @Published var micLevel: Float = 0.0
     
     let speechRecognizer = SpeechRecognizer()
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
     
-    // URLBasedAssistant Settings
-    @Published var assistantModel: URLBasedAssistantModel = {
-        if let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
-           let model = URLBasedAssistantModel.fromJSON(rawData) {
-            return model
-        }
-        return URLBasedAssistantModel()
-    }()
-    
-    // MARK: - Private Properties
-    
-    // Get Start with Mic Muted Setting
-    private var startWithMicMuted: Bool {
+    var startWithMicMuted: Bool {
         UserDefaults.standard.bool(forKey: "startWithMicMuted")
     }
     
@@ -65,7 +53,7 @@ class AssistantViewModel: ObservableObject {
         setupSpeechRecognizerBindings()
     }
     
-    private func setupSpeechRecognizerBindings() {
+    func setupSpeechRecognizerBindings() {
         speechRecognizer.$recognizedText
             .sink { [weak self] text in
                 self?.inputText = text
@@ -101,12 +89,10 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Public Methods
+    // MARK: - Methods
     
     func startAssistant() {
-        if !assistantModel.checkURLAvailability() {
-            return
-        }
+        // Override in subclass
         if !startWithMicMuted {
             startRecording()
         }
@@ -121,28 +107,12 @@ class AssistantViewModel: ObservableObject {
     }
     
     func confirmInput() {
-        // Stop recording before searching
+        // Override in subclass
         stopRecording()
-        
-        if let url = assistantModel.makeSearchURL(query: inputText) {
-            switch assistantModel.openIn {
-            case .inAppBrowser:
-                self.searchURL = url
-                self.showSafariView = true
-            case .defaultApp:
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                onDismiss?()
-            }
-        } else {
-            // Handle invalid URL error
-            self.errorMessage = "Invalid Search URL. Please check your settings."
-            self.showError = true
-        }
     }
     
-    // MARK: - Private Methods
-    
-    private func handleSilenceTimeout() {
+    // Handle Speech Recognizer Silence Timeout
+    func handleSilenceTimeout() {
         guard speechRecognizer.isRecording else { return }
         if !inputText.isEmpty {
             confirmInput()

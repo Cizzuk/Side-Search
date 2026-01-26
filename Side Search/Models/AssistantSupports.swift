@@ -29,6 +29,18 @@ enum AssistantType: String, CaseIterable {
             return AppleFoundationAssistantModel.self
         }
     }
+    
+    func makeAssistantViewModel() -> AssistantViewModel {
+        return DescriptionProviderType.makeAssistantViewModel()
+    }
+    
+    static var current: AssistantType {
+        if let rawValue = UserDefaults.standard.string(forKey: "currentAssistant"),
+           let type = AssistantType(rawValue: rawValue) {
+            return type
+        }
+        return .urlBased
+    }
 }
 
 protocol AssistantDescriptionProvider {
@@ -40,6 +52,9 @@ protocol AssistantDescriptionProvider {
     // Settings
     static var makeSettingsView: any View { get }
     static var userDefaultsKey: String { get }
+    
+    // AssistantViewModel
+    static func makeAssistantViewModel() -> AssistantViewModel
     
     // Availability Check
     static func isAvailable() -> Bool

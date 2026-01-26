@@ -10,7 +10,11 @@ import SwiftUI
 struct AssistantView: View {
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
-    @StateObject private var viewModel = AssistantViewModel()
+    @StateObject private var viewModel: AssistantViewModel
+    
+    init() {
+        _viewModel = StateObject(wrappedValue: AssistantType.current.makeAssistantViewModel())
+    }
     
     var body: some View {
         NavigationStack {

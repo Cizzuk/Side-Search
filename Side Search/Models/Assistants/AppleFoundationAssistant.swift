@@ -16,6 +16,8 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     static var makeSettingsView: any View { AppleFoundationAssistantSettingsView() }
     static var userDefaultsKey = "appleFoundationAssistantSettings"
     
+    // TODO: Create AppleFoundationAssistantViewModel
+    static func makeAssistantViewModel() -> AssistantViewModel { AssistantViewModel() }
     static func isAvailable() -> Bool { return false }
 }
 

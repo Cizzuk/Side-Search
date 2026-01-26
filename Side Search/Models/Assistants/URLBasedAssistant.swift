@@ -16,6 +16,7 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static var makeSettingsView: any View { URLBasedAssistantSettingsView() }
     static var userDefaultsKey = "urlBasedAssistantSettings"
     
+    static func makeAssistantViewModel() -> AssistantViewModel { URLBasedAssistantViewModel() }
     static func isAvailable() -> Bool { return true }
 }
 
