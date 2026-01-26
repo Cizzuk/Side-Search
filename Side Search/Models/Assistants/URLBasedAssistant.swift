@@ -17,7 +17,9 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static var userDefaultsKey = "urlBasedAssistantSettings"
     
     static func makeAssistantViewModel() -> AssistantViewModel { URLBasedAssistantViewModel() }
+    
     static func isAvailable() -> Bool { return true }
+    static func isBlocked() -> Bool { return false }
 }
 
 struct URLBasedAssistantModel: AssistantModel {

@@ -62,6 +62,7 @@ protocol AssistantDescriptionProvider {
     
     // Availability Check
     static func isAvailable() -> Bool
+    static func isBlocked() -> Bool
 }
 
 protocol AssistantModel: Codable, Equatable {

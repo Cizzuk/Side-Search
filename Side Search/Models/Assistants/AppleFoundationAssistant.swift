@@ -18,7 +18,14 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     
     // TODO: Create AppleFoundationAssistantViewModel
     static func makeAssistantViewModel() -> AssistantViewModel { AssistantViewModel() }
-    static func isAvailable() -> Bool { return false }
+    
+    static func isAvailable() -> Bool { return true }
+    static func isBlocked() -> Bool {
+        if GeoHelper.currentRegion == "CN" {
+            return true
+        }
+        return false
+    }
 }
 
 struct AppleFoundationAssistantModel: AssistantModel {
