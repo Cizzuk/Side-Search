@@ -14,6 +14,7 @@ struct MainView: View {
     @StateObject var viewModel = MainViewModel()
     @State private var showingChangeIconView = false
     @State private var showingSwitchAssistantView = false
+    @State private var showClearInAppBrowserDataAlert = false
     
     var body: some View {
         NavigationStack {
@@ -43,10 +44,8 @@ struct MainView: View {
                 } header: { Text("Speech Settings") }
                 
                 Section {
-                    Button() {
-                        SFSafariViewController.DataStore.default.clearWebsiteData()
-                    } label: {
-                        Label("Clear In-App Browser Data", systemImage: "trash")
+                    Button(action: { showClearInAppBrowserDataAlert = true }) {
+                        Label("Clear In-App Browser Data", systemImage: "xmark.circle")
                     }
                 }
                 
@@ -71,6 +70,16 @@ struct MainView: View {
             }
             .sheet(isPresented: $showingChangeIconView) {
                 ChangeIconView()
+            }
+            // Delete In-App Browser Data Alert
+            .alert(isPresented: $showClearInAppBrowserDataAlert) {
+                Alert(
+                    title: Text("Clear In-App Browser Data"),
+                    message: Text("Are you sure you want to clear all in-app browser data?"),
+                    primaryButton: .destructive(Text("Clear")) { SFSafariViewController.DataStore.default.clearWebsiteData()
+                    },
+                    secondaryButton: .cancel()
+                )
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
