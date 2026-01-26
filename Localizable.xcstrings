@@ -48,6 +48,16 @@
         }
       }
     },
+    "Are you sure you want to clear all in-app browser data?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ内ブラウザのデータをすべて消去しますか？"
+          }
+        }
+      }
+    },
     "Ask to Assistant" : {
       "localizations" : {
         "ja" : {
@@ -170,6 +180,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Claude"
+          }
+        }
+      }
+    },
+    "Clear" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "消去"
           }
         }
       }
