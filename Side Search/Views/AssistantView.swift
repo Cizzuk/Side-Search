@@ -119,6 +119,9 @@ struct AssistantView: View {
             .onDisappear() {
                 viewModel.stopRecording()
             }
+            .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+                viewModel.activateAssistant()
+            }
         }
         .background(
             AngularGradient(

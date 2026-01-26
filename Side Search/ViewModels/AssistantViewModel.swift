@@ -117,6 +117,13 @@ class AssistantViewModel: ObservableObject {
         stopRecording()
     }
     
+    // Handle repressing the Side Button
+    func activateAssistant() {
+        if !isRecording && !startWithMicMuted {
+            startRecording()
+        }
+    }
+    
     // Handle Speech Recognizer Silence Timeout
     func handleSilenceTimeout() {
         guard speechRecognizer.isRecording else { return }
