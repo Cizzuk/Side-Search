@@ -16,7 +16,7 @@ struct AssistantView: View {
         NavigationStack {
             VStack {
                 TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
-                          text: $viewModel.recognizedText, axis: .vertical)
+                          text: $viewModel.inputText, axis: .vertical)
                 .font(.headline)
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -33,7 +33,7 @@ struct AssistantView: View {
                     }
                 }
                 .onSubmit {
-                    viewModel.performSearch()
+                    viewModel.confirmInput()
                 }
             }
             .scrollDismissesKeyboard(.interactively)
@@ -58,7 +58,7 @@ struct AssistantView: View {
                     }
                     .tint(viewModel.isRecording ? .orange : .primary)
                     Button(action: {
-                        viewModel.performSearch()
+                        viewModel.confirmInput()
                     }) {
                         Label("Search", systemImage: "magnifyingglass")
                     }

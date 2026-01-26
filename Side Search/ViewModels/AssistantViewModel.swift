@@ -9,30 +9,48 @@ import Combine
 import UIKit
 
 class AssistantViewModel: ObservableObject {
+    enum MessageFrom {
+        case user
+        case assistant
+        case system
+    }
+    
+    enum MessageType {
+        case text
+    }
+    
+    // MARK: - Variables
+    
     var onDismiss: (() -> Void)?
-    @Published var recognizedText = ""
-    @Published var isRecording = false
-    @Published var micLevel: Float = 0.0
+    
+    // Input Field
+    @Published var inputText = ""
+    @Published var shouldInputFocused = false
+    
+    // Web View
     @Published var searchURL: URL?
     @Published var showSafariView = false
     
+    // Error Alert
     @Published var errorMessage: LocalizedStringResource = ""
     @Published var isCriticalError = false
     @Published var showError = false
-    @Published var shouldInputFocused = false
     
-    // Get SearchEngine Settings
-    @Published var SearchEngine: URLBasedAssistantModel = {
+    // Speech Recognizer=
+    @Published var isRecording = false
+    @Published var micLevel: Float = 0.0
+    
+    let speechRecognizer = SpeechRecognizer()
+    private var cancellables = Set<AnyCancellable>()
+    
+    // URLBasedAssistant Settings
+    @Published var assistantModel: URLBasedAssistantModel = {
         if let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
-           let engine = URLBasedAssistantModel.fromJSON(rawData) {
-            return engine
+           let model = URLBasedAssistantModel.fromJSON(rawData) {
+            return model
         }
         return URLBasedAssistantModel()
     }()
-    
-    // Speech Recognizer
-    let speechRecognizer = SpeechRecognizer()
-    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Private Properties
     
@@ -50,7 +68,7 @@ class AssistantViewModel: ObservableObject {
     private func setupSpeechRecognizerBindings() {
         speechRecognizer.$recognizedText
             .sink { [weak self] text in
-                self?.recognizedText = text
+                self?.inputText = text
             }
             .store(in: &cancellables)
         
@@ -86,7 +104,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Public Methods
     
     func startAssistant() {
-        if !SearchEngine.checkURLAvailability() {
+        if !assistantModel.checkURLAvailability() {
             return
         }
         if !startWithMicMuted {
@@ -102,12 +120,12 @@ class AssistantViewModel: ObservableObject {
         speechRecognizer.stopRecording()
     }
     
-    func performSearch() {
+    func confirmInput() {
         // Stop recording before searching
         stopRecording()
         
-        if let url = SearchEngine.makeSearchURL(query: recognizedText) {
-            switch SearchEngine.openIn {
+        if let url = assistantModel.makeSearchURL(query: inputText) {
+            switch assistantModel.openIn {
             case .inAppBrowser:
                 self.searchURL = url
                 self.showSafariView = true
@@ -126,8 +144,8 @@ class AssistantViewModel: ObservableObject {
     
     private func handleSilenceTimeout() {
         guard speechRecognizer.isRecording else { return }
-        if !recognizedText.isEmpty {
-            performSearch()
+        if !inputText.isEmpty {
+            confirmInput()
         } else {
             stopRecording()
         }
