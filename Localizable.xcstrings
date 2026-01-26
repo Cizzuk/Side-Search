@@ -194,6 +194,16 @@
         }
       }
     },
+    "Confirm" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        }
+      }
+    },
     "Copilot Search" : {
       "localizations" : {
         "ja" : {
@@ -473,16 +483,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "URLスキームを使用してショートカットを実行する"
-          }
-        }
-      }
-    },
-    "Search" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "検索"
           }
         }
       }
