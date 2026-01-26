@@ -72,7 +72,7 @@ class MainViewModel: ObservableObject {
            (!type.DescriptionProviderType.isBlocked() && !type.DescriptionProviderType.isAvailable()) {
             return type
         }
-        return .urlBased
+        return .defaultType
     }() {
         didSet {
             UserDefaults.standard.set(currentAssistant.rawValue, forKey: "currentAssistant")

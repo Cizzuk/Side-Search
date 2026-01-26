@@ -12,6 +12,10 @@ enum AssistantType: String, CaseIterable {
     case urlBased
     case appleFoundation
     
+    static var defaultType: AssistantType {
+        return .urlBased
+    }
+    
     var DescriptionProviderType: any AssistantDescriptionProvider.Type {
         switch self {
         case .urlBased:
