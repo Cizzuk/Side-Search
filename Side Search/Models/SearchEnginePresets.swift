@@ -8,22 +8,8 @@
 import Foundation
 
 class SearchEnginePresets {
-    // Helpers
-    private static let currentRegion = Locale.current.region?.identifier
-    private static let preferredLanguages = Locale.preferredLanguages
-    
-    private static func containsLanguage(_ languageCode: String) -> Bool {
-        return preferredLanguages.contains { language in
-            if language.hasPrefix(languageCode + "-") {
-                return true
-            }
-            let locale = Locale(identifier: language)
-            return locale.language.languageCode?.identifier == languageCode
-        }
-    }
-    
     static var defaultSearchEngine: URLBasedAssistantModel {
-        if currentRegion == "CN" {
+        if GeoHelper.currentRegion == "CN" {
             return URLBasedAssistantModel(
                 name: "百度AI搜索",
                 url: "https://chat.baidu.com/search?query=%s",
@@ -38,7 +24,7 @@ class SearchEnginePresets {
     
     static var aiAssistants: [URLBasedAssistantModel] {
         var aiCSEs: [URLBasedAssistantModel] = []
-        if currentRegion != "CN" {
+        if GeoHelper.currentRegion != "CN" {
             aiCSEs.append(contentsOf: [
                 URLBasedAssistantModel(
                     name: "ChatGPT",
@@ -63,7 +49,7 @@ class SearchEnginePresets {
             ])
         }
         
-        if currentRegion == "CN" || containsLanguage("zh-Hans") {
+        if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
             aiCSEs.append(URLBasedAssistantModel(
                 name: "百度AI搜索",
                 url: "https://chat.baidu.com/search?query=%s",
@@ -77,7 +63,7 @@ class SearchEnginePresets {
         var normalCSEs: [URLBasedAssistantModel] = []
         
         let localizedYahoo: URLBasedAssistantModel
-        if preferredLanguages.first == "ja-JP" {
+        if GeoHelper.preferredLanguages.first == "ja-JP" {
             localizedYahoo = URLBasedAssistantModel(
                 name: "Yahoo! JAPAN",
                 url: "https://search.yahoo.co.jp/search?p=%s",
@@ -109,14 +95,14 @@ class SearchEnginePresets {
             ),
         ])
         
-        if currentRegion == "CN" || containsLanguage("zh-Hans") {
+        if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
             normalCSEs.append(URLBasedAssistantModel(
                 name: "百度",
                 url: "https://www.baidu.com/s?wd=%s",
             ))
         }
         
-        if currentRegion == "RU" || containsLanguage("ru") {
+        if GeoHelper.currentRegion == "RU" || GeoHelper.containsLanguage("ru") {
             normalCSEs.append(URLBasedAssistantModel(
                 name: "Яндекс",
                 url: "https://yandex.ru/search/?text=%s",
