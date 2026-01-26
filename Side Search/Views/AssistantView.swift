@@ -64,7 +64,7 @@ struct AssistantView: View {
                     Button(action: {
                         viewModel.confirmInput()
                     }) {
-                        Label("Search", systemImage: "magnifyingglass")
+                        Label("Confirm", systemImage: AssistantType.current.DescriptionProviderType.assistantSystemImage)
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
