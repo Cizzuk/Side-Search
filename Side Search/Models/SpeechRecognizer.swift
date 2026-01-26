@@ -105,7 +105,11 @@ class SpeechRecognizer: ObservableObject {
                     // Handle speech result
                     if let result = result {
                         DispatchQueue.main.async {
-                            self.recognizedText = result.bestTranscription.formattedString
+                            let newText = result.bestTranscription.formattedString
+                            // Prevent overwriting with empty string
+                            if !newText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                self.recognizedText = newText
+                            }
                         }
                         isFinal = result.isFinal
                         self.startSilenceTimer()
