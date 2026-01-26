@@ -33,6 +33,11 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         // Stop recording before searching
         stopRecording()
         
+        // Prevent empty input
+        if inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return
+        }
+        
         // Simulate a response from Yamabico
         let userInput = inputText
         let response = "\(userInput)..."
