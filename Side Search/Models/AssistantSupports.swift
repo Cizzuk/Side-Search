@@ -44,10 +44,11 @@ enum AssistantType: String, CaseIterable {
     
     static var current: AssistantType {
         if let rawValue = UserDefaults.standard.string(forKey: "currentAssistant"),
-           let type = AssistantType(rawValue: rawValue) {
+           let type = AssistantType(rawValue: rawValue),
+           (!type.DescriptionProviderType.isBlocked() && type.DescriptionProviderType.isAvailable()) {
             return type
         }
-        return .urlBased
+        return .defaultType
     }
 }
 
