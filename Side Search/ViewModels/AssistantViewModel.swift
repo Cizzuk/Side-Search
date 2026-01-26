@@ -15,6 +15,11 @@ class AssistantViewModel: ObservableObject {
         case system
     }
     
+    struct MessageData {
+        let from: MessageFrom
+        let content: String
+    }
+    
     // MARK: - Variables
     
     var onDismiss: (() -> Void)?
@@ -23,7 +28,8 @@ class AssistantViewModel: ObservableObject {
     @Published var inputText = ""
     @Published var shouldInputFocused = false
     
-    @Published var messageHistory: [(from: MessageFrom, content: String)] = []
+    @Published var messageHistory: [MessageData] = []
+    @Published var mainResponseText: MessageData? = nil
     
     // Web View
     @Published var searchURL: URL?
