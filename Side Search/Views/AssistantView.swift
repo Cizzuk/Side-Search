@@ -22,11 +22,13 @@ struct AssistantView: View {
     var body: some View {
         NavigationStack {
             VStack {
+                Spacer()
+                
                 TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
                           text: $viewModel.inputText, axis: .vertical)
                 .font(.headline)
-                .padding(.horizontal)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .submitLabel(.return)
                 .focused($isInputFocused)
                 .onChange(of: isInputFocused) {
@@ -42,7 +44,27 @@ struct AssistantView: View {
                 .onSubmit {
                     viewModel.confirmInput()
                 }
+                
+                // Response Text
+                if viewModel.mainResponseIsPreparing {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .padding()
+                } else {
+                    if let responseId = viewModel.mainResponseId,
+                       let messageData = viewModel.messageHistory.first(where: { $0.id == responseId }) {
+                        Text(messageData.content)
+                            .font(.title3)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                    }
+                }
+                
+                Spacer()
             }
+            .animation(.smooth, value: viewModel.inputText)
+            .animation(.smooth, value: viewModel.mainResponseIsPreparing)
             .scrollDismissesKeyboard(.interactively)
             .accessibilityAction(.escape) { dismiss() }
             .padding()

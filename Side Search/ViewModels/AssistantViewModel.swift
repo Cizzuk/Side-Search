@@ -15,7 +15,8 @@ class AssistantViewModel: ObservableObject {
         case system
     }
     
-    struct MessageData {
+    struct MessageData: Identifiable {
+        let id = UUID()
         let from: MessageFrom
         let content: String
     }
@@ -29,7 +30,8 @@ class AssistantViewModel: ObservableObject {
     @Published var shouldInputFocused = false
     
     @Published var messageHistory: [MessageData] = []
-    @Published var mainResponseText: MessageData? = nil
+    @Published var mainResponseId: UUID?
+    @Published var mainResponseIsPreparing = false
     
     // Web View
     @Published var searchURL: URL?
