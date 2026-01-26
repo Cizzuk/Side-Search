@@ -67,12 +67,7 @@ class MainViewModel: ObservableObject {
     }
     
     @Published var currentAssistant: AssistantType = {
-        if let rawValue = UserDefaults.standard.string(forKey: "currentAssistant"),
-           let type = AssistantType(rawValue: rawValue),
-           (!type.DescriptionProviderType.isBlocked() && !type.DescriptionProviderType.isAvailable()) {
-            return type
-        }
-        return .defaultType
+        return AssistantType.current
     }() {
         didSet {
             UserDefaults.standard.set(currentAssistant.rawValue, forKey: "currentAssistant")
