@@ -15,10 +15,6 @@ class AssistantViewModel: ObservableObject {
         case system
     }
     
-    enum MessageType {
-        case text
-    }
-    
     // MARK: - Variables
     
     var onDismiss: (() -> Void)?
@@ -27,7 +23,7 @@ class AssistantViewModel: ObservableObject {
     @Published var inputText = ""
     @Published var shouldInputFocused = false
     
-    @Published var messageHistory: [(from: MessageFrom, type: MessageType, content: String)] = []
+    @Published var messageHistory: [(from: MessageFrom, content: String)] = []
     
     // Web View
     @Published var searchURL: URL?
