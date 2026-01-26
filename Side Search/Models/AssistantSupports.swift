@@ -30,6 +30,10 @@ enum AssistantType: String, CaseIterable {
         }
     }
     
+    func makeSettingsView() -> any View {
+        return DescriptionProviderType.makeSettingsView
+    }
+    
     func makeAssistantViewModel() -> AssistantViewModel {
         return DescriptionProviderType.makeAssistantViewModel()
     }
