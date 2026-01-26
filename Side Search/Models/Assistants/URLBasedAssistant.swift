@@ -12,6 +12,11 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static var assistantName = LocalizedStringResource("URL Based Assistant")
     static var assistantDescription = LocalizedStringResource("This can be used by setting URLs for AI assistants, search engines, etc. The assistant will open in the in-app browser or the default app. Side Search's speech recognition is optional.")
     static var assistantSystemImage = "magnifyingglass"
+    static var assistantGradient = Gradient(colors: [
+        Color(red: 51/255, green: 102/255,  blue: 255/255),
+        Color(red: 51/255, green: 153/255,  blue: 255/255),
+        Color(red: 51/255, green: 102/255,  blue: 255/255),
+    ])
     
     static var makeSettingsView: any View { URLBasedAssistantSettingsView() }
     static var userDefaultsKey = "urlBasedAssistantSettings"

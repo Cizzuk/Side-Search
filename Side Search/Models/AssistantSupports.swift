@@ -56,6 +56,7 @@ protocol AssistantDescriptionProvider {
     static var assistantName: LocalizedStringResource { get } // Keep this short
     static var assistantDescription: LocalizedStringResource { get }
     static var assistantSystemImage: String { get }
+    static var assistantGradient: Gradient { get }
     
     // Settings
     static var makeSettingsView: any View { get }
