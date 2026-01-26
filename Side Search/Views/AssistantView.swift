@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct AssistantView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
     @StateObject private var viewModel: AssistantViewModel
@@ -95,12 +98,16 @@ struct AssistantView: View {
                 viewModel.stopRecording()
             }
         }
-        .background(LinearGradient(
-            colors: [Color.clear.opacity(0),
-                     Color.dropblue.opacity(0.15 + Double(viewModel.micLevel)*0.25)],
-            startPoint: UnitPoint(x: 0.5, y: (0.0 - CGFloat(viewModel.micLevel))),
-            endPoint: .bottom
-        ).ignoresSafeArea())
+        .background(
+            AngularGradient(
+                gradient: AssistantType.current.DescriptionProviderType.assistantGradient,
+                center: .center,
+                angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
+            )
+            .ignoresSafeArea()
+            .opacity((0.15 + Double(viewModel.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
+            .blur(radius: 30)
+        )
         .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents([.fraction(0.3), .large])
     }
