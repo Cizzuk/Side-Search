@@ -27,7 +27,7 @@ class AssistantViewModel: ObservableObject {
     @Published var inputText = ""
     @Published var shouldInputFocused = false
     
-    @Published var messages: [(from: MessageFrom, type: MessageType, content: String)] = []
+    @Published var messageHistory: [(from: MessageFrom, type: MessageType, content: String)] = []
     
     // Web View
     @Published var searchURL: URL?

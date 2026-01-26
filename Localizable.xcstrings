@@ -680,6 +680,12 @@
         }
       }
     },
+    "TEST Assistant. Echo user input." : {
+      "shouldTranslate" : false
+    },
+    "TEST Yamabico Assistant" : {
+      "shouldTranslate" : false
+    },
     "The Search URL is necessary to set your preferred AI assistant or search engine URL." : {
       "localizations" : {
         "ja" : {
