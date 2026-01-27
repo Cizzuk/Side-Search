@@ -12,6 +12,7 @@ struct AssistantView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     
     @Environment(\.dismiss) var dismiss
+    @State private var detent: PresentationDetent = .fraction(0.3)
     @FocusState private var isInputFocused: Bool
     @StateObject private var viewModel: AssistantViewModel
     
@@ -56,6 +57,7 @@ struct AssistantView: View {
                             .onChange(of: isInputFocused) {
                                 if isInputFocused {
                                     viewModel.stopRecording()
+                                    detent = .large
                                 }
                             }
                             .onChange(of: viewModel.shouldInputFocused) {
@@ -153,7 +155,7 @@ struct AssistantView: View {
             .blur(radius: 30)
         )
         .animation(.smooth, value: viewModel.micLevel)
-        .presentationDetents([.fraction(0.3), .large])
+        .presentationDetents([.fraction(0.3), .medium, .large], selection: $detent)
         .presentationContentInteraction(.scrolls)
     }
 }
