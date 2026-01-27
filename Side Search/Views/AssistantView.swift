@@ -23,7 +23,6 @@ struct AssistantView: View {
         NavigationStack {
             ScrollViewReader { proxy in
                 ScrollView {
-                    Spacer()
                     VStack {
                         TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
                                   text: $viewModel.inputText, axis: .vertical)
@@ -66,7 +65,6 @@ struct AssistantView: View {
                             }
                         }
                     }
-                    Spacer()
                 }
                 .onChange(of: viewModel.inputText) {
                     if viewModel.isRecording {
