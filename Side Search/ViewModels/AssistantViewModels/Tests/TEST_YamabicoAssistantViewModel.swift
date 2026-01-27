@@ -46,13 +46,15 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         let assistantMessage = MessageData(from: .assistant, content: response)
         
         messageHistory.append(userMessage)
-        mainResponseIsPreparing = true
+        responseIsPreparing = true
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             messageHistory.append(assistantMessage)
-            mainResponseId = assistantMessage.id
-            mainResponseIsPreparing = false
+            responseIsPreparing = false
         }
+        
+        
+        inputText = ""
     }
 }

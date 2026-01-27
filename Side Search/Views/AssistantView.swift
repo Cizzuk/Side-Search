@@ -23,48 +23,50 @@ struct AssistantView: View {
         NavigationStack {
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack {
-                        TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
-                                  text: $viewModel.inputText, axis: .vertical)
-                        .font(.headline)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .submitLabel(.return)
-                        .focused($isInputFocused)
-                        .onSubmit {
-                            viewModel.confirmInput()
-                        }
-                        .onChange(of: isInputFocused) {
-                            if isInputFocused {
-                                viewModel.stopRecording()
+                    VStack(alignment: .leading, spacing: 16) {
+                        ForEach(viewModel.messageHistory) { message in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(message.from.displayName)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text(message.content)
+                                    .font(.title3)
                             }
-                        }
-                        .onChange(of: viewModel.shouldInputFocused) {
-                            if viewModel.shouldInputFocused {
-                                isInputFocused = true
-                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        // Scroll anchor
-                        Color.clear
-                            .frame(height: 1)
-                            .id("scrollAnchor")
-                        
-                        // Response Text
-                        if viewModel.mainResponseIsPreparing {
+                        if viewModel.responseIsPreparing {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle())
-                                .padding()
-                        } else {
-                            if let responseId = viewModel.mainResponseId,
-                               let messageData = viewModel.messageHistory.first(where: { $0.id == responseId }) {
-                                Text(messageData.content)
-                                    .font(.title3)
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(AssistantViewModel.MessageFrom.user.displayName)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
+                                      text: $viewModel.inputText, axis: .vertical)
+                            .font(.headline)
+                            .submitLabel(.return)
+                            .focused($isInputFocused)
+                            .onSubmit {
+                                viewModel.confirmInput()
+                            }
+                            .onChange(of: isInputFocused) {
+                                if isInputFocused {
+                                    viewModel.stopRecording()
+                                }
+                            }
+                            .onChange(of: viewModel.shouldInputFocused) {
+                                if viewModel.shouldInputFocused {
+                                    isInputFocused = true
+                                }
                             }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .id("scrollAnchor")
                     }
+                    .padding()
                 }
                 .onChange(of: viewModel.inputText) {
                     if viewModel.isRecording {
@@ -73,15 +75,15 @@ struct AssistantView: View {
                         }
                     }
                 }
-                .onChange(of: viewModel.mainResponseIsPreparing) {
+                .onChange(of: viewModel.messageHistory.count) {
                     withAnimation {
-                        proxy.scrollTo("scrollAnchor", anchor: .top)
+                        proxy.scrollTo("scrollAnchor", anchor: .bottom)
                     }
                 }
             }
             .padding(.horizontal)
             .animation(.smooth, value: viewModel.inputText)
-            .animation(.smooth, value: viewModel.mainResponseIsPreparing)
+            .animation(.smooth, value: viewModel.messageHistory.count)
             .scrollDismissesKeyboard(.interactively)
             .accessibilityAction(.escape) { dismiss() }
             .toolbar {

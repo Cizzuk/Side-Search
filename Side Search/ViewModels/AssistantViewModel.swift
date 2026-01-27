@@ -13,6 +13,17 @@ class AssistantViewModel: ObservableObject {
         case user
         case assistant
         case system
+        
+        var displayName: LocalizedStringResource {
+            switch self {
+            case .user:
+                return "You"
+            case .assistant:
+                return "Assistant"
+            case .system:
+                return "System"
+            }
+        }
     }
     
     struct MessageData: Identifiable {
@@ -30,8 +41,7 @@ class AssistantViewModel: ObservableObject {
     @Published var shouldInputFocused = false
     
     @Published var messageHistory: [MessageData] = []
-    @Published var mainResponseId: UUID?
-    @Published var mainResponseIsPreparing = false
+    @Published var responseIsPreparing = false
     
     // Web View
     @Published var searchURL: URL?
@@ -115,6 +125,7 @@ class AssistantViewModel: ObservableObject {
     func confirmInput() {
         // Override in subclass
         stopRecording()
+        inputText = ""
     }
     
     // Handle repressing the Side Button
