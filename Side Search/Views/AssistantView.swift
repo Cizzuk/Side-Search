@@ -33,6 +33,7 @@ struct AssistantView: View {
                                 Text(message.content)
                                     .font(.title3)
                             }
+                            .id(message.id)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
@@ -67,10 +68,11 @@ struct AssistantView: View {
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .id("scrollAnchor")
                     }
+                    .id("scrollAnchor")
                     .padding(.horizontal, 25)
-                    .padding(.vertical, 10)
+                    .padding(.top, 10)
+                    .padding(.bottom, 50)
                 }
                 .onChange(of: viewModel.inputText) {
                     if viewModel.isRecording {
@@ -81,7 +83,13 @@ struct AssistantView: View {
                 }
                 .onChange(of: viewModel.messageHistory.count) {
                     withAnimation {
-                        proxy.scrollTo("scrollAnchor", anchor: .bottom)
+                        if let lastMessage = viewModel.messageHistory.last {
+                            if lastMessage.from == .user {
+                                proxy.scrollTo("scrollAnchor", anchor: .bottom)
+                            } else {
+                                proxy.scrollTo(lastMessage.id, anchor: .top)
+                            }
+                        }
                     }
                 }
             }
