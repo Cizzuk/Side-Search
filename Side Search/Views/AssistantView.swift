@@ -32,6 +32,7 @@ struct AssistantView: View {
                                     .foregroundStyle(.secondary)
                                 Text(message.content)
                                     .font(.title3)
+                                    .textSelection(.enabled)
                             }
                             .id(message.id)
                             .frame(maxWidth: .infinity, alignment: .leading)
