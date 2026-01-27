@@ -68,6 +68,16 @@
         }
       }
     },
+    "Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタント"
+          }
+        }
+      }
+    },
     "Audio engine couldn't start: %@" : {
       "localizations" : {
         "ja" : {
@@ -680,6 +690,16 @@
         }
       }
     },
+    "System" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システム"
+          }
+        }
+      }
+    },
     "TEST Assistant. Echo user input." : {
       "shouldTranslate" : false
     },
@@ -782,6 +802,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yahoo! JAPAN"
+          }
+        }
+      }
+    },
+    "You" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなた"
           }
         }
       }
