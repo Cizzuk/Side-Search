@@ -46,7 +46,8 @@ struct AssistantView: View {
                                 .foregroundStyle(.secondary)
                             TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
                                       text: $viewModel.inputText, axis: .vertical)
-                            .font(.headline)
+                            .font(.title3)
+                            .bold()
                             .submitLabel(.return)
                             .focused($isInputFocused)
                             .onSubmit {
