@@ -24,7 +24,7 @@ struct AssistantView: View {
         NavigationStack {
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 25) {
                         ForEach(viewModel.messageHistory) { message in
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(message.from.displayName)
@@ -70,7 +70,7 @@ struct AssistantView: View {
                         .id("scrollAnchor")
                     }
                     .padding(.horizontal, 25)
-                    .padding(.vertical, 15)
+                    .padding(.vertical, 10)
                 }
                 .onChange(of: viewModel.inputText) {
                     if viewModel.isRecording {
