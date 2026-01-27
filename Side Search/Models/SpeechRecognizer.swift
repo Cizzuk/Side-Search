@@ -106,8 +106,7 @@ class SpeechRecognizer: ObservableObject {
                     if let result = result {
                         DispatchQueue.main.async {
                             let newText = result.bestTranscription.formattedString
-                            // Prevent overwriting with empty string
-                            if !newText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            if self.isRecording && !newText.isEmpty {
                                 self.recognizedText = newText
                             }
                         }
@@ -173,10 +172,10 @@ class SpeechRecognizer: ObservableObject {
     func stopRecording() {
         stopSilenceTimer()
         if audioEngine.isRunning {
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
             isRecording = false
             micLevel = 0.0
+            audioEngine.stop()
+            recognitionRequest?.endAudio()
             
             // Deactivate the audio session
             do {
