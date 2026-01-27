@@ -69,11 +69,12 @@ struct AssistantView: View {
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, 50)
                     }
                     .id("scrollAnchor")
                     .padding(.horizontal, 25)
                     .padding(.top, 10)
-                    .padding(.bottom, 50)
+                    .padding(.bottom, 0)
                 }
                 .onChange(of: viewModel.inputText) {
                     if viewModel.isRecording {
