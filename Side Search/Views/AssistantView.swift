@@ -154,5 +154,6 @@ struct AssistantView: View {
         )
         .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents([.fraction(0.3), .large])
+        .presentationContentInteraction(.scrolls)
     }
 }
