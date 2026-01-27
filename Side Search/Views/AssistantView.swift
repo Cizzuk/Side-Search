@@ -21,53 +21,71 @@ struct AssistantView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Spacer()
-                
-                TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
-                          text: $viewModel.inputText, axis: .vertical)
-                .font(.headline)
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .submitLabel(.return)
-                .focused($isInputFocused)
-                .onChange(of: isInputFocused) {
-                    if isInputFocused {
-                        viewModel.stopRecording()
-                    }
-                }
-                .onChange(of: viewModel.shouldInputFocused) {
-                    if viewModel.shouldInputFocused {
-                        isInputFocused = true
-                    }
-                }
-                .onSubmit {
-                    viewModel.confirmInput()
-                }
-                
-                // Response Text
-                if viewModel.mainResponseIsPreparing {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
+            ScrollViewReader { proxy in
+                ScrollView {
+                    Spacer()
+                    VStack {
+                        TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
+                                  text: $viewModel.inputText, axis: .vertical)
+                        .font(.headline)
                         .padding()
-                } else {
-                    if let responseId = viewModel.mainResponseId,
-                       let messageData = viewModel.messageHistory.first(where: { $0.id == responseId }) {
-                        Text(messageData.content)
-                            .font(.title3)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .submitLabel(.return)
+                        .focused($isInputFocused)
+                        .onSubmit {
+                            viewModel.confirmInput()
+                        }
+                        .onChange(of: isInputFocused) {
+                            if isInputFocused {
+                                viewModel.stopRecording()
+                            }
+                        }
+                        .onChange(of: viewModel.shouldInputFocused) {
+                            if viewModel.shouldInputFocused {
+                                isInputFocused = true
+                            }
+                        }
                         
+                        // Scroll anchor
+                        Color.clear
+                            .frame(height: 1)
+                            .id("scrollAnchor")
+                        
+                        // Response Text
+                        if viewModel.mainResponseIsPreparing {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .padding()
+                        } else {
+                            if let responseId = viewModel.mainResponseId,
+                               let messageData = viewModel.messageHistory.first(where: { $0.id == responseId }) {
+                                Text(messageData.content)
+                                    .font(.title3)
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+                    }
+                    Spacer()
+                }
+                .onChange(of: viewModel.inputText) {
+                    if viewModel.isRecording {
+                        withAnimation {
+                            proxy.scrollTo("scrollAnchor", anchor: .top)
+                        }
                     }
                 }
-                
-                Spacer()
+                .onChange(of: viewModel.mainResponseIsPreparing) {
+                    withAnimation {
+                        proxy.scrollTo("scrollAnchor", anchor: .bottom)
+                    }
+                }
             }
+            .padding(.horizontal)
             .animation(.smooth, value: viewModel.inputText)
             .animation(.smooth, value: viewModel.mainResponseIsPreparing)
             .scrollDismissesKeyboard(.interactively)
             .accessibilityAction(.escape) { dismiss() }
-            .padding()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", systemImage: "xmark") {
