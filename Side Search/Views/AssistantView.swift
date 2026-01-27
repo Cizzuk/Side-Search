@@ -71,13 +71,13 @@ struct AssistantView: View {
                 .onChange(of: viewModel.inputText) {
                     if viewModel.isRecording {
                         withAnimation {
-                            proxy.scrollTo("scrollAnchor", anchor: .top)
+                            proxy.scrollTo("scrollAnchor", anchor: .bottom)
                         }
                     }
                 }
                 .onChange(of: viewModel.mainResponseIsPreparing) {
                     withAnimation {
-                        proxy.scrollTo("scrollAnchor", anchor: .bottom)
+                        proxy.scrollTo("scrollAnchor", anchor: .top)
                     }
                 }
             }
