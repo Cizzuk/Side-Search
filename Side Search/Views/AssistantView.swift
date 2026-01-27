@@ -67,7 +67,8 @@ struct AssistantView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .id("scrollAnchor")
                     }
-                    .padding()
+                    .padding(.horizontal, 25)
+                    .padding(.vertical, 15)
                 }
                 .onChange(of: viewModel.inputText) {
                     if viewModel.isRecording {
@@ -82,7 +83,6 @@ struct AssistantView: View {
                     }
                 }
             }
-            .padding(.horizontal)
             .animation(.smooth, value: viewModel.inputText)
             .animation(.smooth, value: viewModel.messageHistory.count)
             .scrollDismissesKeyboard(.interactively)
