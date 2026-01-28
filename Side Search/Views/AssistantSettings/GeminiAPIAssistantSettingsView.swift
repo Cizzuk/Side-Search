@@ -39,17 +39,20 @@ struct GeminiAPIAssistantSettingsView: View {
         }
         .onChange(of: apiKey) {
             GeminiAPIAssistantModel.saveAPIKey(key: apiKey)
+            Task { await updateAvailableModels() }
         }
         .onAppear {
             saveSettings()
-            Task {
-                await GeminiAPIAssistantModel.getModels()
-                availableModels = GeminiAPIAssistantModel.availableModels
-            }
+            Task { await updateAvailableModels() }
         }
     }
     
     private func saveSettings() {
         assistantModel.save()
+    }
+    
+    private func updateAvailableModels() async {
+        await GeminiAPIAssistantModel.getModels()
+        availableModels = GeminiAPIAssistantModel.availableModels
     }
 }
