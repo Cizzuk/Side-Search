@@ -61,6 +61,3 @@ struct AppleFoundationAssistantModel: AssistantModel {
         return true
     }
 }
-
-extension AppleFoundationAssistantModel {
-}
