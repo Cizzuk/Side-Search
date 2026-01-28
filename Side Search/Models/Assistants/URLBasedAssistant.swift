@@ -33,10 +33,8 @@ struct URLBasedAssistantModel: AssistantModel {
     var url: String = ""
     var openIn: OpenInOption = .inAppBrowser
     
-    init() {
-        self = Self.load()
-    }
-    
+    init() { }
+
     init(name: LocalizedStringResource, url: String, openIn: OpenInOption = .inAppBrowser) {
         self.name = name
         self.url = url
@@ -50,7 +48,7 @@ struct URLBasedAssistantModel: AssistantModel {
                 return model
             }
         }
-        return Self()
+        return SearchEnginePresets.defaultSearchEngine
     }
     
     func save() {

@@ -12,7 +12,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     
     // MARK: - Assistant Settings
     
-    private var assistantModel: AppleFoundationAssistantModel = AppleFoundationAssistantModel()
+    private var assistantModel = AppleFoundationAssistantModel.load()
     
     private var session: LanguageModelSession
     

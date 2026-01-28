@@ -38,6 +38,16 @@
         }
       }
     },
+    "API Key" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APIキー"
+          }
+        }
+      }
+    },
     "Apple Foundation Models" : {
       "localizations" : {
         "ja" : {
@@ -334,6 +344,36 @@
         }
       }
     },
+    "Gemini API" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini API"
+          }
+        }
+      }
+    },
+    "Gemini API Key" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini APIキー"
+          }
+        }
+      }
+    },
+    "Get API Key..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APIキーを入手…"
+          }
+        }
+      }
+    },
     "Google" : {
       "localizations" : {
         "ja" : {
@@ -457,6 +497,16 @@
     "MIT License\n\nCopyright (c) 2025 Cizzuk\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE." : {
       "shouldTranslate" : false
     },
+    "Model" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "モデル"
+          }
+        }
+      }
+    },
     "OK" : {
       "localizations" : {
         "ja" : {
@@ -503,6 +553,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Perplexity"
+          }
+        }
+      }
+    },
+    "Please get and enter your API key from Google AI Studio." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google AI StudioでAPIキーを取得して入力してください。"
           }
         }
       }
@@ -563,6 +623,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索URLのヒント"
+          }
+        }
+      }
+    },
+    "Select a model" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "モデルを選択"
           }
         }
       }
@@ -742,6 +812,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Appleの提供するFoundation Modelsを使用して会話を行うことができるアシスタントです。使用するにはデバイスでApple Intelligenceが利用可能である必要があります。このアシスタントではインターネット上を検索することはできません。"
+          }
+        }
+      }
+    },
+    "This is an assistant that can converse using Gemini provided by Google. To use it, you need to obtain an API key yourself from Google AI Studio. You are responsible for managing the costs and agreements related to your usage." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Googleの提供するGeminiを使用して会話を行うことができるアシスタントです。使用するにはご自身でGoogle AI StudioでAPIキーを取得する必要があります。利用にかかるコストや同意する規約などは、ご自身で管理していただく必要があります。"
           }
         }
       }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct URLBasedAssistantSettingsView: View {
-    @State private var assistantModel: URLBasedAssistantModel = URLBasedAssistantModel()
+    @State private var assistantModel = URLBasedAssistantModel.load()
     
     @State private var showPresets = false
     

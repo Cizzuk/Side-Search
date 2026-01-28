@@ -11,6 +11,7 @@ import SwiftUI
 enum AssistantType: String, CaseIterable {
     case urlBased
     case appleFoundation
+    case geminiAPI
     // Tests
     case test_yamabico
     
@@ -24,6 +25,8 @@ enum AssistantType: String, CaseIterable {
             return URLBasedAssistant.self
         case .appleFoundation:
             return AppleFoundationAssistant.self
+        case .geminiAPI:
+            return GeminiAPIAssistant.self
         case .test_yamabico:
             return TEST_YamabicoAssistant.self
         }
@@ -35,6 +38,8 @@ enum AssistantType: String, CaseIterable {
             return URLBasedAssistantModel.self
         case .appleFoundation:
             return AppleFoundationAssistantModel.self
+        case .geminiAPI:
+            return GeminiAPIAssistantModel.self
         case .test_yamabico:
             return TEST_YamabicoAssistantModel.self
         }
