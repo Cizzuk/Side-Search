@@ -108,7 +108,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Methods
     
     func startAssistant() {
-        // MARK: Override in subclass
+        // MARK: Override in subclass if needed
         if !startWithMicMuted {
             startRecording()
         }

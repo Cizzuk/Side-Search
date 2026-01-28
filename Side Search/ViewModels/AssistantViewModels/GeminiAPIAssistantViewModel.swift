@@ -94,12 +94,6 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     // MARK: - Override Methods
     
-    override func startAssistant() {
-        if !startWithMicMuted {
-            startRecording()
-        }
-    }
-    
     override func confirmInput() {
         // Prevent empty input
         if inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {

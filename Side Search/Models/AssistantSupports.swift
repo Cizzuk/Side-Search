@@ -84,6 +84,4 @@ protocol AssistantDescriptionProvider {
 protocol AssistantModel: Codable, Equatable {
     static func load() -> Self
     func save()
-    
-    func isValidSettings() -> Bool
 }

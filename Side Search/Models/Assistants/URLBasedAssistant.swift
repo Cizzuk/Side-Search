@@ -57,10 +57,6 @@ struct URLBasedAssistantModel: AssistantModel {
             UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
         }
     }
-    
-    func isValidSettings() -> Bool {
-        return checkURLAvailability()
-    }
 }
 
 extension URLBasedAssistantModel {

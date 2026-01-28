@@ -42,8 +42,4 @@ struct TEST_YamabicoAssistantModel: AssistantModel {
     }
     
     func save() {}
-    
-    func isValidSettings() -> Bool {
-        return true
-    }
 }

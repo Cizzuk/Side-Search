@@ -59,16 +59,6 @@ struct GeminiAPIAssistantModel: AssistantModel {
             UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
         }
     }
-    
-    func isValidSettings() -> Bool {
-        if !Self.existsAPIKey() {
-            return false
-        }
-        if !Self.availableModels.contains(model) {
-            return false
-        }
-        return true
-    }
 }
 
 extension GeminiAPIAssistantModel {

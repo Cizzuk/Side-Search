@@ -68,8 +68,4 @@ struct AppleFoundationAssistantModel: AssistantModel {
             UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
         }
     }
-    
-    func isValidSettings() -> Bool {
-        return true
-    }
 }
