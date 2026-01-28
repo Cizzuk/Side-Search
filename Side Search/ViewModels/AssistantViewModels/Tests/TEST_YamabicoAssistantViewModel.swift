@@ -30,23 +30,23 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
     }
     
     override func confirmInput() {
-        stopRecording()
-        
         // Prevent empty input
         if inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return
         }
         
-        // Simulate a response from Yamabico
-        let userInput = inputText
-        let response = "\(userInput)..."
+        responseIsPreparing = true
+        stopRecording()
         
+        // Add user message to history
+        let userInput = inputText
         let userMessage = MessageData(from: .user, content: userInput)
+        messageHistory.append(userMessage)
+        
+        let response = "\(userInput)..."
         let assistantMessage = MessageData(from: .assistant, content: response)
         
-        messageHistory.append(userMessage)
-        responseIsPreparing = true
-        
+        // Simulate a response from Yamabico
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             messageHistory.append(assistantMessage)

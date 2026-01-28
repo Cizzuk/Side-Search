@@ -108,7 +108,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Methods
     
     func startAssistant() {
-        // Override in subclass
+        // MARK: Override in subclass
         if !startWithMicMuted {
             startRecording()
         }
@@ -123,9 +123,17 @@ class AssistantViewModel: ObservableObject {
     }
     
     func confirmInput() {
-        // Override in subclass
+        // MARK: Override in subclass
+        responseIsPreparing = true
         stopRecording()
+        
+        // Add user message to history
+        let userInput = inputText
+        let userMessage = MessageData(from: .user, content: userInput)
+        messageHistory.append(userMessage)
+        
         inputText = ""
+        responseIsPreparing = false
     }
     
     // Handle repressing the Side Button
