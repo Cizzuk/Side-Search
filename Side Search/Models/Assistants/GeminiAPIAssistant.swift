@@ -40,13 +40,8 @@ struct GeminiAPIAssistantModel: AssistantModel {
     static var availableModels: [String] = []
     
     var model: String = ""
-    var customInstructions: String = ""
     
     init() { }
-
-    init(customInstructions: String) {
-        self.customInstructions = customInstructions
-    }
     
     static func load() -> Self {
         if let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) {
