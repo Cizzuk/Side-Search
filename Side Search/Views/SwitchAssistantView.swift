@@ -58,6 +58,6 @@ struct SwitchAssistantView: View {
                 }
             }
         }
-        .presentationDetents([.medium, .fraction(0.9)])
+        .presentationDetents([.fraction(0.9)])
     }
 }
