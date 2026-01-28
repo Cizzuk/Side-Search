@@ -27,6 +27,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         let text: String
     }
     
+    // For config
     private struct GeminiTool: Codable {
         let google_search: GeminiGoogleSearch
     }
@@ -46,6 +47,21 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     private struct GeminiCandidate: Codable {
         let content: GeminiContent
+        let groundingMetadata: GeminiGroundingMetadata?
+    }
+    
+    // For sources
+    private struct GeminiGroundingMetadata: Codable {
+        let groundingChunks: [GeminiGroundingChunk]?
+    }
+    
+    private struct GeminiGroundingChunk: Codable {
+        let web: GeminiWebSource?
+    }
+    
+    private struct GeminiWebSource: Codable {
+        let uri: String
+        let title: String
     }
     
     // MARK: - Chat History
@@ -61,14 +77,15 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     // MARK: - Helper Methods
     
     @MainActor
-    func generate(prompt: String) async throws -> String {
+    func generate(prompt: String) async {
+        // Add user message to history
+        messageHistory.append(MessageData(from: .user, content: prompt))
         chatHistory.append(GeminiContent(role: "user", parts: [GeminiPart(text: prompt)]))
         
         guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(assistantModel.model):generateContent")
         else {
-            throw NSError(domain: "GeminiAPIAssistant",
-                          code: -1,
-                          userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            messageHistory.append(MessageData(from: .system, content: "Invalid URL"))
+            return
         }
         
         // Prepare request
@@ -76,29 +93,55 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         request.httpMethod = "POST"
         request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONEncoder().encode(GeminiRequest(contents: chatHistory))
+        
+        // Create request body
+        do {
+            request.httpBody = try JSONEncoder().encode(GeminiRequest(contents: chatHistory))
+        } catch {
+            messageHistory.append(MessageData(from: .system, content: error.localizedDescription))
+            return
+        }
         
         // Send request
         let data: Data
         do {
             (data, _) = try await URLSession.shared.data(for: request)
         } catch {
-            throw NSError(domain: "GeminiAPIAssistant",
-                          code: -1,
-                          userInfo: [NSLocalizedDescriptionKey: "Connection error"])
+            messageHistory.append(MessageData(from: .system, content: "Connection error"))
+            return
         }
         
-        let response = try JSONDecoder().decode(GeminiResponse.self, from: data)
-
         // Parse response
-        guard let text = response.candidates?.first?.content.parts.first?.text else {
-            throw NSError(domain: "GeminiAPIAssistant",
-                          code: -1,
-                          userInfo: [NSLocalizedDescriptionKey: String(data: data, encoding: .utf8) ?? "No response"])
+        let response: GeminiResponse
+        do {
+            response = try JSONDecoder().decode(GeminiResponse.self, from: data)
+        } catch {
+            messageHistory.append(MessageData(from: .system, content: error.localizedDescription))
+            return
         }
         
+        // Extract response text
+        guard let candidate = response.candidates?.first,
+              let text = candidate.content.parts.first?.text else {
+            messageHistory.append(MessageData(from: .system, content: String(data: data, encoding: .utf8) ?? "No response"))
+            return
+        }
+        
+        // Extract sources
+        var sources: [(title: String, url: URL)] = []
+        if let groundingChunks = candidate.groundingMetadata?.groundingChunks {
+            for chunk in groundingChunks {
+                if let web = chunk.web, let sourceURL = URL(string: web.uri) {
+                    sources.append((title: web.title, url: sourceURL))
+                }
+            }
+        }
+        
+        // Add assistant message to history
         chatHistory.append(GeminiContent(role: "model", parts: [GeminiPart(text: text)]))
-        return text
+        var message = MessageData(from: .assistant, content: text)
+        message.sources = sources
+        messageHistory.append(message)
     }
     
     // MARK: - Override Methods
@@ -112,27 +155,12 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         responseIsPreparing = true
         stopRecording()
         
-        // Add user message to history
         let userInput = inputText
         inputText = ""
-        let userMessage = MessageData(from: .user, content: userInput)
-        messageHistory.append(userMessage)
         
-        // Generate response
         Task {
-            let message: MessageData
-            do {
-                let response = try await generate(prompt: userInput)
-                message = MessageData(from: .assistant, content: response)
-            } catch {
-                message = MessageData(from: .system, content: error.localizedDescription)
-            }
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.messageHistory.append(message)
-                self.responseIsPreparing = false
-            }
+            await generate(prompt: userInput)
+            responseIsPreparing = false
         }
     }
 }
