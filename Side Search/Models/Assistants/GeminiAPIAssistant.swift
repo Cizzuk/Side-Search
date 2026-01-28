@@ -66,7 +66,10 @@ struct GeminiAPIAssistantModel: AssistantModel {
     }
     
     func isValidSettings() -> Bool {
-        if model.isEmpty {
+        if !Self.existsAPIKey() {
+            return false
+        }
+        if !Self.availableModels.contains(model) {
             return false
         }
         return true
@@ -87,6 +90,10 @@ extension GeminiAPIAssistantModel {
     
     static func deleteAPIKey() {
         KeychainSupport.delete(key: keychainKey)
+    }
+    
+    static func existsAPIKey() -> Bool {
+        return KeychainSupport.exists(key: keychainKey)
     }
     
     static func getModels(force: Bool = false) async {
