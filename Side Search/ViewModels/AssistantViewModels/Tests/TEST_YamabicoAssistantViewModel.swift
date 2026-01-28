@@ -40,6 +40,7 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         
         // Add user message to history
         let userInput = inputText
+        inputText = ""
         let userMessage = MessageData(from: .user, content: userInput)
         messageHistory.append(userMessage)
         
@@ -52,7 +53,5 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
             messageHistory.append(assistantMessage)
             responseIsPreparing = false
         }
-        
-        inputText = ""
     }
 }
