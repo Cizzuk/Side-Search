@@ -119,6 +119,7 @@ class SpeechRecognizer: ObservableObject {
                         self.stopSilenceTimer()
                         self.audioEngine.stop()
                         inputNode.removeTap(onBus: 0)
+                        self.recognitionRequest?.endAudio()
                         
                         self.recognitionRequest = nil
                         self.recognitionTask = nil
@@ -132,6 +133,7 @@ class SpeechRecognizer: ObservableObject {
                 
                 // Configure the microphone input
                 let recordingFormat = inputNode.outputFormat(forBus: 0)
+                inputNode.removeTap(onBus: 0)
                 inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
                     self.recognitionRequest?.append(buffer)
                     
@@ -181,7 +183,11 @@ class SpeechRecognizer: ObservableObject {
                 guard let self = self else { return }
                 
                 audioEngine.stop()
+                audioEngine.inputNode.removeTap(onBus: 0)
                 recognitionRequest?.endAudio()
+                
+                self.recognitionRequest = nil
+                self.recognitionTask = nil
                 
                 // Deactivate the audio session
                 do {
