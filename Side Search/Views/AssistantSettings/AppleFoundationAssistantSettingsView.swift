@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppleFoundationAssistantSettingsView: View {
-    @State private var assistantModel: AppleFoundationAssistantModel = AppleFoundationAssistantModel.fromUserDefaults()
+    @State private var assistantModel: AppleFoundationAssistantModel = AppleFoundationAssistantModel()
     
     var body: some View {
         Group {
@@ -28,8 +28,6 @@ struct AppleFoundationAssistantSettingsView: View {
     }
     
     private func saveSettings() {
-        if let data = assistantModel.toJSON() {
-            UserDefaults.standard.set(data, forKey: AppleFoundationAssistant.userDefaultsKey)
-        }
+        assistantModel.save()
     }
 }

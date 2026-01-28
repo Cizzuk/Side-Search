@@ -67,7 +67,6 @@ protocol AssistantDescriptionProvider {
     
     // Settings
     static var makeSettingsView: any View { get }
-    static var userDefaultsKey: String { get }
     
     // AssistantViewModel
     static func makeAssistantViewModel() -> AssistantViewModel
@@ -78,8 +77,8 @@ protocol AssistantDescriptionProvider {
 }
 
 protocol AssistantModel: Codable, Equatable {
-    static func fromUserDefaults() -> Self
-    static func fromJSON(_ data: Data) -> Self?
-    func toJSON() -> Data?
+    static func load() -> Self
+    func save()
+    
     func isValidSettings() -> Bool
 }

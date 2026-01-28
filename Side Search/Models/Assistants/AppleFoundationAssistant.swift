@@ -21,7 +21,6 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     ])
     
     static var makeSettingsView: any View { AppleFoundationAssistantSettingsView() }
-    static var userDefaultsKey = "appleFoundationAssistantSettings"
     
     // TODO: Create AppleFoundationAssistantViewModel
     static func makeAssistantViewModel() -> AssistantViewModel { AppleFoundationAssistantViewModel() }
@@ -44,25 +43,33 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
 }
 
 struct AppleFoundationAssistantModel: AssistantModel {
+    private static let userDefaultsKey = "appleFoundationAssistantSettings"
+    
     var customInstructions: String = ""
     
-    static func fromUserDefaults() -> Self {
-        guard let rawData = UserDefaults.standard.data(forKey: AppleFoundationAssistant.userDefaultsKey),
-              let model = fromJSON(rawData) else {
-            return Self()
+    init() {
+        self = Self.load()
+    }
+
+    init(customInstructions: String) {
+        self.customInstructions = customInstructions
+    }
+    
+    static func load() -> Self {
+        if let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) {
+            let decoder = JSONDecoder()
+            if let model = try? decoder.decode(Self.self, from: rawData) {
+                return model
+            }
         }
-        return model
+        return Self()
     }
     
-    static func fromJSON(_ data: Data) -> Self? {
-        let decoder = JSONDecoder()
-        let model = try? decoder.decode(self, from: data)
-        return model
-    }
-    
-    func toJSON() -> Data? {
+    func save() {
         let encoder = JSONEncoder()
-        return try? encoder.encode(self)
+        if let data = try? encoder.encode(self) {
+            UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
+        }
     }
     
     func isValidSettings() -> Bool {

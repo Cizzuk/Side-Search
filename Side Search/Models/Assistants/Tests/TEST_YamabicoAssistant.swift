@@ -16,7 +16,6 @@ struct TEST_YamabicoAssistant: AssistantDescriptionProvider {
     ])
     
     static var makeSettingsView: any View { EmptyView() }
-    static var userDefaultsKey = "TEST_YamabicoAssistantSettings"
     
     static func makeAssistantViewModel() -> AssistantViewModel { TEST_YamabicoAssistantViewModel() }
     
@@ -38,24 +37,11 @@ struct TEST_YamabicoAssistant: AssistantDescriptionProvider {
 }
 
 struct TEST_YamabicoAssistantModel: AssistantModel {
-    static func fromUserDefaults() -> Self {
-        guard let rawData = UserDefaults.standard.data(forKey: TEST_YamabicoAssistant.userDefaultsKey),
-              let model = fromJSON(rawData) else {
-            return Self()
-        }
-        return model
+    static func load() -> Self {
+        return Self()
     }
     
-    static func fromJSON(_ data: Data) -> Self? {
-        let decoder = JSONDecoder()
-        let model = try? decoder.decode(self, from: data)
-        return model
-    }
-    
-    func toJSON() -> Data? {
-        let encoder = JSONEncoder()
-        return try? encoder.encode(self)
-    }
+    func save() {}
     
     func isValidSettings() -> Bool {
         return true

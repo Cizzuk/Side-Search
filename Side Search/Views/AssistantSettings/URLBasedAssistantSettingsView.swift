@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct URLBasedAssistantSettingsView: View {
-    @State private var assistantModel: URLBasedAssistantModel = URLBasedAssistantModel.fromUserDefaults()
+    @State private var assistantModel: URLBasedAssistantModel = URLBasedAssistantModel()
     
     @State private var showPresets = false
     
@@ -53,9 +53,7 @@ struct URLBasedAssistantSettingsView: View {
     }
     
     private func saveSettings() {
-        if let data = assistantModel.toJSON() {
-            UserDefaults.standard.set(data, forKey: URLBasedAssistant.userDefaultsKey)
-        }
+        assistantModel.save()
     }
     
     private func migrateUserDefaults() {

@@ -19,7 +19,6 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     ])
     
     static var makeSettingsView: any View { URLBasedAssistantSettingsView() }
-    static var userDefaultsKey = "urlBasedAssistantSettings"
     
     static func makeAssistantViewModel() -> AssistantViewModel { URLBasedAssistantViewModel() }
     
@@ -28,27 +27,37 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
 }
 
 struct URLBasedAssistantModel: AssistantModel {
+    private static let userDefaultsKey = "urlBasedAssistantSettings"
+    
     var name: LocalizedStringResource = ""
     var url: String = ""
     var openIn: OpenInOption = .inAppBrowser
     
-    static func fromUserDefaults() -> Self {
-        guard let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
-              let model = fromJSON(rawData) else {
-            return SearchEnginePresets.defaultSearchEngine
+    init() {
+        self = Self.load()
+    }
+    
+    init(name: LocalizedStringResource, url: String, openIn: OpenInOption = .inAppBrowser) {
+        self.name = name
+        self.url = url
+        self.openIn = openIn
+    }
+    
+    static func load() -> Self {
+        if let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) {
+            let decoder = JSONDecoder()
+            if let model = try? decoder.decode(Self.self, from: rawData) {
+                return model
+            }
         }
-        return model
+        return Self()
     }
     
-    static func fromJSON(_ data: Data) -> Self? {
-        let decoder = JSONDecoder()
-        let model = try? decoder.decode(self, from: data)
-        return model
-    }
-    
-    func toJSON() -> Data? {
+    func save() {
         let encoder = JSONEncoder()
-        return try? encoder.encode(self)
+        if let data = try? encoder.encode(self) {
+            UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
+        }
     }
     
     func isValidSettings() -> Bool {

@@ -11,7 +11,7 @@ class URLBasedAssistantViewModel: AssistantViewModel {
     
     // MARK: - Assistant Settings
     
-    private var assistantModel: URLBasedAssistantModel = URLBasedAssistantModel.fromUserDefaults()
+    private var assistantModel: URLBasedAssistantModel = URLBasedAssistantModel()
     
     // MARK: - Initialization
     

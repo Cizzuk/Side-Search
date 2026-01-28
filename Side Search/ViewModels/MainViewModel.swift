@@ -37,10 +37,7 @@ class MainViewModel: ObservableObject {
             return
         }
         
-        guard let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
-              let SearchEngine = URLBasedAssistantModel.fromJSON(rawData) else {
-            return
-        }
+        let SearchEngine = URLBasedAssistantModel()
         
         // Check if query input is needed
         if SearchEngine.needQueryInput() {
