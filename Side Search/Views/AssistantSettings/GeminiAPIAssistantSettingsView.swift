@@ -10,6 +10,7 @@ import SwiftUI
 struct GeminiAPIAssistantSettingsView: View {
     @State private var assistantModel = GeminiAPIAssistantModel.load()
     @State private var apiKey: String = GeminiAPIAssistantModel.loadAPIKey()
+    @State private var availableModels: [String] = GeminiAPIAssistantModel.availableModels
     
     var body: some View {
         Group {
@@ -22,6 +23,16 @@ struct GeminiAPIAssistantSettingsView: View {
                     .environment(\.layoutDirection, .leftToRight)
                     .submitLabel(.done)
             } header: { Text("Gemini API Key") }
+            
+            // Model Selection
+            Section {
+                Picker("Model", selection: $assistantModel.model) {
+                    Text("Select a model").tag("")
+                    ForEach(availableModels, id: \.self) { model in
+                        Text(model).tag(model)
+                    }
+                }
+            } header: { Text("Model") }
         }
         .onChange(of: assistantModel) {
             saveSettings()
@@ -31,6 +42,10 @@ struct GeminiAPIAssistantSettingsView: View {
         }
         .onAppear {
             saveSettings()
+            Task {
+                await GeminiAPIAssistantModel.getModels()
+                availableModels = GeminiAPIAssistantModel.availableModels
+            }
         }
     }
     

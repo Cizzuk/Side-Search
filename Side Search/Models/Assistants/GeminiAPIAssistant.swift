@@ -89,5 +89,36 @@ extension GeminiAPIAssistantModel {
         KeychainSupport.delete(key: keychainKey)
     }
     
-    static func getModels() { }
+    static func getModels(force: Bool = false) async {
+        let apiKey = loadAPIKey()
+        guard !apiKey.isEmpty,
+              let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models?key=\(apiKey)") else {
+            availableModels = []
+            return
+        }
+        
+        if !force, !availableModels.isEmpty {
+            return
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let models = json["models"] as? [[String: Any]] else { return }
+            
+            let modelNames = models.compactMap { model -> String? in
+                guard let name = model["name"] as? String else { return nil }
+                return name.replacingOccurrences(of: "models/", with: "")
+            }
+            
+            await MainActor.run {
+                availableModels = modelNames
+            }
+        } catch {
+            print("Error fetching Gemini models: \(error)")
+            await MainActor.run {
+                availableModels = []
+            }
+        }
+    }
 }
