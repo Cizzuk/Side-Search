@@ -5,7 +5,6 @@
 //  Created by Cizzuk on 2025/12/24.
 //
 
-import Foundation
 import SwiftUI
 
 struct URLBasedAssistant: AssistantDescriptionProvider {
