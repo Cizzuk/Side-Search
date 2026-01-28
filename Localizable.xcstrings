@@ -68,12 +68,12 @@
         }
       }
     },
-    "Ask to Assistant" : {
+    "Ask Assistant" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アシスタントに質問する"
+            "value" : "アシスタントに質問"
           }
         }
       }
