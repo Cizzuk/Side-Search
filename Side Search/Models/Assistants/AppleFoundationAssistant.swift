@@ -21,8 +21,7 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     ])
     
     static var makeSettingsView: any View { AppleFoundationAssistantSettingsView() }
-    
-    // TODO: Create AppleFoundationAssistantViewModel
+
     static func makeAssistantViewModel() -> AssistantViewModel { AppleFoundationAssistantViewModel() }
     
     static func isAvailable() -> Bool {
