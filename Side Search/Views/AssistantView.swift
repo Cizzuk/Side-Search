@@ -124,6 +124,7 @@ struct AssistantView: View {
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
+                    .disabled(viewModel.responseIsPreparing)
                 }
             }
             .fullScreenCover(isPresented: $viewModel.showSafariView, onDismiss: {
