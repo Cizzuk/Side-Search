@@ -33,6 +33,13 @@ struct AssistantView: View {
                                 Text(message.content)
                                     .font(.title3)
                                     .textSelection(.enabled)
+                                Spacer()
+                                ForEach(message.sources, id: \.url) { source in
+                                    Link(destination: source.url) {
+                                        Label(source.title, systemImage: "link")
+                                            .font(.caption)
+                                    }
+                                }
                             }
                             .id(message.id)
                             .frame(maxWidth: .infinity, alignment: .leading)

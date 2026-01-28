@@ -30,6 +30,7 @@ class AssistantViewModel: ObservableObject {
         let id = UUID()
         let from: MessageFrom
         let content: String
+        let sources: [(title: String, url: URL)] = []
     }
     
     // MARK: - Variables
