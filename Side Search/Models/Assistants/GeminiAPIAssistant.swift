@@ -21,7 +21,7 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
         Color(red: 66/255,  green: 133/255, blue: 244/255),
     ])
     
-    static var makeSettingsView: any View { EmptyView() }
+    static var makeSettingsView: any View { GeminiAPIAssistantSettingsView() }
     
     static func makeAssistantViewModel() -> AssistantViewModel { AssistantViewModel() }
     
@@ -36,6 +36,8 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
 
 struct GeminiAPIAssistantModel: AssistantModel {
     private static let userDefaultsKey = "geminiAPIAssistantSettings"
+    
+    static var availableModels: [String] = []
     
     var model: String = ""
     var customInstructions: String = ""
@@ -69,4 +71,23 @@ struct GeminiAPIAssistantModel: AssistantModel {
         }
         return true
     }
+}
+
+extension GeminiAPIAssistantModel {
+    // API Key in Keychain
+    private static let keychainKey = "geminiAPIKey"
+    
+    static func loadAPIKey() -> String {
+        return KeychainSupport.load(key: keychainKey) ?? ""
+    }
+    
+    static func saveAPIKey(key: String) {
+        KeychainSupport.save(key: keychainKey, value: key)
+    }
+    
+    static func deleteAPIKey() {
+        KeychainSupport.delete(key: keychainKey)
+    }
+    
+    static func getModels() { }
 }
