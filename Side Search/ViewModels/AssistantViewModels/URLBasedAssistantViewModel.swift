@@ -30,11 +30,16 @@ class URLBasedAssistantViewModel: AssistantViewModel {
         // Stop recording before searching
         stopRecording()
         
+        // Add user message to history
+        let userInput = inputText
+        inputText = ""
+        let userMessage = MessageData(from: .user, content: userInput)
+        messageHistory.append(userMessage)
+        
         if let url = assistantModel.makeSearchURL(query: inputText) {
             switch assistantModel.openIn {
             case .inAppBrowser:
-                self.searchURL = url
-                self.showSafariView = true
+                self.openSafariView(at: url)
             case .defaultApp:
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 onDismiss?()

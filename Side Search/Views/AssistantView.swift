@@ -35,7 +35,7 @@ struct AssistantView: View {
                                     .textSelection(.enabled)
                                 Spacer()
                                 ForEach(message.sources, id: \.url) { source in
-                                    Link(destination: source.url) {
+                                    Button(action: { viewModel.openSafariView(at: source.url) }) {
                                         Label(source.title, systemImage: "link")
                                             .font(.caption)
                                     }
@@ -134,9 +134,7 @@ struct AssistantView: View {
                     .disabled(viewModel.responseIsPreparing)
                 }
             }
-            .fullScreenCover(isPresented: $viewModel.showSafariView, onDismiss: {
-                dismiss()
-            }) {
+            .fullScreenCover(isPresented: $viewModel.showSafariView) {
                 if let url = viewModel.searchURL {
                     SafariView(url: url)
                         .ignoresSafeArea()

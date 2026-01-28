@@ -137,6 +137,16 @@ class AssistantViewModel: ObservableObject {
         responseIsPreparing = false
     }
     
+    func openSafariView(at url: URL) {
+        if SafariView.checkAvailability(at: url) {
+            searchURL = url
+            showSafariView = true
+        } else {
+            self.errorMessage = "Cannot open the URL in In-App Browser."
+            self.showError = true
+        }
+    }
+    
     // Handle repressing the Side Button
     func activateAssistant() {
         if !isRecording && !startWithMicMuted {
