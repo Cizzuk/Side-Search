@@ -109,17 +109,22 @@ extension GeminiAPIAssistantModel {
         }
         
         do {
+            // Fetch models
             let (data, _) = try await URLSession.shared.data(from: url)
             guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let models = json["models"] as? [[String: Any]] else { return }
             
+            // Create model list
             let modelNames = models.compactMap { model -> String? in
-                guard let name = model["name"] as? String else { return nil }
+                guard let name = model["name"] as? String,
+                      let supportedMethods = model["supportedGenerationMethods"] as? [String],
+                      // Filter only models that support text generation
+                      supportedMethods.contains("generateContent") else { return nil }
                 return name.replacingOccurrences(of: "models/", with: "")
             }
             
             await MainActor.run {
-                availableModels = modelNames
+                availableModels = modelNames.sorted()
             }
         } catch {
             print("Error fetching Gemini models: \(error)")
