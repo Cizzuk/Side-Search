@@ -334,6 +334,16 @@
         }
       }
     },
+    "Gemini API" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini API"
+          }
+        }
+      }
+    },
     "Google" : {
       "localizations" : {
         "ja" : {
@@ -742,6 +752,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Appleの提供するFoundation Modelsを使用して会話を行うことができるアシスタントです。使用するにはデバイスでApple Intelligenceが利用可能である必要があります。このアシスタントではインターネット上を検索することはできません。"
+          }
+        }
+      }
+    },
+    "This is an assistant that can converse using Gemini provided by Google. To use it, you need to obtain an API key yourself from Google AI Studio. You are responsible for managing the costs and agreements related to your usage." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Googleの提供するGeminiを使用して会話を行うことができるアシスタントです。使用するにはご自身でGoogle AI StudioでAPIキーを取得する必要があります。利用にかかるコストや同意する規約などは、ご自身で管理していただく必要があります。"
           }
         }
       }
