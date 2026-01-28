@@ -40,9 +40,7 @@ struct GeminiAPIAssistantModel: AssistantModel {
     var model: String = ""
     var customInstructions: String = ""
     
-    init() {
-        self = Self.load()
-    }
+    init() { }
 
     init(customInstructions: String) {
         self.customInstructions = customInstructions

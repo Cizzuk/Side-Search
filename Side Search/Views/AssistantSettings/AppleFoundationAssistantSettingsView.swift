@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppleFoundationAssistantSettingsView: View {
-    @State private var assistantModel: AppleFoundationAssistantModel = AppleFoundationAssistantModel()
+    @State private var assistantModel = AppleFoundationAssistantModel.load()
     
     var body: some View {
         Group {
