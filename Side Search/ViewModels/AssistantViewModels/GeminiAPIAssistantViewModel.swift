@@ -55,11 +55,17 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     func generate(prompt: String) async throws -> String {
         chatHistory.append(GeminiContent(role: "user", parts: [GeminiPart(text: prompt)]))
         
-        let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(assistantModel.model):generateContent?key=\(apiKey)")!
+        guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(assistantModel.model):generateContent")
+        else {
+            throw NSError(domain: "GeminiAPIAssistant",
+                          code: -1,
+                          userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+        }
         
         // Prepare request
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONEncoder().encode(GeminiRequest(contents: chatHistory))
         
@@ -69,7 +75,9 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         
         // Parse response
         guard let text = response.candidates?.first?.content.parts.first?.text else {
-            throw NSError(domain: "GeminiAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "No response"])
+            throw NSError(domain: "GeminiAPIAssistant",
+                          code: -1,
+                          userInfo: [NSLocalizedDescriptionKey: "No response"])
         }
         
         chatHistory.append(GeminiContent(role: "model", parts: [GeminiPart(text: text)]))
