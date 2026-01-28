@@ -12,7 +12,7 @@ struct AssistantView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     
     @Environment(\.dismiss) var dismiss
-    @State private var detent: PresentationDetent = .fraction(0.3)
+    @State private var detent: PresentationDetent = .medium
     @FocusState private var isInputFocused: Bool
     @StateObject private var viewModel: AssistantViewModel
     
@@ -171,7 +171,7 @@ struct AssistantView: View {
             .blur(radius: 30)
         )
         .animation(.smooth, value: viewModel.micLevel)
-        .presentationDetents([.fraction(0.3), .medium, .large], selection: $detent)
+        .presentationDetents([.medium, .large], selection: $detent)
         .presentationContentInteraction(.scrolls)
     }
 }
