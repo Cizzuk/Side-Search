@@ -8,13 +8,7 @@
 import SwiftUI
 
 struct AppleFoundationAssistantSettingsView: View {
-    @State private var assistantModel: AppleFoundationAssistantModel = {
-        if let rawData = UserDefaults.standard.data(forKey: AppleFoundationAssistant.userDefaultsKey),
-           let model = AppleFoundationAssistantModel.fromJSON(rawData) {
-            return model
-        }
-        return AppleFoundationAssistantModel()
-    }()
+    @State private var assistantModel: AppleFoundationAssistantModel = AppleFoundationAssistantModel.fromUserDefaults()
     
     var body: some View {
         Group {

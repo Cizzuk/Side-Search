@@ -12,13 +12,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     
     // MARK: - Assistant Settings
     
-    private var assistantModel: AppleFoundationAssistantModel = {
-        if let rawData = UserDefaults.standard.data(forKey: AppleFoundationAssistant.userDefaultsKey),
-           let model = AppleFoundationAssistantModel.fromJSON(rawData) {
-            return model
-        }
-        return AppleFoundationAssistantModel()
-    }()
+    private var assistantModel: AppleFoundationAssistantModel = AppleFoundationAssistantModel.fromUserDefaults()
     
     private var session: LanguageModelSession
     

@@ -46,9 +46,17 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
 struct AppleFoundationAssistantModel: AssistantModel {
     var customInstructions: String = ""
     
-    static func fromJSON(_ data: Data) -> AppleFoundationAssistantModel? {
+    static func fromUserDefaults() -> Self {
+        guard let rawData = UserDefaults.standard.data(forKey: AppleFoundationAssistant.userDefaultsKey),
+              let model = fromJSON(rawData) else {
+            return Self()
+        }
+        return model
+    }
+    
+    static func fromJSON(_ data: Data) -> Self? {
         let decoder = JSONDecoder()
-        let model = try? decoder.decode(AppleFoundationAssistantModel.self, from: data)
+        let model = try? decoder.decode(self, from: data)
         return model
     }
     

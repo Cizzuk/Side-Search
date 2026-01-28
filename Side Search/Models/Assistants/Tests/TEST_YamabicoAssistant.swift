@@ -38,9 +38,17 @@ struct TEST_YamabicoAssistant: AssistantDescriptionProvider {
 }
 
 struct TEST_YamabicoAssistantModel: AssistantModel {
-    static func fromJSON(_ data: Data) -> TEST_YamabicoAssistantModel? {
+    static func fromUserDefaults() -> Self {
+        guard let rawData = UserDefaults.standard.data(forKey: TEST_YamabicoAssistant.userDefaultsKey),
+              let model = fromJSON(rawData) else {
+            return Self()
+        }
+        return model
+    }
+    
+    static func fromJSON(_ data: Data) -> Self? {
         let decoder = JSONDecoder()
-        let model = try? decoder.decode(TEST_YamabicoAssistantModel.self, from: data)
+        let model = try? decoder.decode(self, from: data)
         return model
     }
     

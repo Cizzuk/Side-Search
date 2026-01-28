@@ -8,13 +8,7 @@
 import SwiftUI
 
 struct URLBasedAssistantSettingsView: View {
-    @State private var assistantModel: URLBasedAssistantModel = {
-        if let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
-           let model = URLBasedAssistantModel.fromJSON(rawData) {
-            return model
-        }
-        return SearchEnginePresets.defaultSearchEngine
-    }()
+    @State private var assistantModel: URLBasedAssistantModel = URLBasedAssistantModel.fromUserDefaults()
     
     @State private var showPresets = false
     

@@ -78,6 +78,7 @@ protocol AssistantDescriptionProvider {
 }
 
 protocol AssistantModel: Codable, Equatable {
+    static func fromUserDefaults() -> Self
     static func fromJSON(_ data: Data) -> Self?
     func toJSON() -> Data?
     func isValidSettings() -> Bool

@@ -32,9 +32,17 @@ struct URLBasedAssistantModel: AssistantModel {
     var url: String = ""
     var openIn: OpenInOption = .inAppBrowser
     
-    static func fromJSON(_ data: Data) -> URLBasedAssistantModel? {
+    static func fromUserDefaults() -> Self {
+        guard let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
+              let model = fromJSON(rawData) else {
+            return SearchEnginePresets.defaultSearchEngine
+        }
+        return model
+    }
+    
+    static func fromJSON(_ data: Data) -> Self? {
         let decoder = JSONDecoder()
-        let model = try? decoder.decode(URLBasedAssistantModel.self, from: data)
+        let model = try? decoder.decode(self, from: data)
         return model
     }
     

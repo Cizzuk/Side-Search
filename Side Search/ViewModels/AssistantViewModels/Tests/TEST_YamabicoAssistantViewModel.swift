@@ -11,9 +11,7 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
     
     // MARK: - Assistant Settings
     
-    private var assistantModel: TEST_YamabicoAssistantModel = {
-        return TEST_YamabicoAssistantModel()
-    }()
+    private var assistantModel: TEST_YamabicoAssistantModel = TEST_YamabicoAssistantModel.fromUserDefaults()
     
     // MARK: - Initialization
     

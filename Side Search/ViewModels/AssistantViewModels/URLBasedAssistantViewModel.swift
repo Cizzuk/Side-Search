@@ -11,13 +11,7 @@ class URLBasedAssistantViewModel: AssistantViewModel {
     
     // MARK: - Assistant Settings
     
-    private var assistantModel: URLBasedAssistantModel = {
-        if let rawData = UserDefaults.standard.data(forKey: URLBasedAssistant.userDefaultsKey),
-           let model = URLBasedAssistantModel.fromJSON(rawData) {
-            return model
-        }
-        return URLBasedAssistantModel()
-    }()
+    private var assistantModel: URLBasedAssistantModel = URLBasedAssistantModel.fromUserDefaults()
     
     // MARK: - Initialization
     
