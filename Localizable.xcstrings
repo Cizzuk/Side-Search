@@ -364,6 +364,16 @@
         }
       }
     },
+    "Get API Key..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APIキーを入手…"
+          }
+        }
+      }
+    },
     "Google" : {
       "localizations" : {
         "ja" : {
@@ -543,6 +553,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Perplexity"
+          }
+        }
+      }
+    },
+    "Please get and enter your API key from Google AI Studio." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google AI StudioでAPIキーを取得して入力してください。"
           }
         }
       }
