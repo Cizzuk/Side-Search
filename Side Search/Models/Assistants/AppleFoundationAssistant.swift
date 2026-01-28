@@ -44,6 +44,8 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
 }
 
 struct AppleFoundationAssistantModel: AssistantModel {
+    var customInstructions: String = ""
+    
     static func fromJSON(_ data: Data) -> AppleFoundationAssistantModel? {
         let decoder = JSONDecoder()
         let model = try? decoder.decode(AppleFoundationAssistantModel.self, from: data)
@@ -56,7 +58,7 @@ struct AppleFoundationAssistantModel: AssistantModel {
     }
     
     func isValidSettings() -> Bool {
-        return false
+        return true
     }
 }
 

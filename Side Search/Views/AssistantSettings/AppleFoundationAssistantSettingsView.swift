@@ -17,7 +17,14 @@ struct AppleFoundationAssistantSettingsView: View {
     }()
     
     var body: some View {
-        Group {}
+        Group {
+            // Custom Instructions Section
+            Section {
+                TextEditor(text: $assistantModel.customInstructions)
+                    .submitLabel(.return)
+                    .frame(maxHeight: 200)
+            } header: { Text("Custom Instructions") }
+        }
         .onChange(of: assistantModel) {
             saveSettings()
         }

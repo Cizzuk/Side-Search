@@ -254,6 +254,16 @@
         }
       }
     },
+    "Custom Instructions" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カスタム指示"
+          }
+        }
+      }
+    },
     "Default App" : {
       "localizations" : {
         "ja" : {

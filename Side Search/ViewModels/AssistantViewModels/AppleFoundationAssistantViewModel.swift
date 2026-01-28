@@ -13,14 +13,25 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     // MARK: - Assistant Settings
     
     private var assistantModel: AppleFoundationAssistantModel = {
+        if let rawData = UserDefaults.standard.data(forKey: AppleFoundationAssistant.userDefaultsKey),
+           let model = AppleFoundationAssistantModel.fromJSON(rawData) {
+            return model
+        }
         return AppleFoundationAssistantModel()
     }()
     
-    private var session: LanguageModelSession = LanguageModelSession()
+    private var session: LanguageModelSession
     
     // MARK: - Initialization
     
     override init() {
+        // Initialize Language Model Session with custom instructions if provided
+        if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            self.session = LanguageModelSession()
+        } else {
+            self.session = LanguageModelSession(instructions: assistantModel.customInstructions)
+        }
+        
         super.init()
     }
     
