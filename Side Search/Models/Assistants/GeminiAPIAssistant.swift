@@ -10,7 +10,7 @@ import SwiftUI
 
 struct GeminiAPIAssistant: AssistantDescriptionProvider {
     static var assistantName = LocalizedStringResource("Google Gemini API")
-    static var assistantDescription = LocalizedStringResource("This is an assistant that can converse using Gemini provided by Google. To use it, you need to obtain an API key yourself from Google AI Studio. You are responsible for managing the costs and agreements related to your usage.")
+    static var assistantDescription = LocalizedStringResource("This is an assistant that can converse and search using Gemini provided by Google. To use it, you need to obtain an API key yourself from Google AI Studio. You are responsible for managing the costs and agreements related to your usage.")
     static var assistantSystemImage = "sparkle"
     
     static var assistantGradient = Gradient(colors: [
