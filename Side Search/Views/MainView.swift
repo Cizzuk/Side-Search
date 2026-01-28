@@ -15,6 +15,7 @@ struct MainView: View {
     @State private var showingChangeIconView = false
     @State private var showingSwitchAssistantView = false
     @State private var showClearInAppBrowserDataAlert = false
+    @State private var isPhone = UIDevice.current.userInterfaceIdiom == .phone
     
     var body: some View {
         NavigationStack {
@@ -90,7 +91,11 @@ struct MainView: View {
                         }
                         .padding(.horizontal, 10)
                     }
-                    .popover(isPresented: $showingSwitchAssistantView) {
+                    .popover(isPresented: isPhone ? $showingSwitchAssistantView : .constant(false)) {
+                        SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
+                            .presentationCompactAdaptation(.sheet)
+                    }
+                    .sheet(isPresented: !isPhone ? $showingSwitchAssistantView : .constant(false)) {
                         SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
                     }
                     
@@ -99,7 +104,11 @@ struct MainView: View {
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
-                    .popover(isPresented: $viewModel.showAssistant) {
+                    .popover(isPresented: isPhone ? $viewModel.showAssistant : .constant(false)) {
+                        AssistantView()
+                            .presentationCompactAdaptation(.sheet)
+                    }
+                    .sheet(isPresented: !isPhone ? $viewModel.showAssistant : .constant(false)) {
                         AssistantView()
                     }
                 }
