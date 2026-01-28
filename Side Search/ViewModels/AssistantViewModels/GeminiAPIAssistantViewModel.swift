@@ -16,6 +16,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     // MARK: - Gemini API Types for JSON
     // contents -> role, parts -> text
+    // tools -> google_search
     
     private struct GeminiContent: Codable {
         let role: String
@@ -26,8 +27,16 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         let text: String
     }
     
+    private struct GeminiTool: Codable {
+        let google_search: GeminiGoogleSearch
+    }
+    
+    private struct GeminiGoogleSearch: Codable {
+    }
+    
     private struct GeminiRequest: Codable {
         let contents: [GeminiContent]
+        var tools: [GeminiTool] = [GeminiTool(google_search: GeminiGoogleSearch())]
     }
     
     // For response parsing
