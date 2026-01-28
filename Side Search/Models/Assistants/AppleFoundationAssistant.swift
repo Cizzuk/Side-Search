@@ -5,7 +5,7 @@
 //  Created by Cizzuk on 2025/12/24.
 //
 
-import Foundation
+import FoundationModels
 import SwiftUI
 
 struct AppleFoundationAssistant: AssistantDescriptionProvider {
@@ -26,7 +26,15 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     // TODO: Create AppleFoundationAssistantViewModel
     static func makeAssistantViewModel() -> AssistantViewModel { AppleFoundationAssistantViewModel() }
     
-    static func isAvailable() -> Bool { return true }
+    static func isAvailable() -> Bool {
+        switch SystemLanguageModel.default.availability {
+        case .available:
+            return true
+        case .unavailable:
+            return false
+        }
+    }
+    
     static func isBlocked() -> Bool {
         if GeoHelper.currentRegion == "CN" {
             return true
