@@ -47,7 +47,7 @@ struct AssistantView: View {
                             Text(AssistantViewModel.MessageFrom.user.displayName)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            TextField(viewModel.isRecording ? "Listening..." : "Ask to Assistant",
+                            TextField(viewModel.isRecording ? "Listening..." : "Ask Assistant",
                                       text: $viewModel.inputText, axis: .vertical)
                             .font(.title3)
                             .bold()
