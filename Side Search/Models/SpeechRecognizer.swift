@@ -125,6 +125,7 @@ class SpeechRecognizer: ObservableObject {
                         
                         DispatchQueue.main.async {
                             self.isRecording = false
+                            self.micLevel = 0.0
                         }
                     }
                 }
