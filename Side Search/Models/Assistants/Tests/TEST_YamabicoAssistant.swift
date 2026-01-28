@@ -5,7 +5,6 @@
 //  Created by Cizzuk on 2026/01/26.
 //
 
-import Foundation
 import SwiftUI
 
 struct TEST_YamabicoAssistant: AssistantDescriptionProvider {
@@ -28,6 +27,7 @@ struct TEST_YamabicoAssistant: AssistantDescriptionProvider {
         return false
         #endif
     }
+    
     static func isBlocked() -> Bool {
         #if DEBUG
         return false
