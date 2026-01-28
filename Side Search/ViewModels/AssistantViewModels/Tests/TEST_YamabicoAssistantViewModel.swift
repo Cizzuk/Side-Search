@@ -30,7 +30,6 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
     }
     
     override func confirmInput() {
-        // Stop recording before searching
         stopRecording()
         
         // Prevent empty input
@@ -53,7 +52,6 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
             messageHistory.append(assistantMessage)
             responseIsPreparing = false
         }
-        
         
         inputText = ""
     }
