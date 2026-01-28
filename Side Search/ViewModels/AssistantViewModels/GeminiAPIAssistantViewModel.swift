@@ -70,14 +70,22 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         request.httpBody = try JSONEncoder().encode(GeminiRequest(contents: chatHistory))
         
         // Send request
-        let (data, _) = try await URLSession.shared.data(for: request)
-        let response = try JSONDecoder().decode(GeminiResponse.self, from: data)
+        let data: Data
+        do {
+            (data, _) = try await URLSession.shared.data(for: request)
+        } catch {
+            throw NSError(domain: "GeminiAPIAssistant",
+                          code: -1,
+                          userInfo: [NSLocalizedDescriptionKey: "Connection error"])
+        }
         
+        let response = try JSONDecoder().decode(GeminiResponse.self, from: data)
+
         // Parse response
         guard let text = response.candidates?.first?.content.parts.first?.text else {
             throw NSError(domain: "GeminiAPIAssistant",
                           code: -1,
-                          userInfo: [NSLocalizedDescriptionKey: "No response"])
+                          userInfo: [NSLocalizedDescriptionKey: String(data: data, encoding: .utf8) ?? "No response"])
         }
         
         chatHistory.append(GeminiContent(role: "model", parts: [GeminiPart(text: text)]))
