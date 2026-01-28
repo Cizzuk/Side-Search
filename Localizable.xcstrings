@@ -344,16 +344,6 @@
         }
       }
     },
-    "Gemini API" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gemini API"
-          }
-        }
-      }
-    },
     "Gemini API Key" : {
       "localizations" : {
         "ja" : {
@@ -380,6 +370,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Google"
+          }
+        }
+      }
+    },
+    "Google Gemini API" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Gemini API"
           }
         }
       }
