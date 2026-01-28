@@ -5,7 +5,6 @@
 //  Created by Cizzuk on 2026/01/28.
 //
 
-import FoundationModels
 import UIKit
 
 class GeminiAPIAssistantViewModel: AssistantViewModel {
@@ -14,6 +13,35 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     private var assistantModel = GeminiAPIAssistantModel.load()
     private var apiKey: String = GeminiAPIAssistantModel.loadAPIKey()
+    
+    // MARK: - Gemini API Types for JSON
+    // contents -> role, parts -> text
+    
+    private struct GeminiContent: Codable {
+        let role: String
+        let parts: [GeminiPart]
+    }
+    
+    private struct GeminiPart: Codable {
+        let text: String
+    }
+    
+    private struct GeminiRequest: Codable {
+        let contents: [GeminiContent]
+    }
+    
+    // For response parsing
+    private struct GeminiResponse: Codable {
+        let candidates: [GeminiCandidate]?
+    }
+    
+    private struct GeminiCandidate: Codable {
+        let content: GeminiContent
+    }
+    
+    // MARK: - Chat History
+    
+    private var chatHistory: [GeminiContent] = []
     
     // MARK: - Initialization
     
@@ -25,8 +53,27 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     @MainActor
     func generate(prompt: String) async throws -> String {
-        // TODO: Create Gemini API call
-        return ""
+        chatHistory.append(GeminiContent(role: "user", parts: [GeminiPart(text: prompt)]))
+        
+        let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(assistantModel.model):generateContent?key=\(apiKey)")!
+        
+        // Prepare request
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(GeminiRequest(contents: chatHistory))
+        
+        // Send request
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let response = try JSONDecoder().decode(GeminiResponse.self, from: data)
+        
+        // Parse response
+        guard let text = response.candidates?.first?.content.parts.first?.text else {
+            throw NSError(domain: "GeminiAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "No response"])
+        }
+        
+        chatHistory.append(GeminiContent(role: "model", parts: [GeminiPart(text: text)]))
+        return text
     }
     
     // MARK: - Override Methods

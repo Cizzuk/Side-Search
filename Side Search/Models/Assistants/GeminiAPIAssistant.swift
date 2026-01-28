@@ -23,7 +23,7 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
     
     static var makeSettingsView: any View { GeminiAPIAssistantSettingsView() }
     
-    static func makeAssistantViewModel() -> AssistantViewModel { AssistantViewModel() }
+    static func makeAssistantViewModel() -> AssistantViewModel { GeminiAPIAssistantViewModel() }
     
     static func isAvailable() -> Bool { return true }
     static func isBlocked() -> Bool {
