@@ -88,7 +88,7 @@ struct MainView: View {
                             Image(systemName: viewModel.currentAssistant.DescriptionProviderType.assistantSystemImage)
                             Text(viewModel.currentAssistant.DescriptionProviderType.assistantName)
                         }
-                        .padding()
+                        .padding(.horizontal, 10)
                     }
                     .popover(isPresented: $showingSwitchAssistantView) {
                         SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
