@@ -22,7 +22,15 @@ struct GeminiAPIAssistantSettingsView: View {
                     .textInputAutocapitalization(.never)
                     .environment(\.layoutDirection, .leftToRight)
                     .submitLabel(.done)
-            } header: { Text("Gemini API Key") }
+            } header: { Text("Gemini API Key")
+            } footer: {
+                VStack(alignment: .leading) {
+                    Text("Please get and enter your API key from Google AI Studio.")
+                    Spacer()
+                    Link("Get API Key...", destination: URL(string: "https://aistudio.google.com/api-keys")!)
+                        .font(.footnote)
+                }
+            }
             
             // Model Selection
             Section {
