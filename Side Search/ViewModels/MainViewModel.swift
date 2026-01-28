@@ -37,7 +37,7 @@ class MainViewModel: ObservableObject {
             return
         }
         
-        let SearchEngine = URLBasedAssistantModel()
+        let SearchEngine = URLBasedAssistantModel.load()
         
         // Check if query input is needed
         if SearchEngine.needQueryInput() {
