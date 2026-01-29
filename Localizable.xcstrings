@@ -4,16 +4,6 @@
     "" : {
       "shouldTranslate" : false
     },
-    "%.0fs" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%.0f秒"
-          }
-        }
-      }
-    },
     "%@" : {
       "shouldTranslate" : false
     },
@@ -28,25 +18,12 @@
       },
       "shouldTranslate" : false
     },
-    "32" : {
-      "shouldTranslate" : false
-    },
     "About" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "情報"
-          }
-        }
-      }
-    },
-    "Advanced Settings" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "高度な設定"
           }
         }
       }
@@ -61,12 +38,52 @@
         }
       }
     },
-    "Assistant Settings" : {
+    "API Key" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アシスタントの設定"
+            "value" : "APIキー"
+          }
+        }
+      }
+    },
+    "Apple Foundation Models" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Foundation Models"
+          }
+        }
+      }
+    },
+    "Are you sure you want to clear all in-app browser data?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ内ブラウザのデータをすべて消去しますか？"
+          }
+        }
+      }
+    },
+    "Ask Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントに質問"
+          }
+        }
+      }
+    },
+    "Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタント"
           }
         }
       }
@@ -97,16 +114,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bing"
-          }
-        }
-      }
-    },
-    "Blank to disable" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "空白にすると無効化"
           }
         }
       }
@@ -151,6 +158,26 @@
         }
       }
     },
+    "Cannot open the URL in In-App Browser." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLをアプリ内ブラウザで開くことができません。"
+          }
+        }
+      }
+    },
+    "Change App Icon" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アイコンを変更"
+          }
+        }
+      }
+    },
     "ChatGPT" : {
       "localizations" : {
         "ja" : {
@@ -187,6 +214,16 @@
         }
       }
     },
+    "Clear" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "消去"
+          }
+        }
+      }
+    },
     "Clear In-App Browser Data" : {
       "localizations" : {
         "ja" : {
@@ -203,6 +240,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "カーテンを閉じる"
+          }
+        }
+      }
+    },
+    "Confirm" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
           }
         }
       }
@@ -227,6 +274,16 @@
         }
       }
     },
+    "Custom Instructions" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カスタム指示"
+          }
+        }
+      }
+    },
     "Default App" : {
       "localizations" : {
         "ja" : {
@@ -243,16 +300,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開発者"
-          }
-        }
-      }
-    },
-    "Disable Percent-encoding" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "パーセントエンコーディングを無効にする"
           }
         }
       }
@@ -297,6 +344,36 @@
         }
       }
     },
+    "Gemini" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini"
+          }
+        }
+      }
+    },
+    "Gemini API Key" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini APIキー"
+          }
+        }
+      }
+    },
+    "Get API Key..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APIキーを入手…"
+          }
+        }
+      }
+    },
     "Google" : {
       "localizations" : {
         "ja" : {
@@ -307,12 +384,12 @@
         }
       }
     },
-    "Google AI Mode" : {
+    "Google Gemini API" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Google AIモード"
+            "value" : "Google Gemini API"
           }
         }
       }
@@ -407,12 +484,12 @@
         }
       }
     },
-    "Max Query Length" : {
+    "Manually Confirm Speech" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "クエリの最大文字数"
+            "value" : "手動で音声認識を完了する"
           }
         }
       }
@@ -429,6 +506,16 @@
     },
     "MIT License\n\nCopyright (c) 2025 Cizzuk\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE." : {
       "shouldTranslate" : false
+    },
+    "Model" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "モデル"
+          }
+        }
+      }
     },
     "OK" : {
       "localizations" : {
@@ -480,6 +567,16 @@
         }
       }
     },
+    "Please get and enter your API key from Google AI Studio." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google AI StudioでAPIキーを取得して入力してください。"
+          }
+        }
+      }
+    },
     "Privacy Policy" : {
       "localizations" : {
         "ja" : {
@@ -496,16 +593,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "URLスキームを使用してショートカットを実行する"
-          }
-        }
-      }
-    },
-    "Search" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "検索"
           }
         }
       }
@@ -550,12 +637,12 @@
         }
       }
     },
-    "Search with Assistant" : {
+    "Select a model" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アシスタントで検索"
+            "value" : "モデルを選択"
           }
         }
       }
@@ -582,16 +669,6 @@
     },
     "Side Search" : {
       "shouldTranslate" : false
-    },
-    "Silence Duration" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "話さない時間"
-          }
-        }
-      }
     },
     "Source" : {
       "localizations" : {
@@ -629,6 +706,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "音声認識の初期化に失敗しました。"
+          }
+        }
+      }
+    },
+    "Speech Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識の設定"
           }
         }
       }
@@ -673,16 +760,6 @@
         }
       }
     },
-    "Stop Speech and Search" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "話すのを止めて検索"
-          }
-        }
-      }
-    },
     "Stop Speech Recognition" : {
       "localizations" : {
         "ja" : {
@@ -692,6 +769,32 @@
           }
         }
       }
+    },
+    "Switch Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントの切り替え"
+          }
+        }
+      }
+    },
+    "System" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システム"
+          }
+        }
+      }
+    },
+    "TEST Assistant. Echo user input." : {
+      "shouldTranslate" : false
+    },
+    "TEST Yamabico Assistant" : {
+      "shouldTranslate" : false
     },
     "The Search URL is necessary to set your preferred AI assistant or search engine URL." : {
       "localizations" : {
@@ -703,12 +806,32 @@
         }
       }
     },
-    "This option is locked to Default App because the In-App Browser does not support the Search URL." : {
+    "This can be used by setting URLs for AI assistants, search engines, etc. The assistant will open in the in-app browser or the default app. Side Search's speech recognition is optional." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アプリ内ブラウザが検索URLをサポートしていないため、この設定はデフォルトのアプリに固定されます。"
+            "value" : "AIアシスタントや検索エンジンなどのURLを設定して使用するアシスタントです。アシスタントはアプリ内ブラウザかデフォルトのアプリで開きます。Side Searchの音声認識はオプションです。"
+          }
+        }
+      }
+    },
+    "This is an assistant that can converse and search using Gemini provided by Google. To use it, you need to obtain an API key yourself from Google AI Studio. You are responsible for managing the costs and agreements related to your usage." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Googleの提供するGeminiを使用して会話と検索を行うことができるアシスタントです。使用するにはご自身でGoogle AI StudioでAPIキーを取得する必要があります。利用にかかるコストや同意する規約などは、ご自身で管理していただく必要があります。"
+          }
+        }
+      }
+    },
+    "This is an assistant that can converse using Foundation Models provided by Apple. To use it, Apple Intelligence must be available on your device. This assistant cannot search the internet." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appleの提供するFoundation Modelsを使用して会話を行うことができるアシスタントです。使用するにはデバイスでApple Intelligenceが利用可能である必要があります。このアシスタントではインターネット上を検索することはできません。"
           }
         }
       }
@@ -743,6 +866,16 @@
         }
       }
     },
+    "URL Based Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLベースアシスタント"
+          }
+        }
+      }
+    },
     "Version" : {
       "localizations" : {
         "ja" : {
@@ -769,6 +902,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yahoo! JAPAN"
+          }
+        }
+      }
+    },
+    "You" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなた"
           }
         }
       }

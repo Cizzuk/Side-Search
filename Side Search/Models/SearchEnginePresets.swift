@@ -8,63 +8,49 @@
 import Foundation
 
 class SearchEnginePresets {
-    // Helpers
-    private static let currentRegion = Locale.current.region?.identifier
-    private static let preferredLanguages = Locale.preferredLanguages
-    
-    private static func containsLanguage(_ languageCode: String) -> Bool {
-        return preferredLanguages.contains { language in
-            if language.hasPrefix(languageCode + "-") {
-                return true
-            }
-            let locale = Locale(identifier: language)
-            return locale.language.languageCode?.identifier == languageCode
-        }
-    }
-    
-    static var defaultSearchEngine: SearchEngineModel {
-        if currentRegion == "CN" {
-            return SearchEngineModel(
+    static var defaultSearchEngine: URLBasedAssistantModel {
+        if GeoHelper.currentRegion == "CN" {
+            return URLBasedAssistantModel(
                 name: "百度AI搜索",
                 url: "https://chat.baidu.com/search?query=%s",
             )
         } else {
-            return SearchEngineModel(
+            return URLBasedAssistantModel(
                 name: "ChatGPT",
                 url: "https://chatgpt.com/?q=%s",
             )
         }
     }
     
-    class func aiAssistants() -> [SearchEngineModel] {
-        var aiCSEs: [SearchEngineModel] = []
-        if currentRegion != "CN" {
+    static var aiAssistants: [URLBasedAssistantModel] {
+        var aiCSEs: [URLBasedAssistantModel] = []
+        if GeoHelper.currentRegion != "CN" {
             aiCSEs.append(contentsOf: [
-                SearchEngineModel(
+                URLBasedAssistantModel(
                     name: "ChatGPT",
                     url: "https://chatgpt.com/?q=%s",
                 ),
-                SearchEngineModel(
+                URLBasedAssistantModel(
+                    name: "Gemini",
+                    url: "https://gemini.google.com/?prompt_text=%s",
+                ),
+                URLBasedAssistantModel(
                     name: "Claude",
                     url: "https://claude.ai/new?q=%s",
                 ),
-                SearchEngineModel(
-                    name: "Google AI Mode",
-                    url: "https://google.com/?q=%s&udm=50",
-                ),
-                SearchEngineModel(
+                URLBasedAssistantModel(
                     name: "Copilot Search",
                     url: "https://www.bing.com/copilotsearch?q=%s",
                 ),
-                SearchEngineModel(
+                URLBasedAssistantModel(
                     name: "Perplexity",
                     url: "https://www.perplexity.ai/?q=%s",
                 )
             ])
         }
         
-        if currentRegion == "CN" || containsLanguage("zh-Hans") {
-            aiCSEs.append(SearchEngineModel(
+        if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
+            aiCSEs.append(URLBasedAssistantModel(
                 name: "百度AI搜索",
                 url: "https://chat.baidu.com/search?query=%s",
             ))
@@ -73,67 +59,66 @@ class SearchEnginePresets {
         return aiCSEs
     }
     
-    class func normalSearchEngines() -> [SearchEngineModel] {
-        var normalCSEs: [SearchEngineModel] = []
+    static var normalSearchEngines: [URLBasedAssistantModel] {
+        var normalCSEs: [URLBasedAssistantModel] = []
         
-        let localizedYahoo: SearchEngineModel
-        if preferredLanguages.first == "ja-JP" {
-            localizedYahoo = SearchEngineModel(
+        let localizedYahoo: URLBasedAssistantModel
+        if GeoHelper.preferredLanguages.first == "ja-JP" {
+            localizedYahoo = URLBasedAssistantModel(
                 name: "Yahoo! JAPAN",
                 url: "https://search.yahoo.co.jp/search?p=%s",
             )
         } else {
-            localizedYahoo = SearchEngineModel(
+            localizedYahoo = URLBasedAssistantModel(
                 name: "Yahoo",
                 url: "https://search.yahoo.com/search?p=%s",
             )
         }
         
         normalCSEs.append(contentsOf:[
-            SearchEngineModel(
+            URLBasedAssistantModel(
                 name: "Google",
                 url: "https://www.google.com/search?q=%s&client=safari",
             ),
-            SearchEngineModel(
+            URLBasedAssistantModel(
                 name: "Bing",
                 url: "https://www.bing.com/search?q=%s",
             ),
             localizedYahoo,
-            SearchEngineModel(
+            URLBasedAssistantModel(
                 name: "DuckDuckGo",
                 url: "https://duckduckgo.com/?q=%s",
-                maxQueryLength: 500,
             ),
-            SearchEngineModel(
+            URLBasedAssistantModel(
                 name: "Ecosia",
                 url: "https://www.ecosia.org/search?q=%s",
             ),
         ])
         
-        if currentRegion == "CN" || containsLanguage("zh-Hans") {
-            normalCSEs.append(SearchEngineModel(
+        if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
+            normalCSEs.append(URLBasedAssistantModel(
                 name: "百度",
                 url: "https://www.baidu.com/s?wd=%s",
             ))
         }
         
-        if currentRegion == "RU" || containsLanguage("ru") {
-            normalCSEs.append(SearchEngineModel(
+        if GeoHelper.currentRegion == "RU" || GeoHelper.containsLanguage("ru") {
+            normalCSEs.append(URLBasedAssistantModel(
                 name: "Яндекс",
                 url: "https://yandex.ru/search/?text=%s",
             ))
         }
         
         normalCSEs.append(contentsOf:[
-            SearchEngineModel(
+            URLBasedAssistantModel(
                 name: "Startpage",
                 url: "https://www.startpage.com/sp/search?query=%s",
             ),
-            SearchEngineModel(
+            URLBasedAssistantModel(
                 name: "Brave Search",
                 url: "https://search.brave.com/search?q=%s",
             ),
-            SearchEngineModel(
+            URLBasedAssistantModel(
                 name: "Kagi",
                 url: "https://kagi.com/search?q=%s",
             ),
