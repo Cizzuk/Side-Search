@@ -116,6 +116,7 @@ class AssistantViewModel: ObservableObject {
     }
     
     func startRecording() {
+        guard !responseIsPreparing else { return }
         speechRecognizer.startRecording()
     }
     
@@ -125,6 +126,7 @@ class AssistantViewModel: ObservableObject {
     
     func confirmInput() {
         // MARK: Override in subclass
+        guard !responseIsPreparing else { return }
         responseIsPreparing = true
         stopRecording()
         
