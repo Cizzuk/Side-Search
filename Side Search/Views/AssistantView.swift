@@ -124,6 +124,7 @@ struct AssistantView: View {
                               systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
                     }
                     .tint(viewModel.isRecording ? .orange : .primary)
+                    
                     Button(action: {
                         viewModel.confirmInput()
                     }) {
