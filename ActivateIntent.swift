@@ -13,9 +13,10 @@ extension Notification.Name {
 
 @AppIntent(schema: .assistant.activate)
 struct ActivateIntent: AppIntent {
-    static let title: LocalizedStringResource = "Start Assistant"
     static let supportedModes: IntentModes = .foreground
     
+    static let title: LocalizedStringResource = "Start Assistant"
+    static var description: LocalizedStringResource = "Start the Side Search assistant."
     static var isDiscoverable = true
     
     @MainActor
