@@ -12,7 +12,6 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
     static var assistantName = LocalizedStringResource("Google Gemini API")
     static var assistantDescription = LocalizedStringResource("This is an assistant that can converse and search using Gemini provided by Google. To use it, you need to obtain an API key yourself from Google AI Studio. You are responsible for managing the costs and agreements related to your usage.")
     static var assistantSystemImage = "sparkle"
-    
     static var assistantGradient = Gradient(colors: [
         Color(red: 66/255,  green: 133/255, blue: 244/255),
         Color(red: 15/255,  green: 157/255, blue: 88/255),
@@ -20,6 +19,7 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
         Color(red: 219/255, green: 68/255, blue: 55/255),
         Color(red: 66/255,  green: 133/255, blue: 244/255),
     ])
+    static var assistantIsAI: Bool = true
     
     static var makeSettingsView: any View { GeminiAPIAssistantSettingsView() }
     

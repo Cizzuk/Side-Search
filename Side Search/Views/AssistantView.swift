@@ -76,7 +76,15 @@ struct AssistantView: View {
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.bottom, 50)
+                        
+                        if AssistantType.current.DescriptionProviderType.assistantIsAI {
+                            Text("This assistant is AI and can make mistakes.")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
+                        
+                        Spacer(minLength: 50)
                     }
                     .id("scrollAnchor")
                     .padding(.horizontal, 25)

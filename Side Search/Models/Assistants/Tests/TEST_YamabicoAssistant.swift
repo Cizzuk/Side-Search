@@ -14,6 +14,7 @@ struct TEST_YamabicoAssistant: AssistantDescriptionProvider {
     static var assistantGradient = Gradient(colors: [
         Color(red: 51/255, green: 102/255,  blue: 255/255),
     ])
+    static var assistantIsAI: Bool = true
     
     static var makeSettingsView: any View { EmptyView() }
     
