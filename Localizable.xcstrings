@@ -740,6 +740,16 @@
         }
       }
     },
+    "Start the Side Search assistant." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Searchのアシスタントを開始します。"
+          }
+        }
+      }
+    },
     "Start with Mic Muted" : {
       "localizations" : {
         "ja" : {
