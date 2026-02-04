@@ -172,7 +172,7 @@ struct AssistantView: View {
             .blur(radius: 30)
         )
         .animation(.smooth, value: viewModel.micLevel)
-        .presentationDetents([.medium, .large], selection: $detent)
+        .presentationDetents([.medium, .fraction(0.3), .large], selection: $detent)
         .presentationContentInteraction(.scrolls)
     }
 }
