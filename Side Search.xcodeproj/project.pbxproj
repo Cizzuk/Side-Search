@@ -11,6 +11,7 @@
 		BE811A382F340E2D00894EA5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE811A372F340E2C00894EA5 /* WidgetKit.framework */; };
 		BE811A3A2F340E2D00894EA5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE811A392F340E2D00894EA5 /* SwiftUI.framework */; };
 		BE811A452F340E2D00894EA5 /* WidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BE811A352F340E2C00894EA5 /* WidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BE811A4D2F340EBE00894EA5 /* ActivateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */; };
 		BE8AA7612EFC2EB100C02260 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
@@ -55,12 +56,20 @@
 			);
 			target = BE811A342F340E2C00894EA5 /* WidgetExtensionExtension */;
 		};
+		BE811A4F2F340F7100894EA5 /* Exceptions for "WidgetExtension" folder in "Side Search" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				StartAssistant.swift,
+			);
+			target = BEB06C492EFBA9AE0026CC6E /* Side Search */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BE811A3B2F340E2D00894EA5 /* WidgetExtension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				BE811A4F2F340F7100894EA5 /* Exceptions for "WidgetExtension" folder in "Side Search" target */,
 				BE811A492F340E2D00894EA5 /* Exceptions for "WidgetExtension" folder in "WidgetExtensionExtension" target */,
 			);
 			path = WidgetExtension;
@@ -234,6 +243,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE811A4D2F340EBE00894EA5 /* ActivateIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
