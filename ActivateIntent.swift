@@ -15,6 +15,8 @@ extension Notification.Name {
 struct ActivateIntent: AppIntent {
     static let supportedModes: IntentModes = .foreground
     
+    static var isDiscoverable = false
+    
     @MainActor
     func perform() async throws -> some IntentResult {
         NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
