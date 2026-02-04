@@ -806,6 +806,16 @@
         }
       }
     },
+    "This assistant is AI and can make mistakes." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアシスタントはAIであるため、間違えることがあります。"
+          }
+        }
+      }
+    },
     "This can be used by setting URLs for AI assistants, search engines, etc. The assistant will open in the in-app browser or the default app. Side Search's speech recognition is optional." : {
       "localizations" : {
         "ja" : {
