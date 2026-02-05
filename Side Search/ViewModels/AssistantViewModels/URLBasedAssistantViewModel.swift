@@ -35,7 +35,7 @@ class URLBasedAssistantViewModel: AssistantViewModel {
         let userMessage = MessageData(from: .user, content: userInput)
         messageHistory.append(userMessage)
         
-        if let url = assistantModel.makeSearchURL(query: inputText) {
+        if let url = assistantModel.makeSearchURL(query: userInput) {
             switch assistantModel.openIn {
             case .inAppBrowser:
                 self.openSafariView(at: url)
