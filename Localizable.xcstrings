@@ -89,7 +89,14 @@
       }
     },
     "Assistant Screen Size" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントの画面サイズ"
+          }
+        }
+      }
     },
     "Audio engine couldn't start: %@" : {
       "localizations" : {
@@ -468,7 +475,14 @@
       }
     },
     "Large" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大きい"
+          }
+        }
+      }
     },
     "License" : {
       "localizations" : {
@@ -500,9 +514,6 @@
         }
       }
     },
-    "Medium" : {
-
-    },
     "Microphone access denied. Please enable it in Settings." : {
       "localizations" : {
         "ja" : {
@@ -522,6 +533,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "モデル"
+          }
+        }
+      }
+    },
+    "Normal" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通常"
           }
         }
       }
@@ -680,7 +701,14 @@
       "shouldTranslate" : false
     },
     "Small" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小さい"
+          }
+        }
+      }
     },
     "Source" : {
       "localizations" : {
