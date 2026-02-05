@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import SwiftUI
 
 class AssistantViewModel: ObservableObject {
     enum MessageFrom {
@@ -33,9 +34,47 @@ class AssistantViewModel: ObservableObject {
         var sources: [(title: String, url: URL)] = []
     }
     
+    enum DetentOption: String, CaseIterable, Identifiable {
+        case small
+        case medium
+        case large
+        
+        var id: String { rawValue }
+        
+        var displayName: LocalizedStringResource {
+            switch self {
+            case .small:
+                return "Small"
+            case .medium:
+                return "Medium"
+            case .large:
+                return "Large"
+            }
+        }
+        
+        var presentationDetent: PresentationDetent {
+            switch self {
+            case .small:
+                return .fraction(0.3)
+            case .medium:
+                return .medium
+            case .large:
+                return .large
+            }
+        }
+    }
+    
     // MARK: - Variables
     
     var onDismiss: (() -> Void)?
+    
+    @Published var detent: PresentationDetent = {
+        if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
+           let option = DetentOption(rawValue: rawValue) {
+            return option.presentationDetent
+        }
+        return .medium
+    }()
     
     // Input Field
     @Published var inputText = ""

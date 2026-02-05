@@ -45,6 +45,14 @@ struct MainView: View {
                 } header: { Text("Speech Settings") }
                 
                 Section {
+                    Picker("Assistant Screen Size", selection: $viewModel.assistantViewDetent) {
+                        ForEach(AssistantViewModel.DetentOption.allCases) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                }
+                
+                Section {
                     Button(action: { showClearInAppBrowserDataAlert = true }) {
                         Label("Clear In-App Browser Data", systemImage: "xmark.circle")
                     }

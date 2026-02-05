@@ -88,6 +88,9 @@
         }
       }
     },
+    "Assistant Screen Size" : {
+
+    },
     "Audio engine couldn't start: %@" : {
       "localizations" : {
         "ja" : {
@@ -464,6 +467,9 @@
         }
       }
     },
+    "Large" : {
+
+    },
     "License" : {
       "localizations" : {
         "ja" : {
@@ -493,6 +499,9 @@
           }
         }
       }
+    },
+    "Medium" : {
+
     },
     "Microphone access denied. Please enable it in Settings." : {
       "localizations" : {
@@ -669,6 +678,9 @@
     },
     "Side Search" : {
       "shouldTranslate" : false
+    },
+    "Small" : {
+
     },
     "Source" : {
       "localizations" : {
