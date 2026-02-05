@@ -80,6 +80,7 @@ struct AssistantView: View {
                             Text("This assistant is AI and can make mistakes.")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
+                                .opacity(0.7)
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
                         
