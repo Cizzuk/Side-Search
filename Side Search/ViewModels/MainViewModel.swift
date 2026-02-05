@@ -131,7 +131,7 @@ class MainViewModel: ObservableObject {
            let option = AssistantViewModel.DetentOption(rawValue: rawValue) {
             return option
         }
-        return .medium
+        return .normal
     }() {
         didSet {
             UserDefaults.standard.set(assistantViewDetent.rawValue, forKey: "assistantViewDetent")

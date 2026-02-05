@@ -36,7 +36,7 @@ class AssistantViewModel: ObservableObject {
     
     enum DetentOption: String, CaseIterable, Identifiable {
         case small
-        case medium
+        case normal
         case large
         
         var id: String { rawValue }
@@ -45,8 +45,8 @@ class AssistantViewModel: ObservableObject {
             switch self {
             case .small:
                 return "Small"
-            case .medium:
-                return "Medium"
+            case .normal:
+                return "Normal"
             case .large:
                 return "Large"
             }
@@ -56,7 +56,7 @@ class AssistantViewModel: ObservableObject {
             switch self {
             case .small:
                 return .fraction(0.3)
-            case .medium:
+            case .normal:
                 return .medium
             case .large:
                 return .large
@@ -73,7 +73,7 @@ class AssistantViewModel: ObservableObject {
            let option = DetentOption(rawValue: rawValue) {
             return option.presentationDetent
         }
-        return .medium
+        return DetentOption.normal.presentationDetent
     }()
     
     // Input Field
