@@ -125,7 +125,7 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    // Assistant Screen detent
+    // Assistant View Detent
     @Published var assistantViewDetent: AssistantViewModel.DetentOption = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
            let option = AssistantViewModel.DetentOption(rawValue: rawValue) {
