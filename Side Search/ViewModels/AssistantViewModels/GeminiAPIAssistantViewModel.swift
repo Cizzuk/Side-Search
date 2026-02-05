@@ -148,10 +148,10 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     override func confirmInput() {
         // Prevent empty input
-        if inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return
-        }
+        guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else { return }
         
+        guard !responseIsPreparing else { return }
         responseIsPreparing = true
         stopRecording()
         

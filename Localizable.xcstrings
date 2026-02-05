@@ -88,6 +88,16 @@
         }
       }
     },
+    "Assistant Screen Size" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントの画面サイズ"
+          }
+        }
+      }
+    },
     "Audio engine couldn't start: %@" : {
       "localizations" : {
         "ja" : {
@@ -464,6 +474,16 @@
         }
       }
     },
+    "Large" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大きい"
+          }
+        }
+      }
+    },
     "License" : {
       "localizations" : {
         "ja" : {
@@ -513,6 +533,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "モデル"
+          }
+        }
+      }
+    },
+    "Normal" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通常"
           }
         }
       }
@@ -670,6 +700,16 @@
     "Side Search" : {
       "shouldTranslate" : false
     },
+    "Small" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小さい"
+          }
+        }
+      }
+    },
     "Source" : {
       "localizations" : {
         "ja" : {
@@ -740,6 +780,16 @@
         }
       }
     },
+    "Start the Side Search assistant." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Searchのアシスタントを開始します。"
+          }
+        }
+      }
+    },
     "Start with Mic Muted" : {
       "localizations" : {
         "ja" : {
@@ -802,6 +852,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。"
+          }
+        }
+      }
+    },
+    "This assistant is AI and can make mistakes." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアシスタントはAIであるため、間違えることがあります。"
           }
         }
       }
@@ -916,12 +976,12 @@
         }
       }
     },
-    "You can find it in the Shortcuts under \"Side Search\" by selecting the \"Enable Assistant\" action." : {
+    "You can find it in the Shortcuts under \"Side Search\" by selecting the \"Start Assistant\" action." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ショートカットで「Side Search」の「アシスタントを有効にする」アクションから利用できます。"
+            "value" : "ショートカットで「Side Search」の「アシスタントを開始」アクションから利用できます。"
           }
         }
       }

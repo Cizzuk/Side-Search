@@ -12,7 +12,6 @@ struct AssistantView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     
     @Environment(\.dismiss) var dismiss
-    @State private var detent: PresentationDetent = .medium
     @FocusState private var isInputFocused: Bool
     @StateObject private var viewModel: AssistantViewModel
     
@@ -66,7 +65,7 @@ struct AssistantView: View {
                             .onChange(of: isInputFocused) {
                                 if isInputFocused {
                                     viewModel.stopRecording()
-                                    detent = .large
+                                    viewModel.detent = .large
                                 }
                             }
                             .onChange(of: viewModel.shouldInputFocused) {
@@ -76,7 +75,16 @@ struct AssistantView: View {
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.bottom, 50)
+                        
+                        if AssistantType.current.DescriptionProviderType.assistantIsAI {
+                            Text("This assistant is AI and can make mistakes.")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                                .opacity(0.7)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
+                        
+                        Spacer(minLength: 50)
                     }
                     .id("scrollAnchor")
                     .padding(.horizontal, 25)
@@ -124,6 +132,7 @@ struct AssistantView: View {
                               systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
                     }
                     .tint(viewModel.isRecording ? .orange : .primary)
+                    
                     Button(action: {
                         viewModel.confirmInput()
                     }) {
@@ -171,7 +180,7 @@ struct AssistantView: View {
             .blur(radius: 30)
         )
         .animation(.smooth, value: viewModel.micLevel)
-        .presentationDetents([.medium, .large], selection: $detent)
+        .presentationDetents([.medium, .fraction(0.3), .large], selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)
     }
 }

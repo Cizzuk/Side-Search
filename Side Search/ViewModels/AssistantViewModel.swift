@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import SwiftUI
 
 class AssistantViewModel: ObservableObject {
     enum MessageFrom {
@@ -33,9 +34,47 @@ class AssistantViewModel: ObservableObject {
         var sources: [(title: String, url: URL)] = []
     }
     
+    enum DetentOption: String, CaseIterable, Identifiable {
+        case small
+        case normal
+        case large
+        
+        var id: String { rawValue }
+        
+        var displayName: LocalizedStringResource {
+            switch self {
+            case .small:
+                return "Small"
+            case .normal:
+                return "Normal"
+            case .large:
+                return "Large"
+            }
+        }
+        
+        var presentationDetent: PresentationDetent {
+            switch self {
+            case .small:
+                return .fraction(0.3)
+            case .normal:
+                return .medium
+            case .large:
+                return .large
+            }
+        }
+    }
+    
     // MARK: - Variables
     
     var onDismiss: (() -> Void)?
+    
+    @Published var detent: PresentationDetent = {
+        if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
+           let option = DetentOption(rawValue: rawValue) {
+            return option.presentationDetent
+        }
+        return DetentOption.normal.presentationDetent
+    }()
     
     // Input Field
     @Published var inputText = ""
@@ -116,6 +155,7 @@ class AssistantViewModel: ObservableObject {
     }
     
     func startRecording() {
+        guard !responseIsPreparing else { return }
         speechRecognizer.startRecording()
     }
     
@@ -125,6 +165,7 @@ class AssistantViewModel: ObservableObject {
     
     func confirmInput() {
         // MARK: Override in subclass
+        guard !responseIsPreparing else { return }
         responseIsPreparing = true
         stopRecording()
         

@@ -69,6 +69,7 @@ protocol AssistantDescriptionProvider {
     static var assistantDescription: LocalizedStringResource { get }
     static var assistantSystemImage: String { get }
     static var assistantGradient: Gradient { get }
+    static var assistantIsAI: Bool { get }
     
     // Settings
     static var makeSettingsView: any View { get }

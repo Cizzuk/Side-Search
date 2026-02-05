@@ -50,10 +50,10 @@ struct HelpView: View {
                 // MARK: - Shortcut Tip
                 Section {
                     // ショートカットを使ってSide Searchのアシスタントを起動することができます。
-                    // ショートカットで「Side Search」から「アシスタントを有効にする」アクションから利用できます。
+                    // ショートカットで「Side Search」から「アシスタントを開始」アクションから利用できます。
                     // ショートカットのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。
                     Text("You can launch the Side Search assistant using the Shortcuts.")
-                    Text("You can find it in the Shortcuts under \"Side Search\" by selecting the \"Enable Assistant\" action.")
+                    Text("You can find it in the Shortcuts under \"Side Search\" by selecting the \"Start Assistant\" action.")
                     Text("By setting up automation in the Shortcuts, you can perform other actions when Side Search is launched.")
                     Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/create-a-new-personal-automation-apdfbdbd7123/ios")!) {
                         Label("Create a new personal automation in Shortcuts", systemImage: "book")

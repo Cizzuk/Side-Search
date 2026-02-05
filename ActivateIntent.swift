@@ -15,6 +15,10 @@ extension Notification.Name {
 struct ActivateIntent: AppIntent {
     static let supportedModes: IntentModes = .foreground
     
+    static let title: LocalizedStringResource = "Start Assistant"
+    static var description: LocalizedStringResource = "Start the Side Search assistant."
+    static var isDiscoverable = true
+    
     @MainActor
     func perform() async throws -> some IntentResult {
         NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
