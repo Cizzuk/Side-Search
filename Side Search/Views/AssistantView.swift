@@ -25,23 +25,9 @@ struct AssistantView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 25) {
                         ForEach(viewModel.messageHistory) { message in
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(message.from.displayName)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                Text(message.content)
-                                    .font(.title3)
-                                    .textSelection(.enabled)
-                                Spacer()
-                                ForEach(message.sources, id: \.url) { source in
-                                    Button(action: { viewModel.openSafariView(at: source.url) }) {
-                                        Label(source.title, systemImage: "link")
-                                            .font(.caption)
-                                    }
-                                }
-                            }
-                            .id(message.id)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            MessagesView(message: message, openSafariView: { url in
+                                viewModel.openSafariView(at: url)
+                            })
                         }
                         
                         if viewModel.responseIsPreparing {
@@ -50,8 +36,8 @@ struct AssistantView: View {
                         }
                         
                         VStack(alignment: .leading, spacing: 4) {
-                                .font(.caption)
                             Text(AssistantMessage.From.user.displayName)
+                                .font(.headline)
                                 .foregroundStyle(.secondary)
                             TextField(viewModel.isRecording ? "Listening..." : "Ask Assistant",
                                       text: $viewModel.inputText, axis: .vertical)
