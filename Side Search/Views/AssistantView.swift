@@ -13,6 +13,8 @@ struct AssistantView: View {
     
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
+    
+    private let assistantType = AssistantType.current
     @StateObject private var viewModel: AssistantViewModel
     
     init() {
@@ -67,7 +69,7 @@ struct AssistantView: View {
                             viewModel.confirmInput()
                         }
                         
-                        if AssistantType.current.DescriptionProviderType.assistantIsAI {
+                        if assistantType.DescriptionProviderType.assistantIsAI {
                             Text("This assistant is AI and can make mistakes.")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
@@ -127,7 +129,7 @@ struct AssistantView: View {
                     Button(action: {
                         viewModel.confirmInput()
                     }) {
-                        Label("Confirm", systemImage: AssistantType.current.DescriptionProviderType.assistantSystemImage)
+                        Label("Confirm", systemImage: assistantType.DescriptionProviderType.assistantSystemImage)
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
@@ -162,7 +164,7 @@ struct AssistantView: View {
         }
         .background(
             AngularGradient(
-                gradient: AssistantType.current.DescriptionProviderType.assistantGradient,
+                gradient: assistantType.DescriptionProviderType.assistantGradient,
                 center: .center,
                 angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
             )
