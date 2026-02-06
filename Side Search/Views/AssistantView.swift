@@ -23,7 +23,7 @@ struct AssistantView: View {
         NavigationStack {
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 25) {
+                    VStack(alignment: .leading, spacing: 30) {
                         ForEach(viewModel.messageHistory) { message in
                             MessagesView(message: message, openSafariView: { url in
                                 viewModel.openSafariView(at: url)
