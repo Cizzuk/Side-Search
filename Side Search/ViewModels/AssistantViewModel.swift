@@ -10,30 +10,6 @@ import UIKit
 import SwiftUI
 
 class AssistantViewModel: ObservableObject {
-    enum MessageFrom {
-        case user
-        case assistant
-        case system
-        
-        var displayName: LocalizedStringResource {
-            switch self {
-            case .user:
-                return "You"
-            case .assistant:
-                return "Assistant"
-            case .system:
-                return "System"
-            }
-        }
-    }
-    
-    struct MessageData: Identifiable {
-        let id = UUID()
-        let from: MessageFrom
-        let content: String
-        var sources: [(title: String, url: URL)] = []
-    }
-    
     enum DetentOption: String, CaseIterable, Identifiable {
         case small
         case normal
@@ -80,7 +56,7 @@ class AssistantViewModel: ObservableObject {
     @Published var inputText = ""
     @Published var shouldInputFocused = false
     
-    @Published var messageHistory: [MessageData] = []
+    @Published var messageHistory: [AssistantMessage] = []
     @Published var responseIsPreparing = false
     
     // Web View
@@ -171,7 +147,7 @@ class AssistantViewModel: ObservableObject {
         
         // Add user message to history
         let userInput = inputText
-        let userMessage = MessageData(from: .user, content: userInput)
+        let userMessage = AssistantMessage(from: .user, content: userInput)
         messageHistory.append(userMessage)
         
         inputText = ""

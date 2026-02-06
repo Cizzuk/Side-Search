@@ -51,17 +51,17 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
         // Add user message to history
         let userInput = inputText
         inputText = ""
-        let userMessage = MessageData(from: .user, content: userInput)
+        let userMessage = AssistantMessage(from: .user, content: userInput)
         messageHistory.append(userMessage)
         
         // Generate response
         Task {
-            let message: MessageData
+            let message: AssistantMessage
             do {
                 let response = try await generate(prompt: userInput)
-                message = MessageData(from: .assistant, content: response)
+                message = AssistantMessage(from: .assistant, content: response)
             } catch {
-                message = MessageData(from: .system, content: error.localizedDescription)
+                message = AssistantMessage(from: .system, content: error.localizedDescription)
             }
             
             DispatchQueue.main.async { [weak self] in

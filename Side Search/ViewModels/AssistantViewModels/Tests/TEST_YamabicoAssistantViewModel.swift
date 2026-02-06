@@ -33,11 +33,11 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         // Add user message to history
         let userInput = inputText
         inputText = ""
-        let userMessage = MessageData(from: .user, content: userInput)
+        let userMessage = AssistantMessage(from: .user, content: userInput)
         messageHistory.append(userMessage)
         
         let response = "\(userInput)..."
-        let assistantMessage = MessageData(from: .assistant, content: response)
+        let assistantMessage = AssistantMessage(from: .assistant, content: response)
         
         // Simulate a response from Yamabico
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in

@@ -50,8 +50,8 @@ struct AssistantView: View {
                         }
                         
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(AssistantViewModel.MessageFrom.user.displayName)
                                 .font(.caption)
+                            Text(AssistantMessage.From.user.displayName)
                                 .foregroundStyle(.secondary)
                             TextField(viewModel.isRecording ? "Listening..." : "Ask Assistant",
                                       text: $viewModel.inputText, axis: .vertical)

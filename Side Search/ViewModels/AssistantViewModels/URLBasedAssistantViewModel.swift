@@ -32,7 +32,7 @@ class URLBasedAssistantViewModel: AssistantViewModel {
         // Add user message to history
         let userInput = inputText
         inputText = ""
-        let userMessage = MessageData(from: .user, content: userInput)
+        let userMessage = AssistantMessage(from: .user, content: userInput)
         messageHistory.append(userMessage)
         
         if let url = assistantModel.makeSearchURL(query: userInput) {

@@ -79,12 +79,12 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     @MainActor
     func generate(prompt: String) async {
         // Add user message to history
-        messageHistory.append(MessageData(from: .user, content: prompt))
+        messageHistory.append(AssistantMessage(from: .user, content: prompt))
         chatHistory.append(GeminiContent(role: "user", parts: [GeminiPart(text: prompt)]))
         
         guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(assistantModel.model):generateContent")
         else {
-            messageHistory.append(MessageData(from: .system, content: "Invalid URL"))
+            messageHistory.append(AssistantMessage(from: .system, content: "Invalid URL"))
             return
         }
         
@@ -98,7 +98,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         do {
             request.httpBody = try JSONEncoder().encode(GeminiRequest(contents: chatHistory))
         } catch {
-            messageHistory.append(MessageData(from: .system, content: error.localizedDescription))
+            messageHistory.append(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
         
@@ -107,7 +107,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         do {
             (data, _) = try await URLSession.shared.data(for: request)
         } catch {
-            messageHistory.append(MessageData(from: .system, content: "Connection error"))
+            messageHistory.append(AssistantMessage(from: .system, content: "Connection error"))
             return
         }
         
@@ -116,14 +116,14 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         do {
             response = try JSONDecoder().decode(GeminiResponse.self, from: data)
         } catch {
-            messageHistory.append(MessageData(from: .system, content: error.localizedDescription))
+            messageHistory.append(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
         
         // Extract response text
         guard let candidate = response.candidates?.first,
               let text = candidate.content.parts.first?.text else {
-            messageHistory.append(MessageData(from: .system, content: String(data: data, encoding: .utf8) ?? "No response"))
+            messageHistory.append(AssistantMessage(from: .system, content: String(data: data, encoding: .utf8) ?? "No response"))
             return
         }
         
@@ -139,7 +139,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         
         // Add assistant message to history
         chatHistory.append(GeminiContent(role: "model", parts: [GeminiPart(text: text)]))
-        var message = MessageData(from: .assistant, content: text)
+        var message = AssistantMessage(from: .assistant, content: text)
         message.sources = sources
         messageHistory.append(message)
     }
