@@ -75,6 +75,9 @@ struct AssistantView: View {
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityAction(named: "Confirm") {
+                            viewModel.confirmInput()
+                        }
                         
                         if AssistantType.current.DescriptionProviderType.assistantIsAI {
                             Text("This assistant is AI and can make mistakes.")
