@@ -53,12 +53,14 @@ struct MessagesView: View {
                     .textual.structuredTextStyle(TextualSideStyle())
             }
             
-            Spacer(minLength: 15)
-            
-            ForEach(message.sources, id: \.url) { source in
-                Button(action: { openSafariView(source.url) }) {
-                    Label(source.title, systemImage: "link")
-                        .font(.caption)
+            if !message.sources.isEmpty {
+                Spacer(minLength: 15)
+                
+                ForEach(message.sources, id: \.url) { source in
+                    Button(action: { openSafariView(source.url) }) {
+                        Label(source.title, systemImage: "link")
+                            .font(.caption)
+                    }
                 }
             }
         }
