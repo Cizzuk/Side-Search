@@ -72,6 +72,9 @@ struct HelpView: View {
                     NavigationLink(destination: AboutView()) {
                         Text("About")
                     }
+                    NavigationLink(destination: LicensesView()) {
+                        Text("Licenses")
+                    }
                 }
             }
             .navigationTitle("Help")
@@ -135,3 +138,25 @@ struct AboutView: View {
     }
 }
         
+// MARK: - Licenses View
+struct LicensesView: View {
+    func sec(_ title: String, _ license: String) -> some View {
+        Section{} header: {
+            Text(verbatim: title)
+                .textSelection(.enabled)
+        } footer: {
+            Text(verbatim: license)
+                .environment(\.layoutDirection, .leftToRight)
+                .textSelection(.enabled)
+                .padding(.bottom, 40)
+        }
+    }
+    
+    var body: some View {
+        List {
+            
+        }
+        .navigationTitle("Licenses")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}

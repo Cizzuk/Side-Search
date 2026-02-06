@@ -514,6 +514,16 @@
         }
       }
     },
+    "Licenses" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "権利表記"
+          }
+        }
+      }
+    },
     "Listening..." : {
       "localizations" : {
         "ja" : {
