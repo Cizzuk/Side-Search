@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import MarkdownUI
+import Textual
 
 struct MessagesView: View {
     var message: AssistantMessage
@@ -38,8 +38,8 @@ struct MessagesView: View {
                 Text(message.content)
                     .textSelection(.enabled)
             } else {
-                Markdown(message.content)
-                    .textSelection(.enabled)
+                StructuredText(markdown: message.content, syntaxExtensions: [.math])
+                    .textual.textSelection(.enabled)
             }
             
             Spacer()
