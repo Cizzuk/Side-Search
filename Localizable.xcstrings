@@ -274,6 +274,16 @@
         }
       }
     },
+    "Copy Message to Clipboard" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "メッセージをクリップボードにコピー"
+          }
+        }
+      }
+    },
     "Create a new personal automation in Shortcuts" : {
       "localizations" : {
         "ja" : {
@@ -310,6 +320,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開発者"
+          }
+        }
+      }
+    },
+    "Disable Markdown Rendering" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マークダウンの表示を無効にする"
           }
         }
       }
