@@ -35,10 +35,13 @@ struct AssistantView: View {
                                 .progressViewStyle(CircularProgressViewStyle())
                         }
                         
-                        VStack(alignment: .leading, spacing: 4) {
+                        VStack(alignment: .leading) {
                             Text(AssistantMessage.From.user.displayName)
                                 .font(.headline)
                                 .foregroundStyle(.secondary)
+                            
+                            Spacer()
+                            
                             TextField(viewModel.isRecording ? "Listening..." : "Ask Assistant",
                                       text: $viewModel.inputText, axis: .vertical)
                             .bold()
