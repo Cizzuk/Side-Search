@@ -50,6 +50,8 @@ struct MainView: View {
                             Text(option.displayName).tag(option)
                         }
                     }
+                    
+                    Toggle("Disable Markdown Rendering", isOn: $viewModel.disableMarkdownRendering)
                 }
                 
                 Section {

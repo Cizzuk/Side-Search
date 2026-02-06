@@ -17,6 +17,13 @@ class AssistantViewModel: ObservableObject {
         
         var id: String { rawValue }
         
+        static var defaultDetent: Self {
+            if UIAccessibility.isVoiceOverRunning {
+                return .large
+            }
+            return .normal
+        }
+        
         var displayName: LocalizedStringResource {
             switch self {
             case .small:
@@ -49,7 +56,7 @@ class AssistantViewModel: ObservableObject {
            let option = DetentOption(rawValue: rawValue) {
             return option.presentationDetent
         }
-        return DetentOption.normal.presentationDetent
+        return DetentOption.defaultDetent.presentationDetent
     }()
     
     // Input Field

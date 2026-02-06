@@ -131,10 +131,17 @@ class MainViewModel: ObservableObject {
            let option = AssistantViewModel.DetentOption(rawValue: rawValue) {
             return option
         }
-        return .normal
+        return .defaultDetent
     }() {
         didSet {
             UserDefaults.standard.set(assistantViewDetent.rawValue, forKey: "assistantViewDetent")
+        }
+    }
+    
+    // Disable Markdown Rendering
+    @Published var disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering") {
+        didSet {
+            UserDefaults.standard.set(disableMarkdownRendering, forKey: "disableMarkdownRendering")
         }
     }
 }
