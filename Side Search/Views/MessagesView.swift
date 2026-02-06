@@ -9,9 +9,12 @@ import SwiftUI
 import Textual
 
 struct MessagesView: View {
+    static let borderWidth: CGFloat = 1.5
+    static let borderColor: Color = .secondary.opacity(0.5)
+    let disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering")
+    
     var message: AssistantMessage
     var openSafariView: (URL) -> Void
-    var disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering")
     
     func copyMessage() {
         UIPasteboard.general.string = message.content
@@ -32,7 +35,7 @@ struct MessagesView: View {
             }
             .foregroundStyle(.secondary)
             
-            Spacer()
+            Spacer(minLength: 15)
             
             if disableMarkdownRendering {
                 Text(message.content)
@@ -40,9 +43,12 @@ struct MessagesView: View {
             } else {
                 StructuredText(markdown: message.content, syntaxExtensions: [.math])
                     .textual.textSelection(.enabled)
+                    .textual.headingStyle(SmallerHeading())
+                    .textual.thematicBreakStyle(SimpleLine())
+                    .textual.tableStyle(SimpleTable())
             }
             
-            Spacer()
+            Spacer(minLength: 15)
             
             ForEach(message.sources, id: \.url) { source in
                 Button(action: { openSafariView(source.url) }) {
@@ -55,6 +61,50 @@ struct MessagesView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityAction(named: "Copy Message to Clipboard") {
             copyMessage()
+        }
+    }
+    
+    struct SmallerHeading: StructuredText.HeadingStyle {
+        private static let fontScales: [CGFloat] = [1.5, 1.3, 1.15, 1, 0.875, 0.85]
+        
+        func makeBody(configuration: Configuration) -> some View {
+            let headingLevel = min(configuration.headingLevel, 6)
+            let fontScale = Self.fontScales[headingLevel - 1]
+            
+            VStack(alignment: .leading, spacing: 0) {
+                configuration.label
+                    .textual.fontScale(fontScale)
+                    .fontWeight(.semibold)
+            }
+            .textual.blockSpacing(.fontScaled(top: 1.5, bottom: 0.5))
+        }
+    }
+    
+    struct SimpleTable: StructuredText.TableStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .textual.tableCellSpacing(horizontal: borderWidth, vertical: borderWidth)
+                .textual.blockSpacing(.fontScaled(top: 1.6, bottom: 1.6))
+                .textual.tableOverlay { layout in
+                    Canvas { context, _ in
+                        for divider in layout.dividers() {
+                            context.fill(
+                                Path(divider),
+                                with: .color(borderColor)
+                            )
+                        }
+                    }
+                }
+                .border(borderColor, width: borderWidth)
+        }
+    }
+    
+    struct SimpleLine: StructuredText.ThematicBreakStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            Rectangle()
+                .frame(height: borderWidth)
+                .foregroundStyle(borderColor)
+                .textual.blockSpacing(.fontScaled(top: 1.6, bottom: 1.6))
         }
     }
 }
