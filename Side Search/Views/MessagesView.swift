@@ -12,11 +12,16 @@ struct MessagesView: View {
     var message: AssistantMessage
     var openSafariView: (URL) -> Void
     
-    let disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering")
+    private let disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering")
+    @State private var isCopied: Bool = false
     
     func copyMessage() {
         UIPasteboard.general.string = message.content
         UINotificationFeedbackGenerator().notificationOccurred(.success)
+        isCopied = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            isCopied = false
+        }
     }
     
     var body: some View {
@@ -26,10 +31,14 @@ struct MessagesView: View {
                     .font(.headline)
                 Spacer()
                 Button(action: { copyMessage() }) {
-                    Label("Copy Message to Clipboard", systemImage: "document.on.document")
+                    Label("Copy Message to Clipboard",
+                          systemImage: isCopied ? "checkmark" : "document.on.document")
                         .labelStyle(.iconOnly)
                         .font(.caption)
+                        .frame(width: 24, height: 24, alignment: .center)
                 }
+                .disabled(isCopied)
+                .animation(.default, value: isCopied)
             }
             .foregroundStyle(.secondary)
             
