@@ -40,7 +40,7 @@ struct AssistantView: View {
                                 .font(.headline)
                                 .foregroundStyle(.secondary)
                             
-                            Spacer()
+                            Spacer(minLength: 15)
                             
                             TextField(viewModel.isRecording ? "Listening..." : "Ask Assistant",
                                       text: $viewModel.inputText, axis: .vertical)
