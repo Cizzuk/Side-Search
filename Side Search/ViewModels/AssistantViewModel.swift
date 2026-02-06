@@ -45,6 +45,10 @@ class AssistantViewModel: ObservableObject {
                 return .large
             }
         }
+        
+        static var allOption: Set<PresentationDetent> {
+            return Set(DetentOption.allCases.map { $0.presentationDetent })
+        }
     }
     
     // MARK: - Variables
