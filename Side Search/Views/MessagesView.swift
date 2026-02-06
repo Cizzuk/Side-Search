@@ -44,7 +44,7 @@ struct MessagesView: View {
             } else {
                 StructuredText(markdown: message.content, syntaxExtensions: [.math])
                     .textual.textSelection(.enabled)
-                    .textual.headingStyle(SmallerHeading())
+                    .textual.headingStyle(SimpleHeading())
                     .textual.thematicBreakStyle(SimpleLine())
                     .textual.tableStyle(SimpleTable())
                     .textual.codeBlockStyle(SimpleCodeBlock())
@@ -67,7 +67,7 @@ struct MessagesView: View {
         }
     }
     
-    struct SmallerHeading: StructuredText.HeadingStyle {
+    struct SimpleHeading: StructuredText.HeadingStyle {
         private static let fontScales: [CGFloat] = [1.5, 1.3, 1.15, 1, 0.875, 0.85]
         
         func makeBody(configuration: Configuration) -> some View {
