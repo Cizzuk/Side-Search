@@ -115,6 +115,7 @@ struct MainView: View {
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 showHelpView = false
                 showChangeIconView = false
+                showClearInAppBrowserDataAlert = false
                 viewModel.activateAssistant()
             }
         }
