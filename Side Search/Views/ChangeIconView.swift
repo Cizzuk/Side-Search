@@ -20,7 +20,7 @@ struct ChangeIconView: View {
             .navigationTitle("Change App Icon")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.fraction(0.9)])
     }
     
     private func iconItem(iconName: String, iconID: String) -> some View {
