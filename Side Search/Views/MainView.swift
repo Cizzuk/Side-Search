@@ -15,7 +15,11 @@ struct MainView: View {
     @State private var showingChangeIconView = false
     @State private var showingSwitchAssistantView = false
     @State private var showClearInAppBrowserDataAlert = false
-    @State private var isPhone = UIDevice.current.userInterfaceIdiom == .phone
+    
+    @Namespace private var ns_switchAssistantView
+    private let id_switchAssistantViewButton = "switchAssistantViewButton"
+    @Namespace private var ns_assistantView
+    private let id_activateAssistantButton = "activateAssistantButton"
     
     var body: some View {
         NavigationStack {
@@ -101,26 +105,14 @@ struct MainView: View {
                         }
                         .padding(.horizontal, 10)
                     }
-                    .popover(isPresented: isPhone ? $showingSwitchAssistantView : .constant(false)) {
-                        SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
-                            .presentationCompactAdaptation(.sheet)
-                    }
-                    .sheet(isPresented: !isPhone ? $showingSwitchAssistantView : .constant(false)) {
-                        SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
-                    }
+                    .matchedTransitionSource(id: id_switchAssistantViewButton, in: ns_switchAssistantView)
                     
                     Button(action: { viewModel.activateAssistant() }) {
                         Label("Start Assistant", image: "Sidefish")
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
-                    .popover(isPresented: isPhone ? $viewModel.showAssistant : .constant(false)) {
-                        AssistantView()
-                            .presentationCompactAdaptation(.sheet)
-                    }
-                    .sheet(isPresented: !isPhone ? $viewModel.showAssistant : .constant(false)) {
-                        AssistantView()
-                    }
+                    .matchedTransitionSource(id: id_activateAssistantButton, in: ns_assistantView)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button(action: { viewModel.showHelp = true }) {
@@ -133,6 +125,21 @@ struct MainView: View {
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 viewModel.activateAssistant()
             }
+        }
+        // MARK: - Sheets
+        .sheet(isPresented: $showingSwitchAssistantView) {
+            SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
+                .navigationTransition(.zoom(
+                    sourceID: id_switchAssistantViewButton,
+                    in: ns_switchAssistantView
+                ))
+        }
+        .sheet(isPresented: $viewModel.showAssistant) {
+            AssistantView()
+                .navigationTransition(.zoom(
+                    sourceID: id_activateAssistantButton,
+                    in: ns_assistantView
+                ))
         }
         // MARK: - Dummy Curtain
         .opacity(viewModel.showDummyCurtain ? 0.0 : 1.0)
