@@ -113,6 +113,8 @@ struct MainView: View {
             // MARK: - Events
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+                showHelpView = false
+                showChangeIconView = false
                 viewModel.activateAssistant()
             }
         }
