@@ -22,7 +22,7 @@ struct ChangeIconView: View {
             .navigationTitle("Change App Icon")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button(action: { dismiss() }) {
                         Label("Close", systemImage: "xmark")
                     }
