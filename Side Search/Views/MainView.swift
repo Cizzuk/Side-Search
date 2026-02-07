@@ -74,18 +74,6 @@ struct MainView: View {
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
-            .fullScreenCover(isPresented: $viewModel.showSafariView) {
-                if let url = viewModel.safariViewURL {
-                    SafariView(url: url)
-                        .ignoresSafeArea()
-                }
-            }
-            .sheet(isPresented: $viewModel.showHelp) {
-                HelpView()
-            }
-            .sheet(isPresented: $showingChangeIconView) {
-                ChangeIconView()
-            }
             // Delete In-App Browser Data Alert
             .alert(isPresented: $showClearInAppBrowserDataAlert) {
                 Alert(
@@ -145,6 +133,14 @@ struct MainView: View {
                     sourceID: id_activateAssistantButton,
                     in: ns_assistantView
                 ))
+        }
+        .sheet(isPresented: $viewModel.showHelp) { HelpView() }
+        .sheet(isPresented: $showingChangeIconView) { ChangeIconView() }
+        .fullScreenCover(isPresented: $viewModel.showSafariView) {
+            if let url = viewModel.safariViewURL {
+                SafariView(url: url)
+                    .ignoresSafeArea()
+            }
         }
         // MARK: - Dummy Curtain
         .opacity(viewModel.showDummyCurtain ? 0.0 : 1.0)
