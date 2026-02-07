@@ -122,18 +122,14 @@ struct MainView: View {
         // MARK: - Sheets
         .sheet(isPresented: $showHelpView) { HelpView() }
         .sheet(isPresented: $showChangeIconView) { ChangeIconView() }
-        .sheet(isPresented: $viewModel.showSwitchAssistantView, onDismiss: {
-            viewModel.showSwitchAssistantView = false
-        }) {
+        .sheet(isPresented: $viewModel.showSwitchAssistantView) {
             SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
                 .navigationTransition(.zoom(
                     sourceID: id_switchAssistantViewButton,
                     in: ns_switchAssistantView
                 ))
         }
-        .sheet(isPresented: $viewModel.showAssistant, onDismiss: {
-            viewModel.showAssistant = false
-        }) {
+        .sheet(isPresented: $viewModel.showAssistant) {
             AssistantView()
                 .navigationTransition(.zoom(
                     sourceID: id_activateAssistantButton,
