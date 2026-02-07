@@ -51,9 +51,9 @@ struct SwitchAssistantView: View {
             .navigationTitle("Switch Assistant")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
+                ToolbarItem(placement: .primaryAction) {
                     Button(action: { dismiss() }) {
-                        Label("Cancel", systemImage: "xmark")
+                        Label("Close", systemImage: "xmark")
                     }
                 }
             }

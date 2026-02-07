@@ -81,8 +81,8 @@ struct HelpView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Done", systemImage: "checkmark") {
-                        dismiss()
+                    Button(action: { dismiss() }) {
+                        Label("Close", systemImage: "xmark")
                     }
                 }
             }

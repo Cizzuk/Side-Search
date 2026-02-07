@@ -109,7 +109,7 @@ struct AssistantView: View {
             .accessibilityAction(.escape) { dismiss() }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark") {
+                    Button("End Assistant", systemImage: "xmark") {
                         dismiss()
                     }
                 }

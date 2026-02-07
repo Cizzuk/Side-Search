@@ -244,6 +244,16 @@
         }
       }
     },
+    "Close" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閉じる"
+          }
+        }
+      }
+    },
     "Close Curtain" : {
       "localizations" : {
         "ja" : {
@@ -334,16 +344,6 @@
         }
       }
     },
-    "Done" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完了"
-          }
-        }
-      }
-    },
     "DuckDuckGo" : {
       "localizations" : {
         "ja" : {
@@ -360,6 +360,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ecosia"
+          }
+        }
+      }
+    },
+    "End Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを終了"
           }
         }
       }
