@@ -130,6 +130,7 @@ struct AssistantView: View {
                         viewModel.confirmInput()
                     }) {
                         Label("Confirm", systemImage: assistantType.DescriptionProviderType.assistantSystemImage)
+                            .foregroundStyle(.white)
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)

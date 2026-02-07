@@ -109,6 +109,7 @@ struct MainView: View {
                     
                     Button(action: { viewModel.activateAssistant() }) {
                         Label("Start Assistant", image: "Sidefish")
+                            .foregroundStyle(.white)
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
