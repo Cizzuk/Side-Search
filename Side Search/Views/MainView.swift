@@ -12,8 +12,9 @@ import SwiftUI
 struct MainView: View {
     @Environment(\.scenePhase) private var scenePhase
     @StateObject var viewModel = MainViewModel()
-    @State private var showingChangeIconView = false
-    @State private var showingSwitchAssistantView = false
+    
+    @State private var showHelpView = false
+    @State private var showChangeIconView = false
     @State private var showClearInAppBrowserDataAlert = false
     
     @Namespace private var ns_switchAssistantView
@@ -65,7 +66,7 @@ struct MainView: View {
                 }
                 
                 Section {
-                    Button(action: { showingChangeIconView = true }) {
+                    Button(action: { showChangeIconView = true }) {
                         Label("Change App Icon", systemImage: "app.dashed")
                     }
                 }
@@ -86,7 +87,7 @@ struct MainView: View {
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: { showingSwitchAssistantView = true }) {
+                    Button(action: { viewModel.showSwitchAssistantView = true }) {
                         HStack {
                             Image(systemName: viewModel.currentAssistant.DescriptionProviderType.assistantSystemImage)
                             Text(viewModel.currentAssistant.DescriptionProviderType.assistantName)
@@ -104,7 +105,7 @@ struct MainView: View {
                     .matchedTransitionSource(id: id_activateAssistantButton, in: ns_assistantView)
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(action: { viewModel.showHelp = true }) {
+                    Button(action: { showHelpView = true }) {
                         Label("Help", systemImage: "questionmark")
                     }
                 }
@@ -116,8 +117,10 @@ struct MainView: View {
             }
         }
         // MARK: - Sheets
-        .sheet(isPresented: $showingSwitchAssistantView, onDismiss: {
-            showingSwitchAssistantView = false
+        .sheet(isPresented: $showHelpView) { HelpView() }
+        .sheet(isPresented: $showChangeIconView) { ChangeIconView() }
+        .sheet(isPresented: $viewModel.showSwitchAssistantView, onDismiss: {
+            viewModel.showSwitchAssistantView = false
         }) {
             SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
                 .navigationTransition(.zoom(
@@ -134,8 +137,6 @@ struct MainView: View {
                     in: ns_assistantView
                 ))
         }
-        .sheet(isPresented: $viewModel.showHelp) { HelpView() }
-        .sheet(isPresented: $showingChangeIconView) { ChangeIconView() }
         .fullScreenCover(isPresented: $viewModel.showSafariView) {
             if let url = viewModel.safariViewURL {
                 SafariView(url: url)

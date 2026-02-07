@@ -11,10 +11,10 @@ import Speech
 import SwiftUI
 
 class MainViewModel: ObservableObject {
+    @Published var showSwitchAssistantView = false
     @Published var showAssistant = false
     @Published var showSafariView = false
     @Published var safariViewURL: URL?
-    @Published var showHelp = false
     @Published var showDummyCurtain = false
     
     func onChange(scenePhase: ScenePhase) {
@@ -31,6 +31,12 @@ class MainViewModel: ObservableObject {
     }
     
     func activateAssistant() {
+        // Close sheets and covers
+        showSwitchAssistantView = false
+        showAssistant = false
+        showSafariView = false
+        showDummyCurtain = false
+        
         // Check current assistant type
         if currentAssistant != .urlBased {
             showAssistant = true
