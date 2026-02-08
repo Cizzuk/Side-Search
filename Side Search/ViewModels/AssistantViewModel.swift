@@ -170,8 +170,8 @@ class AssistantViewModel: ObservableObject {
             searchURL = url
             showSafariView = true
         } else {
-            self.errorMessage = "Cannot open the URL in In-App Browser."
-            self.showError = true
+            // Fallback
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     
