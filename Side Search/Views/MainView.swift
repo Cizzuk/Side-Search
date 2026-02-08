@@ -141,7 +141,7 @@ struct MainView: View {
                     .ignoresSafeArea()
             }
         }
-        // MARK: - Dummy Curtain
+        // MARK: - Temporary Screen Curtain
         .temporaryScreenCurtain(isPresented: $viewModel.showTmpCurtain)
     }
 }
