@@ -41,6 +41,7 @@ struct URLBasedAssistantSettingsView: View {
                 }
             } footer: {
                 Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
+                    .padding(.bottom, 10)
             }
         }
         .onChange(of: assistantModel) {
