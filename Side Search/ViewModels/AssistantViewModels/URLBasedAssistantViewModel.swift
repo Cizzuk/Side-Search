@@ -28,8 +28,7 @@ class URLBasedAssistantViewModel: AssistantViewModel {
         // Add user message to history
         let userInput = inputText
         inputText = ""
-        let userMessage = AssistantMessage(from: .user, content: userInput)
-        messageHistory.append(userMessage)
+        var userMessage = AssistantMessage(from: .user, content: userInput)
         
         if let url = assistantModel.makeSearchURL(query: userInput) {
             switch assistantModel.openIn {
@@ -39,10 +38,15 @@ class URLBasedAssistantViewModel: AssistantViewModel {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 onDismiss?()
             }
+            userMessage.sources.append(
+                AssistantMessage.Source(title: url.absoluteString, url: url)
+            )
         } else {
             // Handle invalid URL error
             self.errorMessage = "Invalid Search URL. Please check your settings."
             self.showError = true
         }
+        
+        messageHistory.append(userMessage)
     }
 }
