@@ -198,6 +198,26 @@
         }
       }
     },
+    "Check pricing and available models..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "価格と利用可能なモデルを確認..."
+          }
+        }
+      }
+    },
+    "Check your rate limits..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レート制限を確認…"
+          }
+        }
+      }
+    },
     "Cizzuk" : {
       "localizations" : {
         "en" : {
@@ -633,6 +653,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Perplexity"
+          }
+        }
+      }
+    },
+    "Please check the available models and features for your plan." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ご利用のプランで利用可能なモデルと機能をご確認ください。"
           }
         }
       }
