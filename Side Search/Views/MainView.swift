@@ -142,6 +142,6 @@ struct MainView: View {
             }
         }
         // MARK: - Dummy Curtain
-        .temporaryScreenCurtain(isPresented: $viewModel.showDummyCurtain)
+        .temporaryScreenCurtain(isPresented: $viewModel.showTmpCurtain)
     }
 }

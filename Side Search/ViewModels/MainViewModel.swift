@@ -15,14 +15,14 @@ class MainViewModel: ObservableObject {
     @Published var showAssistant = false
     @Published var showSafariView = false
     @Published var safariViewURL: URL?
-    @Published var showDummyCurtain = false
+    @Published var showTmpCurtain = false
     
     func activateAssistant() {
         // Close sheets and covers
         showSwitchAssistantView = false
         showAssistant = false
         showSafariView = false
-        showDummyCurtain = false
+        showTmpCurtain = false
         
         // Check current assistant type
         if currentAssistant != .urlBased {
@@ -46,8 +46,7 @@ class MainViewModel: ObservableObject {
         }
         
         if let url = URL(string: SearchEngine.url) {
-            // Show dummy curtain
-            showDummyCurtain = true
+            showTmpCurtain = true
             UIApplication.shared.open(url)
         }
     }
