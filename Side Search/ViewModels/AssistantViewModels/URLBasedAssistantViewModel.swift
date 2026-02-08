@@ -36,7 +36,6 @@ class URLBasedAssistantViewModel: AssistantViewModel {
                 self.openSafariView(at: url)
             case .defaultApp:
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                onDismiss?()
             }
             userMessage.sources.append(
                 AssistantMessage.Source(title: url.absoluteString, url: url)

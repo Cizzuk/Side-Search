@@ -53,8 +53,6 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Variables
     
-    var onDismiss: (() -> Void)?
-    
     @Published var detent: PresentationDetent = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
            let option = DetentOption(rawValue: rawValue) {

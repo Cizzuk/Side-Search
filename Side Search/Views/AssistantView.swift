@@ -153,7 +153,6 @@ struct AssistantView: View {
                 Text(viewModel.errorMessage)
             }
             .onAppear {
-                viewModel.onDismiss = { dismiss() }
                 viewModel.startAssistant()
             }
             .onDisappear() {
