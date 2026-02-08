@@ -25,7 +25,7 @@ struct GeminiAPIAssistantSettingsView: View {
             } header: { Text("Gemini API Key")
             } footer: {
                 VStack(alignment: .leading) {
-                    Text("Please get and enter your API key from Google AI Studio.")
+                    Text("Please get and enter your API key from Google AI Studio. You can also use a free tier API key.")
                     Spacer()
                     Link("Get API Key...", destination: URL(string: "https://aistudio.google.com/api-keys")!)
                         .font(.footnote)

@@ -667,12 +667,12 @@
         }
       }
     },
-    "Please get and enter your API key from Google AI Studio." : {
+    "Please get and enter your API key from Google AI Studio. You can also use a free tier API key." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Google AI StudioでAPIキーを取得して入力してください。"
+            "value" : "Google AI StudioでAPIキーを取得して入力してください。無料枠のAPIキーでも利用できます。"
           }
         }
       }
