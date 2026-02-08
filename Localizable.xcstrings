@@ -168,16 +168,6 @@
         }
       }
     },
-    "Cannot open the URL in In-App Browser." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "URLをアプリ内ブラウザで開くことができません。"
-          }
-        }
-      }
-    },
     "Change App Icon" : {
       "localizations" : {
         "ja" : {
