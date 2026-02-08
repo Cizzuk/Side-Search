@@ -30,6 +30,7 @@ struct GeminiAPIAssistantSettingsView: View {
                     Link("Get API Key...", destination: URL(string: "https://aistudio.google.com/api-keys")!)
                         .font(.footnote)
                 }
+                .padding(.bottom, 10)
             }
             
             // Model Selection
@@ -40,7 +41,19 @@ struct GeminiAPIAssistantSettingsView: View {
                         Text(model).tag(model)
                     }
                 }
-            } header: { Text("Model") }
+            } header: { Text("Model")
+            } footer: {
+                VStack(alignment: .leading) {
+                    Text("Please check the available models and features for your plan.")
+                    Spacer()
+                    Link("Check pricing and available models...", destination: URL(string: "https://ai.google.dev/gemini-api/docs/pricing")!)
+                        .font(.footnote)
+                    Spacer()
+                    Link("Check your rate limits...", destination: URL(string: "https://aistudio.google.com/usage?timeRange=last-7-days&tab=rate-limit")!)
+                        .font(.footnote)
+                }
+                .padding(.bottom, 10)
+            }
         }
         .onChange(of: assistantModel) {
             saveSettings()
