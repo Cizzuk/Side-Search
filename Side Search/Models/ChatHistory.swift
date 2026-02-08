@@ -11,6 +11,5 @@ struct ChatHistory: Identifiable, Decodable {
     var id = UUID()
     var date: Date
     var assistantType: AssistantType
-    var assistantSettings: String
     var messages: [AssistantMessage]
 }
