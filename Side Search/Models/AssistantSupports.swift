@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum AssistantType: String, CaseIterable {
+enum AssistantType: String, CaseIterable, Decodable {
     case urlBased
     case appleFoundation
     case geminiAPI
