@@ -39,7 +39,7 @@ struct GeminiAPIAssistantModel: AssistantModel {
     
     static var availableModels: [String] = []
     
-    var model: String = ""
+    var model: String = "gemini-2.5-flash" // default
     
     init() { }
     
