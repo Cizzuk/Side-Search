@@ -128,19 +128,20 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         }
         
         // Extract sources
-        var sources: [(title: String, url: URL)] = []
+        var sources: [AssistantMessage.Source] = []
         if let groundingChunks = candidate.groundingMetadata?.groundingChunks {
             for chunk in groundingChunks {
                 if let web = chunk.web, let sourceURL = URL(string: web.uri) {
-                    sources.append((title: web.title, url: sourceURL))
+                    sources.append(
+                        AssistantMessage.Source(title: web.title, url: sourceURL)
+                    )
                 }
             }
         }
         
         // Add assistant message to history
         chatHistory.append(GeminiContent(role: "model", parts: [GeminiPart(text: text)]))
-        var message = AssistantMessage(from: .assistant, content: text)
-        message.sources = sources
+        let message = AssistantMessage(from: .assistant, content: text, sources: sources)
         messageHistory.append(message)
     }
     

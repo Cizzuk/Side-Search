@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct AssistantMessage: Identifiable {
-    enum From {
+struct AssistantMessage: Identifiable, Decodable {
+    enum From: Decodable {
         case user
         case assistant
         case system
@@ -25,8 +25,13 @@ struct AssistantMessage: Identifiable {
         }
     }
     
-    let id = UUID()
-    let from: From
-    let content: String
-    var sources: [(title: String, url: URL)] = []
+    struct Source: Decodable {
+        var title: String
+        var url: URL
+    }
+    
+    var id = UUID()
+    var from: From
+    var content: String
+    var sources: [Source] = []
 }
