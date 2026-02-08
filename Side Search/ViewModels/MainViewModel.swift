@@ -17,19 +17,6 @@ class MainViewModel: ObservableObject {
     @Published var safariViewURL: URL?
     @Published var showDummyCurtain = false
     
-    func onChange(scenePhase: ScenePhase) {
-        switch scenePhase {
-        case .active:
-            break
-        case .inactive:
-            showDummyCurtain = false
-        case .background:
-            break
-        @unknown default:
-            break
-        }
-    }
-    
     func activateAssistant() {
         // Close sheets and covers
         showSwitchAssistantView = false
@@ -59,12 +46,8 @@ class MainViewModel: ObservableObject {
         }
         
         if let url = URL(string: SearchEngine.url) {
-            // Show dummy curtain without animation
-            var transaction = Transaction(animation: .none)
-            transaction.disablesAnimations = true
-            withTransaction(transaction) {
-                showDummyCurtain = true
-            }
+            // Show dummy curtain
+            showDummyCurtain = true
             UIApplication.shared.open(url)
         }
     }

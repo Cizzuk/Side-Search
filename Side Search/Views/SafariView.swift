@@ -22,7 +22,7 @@ struct SafariView: UIViewControllerRepresentable {
         // Check URL
         guard SafariView.checkAvailability(at: url) else {
             UIApplication.shared.open(url)
-            return UIHostingController(rootView: DummyCurtainView())
+            return UIHostingController(rootView: DummyScreenCurtainView())
         }
         
         let config = SFSafariViewController.Configuration()

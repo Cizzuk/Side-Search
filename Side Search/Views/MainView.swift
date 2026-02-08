@@ -10,7 +10,6 @@ import Speech
 import SwiftUI
 
 struct MainView: View {
-    @Environment(\.scenePhase) private var scenePhase
     @StateObject var viewModel = MainViewModel()
     
     @State private var showHelpView = false
@@ -111,7 +110,6 @@ struct MainView: View {
                 }
             }
             // MARK: - Events
-            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 showHelpView = false
                 showChangeIconView = false
@@ -143,7 +141,6 @@ struct MainView: View {
             }
         }
         // MARK: - Dummy Curtain
-        .opacity(viewModel.showDummyCurtain ? 0.0 : 1.0)
-        .fullScreenCover(isPresented: $viewModel.showDummyCurtain) { DummyCurtainView() }
+        .dummyScreenCurtain(isPresented: $viewModel.showDummyCurtain)
     }
 }
