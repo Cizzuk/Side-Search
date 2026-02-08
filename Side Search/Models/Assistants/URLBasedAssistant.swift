@@ -30,12 +30,11 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
 struct URLBasedAssistantModel: AssistantModel {
     private static let userDefaultsKey = "urlBasedAssistantSettings"
     
-    var url: String = ""
-    var openIn: OpenInOption = .inAppBrowser
-    
-    init() { }
+    // Model Settings
+    var url: String
+    var openIn: OpenInOption
 
-    init(url: String, openIn: OpenInOption = .inAppBrowser) {
+    init(url: String = "", openIn: OpenInOption = .inAppBrowser) {
         self.url = url
         self.openIn = openIn
     }

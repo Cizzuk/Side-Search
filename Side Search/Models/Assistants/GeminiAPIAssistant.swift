@@ -39,9 +39,12 @@ struct GeminiAPIAssistantModel: AssistantModel {
     
     static var availableModels: [String] = []
     
-    var model: String = "gemini-2.5-flash" // default
+    // Model Settings
+    var model: String
     
-    init() { }
+    init(model: String = "gemini-2.5-flash") {
+        self.model = model
+    }
     
     static func load() -> Self {
         if let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) {

@@ -45,11 +45,10 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
 struct AppleFoundationAssistantModel: AssistantModel {
     private static let userDefaultsKey = "appleFoundationAssistantSettings"
     
-    var customInstructions: String = ""
-    
-    init() { }
+    // Model Settings
+    var customInstructions: String
 
-    init(customInstructions: String) {
+    init(customInstructions: String = "") {
         self.customInstructions = customInstructions
     }
     
