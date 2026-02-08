@@ -22,10 +22,6 @@ class URLBasedAssistantViewModel: AssistantViewModel {
     // MARK: - Override Methods
     
     override func confirmInput() {
-        // Prevent empty input
-        guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        else { return }
-        
         // Stop recording before searching
         stopRecording()
         
