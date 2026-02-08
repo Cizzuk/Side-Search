@@ -8,6 +8,7 @@
 import SafariServices
 import Speech
 import SwiftUI
+import TemporaryScreenCurtain
 
 struct MainView: View {
     @StateObject var viewModel = MainViewModel()
@@ -141,6 +142,6 @@ struct MainView: View {
             }
         }
         // MARK: - Dummy Curtain
-        .dummyScreenCurtain(isPresented: $viewModel.showDummyCurtain)
+        .temporaryScreenCurtain(isPresented: $viewModel.showDummyCurtain)
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BE1377E62EFBAAE70060D7E0 /* ActivateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */; };
 		BE4E0E2A2F35CBAC004383AB /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = BE4E0E292F35CBAC004383AB /* Textual */; };
+		BE810EE12F388F4300B0B211 /* TemporaryScreenCurtain in Frameworks */ = {isa = PBXBuildFile; productRef = BE810EE02F388F4300B0B211 /* TemporaryScreenCurtain */; };
 		BE811A382F340E2D00894EA5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE811A372F340E2C00894EA5 /* WidgetKit.framework */; };
 		BE811A3A2F340E2D00894EA5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE811A392F340E2D00894EA5 /* SwiftUI.framework */; };
 		BE811A452F340E2D00894EA5 /* WidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BE811A352F340E2C00894EA5 /* WidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -98,6 +99,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE4E0E2A2F35CBAC004383AB /* Textual in Frameworks */,
+				BE810EE12F388F4300B0B211 /* TemporaryScreenCurtain in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +181,7 @@
 			name = "Side Search";
 			packageProductDependencies = (
 				BE4E0E292F35CBAC004383AB /* Textual */,
+				BE810EE02F388F4300B0B211 /* TemporaryScreenCurtain */,
 			);
 			productName = "Side Search";
 			productReference = BEB06C4A2EFBA9AE0026CC6E /* Side Search.app */;
@@ -214,6 +217,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				BE4E0E282F35CBAC004383AB /* XCRemoteSwiftPackageReference "textual" */,
+				BE810EDF2F388F4300B0B211 /* XCRemoteSwiftPackageReference "swiftui-temporary-screen-curtain" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BEB06C4B2EFBA9AE0026CC6E /* Products */;
@@ -584,6 +588,14 @@
 				minimumVersion = 0.3.1;
 			};
 		};
+		BE810EDF2F388F4300B0B211 /* XCRemoteSwiftPackageReference "swiftui-temporary-screen-curtain" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Cizzuk/swiftui-temporary-screen-curtain";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -591,6 +603,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BE4E0E282F35CBAC004383AB /* XCRemoteSwiftPackageReference "textual" */;
 			productName = Textual;
+		};
+		BE810EE02F388F4300B0B211 /* TemporaryScreenCurtain */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE810EDF2F388F4300B0B211 /* XCRemoteSwiftPackageReference "swiftui-temporary-screen-curtain" */;
+			productName = TemporaryScreenCurtain;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

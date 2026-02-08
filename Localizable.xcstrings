@@ -265,6 +265,8 @@
       }
     },
     "Close Curtain" : {
+      "comment" : "TemporaryScreenCurtain",
+      "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
