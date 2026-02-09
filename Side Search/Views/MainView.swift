@@ -105,6 +105,7 @@ struct MainView: View {
                     .matchedTransitionSource(id: id_activateAssistantButton, in: ns_assistantView)
                 }
                 ToolbarItem(placement: .cancellationAction) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button(action: { showHelpView = true }) {
                         Label("Help", systemImage: "questionmark")
                     }
