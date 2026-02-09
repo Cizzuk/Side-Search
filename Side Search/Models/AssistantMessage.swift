@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct AssistantMessage: Identifiable, Decodable {
-    enum From: Decodable {
+struct AssistantMessage: Identifiable, Codable {
+    enum From: Codable {
         case user
         case assistant
         case system
@@ -25,7 +25,7 @@ struct AssistantMessage: Identifiable, Decodable {
         }
     }
     
-    struct Source: Decodable {
+    struct Source: Codable {
         var title: String
         var url: URL
     }
