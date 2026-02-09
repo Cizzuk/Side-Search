@@ -50,6 +50,10 @@ struct ChatHistoryView: View {
                     }
                 }
             }
+            .animation(.default, value: viewModel.chats.count)
+            .onAppear() {
+                viewModel.loadChats()
+            }
             // Clear All Chat History Alert
             .alert(isPresented: $showClearAllHistoryAlert) {
                 Alert(
@@ -60,9 +64,6 @@ struct ChatHistoryView: View {
                     },
                     secondaryButton: .cancel()
                 )
-            }
-            .onAppear() {
-                viewModel.loadChats()
             }
             .fullScreenCover(isPresented: $viewModel.showSafariView) {
                 if let url = viewModel.searchURL {
