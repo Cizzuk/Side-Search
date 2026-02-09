@@ -1,0 +1,48 @@
+{
+  "fill" : "automatic",
+  "groups" : [
+    {
+      "blur-material" : null,
+      "hidden" : false,
+      "layers" : [
+        {
+          "fill" : "none",
+          "glass" : true,
+          "image-name-specializations" : [
+            {
+              "value" : "pride.png"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "pride-dark.png"
+            }
+          ],
+          "name" : "pride-dark",
+          "position" : {
+            "scale" : 0.75,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.1
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

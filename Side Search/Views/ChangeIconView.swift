@@ -15,6 +15,8 @@ struct ChangeIconView: View {
             List {
                 Section {
                     iconItem(iconName: "Side Fish", iconID: "AppIcon")
+                    iconItem(iconName: "Pride", iconID: "Pride")
+                    iconItem(iconName: "Unity", iconID: "Unity")
                     iconItem(iconName: "OG", iconID: "OG")
                     iconItem(iconName: "OG Like", iconID: "OGLike")
                 }
