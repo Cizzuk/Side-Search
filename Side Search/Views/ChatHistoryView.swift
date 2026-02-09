@@ -108,7 +108,7 @@ struct ChatHistoryView: View {
                         Spacer()
                         Text(chat.assistantType.DescriptionProviderType.assistantName)
                     }
-                    .font(.footnote)
+                    .font(.caption)
                     .foregroundColor(.secondary)
                     
                     // Messages
