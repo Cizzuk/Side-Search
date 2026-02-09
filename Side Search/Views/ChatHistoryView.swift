@@ -51,10 +51,8 @@ struct ChatHistoryView: View {
                 }
             }
             .animation(.default, value: viewModel.chats.count)
-            .onAppear() {
-                viewModel.loadChats()
-            }
-            // Clear All Chat History Alert
+            .navigationTitle("Chat History")
+            .navigationBarTitleDisplayMode(.inline)
             .alert(isPresented: $showClearAllHistoryAlert) {
                 Alert(
                     title: Text("Clear All Chat History"),
@@ -65,14 +63,6 @@ struct ChatHistoryView: View {
                     secondaryButton: .cancel()
                 )
             }
-            .fullScreenCover(isPresented: $viewModel.showSafariView) {
-                if let url = viewModel.searchURL {
-                    SafariView(url: url)
-                        .ignoresSafeArea()
-                }
-            }
-            .navigationTitle("Chat History")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(action: { dismiss() }) {
@@ -86,8 +76,20 @@ struct ChatHistoryView: View {
                     .tint(.red)
                 }
             }
+            // MARK: - Events
+            .onAppear() {
+                viewModel.loadChats()
+            }
+        }
+        .fullScreenCover(isPresented: $viewModel.showSafariView) {
+            if let url = viewModel.searchURL {
+                SafariView(url: url)
+                    .ignoresSafeArea()
+            }
         }
     }
+    
+    // MARK: - Chat Detail View
     
     struct ChatDetailView: View {
         @Environment(\.dismiss) private var dismiss
