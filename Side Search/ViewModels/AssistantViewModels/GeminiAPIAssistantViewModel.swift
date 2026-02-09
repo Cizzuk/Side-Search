@@ -107,7 +107,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         do {
             (data, _) = try await URLSession.shared.data(for: request)
         } catch {
-            messageHistory.append(AssistantMessage(from: .system, content: "Connection error"))
+            messageHistory.append(AssistantMessage(from: .system, content: "Internet connection error"))
             return
         }
         
@@ -123,7 +123,19 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         // Extract response text
         guard let candidate = response.candidates?.first,
               let text = candidate.content.parts.first?.text else {
-            messageHistory.append(AssistantMessage(from: .system, content: String(data: data, encoding: .utf8) ?? "No response"))
+            // Error
+            if let dict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+               let error = dict["error"] as? [String: Any],
+               let message = error["message"] as? String {
+                // Try to extract error message
+                messageHistory.append(AssistantMessage(from: .system, content: message))
+            } else if let errorString = String(data: data, encoding: .utf8) {
+                // Raw error string
+                messageHistory.append(AssistantMessage(from: .system, content: errorString))
+            } else {
+                // Unknown error
+                messageHistory.append(AssistantMessage(from: .system, content: "Unknown error occurred"))
+            }
             return
         }
         
