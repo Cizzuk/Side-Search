@@ -20,6 +20,8 @@ struct MainView: View {
     
     @Namespace private var ns_chatHistoryView
     private let id_chatHistoryViewButton = "chatHistoryViewButton"
+    @Namespace private var ns_helpView
+    private let id_helpViewButton = "helpViewButton"
     @Namespace private var ns_switchAssistantView
     private let id_switchAssistantViewButton = "switchAssistantViewButton"
     @Namespace private var ns_assistantView
@@ -119,6 +121,7 @@ struct MainView: View {
                     Button(action: { showHelpView = true }) {
                         Label("Help", systemImage: "questionmark")
                     }
+                    .matchedTransitionSource(id: id_helpViewButton, in: ns_helpView)
                 }
             }
             // MARK: - Events
@@ -131,7 +134,13 @@ struct MainView: View {
             }
         }
         // MARK: - Sheets
-        .sheet(isPresented: $showHelpView) { HelpView() }
+        .sheet(isPresented: $showHelpView) {
+            HelpView()
+                .navigationTransition(.zoom(
+                    sourceID: id_helpViewButton,
+                    in: ns_helpView
+                ))
+        }
         .fullScreenCover(isPresented: $showChatHistoryView) {
             ChatHistoryView()
                 .navigationTransition(.zoom(
