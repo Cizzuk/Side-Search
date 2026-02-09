@@ -36,7 +36,7 @@ class ChatHistory {
         }
     }
     
-    static func remove(_ chat: UUID) {
+    static func delete(_ chat: UUID) {
         var chats = loadChats()
         chats.removeAll { $0.id == chat }
         if let data = try? JSONEncoder().encode(chats) {
