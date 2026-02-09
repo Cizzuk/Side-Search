@@ -8,14 +8,24 @@
 import SafariServices
 import Speech
 import SwiftUI
+import TemporaryScreenCurtain
 
 struct MainView: View {
-    @Environment(\.scenePhase) private var scenePhase
     @StateObject var viewModel = MainViewModel()
-    @State private var showingChangeIconView = false
-    @State private var showingSwitchAssistantView = false
+    
+    @State private var showChatHistoryView = false
+    @State private var showHelpView = false
+    @State private var showChangeIconView = false
     @State private var showClearInAppBrowserDataAlert = false
-    @State private var isPhone = UIDevice.current.userInterfaceIdiom == .phone
+    
+    @Namespace private var ns_chatHistoryView
+    private let id_chatHistoryViewButton = "chatHistoryViewButton"
+    @Namespace private var ns_helpView
+    private let id_helpViewButton = "helpViewButton"
+    @Namespace private var ns_switchAssistantView
+    private let id_switchAssistantViewButton = "switchAssistantViewButton"
+    @Namespace private var ns_assistantView
+    private let id_activateAssistantButton = "activateAssistantButton"
     
     var body: some View {
         NavigationStack {
@@ -50,6 +60,8 @@ struct MainView: View {
                             Text(option.displayName).tag(option)
                         }
                     }
+                    
+                    Toggle("Disable Markdown Rendering", isOn: $viewModel.disableMarkdownRendering)
                 }
                 
                 Section {
@@ -58,9 +70,11 @@ struct MainView: View {
                     }
                 }
                 
-                Section {
-                    Button(action: { showingChangeIconView = true }) {
-                        Label("Change App Icon", systemImage: "app.dashed")
+                if UIApplication.shared.supportsAlternateIcons {
+                    Section {
+                        Button(action: { showChangeIconView = true }) {
+                            Label("Change App Icon", systemImage: "app.dashed")
+                        }
                     }
                 }
             }
@@ -68,18 +82,6 @@ struct MainView: View {
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
-            .fullScreenCover(isPresented: $viewModel.showSafariView) {
-                if let url = viewModel.safariViewURL {
-                    SafariView(url: url)
-                        .ignoresSafeArea()
-                }
-            }
-            .sheet(isPresented: $viewModel.showHelp) {
-                HelpView()
-            }
-            .sheet(isPresented: $showingChangeIconView) {
-                ChangeIconView()
-            }
             // Delete In-App Browser Data Alert
             .alert(isPresented: $showClearInAppBrowserDataAlert) {
                 Alert(
@@ -92,48 +94,82 @@ struct MainView: View {
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: { showingSwitchAssistantView = true }) {
+                    Button(action: { viewModel.showSwitchAssistantView = true }) {
                         HStack {
                             Image(systemName: viewModel.currentAssistant.DescriptionProviderType.assistantSystemImage)
                             Text(viewModel.currentAssistant.DescriptionProviderType.assistantName)
                         }
                         .padding(.horizontal, 10)
                     }
-                    .popover(isPresented: isPhone ? $showingSwitchAssistantView : .constant(false)) {
-                        SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
-                            .presentationCompactAdaptation(.sheet)
-                    }
-                    .sheet(isPresented: !isPhone ? $showingSwitchAssistantView : .constant(false)) {
-                        SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
-                    }
+                    .matchedTransitionSource(id: id_switchAssistantViewButton, in: ns_switchAssistantView)
                     
                     Button(action: { viewModel.activateAssistant() }) {
                         Label("Start Assistant", image: "Sidefish")
+                            .foregroundStyle(.white)
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
-                    .popover(isPresented: isPhone ? $viewModel.showAssistant : .constant(false)) {
-                        AssistantView()
-                            .presentationCompactAdaptation(.sheet)
-                    }
-                    .sheet(isPresented: !isPhone ? $viewModel.showAssistant : .constant(false)) {
-                        AssistantView()
-                    }
+                    .matchedTransitionSource(id: id_activateAssistantButton, in: ns_assistantView)
                 }
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(action: { viewModel.showHelp = true }) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { showChatHistoryView = true }) {
+                        Label("Chat History", systemImage: "clock")
+                    }
+                    .matchedTransitionSource(id: id_chatHistoryViewButton, in: ns_chatHistoryView)
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: { showHelpView = true }) {
                         Label("Help", systemImage: "questionmark")
                     }
+                    .matchedTransitionSource(id: id_helpViewButton, in: ns_helpView)
                 }
             }
             // MARK: - Events
-            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+                showChatHistoryView = false
+                showHelpView = false
+                showChangeIconView = false
+                showClearInAppBrowserDataAlert = false
                 viewModel.activateAssistant()
             }
         }
-        // MARK: - Dummy Curtain
-        .opacity(viewModel.showDummyCurtain ? 0.0 : 1.0)
-        .fullScreenCover(isPresented: $viewModel.showDummyCurtain) { DummyCurtainView() }
+        // MARK: - Sheets
+        .sheet(isPresented: $showHelpView) {
+            HelpView()
+                .navigationTransition(.zoom(
+                    sourceID: id_helpViewButton,
+                    in: ns_helpView
+                ))
+        }
+        .fullScreenCover(isPresented: $showChatHistoryView) {
+            ChatHistoryView()
+                .navigationTransition(.zoom(
+                    sourceID: id_chatHistoryViewButton,
+                    in: ns_chatHistoryView
+                ))
+        }
+        .sheet(isPresented: $showChangeIconView) { ChangeIconView() }
+        .sheet(isPresented: $viewModel.showSwitchAssistantView) {
+            SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
+                .navigationTransition(.zoom(
+                    sourceID: id_switchAssistantViewButton,
+                    in: ns_switchAssistantView
+                ))
+        }
+        .sheet(isPresented: $viewModel.showAssistant) {
+            AssistantView()
+                .navigationTransition(.zoom(
+                    sourceID: id_activateAssistantButton,
+                    in: ns_assistantView
+                ))
+        }
+        .fullScreenCover(isPresented: $viewModel.showSafariView) {
+            if let url = viewModel.safariViewURL {
+                SafariView(url: url)
+                    .ignoresSafeArea()
+            }
+        }
+        // MARK: - Temporary Screen Curtain
+        .temporaryScreenCurtain(isPresented: $viewModel.showTmpCurtain)
     }
 }

@@ -10,36 +10,19 @@ import UIKit
 import SwiftUI
 
 class AssistantViewModel: ObservableObject {
-    enum MessageFrom {
-        case user
-        case assistant
-        case system
-        
-        var displayName: LocalizedStringResource {
-            switch self {
-            case .user:
-                return "You"
-            case .assistant:
-                return "Assistant"
-            case .system:
-                return "System"
-            }
-        }
-    }
-    
-    struct MessageData: Identifiable {
-        let id = UUID()
-        let from: MessageFrom
-        let content: String
-        var sources: [(title: String, url: URL)] = []
-    }
-    
     enum DetentOption: String, CaseIterable, Identifiable {
         case small
         case normal
         case large
         
         var id: String { rawValue }
+        
+        static var defaultDetent: Self {
+            if UIAccessibility.isVoiceOverRunning {
+                return .large
+            }
+            return .normal
+        }
         
         var displayName: LocalizedStringResource {
             switch self {
@@ -62,25 +45,30 @@ class AssistantViewModel: ObservableObject {
                 return .large
             }
         }
+        
+        static var allOption: Set<PresentationDetent> {
+            return Set(DetentOption.allCases.map { $0.presentationDetent })
+        }
     }
     
     // MARK: - Variables
     
-    var onDismiss: (() -> Void)?
+    // Set from View
+    var assistantType: AssistantType?
     
     @Published var detent: PresentationDetent = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
            let option = DetentOption(rawValue: rawValue) {
             return option.presentationDetent
         }
-        return DetentOption.normal.presentationDetent
+        return DetentOption.defaultDetent.presentationDetent
     }()
     
     // Input Field
     @Published var inputText = ""
     @Published var shouldInputFocused = false
     
-    @Published var messageHistory: [MessageData] = []
+    @Published var messageHistory: [AssistantMessage] = []
     @Published var responseIsPreparing = false
     
     // Web View
@@ -147,6 +135,25 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Methods
     
+    func dismissAssistant() {
+        stopRecording()
+        saveChatHistory()
+    }
+    
+    func saveChatHistory() {
+        guard UserDefaults.standard.bool(forKey: "chatHistoryEnabled"),
+              !messageHistory.isEmpty,
+              let assistantType = assistantType
+        else { return }
+        
+        let chat = ChatHistory.Chat(
+            assistantType: assistantType,
+            messages: messageHistory
+        )
+        
+        ChatHistory.add(chat)
+    }
+    
     func startAssistant() {
         // MARK: Override in subclass if needed
         if !startWithMicMuted {
@@ -171,7 +178,7 @@ class AssistantViewModel: ObservableObject {
         
         // Add user message to history
         let userInput = inputText
-        let userMessage = MessageData(from: .user, content: userInput)
+        let userMessage = AssistantMessage(from: .user, content: userInput)
         messageHistory.append(userMessage)
         
         inputText = ""
@@ -183,8 +190,8 @@ class AssistantViewModel: ObservableObject {
             searchURL = url
             showSafariView = true
         } else {
-            self.errorMessage = "Cannot open the URL in In-App Browser."
-            self.showError = true
+            // Fallback
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     

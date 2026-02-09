@@ -22,18 +22,13 @@ class URLBasedAssistantViewModel: AssistantViewModel {
     // MARK: - Override Methods
     
     override func confirmInput() {
-        // Prevent empty input
-        guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        else { return }
-        
         // Stop recording before searching
         stopRecording()
         
         // Add user message to history
         let userInput = inputText
         inputText = ""
-        let userMessage = MessageData(from: .user, content: userInput)
-        messageHistory.append(userMessage)
+        var userMessage = AssistantMessage(from: .user, content: userInput)
         
         if let url = assistantModel.makeSearchURL(query: userInput) {
             switch assistantModel.openIn {
@@ -41,12 +36,16 @@ class URLBasedAssistantViewModel: AssistantViewModel {
                 self.openSafariView(at: url)
             case .defaultApp:
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                onDismiss?()
             }
+            userMessage.sources.append(
+                AssistantMessage.Source(title: url.absoluteString, url: url)
+            )
         } else {
             // Handle invalid URL error
             self.errorMessage = "Invalid Search URL. Please check your settings."
             self.showError = true
         }
+        
+        messageHistory.append(userMessage)
     }
 }

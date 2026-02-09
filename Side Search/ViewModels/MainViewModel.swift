@@ -11,26 +11,19 @@ import Speech
 import SwiftUI
 
 class MainViewModel: ObservableObject {
+    @Published var showSwitchAssistantView = false
     @Published var showAssistant = false
     @Published var showSafariView = false
     @Published var safariViewURL: URL?
-    @Published var showHelp = false
-    @Published var showDummyCurtain = false
-    
-    func onChange(scenePhase: ScenePhase) {
-        switch scenePhase {
-        case .active:
-            break
-        case .inactive:
-            showDummyCurtain = false
-        case .background:
-            break
-        @unknown default:
-            break
-        }
-    }
+    @Published var showTmpCurtain = false
     
     func activateAssistant() {
+        // Close sheets and covers
+        showSwitchAssistantView = false
+        showAssistant = false
+        showSafariView = false
+        showTmpCurtain = false
+        
         // Check current assistant type
         if currentAssistant != .urlBased {
             showAssistant = true
@@ -53,12 +46,7 @@ class MainViewModel: ObservableObject {
         }
         
         if let url = URL(string: SearchEngine.url) {
-            // Show dummy curtain without animation
-            var transaction = Transaction(animation: .none)
-            transaction.disablesAnimations = true
-            withTransaction(transaction) {
-                showDummyCurtain = true
-            }
+            showTmpCurtain = true
             UIApplication.shared.open(url)
         }
     }
@@ -131,10 +119,17 @@ class MainViewModel: ObservableObject {
            let option = AssistantViewModel.DetentOption(rawValue: rawValue) {
             return option
         }
-        return .normal
+        return .defaultDetent
     }() {
         didSet {
             UserDefaults.standard.set(assistantViewDetent.rawValue, forKey: "assistantViewDetent")
+        }
+    }
+    
+    // Disable Markdown Rendering
+    @Published var disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering") {
+        didSet {
+            UserDefaults.standard.set(disableMarkdownRendering, forKey: "disableMarkdownRendering")
         }
     }
 }

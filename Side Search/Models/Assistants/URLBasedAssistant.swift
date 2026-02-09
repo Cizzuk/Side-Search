@@ -30,14 +30,11 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
 struct URLBasedAssistantModel: AssistantModel {
     private static let userDefaultsKey = "urlBasedAssistantSettings"
     
-    var name: LocalizedStringResource = ""
-    var url: String = ""
-    var openIn: OpenInOption = .inAppBrowser
-    
-    init() { }
+    // Model Settings
+    var url: String
+    var openIn: OpenInOption
 
-    init(name: LocalizedStringResource, url: String, openIn: OpenInOption = .inAppBrowser) {
-        self.name = name
+    init(url: String = "", openIn: OpenInOption = .inAppBrowser) {
         self.url = url
         self.openIn = openIn
     }
@@ -49,7 +46,7 @@ struct URLBasedAssistantModel: AssistantModel {
                 return model
             }
         }
-        return SearchEnginePresets.defaultSearchEngine
+        return Self(url: SearchEnginePresets.defaultSearchEngine.url)
     }
     
     func save() {

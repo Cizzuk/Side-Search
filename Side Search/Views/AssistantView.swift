@@ -13,6 +13,8 @@ struct AssistantView: View {
     
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
+    
+    private let assistantType = AssistantType.current
     @StateObject private var viewModel: AssistantViewModel
     
     init() {
@@ -23,25 +25,11 @@ struct AssistantView: View {
         NavigationStack {
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 25) {
+                    VStack(alignment: .leading, spacing: 45) {
                         ForEach(viewModel.messageHistory) { message in
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(message.from.displayName)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                Text(message.content)
-                                    .font(.title3)
-                                    .textSelection(.enabled)
-                                Spacer()
-                                ForEach(message.sources, id: \.url) { source in
-                                    Button(action: { viewModel.openSafariView(at: source.url) }) {
-                                        Label(source.title, systemImage: "link")
-                                            .font(.caption)
-                                    }
-                                }
-                            }
-                            .id(message.id)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            MessagesView(message: message, openSafariView: { url in
+                                viewModel.openSafariView(at: url)
+                            })
                         }
                         
                         if viewModel.responseIsPreparing {
@@ -49,13 +37,15 @@ struct AssistantView: View {
                                 .progressViewStyle(CircularProgressViewStyle())
                         }
                         
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(AssistantViewModel.MessageFrom.user.displayName)
-                                .font(.caption)
+                        VStack(alignment: .leading) {
+                            Text(AssistantMessage.From.user.displayName)
+                                .font(.headline)
                                 .foregroundStyle(.secondary)
+                            
+                            Spacer(minLength: 15)
+                            
                             TextField(viewModel.isRecording ? "Listening..." : "Ask Assistant",
                                       text: $viewModel.inputText, axis: .vertical)
-                            .font(.title3)
                             .bold()
                             .submitLabel(.return)
                             .focused($isInputFocused)
@@ -75,8 +65,11 @@ struct AssistantView: View {
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityAction(named: "Confirm") {
+                            viewModel.confirmInput()
+                        }
                         
-                        if AssistantType.current.DescriptionProviderType.assistantIsAI {
+                        if assistantType.DescriptionProviderType.assistantIsAI {
                             Text("This assistant is AI and can make mistakes.")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
@@ -116,7 +109,7 @@ struct AssistantView: View {
             .accessibilityAction(.escape) { dismiss() }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark") {
+                    Button("End Assistant", systemImage: "xmark") {
                         dismiss()
                     }
                 }
@@ -136,7 +129,8 @@ struct AssistantView: View {
                     Button(action: {
                         viewModel.confirmInput()
                     }) {
-                        Label("Confirm", systemImage: AssistantType.current.DescriptionProviderType.assistantSystemImage)
+                        Label("Confirm", systemImage: assistantType.DescriptionProviderType.assistantSystemImage)
+                            .foregroundStyle(.white)
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
@@ -159,11 +153,11 @@ struct AssistantView: View {
                 Text(viewModel.errorMessage)
             }
             .onAppear {
-                viewModel.onDismiss = { dismiss() }
+                viewModel.assistantType = assistantType
                 viewModel.startAssistant()
             }
             .onDisappear() {
-                viewModel.stopRecording()
+                viewModel.dismissAssistant()
             }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 viewModel.activateAssistant()
@@ -171,7 +165,7 @@ struct AssistantView: View {
         }
         .background(
             AngularGradient(
-                gradient: AssistantType.current.DescriptionProviderType.assistantGradient,
+                gradient: assistantType.DescriptionProviderType.assistantGradient,
                 center: .center,
                 angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
             )
@@ -180,7 +174,7 @@ struct AssistantView: View {
             .blur(radius: 30)
         )
         .animation(.smooth, value: viewModel.micLevel)
-        .presentationDetents([.medium, .fraction(0.3), .large], selection: $viewModel.detent)
+        .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)
     }
 }

@@ -8,41 +8,47 @@
 import Foundation
 
 class SearchEnginePresets {
-    static var defaultSearchEngine: URLBasedAssistantModel {
+    // Copy the "url" to the URLBasedAssistantModel.
+    struct Preset {
+        let name: LocalizedStringResource
+        let url: String
+    }
+    
+    static var defaultSearchEngine: Preset {
         if GeoHelper.currentRegion == "CN" {
-            return URLBasedAssistantModel(
+            return Preset(
                 name: "百度AI搜索",
                 url: "https://chat.baidu.com/search?query=%s",
             )
         } else {
-            return URLBasedAssistantModel(
+            return Preset(
                 name: "ChatGPT",
                 url: "https://chatgpt.com/?q=%s",
             )
         }
     }
     
-    static var aiAssistants: [URLBasedAssistantModel] {
-        var aiCSEs: [URLBasedAssistantModel] = []
+    static var aiAssistants: [Preset] {
+        var aiCSEs: [Preset] = []
         if GeoHelper.currentRegion != "CN" {
             aiCSEs.append(contentsOf: [
-                URLBasedAssistantModel(
+                Preset(
                     name: "ChatGPT",
                     url: "https://chatgpt.com/?q=%s",
                 ),
-                URLBasedAssistantModel(
+                Preset(
                     name: "Gemini",
                     url: "https://gemini.google.com/?prompt_text=%s",
                 ),
-                URLBasedAssistantModel(
+                Preset(
                     name: "Claude",
                     url: "https://claude.ai/new?q=%s",
                 ),
-                URLBasedAssistantModel(
+                Preset(
                     name: "Copilot Search",
                     url: "https://www.bing.com/copilotsearch?q=%s",
                 ),
-                URLBasedAssistantModel(
+                Preset(
                     name: "Perplexity",
                     url: "https://www.perplexity.ai/?q=%s",
                 )
@@ -50,7 +56,7 @@ class SearchEnginePresets {
         }
         
         if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
-            aiCSEs.append(URLBasedAssistantModel(
+            aiCSEs.append(Preset(
                 name: "百度AI搜索",
                 url: "https://chat.baidu.com/search?query=%s",
             ))
@@ -59,66 +65,66 @@ class SearchEnginePresets {
         return aiCSEs
     }
     
-    static var normalSearchEngines: [URLBasedAssistantModel] {
-        var normalCSEs: [URLBasedAssistantModel] = []
+    static var normalSearchEngines: [Preset] {
+        var normalCSEs: [Preset] = []
         
-        let localizedYahoo: URLBasedAssistantModel
+        let localizedYahoo: Preset
         if GeoHelper.preferredLanguages.first == "ja-JP" {
-            localizedYahoo = URLBasedAssistantModel(
+            localizedYahoo = Preset(
                 name: "Yahoo! JAPAN",
                 url: "https://search.yahoo.co.jp/search?p=%s",
             )
         } else {
-            localizedYahoo = URLBasedAssistantModel(
+            localizedYahoo = Preset(
                 name: "Yahoo",
                 url: "https://search.yahoo.com/search?p=%s",
             )
         }
         
         normalCSEs.append(contentsOf:[
-            URLBasedAssistantModel(
+            Preset(
                 name: "Google",
                 url: "https://www.google.com/search?q=%s&client=safari",
             ),
-            URLBasedAssistantModel(
+            Preset(
                 name: "Bing",
                 url: "https://www.bing.com/search?q=%s",
             ),
             localizedYahoo,
-            URLBasedAssistantModel(
+            Preset(
                 name: "DuckDuckGo",
                 url: "https://duckduckgo.com/?q=%s",
             ),
-            URLBasedAssistantModel(
+            Preset(
                 name: "Ecosia",
                 url: "https://www.ecosia.org/search?q=%s",
             ),
         ])
         
         if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
-            normalCSEs.append(URLBasedAssistantModel(
+            normalCSEs.append(Preset(
                 name: "百度",
                 url: "https://www.baidu.com/s?wd=%s",
             ))
         }
         
         if GeoHelper.currentRegion == "RU" || GeoHelper.containsLanguage("ru") {
-            normalCSEs.append(URLBasedAssistantModel(
+            normalCSEs.append(Preset(
                 name: "Яндекс",
                 url: "https://yandex.ru/search/?text=%s",
             ))
         }
         
         normalCSEs.append(contentsOf:[
-            URLBasedAssistantModel(
+            Preset(
                 name: "Startpage",
                 url: "https://www.startpage.com/sp/search?query=%s",
             ),
-            URLBasedAssistantModel(
+            Preset(
                 name: "Brave Search",
                 url: "https://search.brave.com/search?q=%s",
             ),
-            URLBasedAssistantModel(
+            Preset(
                 name: "Kagi",
                 url: "https://kagi.com/search?q=%s",
             ),

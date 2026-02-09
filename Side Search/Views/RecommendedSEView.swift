@@ -23,7 +23,7 @@ struct SearchEnginePresetsView: View {
                         ForEach(aiCSEList.indices, id: \.self, content: { index in
                             let cse = aiCSEList[index]
                             PresetSEButton(action: {
-                                SearchEngine = cse
+                                SearchEngine.url = cse.url
                                 dismiss()
                             }, cse: cse)
                         })
@@ -35,7 +35,7 @@ struct SearchEnginePresetsView: View {
                     ForEach(normalCSEList.indices, id: \.self, content: { index in
                         let cse = normalCSEList[index]
                         PresetSEButton(action: {
-                            SearchEngine = cse
+                            SearchEngine.url = cse.url
                             dismiss()
                         }, cse: cse)
                     })
@@ -55,7 +55,7 @@ struct SearchEnginePresetsView: View {
     
     struct PresetSEButton: View {
         let action: () -> Void
-        let cse: URLBasedAssistantModel
+        let cse: SearchEnginePresets.Preset
         
         var body: some View {
             Button {

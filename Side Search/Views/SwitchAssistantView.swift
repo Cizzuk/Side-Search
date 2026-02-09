@@ -53,7 +53,7 @@ struct SwitchAssistantView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(action: { dismiss() }) {
-                        Label("Cancel", systemImage: "xmark")
+                        Label("Close", systemImage: "xmark")
                     }
                 }
             }

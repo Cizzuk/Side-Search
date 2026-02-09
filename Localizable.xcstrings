@@ -58,12 +58,22 @@
         }
       }
     },
+    "Are you sure you want to clear all chat history?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャットの履歴をすべて削除しますか？"
+          }
+        }
+      }
+    },
     "Are you sure you want to clear all in-app browser data?" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アプリ内ブラウザのデータをすべて消去しますか？"
+            "value" : "アプリ内ブラウザのデータをすべて削除しますか？"
           }
         }
       }
@@ -168,16 +178,6 @@
         }
       }
     },
-    "Cannot open the URL in In-App Browser." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "URLをアプリ内ブラウザで開くことができません。"
-          }
-        }
-      }
-    },
     "Change App Icon" : {
       "localizations" : {
         "ja" : {
@@ -188,12 +188,42 @@
         }
       }
     },
+    "Chat History" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャット履歴"
+          }
+        }
+      }
+    },
     "ChatGPT" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "ChatGPT"
+          }
+        }
+      }
+    },
+    "Check pricing and available models..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "価格と利用可能なモデルを確認..."
+          }
+        }
+      }
+    },
+    "Check your rate limits..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レート制限を確認…"
           }
         }
       }
@@ -229,7 +259,27 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "消去"
+            "value" : "削除"
+          }
+        }
+      }
+    },
+    "Clear All" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全て削除"
+          }
+        }
+      }
+    },
+    "Clear All Chat History" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全てのチャット履歴を削除"
           }
         }
       }
@@ -244,7 +294,19 @@
         }
       }
     },
+    "Close" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閉じる"
+          }
+        }
+      }
+    },
     "Close Curtain" : {
+      "comment" : "TemporaryScreenCurtain",
+      "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -270,6 +332,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copilot検索"
+          }
+        }
+      }
+    },
+    "Copy Message to Clipboard" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "メッセージをクリップボードにコピー"
           }
         }
       }
@@ -304,6 +376,16 @@
         }
       }
     },
+    "Delete" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除"
+          }
+        }
+      }
+    },
     "Developer" : {
       "localizations" : {
         "ja" : {
@@ -314,12 +396,12 @@
         }
       }
     },
-    "Done" : {
+    "Disable Markdown Rendering" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "完了"
+            "value" : "マークダウンの表示を無効にする"
           }
         }
       }
@@ -340,6 +422,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ecosia"
+          }
+        }
+      }
+    },
+    "Enable Chat History" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャット履歴を有効化"
+          }
+        }
+      }
+    },
+    "End Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを終了"
           }
         }
       }
@@ -494,6 +596,16 @@
         }
       }
     },
+    "Licenses" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "権利表記"
+          }
+        }
+      }
+    },
     "Listening..." : {
       "localizations" : {
         "ja" : {
@@ -597,12 +709,22 @@
         }
       }
     },
-    "Please get and enter your API key from Google AI Studio." : {
+    "Please check the available models and features for your plan." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Google AI StudioでAPIキーを取得して入力してください。"
+            "value" : "ご利用のプランで利用可能なモデルと機能をご確認ください。"
+          }
+        }
+      }
+    },
+    "Please get and enter your API key from Google AI Studio. You can also use a free tier API key." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google AI StudioでAPIキーを取得して入力してください。無料枠のAPIキーでも利用できます。"
           }
         }
       }
@@ -892,6 +1014,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Appleの提供するFoundation Modelsを使用して会話を行うことができるアシスタントです。使用するにはデバイスでApple Intelligenceが利用可能である必要があります。このアシスタントではインターネット上を検索することはできません。"
+          }
+        }
+      }
+    },
+    "Translate Message" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "メッセージを翻訳"
           }
         }
       }
