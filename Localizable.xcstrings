@@ -259,7 +259,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "消去"
+            "value" : "削除"
           }
         }
       }
@@ -269,7 +269,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全て消去"
+            "value" : "全て削除"
           }
         }
       }
