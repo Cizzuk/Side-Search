@@ -54,6 +54,7 @@ struct ChatHistoryView: View {
     }
     
     struct ChatDetailView: View {
+        @Environment(\.dismiss) private var dismiss
         @StateObject var viewModel: ChatHistoryViewModel
         var chat: ChatHistory.Chat
         
@@ -73,9 +74,13 @@ struct ChatHistoryView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(role: .destructive, action: { viewModel.delete(chat.id) }) {
+                    Button(role: .destructive, action: {
+                        viewModel.delete(chat.id)
+                        dismiss()
+                    }) {
                         Label("Delete", systemImage: "trash")
                     }
+                    .tint(.red)
                 }
             }
         }
