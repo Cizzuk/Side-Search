@@ -53,6 +53,9 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Variables
     
+    // Set from View
+    var assistantType: AssistantType?
+    
     @Published var detent: PresentationDetent = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
            let option = DetentOption(rawValue: rawValue) {
@@ -131,6 +134,24 @@ class AssistantViewModel: ObservableObject {
     }
     
     // MARK: - Methods
+    
+    func dismissAssistant() {
+        stopRecording()
+        saveChatHistory()
+    }
+    
+    func saveChatHistory() {
+        guard !messageHistory.isEmpty,
+              let assistantType = assistantType
+        else { return }
+        
+        let chat = ChatHistory.Chat(
+            assistantType: assistantType,
+            messages: messageHistory
+        )
+        
+        ChatHistory.add(chat)
+    }
     
     func startAssistant() {
         // MARK: Override in subclass if needed
