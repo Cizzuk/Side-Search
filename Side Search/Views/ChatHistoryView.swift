@@ -30,6 +30,19 @@ struct ChatHistoryView: View {
                             .foregroundColor(.secondary)
                         }
                     }
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            viewModel.delete(chat.id)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+                }
+                .onDelete { indexSet in
+                    for index in indexSet {
+                        let chat = viewModel.chats[index]
+                        viewModel.delete(chat.id)
+                    }
                 }
             }
             .onAppear() {
@@ -74,10 +87,10 @@ struct ChatHistoryView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(role: .destructive, action: {
+                    Button(role: .destructive) {
                         viewModel.delete(chat.id)
                         dismiss()
-                    }) {
+                    } label: {
                         Label("Delete", systemImage: "trash")
                     }
                     .tint(.red)
