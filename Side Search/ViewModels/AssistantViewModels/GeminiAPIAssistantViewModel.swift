@@ -107,7 +107,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         do {
             (data, _) = try await URLSession.shared.data(for: request)
         } catch {
-            messageHistory.append(AssistantMessage(from: .system, content: "Internet connection error"))
+            messageHistory.append(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
         
