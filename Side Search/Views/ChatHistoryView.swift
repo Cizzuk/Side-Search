@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ChatHistoryView: View {
-    @StateObject var viewModel = ChatHistoryViewModel()
-    
     @Environment(\.dismiss) private var dismiss
+    @StateObject var viewModel = ChatHistoryViewModel()
     
     var body: some View {
         NavigationStack {
@@ -32,6 +31,9 @@ struct ChatHistoryView: View {
                         }
                     }
                 }
+            }
+            .onAppear() {
+                viewModel.loadChats()
             }
             .fullScreenCover(isPresented: $viewModel.showSafariView) {
                 if let url = viewModel.searchURL {

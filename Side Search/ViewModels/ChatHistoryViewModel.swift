@@ -10,7 +10,7 @@ import UIKit
 import SwiftUI
 
 class ChatHistoryViewModel: ObservableObject {
-    @Published var chats: [ChatHistory.Chat] = ChatHistory.loadChats()
+    @Published var chats: [ChatHistory.Chat] = []
     
     // Web View
     @Published var searchURL: URL?
@@ -24,6 +24,10 @@ class ChatHistoryViewModel: ObservableObject {
             // Fallback
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
+    }
+    
+    func loadChats() {
+        chats = ChatHistory.loadChats()
     }
     
     func delete(_ chat: UUID) {
