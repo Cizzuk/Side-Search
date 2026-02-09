@@ -1018,6 +1018,16 @@
         }
       }
     },
+    "Translate Message" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "メッセージを翻訳"
+          }
+        }
+      }
+    },
     "Unable to create a recognition request." : {
       "localizations" : {
         "ja" : {

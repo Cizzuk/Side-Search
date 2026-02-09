@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Translation
 import Textual
 
 struct MessagesView: View {
@@ -14,6 +15,7 @@ struct MessagesView: View {
     
     private let disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering")
     @State private var isCopied: Bool = false
+    @State private var showTranslation: Bool = false
     
     func copyMessage() {
         UIPasteboard.general.string = message.content
@@ -30,15 +32,20 @@ struct MessagesView: View {
                 Text(message.from.displayName)
                     .font(.headline)
                 Spacer()
-                Button(action: { copyMessage() }) {
-                    Label("Copy Message to Clipboard",
-                          systemImage: isCopied ? "checkmark" : "document.on.document")
-                        .labelStyle(.iconOnly)
-                        .font(.caption)
-                        .frame(width: 24, height: 24, alignment: .center)
+                Group {
+                    Button(action: { showTranslation = true }) {
+                        Label("Translate Message", systemImage: "translate")
+                    }
+                    Button(action: { copyMessage() }) {
+                        Label("Copy Message to Clipboard",
+                              systemImage: isCopied ? "checkmark" : "document.on.document")
+                    }
+                    .disabled(isCopied)
+                    .animation(.default, value: isCopied)
                 }
-                .disabled(isCopied)
-                .animation(.default, value: isCopied)
+                .labelStyle(.iconOnly)
+                .font(.caption)
+                .frame(width: 24, height: 24, alignment: .center)
             }
             .foregroundStyle(.secondary)
             
@@ -69,5 +76,6 @@ struct MessagesView: View {
         .accessibilityAction(named: "Copy Message to Clipboard") {
             copyMessage()
         }
+        .translationPresentation(isPresented: $showTranslation, text: message.content)
     }
 }
