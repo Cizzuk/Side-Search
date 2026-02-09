@@ -65,9 +65,11 @@ struct MainView: View {
                     }
                 }
                 
-                Section {
-                    Button(action: { showChangeIconView = true }) {
-                        Label("Change App Icon", systemImage: "app.dashed")
+                if UIApplication.shared.supportsAlternateIcons {
+                    Section {
+                        Button(action: { showChangeIconView = true }) {
+                            Label("Change App Icon", systemImage: "app.dashed")
+                        }
                     }
                 }
             }
