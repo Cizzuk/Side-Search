@@ -99,6 +99,19 @@ struct ChatHistoryView: View {
         var body: some View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 45) {
+                    // Details
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(chat.date, style: .date)
+                            Text(chat.date, style: .time)
+                        }
+                        Spacer()
+                        Text(chat.assistantType.DescriptionProviderType.assistantName)
+                    }
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    
+                    // Messages
                     ForEach(chat.messages) { message in
                         MessagesView(message: message, openSafariView: { url in
                             viewModel.openSafariView(at: url)
