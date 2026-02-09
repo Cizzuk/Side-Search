@@ -21,7 +21,7 @@ struct TEST_YamabicoAssistant: AssistantDescriptionProvider {
     static func makeAssistantViewModel() -> AssistantViewModel { TEST_YamabicoAssistantViewModel() }
     
     static func isAvailable() -> Bool {
-        #if DEBUG
+        #if DEBUG && !targetEnvironment(simulator)
         return true
         #else
         return false
@@ -29,7 +29,7 @@ struct TEST_YamabicoAssistant: AssistantDescriptionProvider {
     }
     
     static func isBlocked() -> Bool {
-        #if DEBUG
+        #if DEBUG && !targetEnvironment(simulator)
         return false
         #else
         return true
