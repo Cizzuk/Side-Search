@@ -32,5 +32,6 @@ class ChatHistoryViewModel: ObservableObject {
     
     func delete(_ chat: UUID) {
         ChatHistory.delete(chat)
+        loadChats()
     }
 }
