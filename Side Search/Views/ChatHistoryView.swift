@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatHistoryView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel = ChatHistoryViewModel()
+    @State private var showClearAllHistoryAlert = false
     
     var body: some View {
         NavigationStack {
@@ -49,6 +50,17 @@ struct ChatHistoryView: View {
                     }
                 }
             }
+            // Clear All Chat History Alert
+            .alert(isPresented: $showClearAllHistoryAlert) {
+                Alert(
+                    title: Text("Clear All Chat History"),
+                    message: Text("Are you sure you want to clear all chat history?"),
+                    primaryButton: .destructive(Text("Clear")) {
+                        viewModel.clearAll()
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
             .onAppear() {
                 viewModel.loadChats()
             }
@@ -65,6 +77,12 @@ struct ChatHistoryView: View {
                     Button(action: { dismiss() }) {
                         Label("Close", systemImage: "xmark")
                     }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { showClearAllHistoryAlert = true }) {
+                        Label("Clear All", systemImage: "minus.circle")
+                    }
+                    .tint(.red)
                 }
             }
         }

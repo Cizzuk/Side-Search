@@ -40,4 +40,9 @@ class ChatHistoryViewModel: ObservableObject {
         ChatHistory.delete(chat)
         loadChats()
     }
+    
+    func clearAll() {
+        ChatHistory.clearAll()
+        loadChats()
+    }
 }
