@@ -32,20 +32,21 @@ struct MessagesView: View {
                 Text(message.from.displayName)
                     .font(.headline)
                 Spacer()
-                Group {
-                    Button(action: { showTranslation = true }) {
-                        Label("Translate Message", systemImage: "translate")
-                    }
+                
+                HStack(spacing: 20) {
                     Button(action: { copyMessage() }) {
                         Label("Copy Message to Clipboard",
                               systemImage: isCopied ? "checkmark" : "document.on.document")
                     }
                     .disabled(isCopied)
                     .animation(.default, value: isCopied)
+                    
+                    Button(action: { showTranslation = true }) {
+                        Label("Translate Message", systemImage: "translate")
+                    }
                 }
                 .labelStyle(.iconOnly)
                 .font(.caption)
-                .frame(width: 24, height: 24, alignment: .center)
             }
             .foregroundStyle(.secondary)
             
