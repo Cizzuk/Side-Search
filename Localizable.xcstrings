@@ -178,6 +178,16 @@
         }
       }
     },
+    "Chat History" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャット履歴"
+          }
+        }
+      }
+    },
     "ChatGPT" : {
       "localizations" : {
         "ja" : {

@@ -13,10 +13,13 @@ import TemporaryScreenCurtain
 struct MainView: View {
     @StateObject var viewModel = MainViewModel()
     
+    @State private var showChatHistoryView = false
     @State private var showHelpView = false
     @State private var showChangeIconView = false
     @State private var showClearInAppBrowserDataAlert = false
     
+    @Namespace private var ns_chatHistoryView
+    private let id_chatHistoryViewButton = "chatHistoryViewButton"
     @Namespace private var ns_switchAssistantView
     private let id_switchAssistantViewButton = "switchAssistantViewButton"
     @Namespace private var ns_assistantView
@@ -106,7 +109,12 @@ struct MainView: View {
                     .buttonStyle(.glassProminent)
                     .matchedTransitionSource(id: id_activateAssistantButton, in: ns_assistantView)
                 }
-                ToolbarItem(placement: .cancellationAction) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { showChatHistoryView = true }) {
+                        Label("Chat History", systemImage: "clock")
+                    }
+                    .matchedTransitionSource(id: id_chatHistoryViewButton, in: ns_chatHistoryView)
+                }
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: { showHelpView = true }) {
                         Label("Help", systemImage: "questionmark")
@@ -115,6 +123,7 @@ struct MainView: View {
             }
             // MARK: - Events
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+                showChatHistoryView = false
                 showHelpView = false
                 showChangeIconView = false
                 showClearInAppBrowserDataAlert = false
@@ -123,6 +132,13 @@ struct MainView: View {
         }
         // MARK: - Sheets
         .sheet(isPresented: $showHelpView) { HelpView() }
+        .fullScreenCover(isPresented: $showChatHistoryView) {
+            ChatHistoryView()
+                .navigationTransition(.zoom(
+                    sourceID: id_chatHistoryViewButton,
+                    in: ns_chatHistoryView
+                ))
+        }
         .sheet(isPresented: $showChangeIconView) { ChangeIconView() }
         .sheet(isPresented: $viewModel.showSwitchAssistantView) {
             SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
