@@ -58,6 +58,16 @@
         }
       }
     },
+    "Are you sure you want to clear all chat history?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャットの履歴をすべて消去しますか？"
+          }
+        }
+      }
+    },
     "Are you sure you want to clear all in-app browser data?" : {
       "localizations" : {
         "ja" : {
@@ -254,6 +264,26 @@
         }
       }
     },
+    "Clear All" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全て消去"
+          }
+        }
+      }
+    },
+    "Clear All Chat History" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全てのチャット履歴を消去"
+          }
+        }
+      }
+    },
     "Clear In-App Browser Data" : {
       "localizations" : {
         "ja" : {
@@ -346,6 +376,16 @@
         }
       }
     },
+    "Delete" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除"
+          }
+        }
+      }
+    },
     "Developer" : {
       "localizations" : {
         "ja" : {
@@ -382,6 +422,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ecosia"
+          }
+        }
+      }
+    },
+    "Enable Chat History" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャット履歴を有効化"
           }
         }
       }
