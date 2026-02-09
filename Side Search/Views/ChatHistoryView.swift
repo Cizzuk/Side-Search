@@ -14,6 +14,10 @@ struct ChatHistoryView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    Toggle("Enable Chat History", isOn: $viewModel.chatHistoryEnabled)
+                }
+                
                 ForEach(viewModel.chats) { chat in
                     NavigationLink(destination: ChatDetailView(viewModel: viewModel, chat: chat)) {
                         VStack(alignment: .leading) {

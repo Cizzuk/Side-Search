@@ -142,7 +142,8 @@ class AssistantViewModel: ObservableObject {
     
     func saveChatHistory() {
         guard !messageHistory.isEmpty,
-              let assistantType = assistantType
+              let assistantType = assistantType,
+              UserDefaults.standard.bool(forKey: "chatHistoryEnabled")
         else { return }
         
         let chat = ChatHistory.Chat(
