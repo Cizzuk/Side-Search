@@ -63,7 +63,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "チャットの履歴をすべて消去しますか？"
+            "value" : "チャットの履歴をすべて削除しますか？"
           }
         }
       }
@@ -73,7 +73,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アプリ内ブラウザのデータをすべて消去しますか？"
+            "value" : "アプリ内ブラウザのデータをすべて削除しますか？"
           }
         }
       }
@@ -279,7 +279,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全てのチャット履歴を消去"
+            "value" : "全てのチャット履歴を削除"
           }
         }
       }
