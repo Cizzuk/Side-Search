@@ -64,13 +64,16 @@ struct ChatHistoryView: View {
                         Label("Clear All", systemImage: "minus.circle")
                     }
                     .tint(.red)
-                    .alert("Clear All Chat History", isPresented: $showClearAllHistoryAlert) {
+                    .confirmationDialog(
+                        "Clear All Chat History",
+                        isPresented: $showClearAllHistoryAlert
+                    ) {
                         Button("Cancel", role: .cancel) {}
                         Button("Clear", role: .destructive) {
                             viewModel.clearAll()
                         }
                     } message: {
-                        Text("Are you sure you want to clear all chat history?")
+                        Text("This will clear all chat history. This action cannot be undone.")
                     }
                 }
             }
