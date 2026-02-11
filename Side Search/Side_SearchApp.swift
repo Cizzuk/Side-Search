@@ -24,5 +24,15 @@ struct Side_SearchApp: App {
                     }
                 }
         }
+        .commands {
+            CommandGroup(replacing: .newItem) {
+                Button {
+                    NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
+                } label: {
+                    Label("Start Assistant", image: "Sidefish")
+                }
+                .keyboardShortcut("N", modifiers: [.command])
+            }
+        }
     }
 }
