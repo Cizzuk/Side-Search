@@ -201,13 +201,17 @@ class SpeechRecognizer: ObservableObject {
     
     @MainActor
     func checkAvailability() async -> Bool {
+        func showErrorMessage(_ message: LocalizedStringResource) {
+            self.errorMessage = message
+            self.showError = true
+        }
+        
         // 1. Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
             break
         case .denied:
-            self.errorMessage = "Microphone access denied. Please enable it in Settings."
-            self.showError = true
+            showErrorMessage("Microphone access denied. Please enable it in Settings.")
             return false
         case .undetermined:
             // Wait for user authorization
@@ -217,13 +221,11 @@ class SpeechRecognizer: ObservableObject {
                 }
             }
             if !granted {
-                self.errorMessage = "Microphone access denied. Please enable it in Settings."
-                self.showError = true
+                showErrorMessage("Microphone access denied. Please enable it in Settings.")
                 return false
             }
         default:
-            self.errorMessage = "Unknown microphone authorization status."
-            self.showError = true
+            showErrorMessage("Unknown microphone authorization status.")
             return false
         }
         
@@ -232,21 +234,18 @@ class SpeechRecognizer: ObservableObject {
         
         // Check supported locales
         guard !SFSpeechRecognizer.supportedLocales().isEmpty else {
-            self.errorMessage = "Speech recognition is currently unavailable on this device."
-            self.showError = true
+            showErrorMessage("Speech recognition is currently unavailable on this device.")
             return false
         }
         
         // Check supportsOnDeviceRecognition & initialization
         if let recognizer = speechRecognizer {
             if !recognizer.supportsOnDeviceRecognition {
-                self.errorMessage = "Speech recognition is currently unavailable on this device."
-                self.showError = true
+                showErrorMessage("Speech recognition is currently unavailable on this device.")
                 return false
             }
         } else {
-            self.errorMessage = "Speech recognizer could not be initialized."
-            self.showError = true
+            showErrorMessage("Speech recognizer could not be initialized.")
             return false
         }
         
