@@ -93,6 +93,7 @@ struct MainView: View {
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
+            .accessibilityAction(.magicTap, { viewModel.activateAssistant() })
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { viewModel.showSwitchAssistantView = true }) {
