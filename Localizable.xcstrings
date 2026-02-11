@@ -1098,6 +1098,16 @@
         }
       }
     },
+    "Waiting for assistant..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを待っています…"
+          }
+        }
+      }
+    },
     "Yahoo" : {
       "localizations" : {
         "ja" : {
