@@ -54,7 +54,7 @@ class SpeechRecognizer: ObservableObject {
             }
             
             // Check Availability
-            if !(await checkMicAvailability()) {
+            if !(await checkAvailability()) {
                 return
             }
             
@@ -200,7 +200,7 @@ class SpeechRecognizer: ObservableObject {
     }
     
     @MainActor
-    func checkMicAvailability() async -> Bool {
+    func checkAvailability() async -> Bool {
         // 1. Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
