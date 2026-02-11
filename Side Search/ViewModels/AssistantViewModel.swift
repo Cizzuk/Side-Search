@@ -88,7 +88,11 @@ class AssistantViewModel: ObservableObject {
     var cancellables = Set<AnyCancellable>()
     
     var startWithMicMuted: Bool {
-        UserDefaults.standard.bool(forKey: "startWithMicMuted")
+        if AccessibilitySettings.isAssistiveAccessEnabled {
+            return true
+        }
+        
+        return UserDefaults.standard.bool(forKey: "startWithMicMuted")
     }
     
     // MARK: - Initialization
