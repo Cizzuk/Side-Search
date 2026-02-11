@@ -54,7 +54,7 @@ class SpeechRecognizer: ObservableObject {
             }
             
             // Check Availability
-            if !(await checkMicAvailability()) {
+            if !(await checkAvailability()) {
                 return
             }
             
@@ -116,18 +116,8 @@ class SpeechRecognizer: ObservableObject {
                     
                     // Handle final
                     if error != nil || isFinal {
-                        self.stopSilenceTimer()
-                        self.audioEngine.stop()
                         inputNode.removeTap(onBus: 0)
-                        self.recognitionRequest?.endAudio()
-                        
-                        self.recognitionRequest = nil
-                        self.recognitionTask = nil
-                        
-                        DispatchQueue.main.async {
-                            self.isRecording = false
-                            self.micLevel = 0.0
-                        }
+                        self.stopRecording()
                     }
                 }
                 
@@ -175,19 +165,25 @@ class SpeechRecognizer: ObservableObject {
     func stopRecording() {
         stopSilenceTimer()
         
+        isRecording = false
+        micLevel = 0.0
+        
+        if let recognitionRequest = recognitionRequest {
+            recognitionRequest.endAudio()
+            self.recognitionRequest = nil
+        }
+        
+        if let recognitionTask = recognitionTask {
+            recognitionTask.finish()
+            self.recognitionTask = nil
+        }
+        
         if audioEngine.isRunning {
-            isRecording = false
-            micLevel = 0.0
-            
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 guard let self = self else { return }
                 
                 audioEngine.stop()
                 audioEngine.inputNode.removeTap(onBus: 0)
-                recognitionRequest?.endAudio()
-                
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
                 
                 // Deactivate the audio session
                 do {
@@ -200,14 +196,18 @@ class SpeechRecognizer: ObservableObject {
     }
     
     @MainActor
-    func checkMicAvailability() async -> Bool {
+    func checkAvailability() async -> Bool {
+        func showErrorMessage(_ message: LocalizedStringResource) {
+            self.errorMessage = message
+            self.showError = true
+        }
+        
         // 1. Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
             break
         case .denied:
-            self.errorMessage = "Microphone access denied. Please enable it in Settings."
-            self.showError = true
+            showErrorMessage("Microphone access denied. Please enable it in Settings.")
             return false
         case .undetermined:
             // Wait for user authorization
@@ -217,13 +217,11 @@ class SpeechRecognizer: ObservableObject {
                 }
             }
             if !granted {
-                self.errorMessage = "Microphone access denied. Please enable it in Settings."
-                self.showError = true
+                showErrorMessage("Microphone access denied. Please enable it in Settings.")
                 return false
             }
         default:
-            self.errorMessage = "Unknown microphone authorization status."
-            self.showError = true
+            showErrorMessage("Unknown microphone authorization status.")
             return false
         }
         
@@ -232,21 +230,18 @@ class SpeechRecognizer: ObservableObject {
         
         // Check supported locales
         guard !SFSpeechRecognizer.supportedLocales().isEmpty else {
-            self.errorMessage = "Speech recognition is currently unavailable on this device."
-            self.showError = true
+            showErrorMessage("Speech recognition is currently unavailable on this device.")
             return false
         }
         
         // Check supportsOnDeviceRecognition & initialization
         if let recognizer = speechRecognizer {
             if !recognizer.supportsOnDeviceRecognition {
-                self.errorMessage = "Speech recognition is currently unavailable on this device."
-                self.showError = true
+                showErrorMessage("Speech recognition is currently unavailable on this device.")
                 return false
             }
         } else {
-            self.errorMessage = "Speech recognizer could not be initialized."
-            self.showError = true
+            showErrorMessage("Speech recognizer could not be initialized.")
             return false
         }
         

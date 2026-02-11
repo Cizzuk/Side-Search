@@ -10,6 +10,7 @@ import SwiftUI
 struct AssistantView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
     
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
@@ -33,8 +34,13 @@ struct AssistantView: View {
                         }
                         
                         if viewModel.responseIsPreparing {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
+                            HStack {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                Text("Waiting for assistant...")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                         
                         VStack(alignment: .leading) {
@@ -62,6 +68,21 @@ struct AssistantView: View {
                                 if viewModel.shouldInputFocused {
                                     isInputFocused = true
                                 }
+                            }
+                            
+                            // Assistive Access Controls
+                            if isAssistiveAccessEnabled {
+                                Spacer(minLength: 30)
+                                Button(action: { viewModel.toggleRecording() }) {
+                                    Label(viewModel.isRecording ? "Stop" : "Speak",
+                                          systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
+                                }
+                                
+                                Button(action: { viewModel.confirmInput() }) {
+                                    Label("OK", systemImage: "checkmark")
+                                }
+                                .buttonStyle(.glassProminent)
+                                .disabled(viewModel.responseIsPreparing)
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -114,13 +135,7 @@ struct AssistantView: View {
                     }
                 }
                 ToolbarItemGroup(placement: .primaryAction) {
-                    Button {
-                        if viewModel.isRecording {
-                            viewModel.stopRecording()
-                        } else {
-                            viewModel.startRecording()
-                        }
-                    } label: {
+                    Button(action: { viewModel.toggleRecording() }) {
                         Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
                               systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
                     }
@@ -177,4 +192,8 @@ struct AssistantView: View {
         .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)
     }
+}
+
+#Preview(traits: .assistiveAccess) {
+    AssistantView()
 }

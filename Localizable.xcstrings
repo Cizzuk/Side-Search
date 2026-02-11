@@ -58,26 +58,6 @@
         }
       }
     },
-    "Are you sure you want to clear all chat history?" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "チャットの履歴をすべて削除しますか？"
-          }
-        }
-      }
-    },
-    "Are you sure you want to clear all in-app browser data?" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリ内ブラウザのデータをすべて削除しますか？"
-          }
-        }
-      }
-    },
     "Ask Assistant" : {
       "localizations" : {
         "ja" : {
@@ -842,6 +822,16 @@
         }
       }
     },
+    "Speak" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "話す"
+          }
+        }
+      }
+    },
     "Speech Language" : {
       "localizations" : {
         "ja" : {
@@ -932,6 +922,16 @@
         }
       }
     },
+    "Stop" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "止める"
+          }
+        }
+      }
+    },
     "Stop Speech Recognition" : {
       "localizations" : {
         "ja" : {
@@ -1018,6 +1018,26 @@
         }
       }
     },
+    "This will clear all chat history. This action cannot be undone." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてのチャットの履歴を削除します。この操作は元に戻せません。"
+          }
+        }
+      }
+    },
+    "This will clear all in-app browser data, including cookies and cache." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クッキーやキャッシュを含む、すべてのアプリ内ブラウザのデータが削除されます。"
+          }
+        }
+      }
+    },
     "Translate Message" : {
       "localizations" : {
         "ja" : {
@@ -1074,6 +1094,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "バージョン"
+          }
+        }
+      }
+    },
+    "Waiting for assistant..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを待っています…"
           }
         }
       }
