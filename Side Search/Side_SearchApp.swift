@@ -14,7 +14,7 @@ struct Side_SearchApp: App {
             AssistantView()
         }
         WindowGroup {
-            AssistantView()
+            MainView()
                 .onOpenURL { url in
                     switch url.host {
                     case "assistant":
