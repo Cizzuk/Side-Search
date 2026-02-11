@@ -10,8 +10,11 @@ import SwiftUI
 @main
 struct Side_SearchApp: App {
     var body: some Scene {
+        AssistiveAccess {
+            AssistantView()
+        }
         WindowGroup {
-            MainView()
+            AssistantView()
                 .onOpenURL { url in
                     switch url.host {
                     case "assistant":

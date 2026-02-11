@@ -13,7 +13,9 @@ struct MessagesView: View {
     var message: AssistantMessage
     var openSafariView: (URL) -> Void
     
+    @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
     private let disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering")
+    
     @State private var isCopied: Bool = false
     @State private var showTranslation: Bool = false
     
@@ -33,20 +35,22 @@ struct MessagesView: View {
                     .font(.headline)
                 Spacer()
                 
-                HStack(spacing: 20) {
-                    Button(action: { copyMessage() }) {
-                        Label("Copy Message to Clipboard",
-                              systemImage: isCopied ? "checkmark" : "document.on.document")
+                if !isAssistiveAccessEnabled {
+                    HStack(spacing: 20) {
+                        Button(action: { copyMessage() }) {
+                            Label("Copy Message to Clipboard",
+                                  systemImage: isCopied ? "checkmark" : "document.on.document")
+                        }
+                        .disabled(isCopied)
+                        .animation(.default, value: isCopied)
+                        
+                        Button(action: { showTranslation = true }) {
+                            Label("Translate Message", systemImage: "translate")
+                        }
                     }
-                    .disabled(isCopied)
-                    .animation(.default, value: isCopied)
-                    
-                    Button(action: { showTranslation = true }) {
-                        Label("Translate Message", systemImage: "translate")
-                    }
+                    .labelStyle(.iconOnly)
+                    .font(.caption)
                 }
-                .labelStyle(.iconOnly)
-                .font(.caption)
             }
             .foregroundStyle(.secondary)
             
@@ -61,7 +65,7 @@ struct MessagesView: View {
                     .textual.structuredTextStyle(TextualSideStyle())
             }
             
-            if !message.sources.isEmpty {
+            if !message.sources.isEmpty && !isAssistiveAccessEnabled {
                 Spacer(minLength: 15)
                 
                 ForEach(message.sources, id: \.url) { source in

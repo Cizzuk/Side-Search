@@ -10,6 +10,7 @@ import SwiftUI
 struct AssistantView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
     
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
@@ -61,6 +62,26 @@ struct AssistantView: View {
                             .onChange(of: viewModel.shouldInputFocused) {
                                 if viewModel.shouldInputFocused {
                                     isInputFocused = true
+                                }
+                            }
+                            
+                            // Assistive Access Controls
+                            if isAssistiveAccessEnabled {
+                                Spacer(minLength: 30)
+                                HStack {
+                                    Button(action: { viewModel.toggleRecording() }) {
+                                        Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
+                                              systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
+                                        .labelStyle(.iconOnly)
+                                    }
+                                    .tint(viewModel.isRecording ? .orange : .primary)
+                                    
+                                    Button(action: { viewModel.confirmInput() }) {
+                                        Label("Confirm", systemImage: assistantType.DescriptionProviderType.assistantSystemImage)
+                                            .labelStyle(.iconOnly)
+                                    }
+                                    .buttonStyle(.glassProminent)
+                                    .disabled(viewModel.responseIsPreparing)
                                 }
                             }
                         }
@@ -171,4 +192,8 @@ struct AssistantView: View {
         .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)
     }
+}
+
+#Preview(traits: .assistiveAccess) {
+    AssistantView()
 }
