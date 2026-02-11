@@ -34,8 +34,13 @@ struct AssistantView: View {
                         }
                         
                         if viewModel.responseIsPreparing {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
+                            HStack {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                Text("Waiting for assistant...")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                         
                         VStack(alignment: .leading) {
