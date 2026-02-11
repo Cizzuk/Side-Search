@@ -68,6 +68,14 @@ struct MainView: View {
                     Button(action: { showClearInAppBrowserDataAlert = true }) {
                         Label("Clear In-App Browser Data", systemImage: "xmark.circle")
                     }
+                    .alert("Clear In-App Browser Data", isPresented: $showClearInAppBrowserDataAlert) {
+                        Button("Cancel", role: .cancel) {}
+                        Button("Clear", role: .destructive) {
+                            SFSafariViewController.DataStore.default.clearWebsiteData()
+                        }
+                    } message: {
+                        Text("Are you sure you want to clear all in-app browser data?")
+                    }
                 }
                 
                 if UIApplication.shared.supportsAlternateIcons {
@@ -82,16 +90,6 @@ struct MainView: View {
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
-            // Delete In-App Browser Data Alert
-            .alert(isPresented: $showClearInAppBrowserDataAlert) {
-                Alert(
-                    title: Text("Clear In-App Browser Data"),
-                    message: Text("Are you sure you want to clear all in-app browser data?"),
-                    primaryButton: .destructive(Text("Clear")) { SFSafariViewController.DataStore.default.clearWebsiteData()
-                    },
-                    secondaryButton: .cancel()
-                )
-            }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { viewModel.showSwitchAssistantView = true }) {
