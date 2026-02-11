@@ -53,16 +53,6 @@ struct ChatHistoryView: View {
             .animation(.default, value: viewModel.chats.count)
             .navigationTitle("Chat History")
             .navigationBarTitleDisplayMode(.inline)
-            .alert(isPresented: $showClearAllHistoryAlert) {
-                Alert(
-                    title: Text("Clear All Chat History"),
-                    message: Text("Are you sure you want to clear all chat history?"),
-                    primaryButton: .destructive(Text("Clear")) {
-                        viewModel.clearAll()
-                    },
-                    secondaryButton: .cancel()
-                )
-            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(action: { dismiss() }) {
@@ -74,6 +64,14 @@ struct ChatHistoryView: View {
                         Label("Clear All", systemImage: "minus.circle")
                     }
                     .tint(.red)
+                    .alert("Clear All Chat History", isPresented: $showClearAllHistoryAlert) {
+                        Button("Cancel", role: .cancel) {}
+                        Button("Clear", role: .destructive) {
+                            viewModel.clearAll()
+                        }
+                    } message: {
+                        Text("Are you sure you want to clear all chat history?")
+                    }
                 }
             }
             // MARK: - Events
