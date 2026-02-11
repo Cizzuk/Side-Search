@@ -822,6 +822,16 @@
         }
       }
     },
+    "Speak" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "話す"
+          }
+        }
+      }
+    },
     "Speech Language" : {
       "localizations" : {
         "ja" : {
@@ -908,6 +918,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Startpage"
+          }
+        }
+      }
+    },
+    "Stop" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "止める"
           }
         }
       }
