@@ -116,18 +116,8 @@ class SpeechRecognizer: ObservableObject {
                     
                     // Handle final
                     if error != nil || isFinal {
-                        self.stopSilenceTimer()
-                        self.audioEngine.stop()
                         inputNode.removeTap(onBus: 0)
-                        self.recognitionRequest?.endAudio()
-                        
-                        self.recognitionRequest = nil
-                        self.recognitionTask = nil
-                        
-                        DispatchQueue.main.async {
-                            self.isRecording = false
-                            self.micLevel = 0.0
-                        }
+                        self.stopRecording()
                     }
                 }
                 
@@ -175,19 +165,25 @@ class SpeechRecognizer: ObservableObject {
     func stopRecording() {
         stopSilenceTimer()
         
+        isRecording = false
+        micLevel = 0.0
+        
+        if let recognitionRequest = recognitionRequest {
+            recognitionRequest.endAudio()
+            self.recognitionRequest = nil
+        }
+        
+        if let recognitionTask = recognitionTask {
+            recognitionTask.finish()
+            self.recognitionTask = nil
+        }
+        
         if audioEngine.isRunning {
-            isRecording = false
-            micLevel = 0.0
-            
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 guard let self = self else { return }
                 
                 audioEngine.stop()
                 audioEngine.inputNode.removeTap(onBus: 0)
-                recognitionRequest?.endAudio()
-                
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
                 
                 // Deactivate the audio session
                 do {
