@@ -170,6 +170,14 @@ class AssistantViewModel: ObservableObject {
         speechRecognizer.stopRecording()
     }
     
+    func toggleRecording() {
+        if isRecording {
+            stopRecording()
+        } else {
+            startRecording()
+        }
+    }
+    
     func confirmInput() {
         // MARK: Override in subclass
         guard !responseIsPreparing else { return }

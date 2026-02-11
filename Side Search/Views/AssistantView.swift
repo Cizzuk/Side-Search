@@ -114,13 +114,7 @@ struct AssistantView: View {
                     }
                 }
                 ToolbarItemGroup(placement: .primaryAction) {
-                    Button {
-                        if viewModel.isRecording {
-                            viewModel.stopRecording()
-                        } else {
-                            viewModel.startRecording()
-                        }
-                    } label: {
+                    Button(action: { viewModel.toggleRecording() }) {
                         Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
                               systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
                     }
