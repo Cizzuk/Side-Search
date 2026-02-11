@@ -19,5 +19,7 @@
 		<key>UISceneConfigurations</key>
 		<dict/>
 	</dict>
+	<key>UISupportsAssistiveAccess</key>
+	<true/>
 </dict>
 </plist>
