@@ -68,21 +68,16 @@ struct AssistantView: View {
                             // Assistive Access Controls
                             if isAssistiveAccessEnabled {
                                 Spacer(minLength: 30)
-                                HStack {
-                                    Button(action: { viewModel.toggleRecording() }) {
-                                        Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
-                                              systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
-                                        .labelStyle(.iconOnly)
-                                    }
-                                    .tint(viewModel.isRecording ? .orange : .primary)
-                                    
-                                    Button(action: { viewModel.confirmInput() }) {
-                                        Label("Confirm", systemImage: assistantType.DescriptionProviderType.assistantSystemImage)
-                                            .labelStyle(.iconOnly)
-                                    }
-                                    .buttonStyle(.glassProminent)
-                                    .disabled(viewModel.responseIsPreparing)
+                                Button(action: { viewModel.toggleRecording() }) {
+                                    Label(viewModel.isRecording ? "Stop" : "Speak",
+                                          systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
                                 }
+                                
+                                Button(action: { viewModel.confirmInput() }) {
+                                    Label("OK", systemImage: "checkmark")
+                                }
+                                .buttonStyle(.glassProminent)
+                                .disabled(viewModel.responseIsPreparing)
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
