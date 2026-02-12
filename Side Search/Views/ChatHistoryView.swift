@@ -94,7 +94,7 @@ struct ChatHistoryView: View {
     
     struct ChatDetailView: View {
         @Environment(\.dismiss) private var dismiss
-        @StateObject var viewModel: ChatHistoryViewModel
+        @ObservedObject var viewModel: ChatHistoryViewModel
         var chat: ChatHistory.Chat
         
         var body: some View {

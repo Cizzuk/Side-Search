@@ -130,21 +130,21 @@ struct MainView: View {
             }
         }
         // MARK: - Sheets
-        .sheet(isPresented: $showHelpView) {
+        .sheet(isPresented: $viewModel.showHelpView) {
             HelpView()
                 .navigationTransition(.zoom(
                     sourceID: id_helpViewButton,
                     in: ns_helpView
                 ))
         }
-        .fullScreenCover(isPresented: $showChatHistoryView) {
+        .fullScreenCover(isPresented: $viewModel.showChatHistoryView) {
             ChatHistoryView()
                 .navigationTransition(.zoom(
                     sourceID: id_chatHistoryViewButton,
                     in: ns_chatHistoryView
                 ))
         }
-        .sheet(isPresented: $showChangeIconView) { ChangeIconView() }
+        .sheet(isPresented: $viewModel.showChangeIconView) { ChangeIconView() }
         .sheet(isPresented: $viewModel.showSwitchAssistantView) {
             SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
                 .navigationTransition(.zoom(
