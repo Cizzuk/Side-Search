@@ -10,7 +10,7 @@ import AppIntents
 import SwiftUI
 
 struct StartAssistantControl: ControlWidget {
-    static let kind = "net.cizzuk.cbnote.WidgetExtension.OpenAppAddNewNoteControl"
+    static let kind = "net.cizzuk.sidesearch.WidgetExtension.StartAssistantControl"
     static let title: LocalizedStringResource = "Start Assistant"
     
     var body: some ControlWidgetConfiguration {
