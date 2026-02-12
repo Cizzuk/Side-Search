@@ -13,20 +13,60 @@ import SwiftUI
 class MainViewModel: ObservableObject {
     @Published var showSwitchAssistantView = false
     @Published var showAssistant = false
+    @Published var showChatHistoryView = false
+    @Published var showHelpView = false
+    @Published var showChangeIconView = false
     @Published var showSafariView = false
     @Published var safariViewURL: URL?
     @Published var showTmpCurtain = false
+
+    enum Modals {
+        case switchAssistant
+        case assistant
+        case chatHistory
+        case help
+        case changeIcon
+        case safari
+        case tmpCurtain
+    }
+    
+    func showModal(_ modal: Modals) {
+        closeAllModals()
+        switch modal {
+        case .switchAssistant:
+            showSwitchAssistantView = true
+        case .assistant:
+            showAssistant = true
+        case .chatHistory:
+            showChatHistoryView = true
+        case .help:
+            showHelpView = true
+        case .changeIcon:
+            showChangeIconView = true
+        case .safari:
+            showSafariView = true
+        case .tmpCurtain:
+            showTmpCurtain = true
+        }
+    }
+
+    func closeAllModals() {
+        showSwitchAssistantView = false
+        showAssistant = false
+        showChatHistoryView = false
+        showHelpView = false
+        showChangeIconView = false
+        showSafariView = false
+        showTmpCurtain = false
+    }
     
     func activateAssistant() {
         // Close sheets and covers
-        showSwitchAssistantView = false
-        showAssistant = false
-        showSafariView = false
-        showTmpCurtain = false
+        closeAllModals()
         
         // Check current assistant type
         if currentAssistant != .urlBased {
-            showAssistant = true
+            showModal(.assistant)
             return
         }
         
@@ -34,19 +74,19 @@ class MainViewModel: ObservableObject {
         
         // Check if query input is needed
         if SearchEngine.needQueryInput() {
-            showAssistant = true
+            showModal(.assistant)
             return
         }
         
         // Check if SafariView is available
         if SearchEngine.openIn == .inAppBrowser && SearchEngine.checkSafariViewAvailability() {
             safariViewURL = URL(string: SearchEngine.url)
-            showSafariView = true
+            showModal(.safari)
             return
         }
         
         if let url = URL(string: SearchEngine.url) {
-            showTmpCurtain = true
+            showModal(.tmpCurtain)
             UIApplication.shared.open(url)
         }
     }
