@@ -13,9 +13,6 @@ import TemporaryScreenCurtain
 struct MainView: View {
     @StateObject var viewModel = MainViewModel()
     
-    @State private var showChatHistoryView = false
-    @State private var showHelpView = false
-    @State private var showChangeIconView = false
     @State private var showClearInAppBrowserDataAlert = false
     
     @Namespace private var ns_chatHistoryView
@@ -83,7 +80,7 @@ struct MainView: View {
                 
                 if UIApplication.shared.supportsAlternateIcons {
                     Section {
-                        Button(action: { showChangeIconView = true }) {
+                        Button(action: { viewModel.showModal(.changeIcon) }) {
                             Label("Change App Icon", systemImage: "app.dashed")
                         }
                     }
@@ -96,7 +93,7 @@ struct MainView: View {
             .accessibilityAction(.magicTap, { viewModel.activateAssistant() })
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: { viewModel.showSwitchAssistantView = true }) {
+                    Button(action: { viewModel.showModal(.switchAssistant) }) {
                         HStack {
                             Image(systemName: viewModel.currentAssistant.DescriptionProviderType.assistantSystemImage)
                             Text(viewModel.currentAssistant.DescriptionProviderType.assistantName)
@@ -114,13 +111,13 @@ struct MainView: View {
                     .matchedTransitionSource(id: id_activateAssistantButton, in: ns_assistantView)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { showChatHistoryView = true }) {
+                    Button(action: { viewModel.showModal(.chatHistory) }) {
                         Label("Chat History", systemImage: "clock")
                     }
                     .matchedTransitionSource(id: id_chatHistoryViewButton, in: ns_chatHistoryView)
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: { showHelpView = true }) {
+                    Button(action: { viewModel.showModal(.help) }) {
                         Label("Help", systemImage: "questionmark")
                     }
                     .matchedTransitionSource(id: id_helpViewButton, in: ns_helpView)
@@ -128,9 +125,6 @@ struct MainView: View {
             }
             // MARK: - Events
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
-                showChatHistoryView = false
-                showHelpView = false
-                showChangeIconView = false
                 showClearInAppBrowserDataAlert = false
                 viewModel.activateAssistant()
             }
