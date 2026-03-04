@@ -178,21 +178,6 @@ class AssistantViewModel: ObservableObject {
         AssistantActivityManager.endAll()
     }
     
-    func addMessage(_ message: AssistantMessage) {
-        messageHistory.append(message)
-        
-        // Send user notification
-        if message.from != .user && currentScenePhase != .active {
-            Task {
-                if await UserNotificationSupport.requestAuthorization() {
-                    await UserNotificationSupport.sendAssistantMessage(message: message)
-                } else {
-                    stopRecording()
-                }
-            }
-        }
-    }
-    
     func saveChatHistory() {
         guard UserDefaults.standard.bool(forKey: "chatHistoryEnabled"),
               !messageHistory.isEmpty
@@ -252,6 +237,21 @@ class AssistantViewModel: ObservableObject {
         inputText = ""
         responseIsPreparing = false
         resumeRecognize()
+    }
+    
+    func addMessage(_ message: AssistantMessage) {
+        messageHistory.append(message)
+        
+        // Send user notification
+        if message.from != .user && currentScenePhase != .active {
+            Task {
+                if await UserNotificationSupport.requestAuthorization() {
+                    await UserNotificationSupport.sendAssistantMessage(message: message)
+                } else {
+                    stopRecording()
+                }
+            }
+        }
     }
     
     func openSafariView(at url: URL) {
