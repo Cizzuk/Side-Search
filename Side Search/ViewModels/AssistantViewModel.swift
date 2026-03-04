@@ -164,7 +164,11 @@ class AssistantViewModel: ObservableObject {
     func isBackgroundAvailable() async -> Bool {
         if !assistantType.DescriptionProviderType.backgroundSupports {
             return false
-        } else if !(await UserNotificationSupport.isAvailable()) {
+        }
+        if AccessibilitySettings.isAssistiveAccessEnabled {
+            return false
+        }
+        if !(await UserNotificationSupport.isAvailable()) {
             return false
         }
         return true
