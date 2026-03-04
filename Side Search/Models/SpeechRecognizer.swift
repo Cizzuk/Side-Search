@@ -45,6 +45,19 @@ class SpeechRecognizer: ObservableObject {
     
     // MARK: - Public Methods
     
+    init() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleInterruption(_:)),
+            name: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance()
+        )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     @MainActor
     func startRecording() {
         Task {
@@ -295,5 +308,17 @@ class SpeechRecognizer: ObservableObject {
     private func silenceTimerFired() {
         guard isRecording else { return }
         onSilenceTimeout?()
+    }
+    
+    // Handle Audio Session Interruptions
+    @objc private func handleInterruption(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else { return }
+        
+        if type == .began {
+            stopRecording()
+        }
     }
 }
