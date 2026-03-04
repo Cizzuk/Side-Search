@@ -137,6 +137,27 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Lifecycle
+    
+    func onChange(scenePhase: ScenePhase) {
+        switch scenePhase {
+        case .active:
+            break
+        case .inactive:
+            break
+        case .background:
+            // Background support check
+            if let assistantType = assistantType,
+               assistantType.DescriptionProviderType.backgroundSupports {
+                
+            } else {
+                stopRecording()
+            }
+        @unknown default:
+            break
+        }
+    }
+    
     // MARK: - Methods
     
     func dismissAssistant() {

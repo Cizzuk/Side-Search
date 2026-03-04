@@ -12,6 +12,7 @@ struct AssistantView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
     
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
     
@@ -177,6 +178,7 @@ struct AssistantView: View {
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 viewModel.activateAssistant()
             }
+            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
         }
         .background(
             AngularGradient(
