@@ -169,6 +169,7 @@ struct AssistantView: View {
                 Text(viewModel.errorMessage)
             }
             .onAppear {
+                viewModel.currentScenePhase = scenePhase
                 viewModel.startAssistant()
             }
             .onDisappear() {
