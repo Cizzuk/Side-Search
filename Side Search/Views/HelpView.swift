@@ -10,7 +10,23 @@ import SwiftUI
 struct HelpView: View {
     @Environment(\.dismiss) private var dismiss
     
+    private var canOpenSettingsURL: Bool {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return false }
+        return UIApplication.shared.canOpenURL(settingsURL)
+    }
+    
+    private func openSettingsURL() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        if UIApplication.shared.canOpenURL(settingsURL) {
+            UIApplication.shared.open(settingsURL)
+        }
+    }
+    
     @State var unAuthorizationStatus: UNAuthorizationStatus?
+    
+    private func updateUNAuthorizationStatus() async {
+        unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
+    }
     
     var body: some View {
         NavigationStack {
@@ -21,13 +37,10 @@ struct HelpView: View {
                     // 設定 → アプリ → Side Searchで「サイドボタンを押してSide Searchを使用」をオンにすることで設定できます。
                     Text("If you are in a region where Side Button customization is enabled, you can quickly launch the Side Search assistant by pressing and holding the Side Button.")
                     Text("You can set it up by going to Settings → Apps → Side Search and turning on \"Press Side Button for Side Search\".")
-                    Button() {
-                        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-                        if UIApplication.shared.canOpenURL(settingsURL) {
-                            UIApplication.shared.open(settingsURL)
+                    if canOpenSettingsURL {
+                        Button(action: { openSettingsURL() }) {
+                            Label("Open Settings", systemImage: "gear")
                         }
-                    } label: {
-                        Label("Open Settings", systemImage: "gear")
                     }
                 } header: { Label("Side Button Tip", systemImage: "button.vertical.right.press") }
                 
@@ -64,13 +77,10 @@ struct HelpView: View {
                                 Label("Allow Notifications", systemImage: "app.badge")
                             }
                         } else if unAuthorizationStatus == .denied {
-                            Button() {
-                                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-                                if UIApplication.shared.canOpenURL(settingsURL) {
-                                    UIApplication.shared.open(settingsURL)
+                            if canOpenSettingsURL {
+                                Button(action: { openSettingsURL() }) {
+                                    Label("Allow in Settings", systemImage: "gear")
                                 }
-                            } label: {
-                                Label("Allow in Settings", systemImage: "gear")
                             }
                         }
                     } header: { Label("Background Tip", systemImage: "arrow.clockwise")
