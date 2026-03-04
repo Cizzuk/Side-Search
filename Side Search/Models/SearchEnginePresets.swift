@@ -37,10 +37,6 @@ class SearchEnginePresets {
                     url: "https://chatgpt.com/?q=%s",
                 ),
                 Preset(
-                    name: "Gemini",
-                    url: "https://gemini.google.com/?prompt_text=%s",
-                ),
-                Preset(
                     name: "Claude",
                     url: "https://claude.ai/new?q=%s",
                 ),
@@ -49,8 +45,16 @@ class SearchEnginePresets {
                     url: "https://www.bing.com/copilotsearch?q=%s",
                 ),
                 Preset(
+                    name: "Google AI Mode",
+                    url: "https://google.com/?q=%s&udm=50",
+                ),
+                Preset(
                     name: "Perplexity",
                     url: "https://www.perplexity.ai/?q=%s",
+                ),
+                Preset(
+                    name: "Gemini",
+                    url: "https://gemini.google.com/app",
                 )
             ])
         }

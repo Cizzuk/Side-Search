@@ -15,8 +15,8 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
     
     // MARK: - Initialization
     
-    override init() {
-        super.init()
+    override init(assistantType: AssistantType = .test_yamabico) {
+        super.init(assistantType: assistantType)
     }
     
     // MARK: - Override Methods
@@ -28,13 +28,13 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
-        stopRecording()
+        pauseRecognize()
         
         // Add user message to history
         let userInput = inputText
         inputText = ""
         let userMessage = AssistantMessage(from: .user, content: userInput)
-        messageHistory.append(userMessage)
+        addMessage(userMessage)
         
         let response = "\(userInput)..."
         let assistantMessage = AssistantMessage(from: .assistant, content: response)
@@ -42,8 +42,9 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         // Simulate a response from Yamabico
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            messageHistory.append(assistantMessage)
+            addMessage(assistantMessage)
             responseIsPreparing = false
+            resumeRecognize()
         }
     }
 }

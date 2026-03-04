@@ -60,6 +60,23 @@ class MainViewModel: ObservableObject {
         showTmpCurtain = false
     }
     
+    // MARK: - Lifecycle
+    
+    func onChange(scenePhase: ScenePhase) {
+        switch scenePhase {
+        case .active:
+            if !showAssistant && AssistantActivityManager.isActive() {
+                AssistantActivityManager.endAll()
+            }
+        case .inactive:
+            break
+        case .background:
+            break
+        @unknown default:
+            break
+        }
+    }
+    
     func activateAssistant() {
         // Close sheets and covers
         closeAllModals()

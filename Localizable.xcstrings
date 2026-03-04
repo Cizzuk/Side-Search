@@ -38,6 +38,26 @@
         }
       }
     },
+    "Allow in Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定で許可する"
+          }
+        }
+      }
+    },
+    "Allow Notifications" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知を許可する"
+          }
+        }
+      }
+    },
     "API Key" : {
       "localizations" : {
         "ja" : {
@@ -78,6 +98,16 @@
         }
       }
     },
+    "Assistant is Active" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタント作動中"
+          }
+        }
+      }
+    },
     "Assistant Screen Size" : {
       "localizations" : {
         "ja" : {
@@ -104,6 +134,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "オーディオセッションのセットアップに失敗しました: %@"
+          }
+        }
+      }
+    },
+    "Background Tip" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドのヒント"
           }
         }
       }
@@ -476,6 +516,16 @@
         }
       }
     },
+    "Google AI Mode" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google AIモード"
+          }
+        }
+      }
+    },
     "Google Gemini API" : {
       "localizations" : {
         "ja" : {
@@ -635,6 +685,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "通常"
+          }
+        }
+      }
+    },
+    "Notifications allowed." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知は許可されています。"
           }
         }
       }
@@ -1048,16 +1108,6 @@
         }
       }
     },
-    "Unable to create a recognition request." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "認識リクエストを作成できませんでした。"
-          }
-        }
-      }
-    },
     "Unknown microphone authorization status." : {
       "localizations" : {
         "ja" : {
@@ -1108,6 +1158,16 @@
         }
       }
     },
+    "With a compatible assistant, you can continue conversations in the background even if you close Side Search during speech recognition." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "対応するアシスタントでは、音声認識中にアプリを閉じてもバックグラウンドで会話を続けることができます。"
+          }
+        }
+      }
+    },
     "Yahoo" : {
       "localizations" : {
         "ja" : {
@@ -1154,6 +1214,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ショートカットを使ってSide Searchのアシスタントを起動することができます。"
+          }
+        }
+      }
+    },
+    "You can receive the assistant's replies via notifications. To have conversations in the background, you need to allow notifications for Side Search." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントの返事は通知で受け取ることができます。バックグラウンドで会話をするにはSide Searchの通知を許可する必要があります。"
           }
         }
       }

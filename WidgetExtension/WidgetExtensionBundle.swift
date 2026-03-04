@@ -12,5 +12,6 @@ import SwiftUI
 struct WidgetExtensionBundle: WidgetBundle {
     var body: some Widget {
         StartAssistantControl()
+        AssistantActivityWidget()
     }
 }

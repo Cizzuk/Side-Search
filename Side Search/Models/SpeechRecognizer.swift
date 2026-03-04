@@ -35,6 +35,7 @@ class SpeechRecognizer: ObservableObject {
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
+    private var isRecognitionPaused = false
     
     // Silence Detection Settings
     private var silenceTimer: Timer?
@@ -44,9 +45,24 @@ class SpeechRecognizer: ObservableObject {
     
     // MARK: - Public Methods
     
+    init() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleInterruption(_:)),
+            name: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance()
+        )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     @MainActor
     func startRecording() {
         Task {
+            isRecognitionPaused = false
+            
             // Cancel any existing recognition task
             if recognitionTask != nil {
                 recognitionTask?.cancel()
@@ -77,49 +93,8 @@ class SpeechRecognizer: ObservableObject {
                     return
                 }
                 
-                // Create the recognition request
-                recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-                
-                // Ensure the recognition request is valid
-                guard let recognitionRequest = recognitionRequest else {
-                    DispatchQueue.main.async {
-                        self.errorMessage = "Unable to create a recognition request."
-                        self.showError = true
-                    }
-                    return
-                }
-                
-                // Configure recognition request
-                recognitionRequest.requiresOnDeviceRecognition = true
-                recognitionRequest.shouldReportPartialResults = true
-                
                 // Configure the input node
                 let inputNode = audioEngine.inputNode
-                
-                // Start the recognition task
-                recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
-                    guard let self = self else { return }
-                    
-                    var isFinal = false
-                    
-                    // Handle speech result
-                    if let result = result {
-                        DispatchQueue.main.async {
-                            let newText = result.bestTranscription.formattedString
-                            if self.isRecording && !newText.isEmpty {
-                                self.recognizedText = newText
-                            }
-                        }
-                        isFinal = result.isFinal
-                        self.startSilenceTimer()
-                    }
-                    
-                    // Handle final
-                    if error != nil || isFinal {
-                        inputNode.removeTap(onBus: 0)
-                        self.stopRecording()
-                    }
-                }
                 
                 // Configure the microphone input
                 let recordingFormat = inputNode.outputFormat(forBus: 0)
@@ -148,8 +123,9 @@ class SpeechRecognizer: ObservableObject {
                         try audioEngine.start()
                         DispatchQueue.main.async {
                             self.isRecording = true
+                            self.isRecognitionPaused = true
+                            self.startRecognize()
                         }
-                        startSilenceTimer(timeout: 10.0)
                     } catch {
                         DispatchQueue.main.async {
                             self.errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
@@ -163,20 +139,11 @@ class SpeechRecognizer: ObservableObject {
     }
     
     func stopRecording() {
-        stopSilenceTimer()
+        stopRecognize()
+        isRecognitionPaused = false
         
         isRecording = false
         micLevel = 0.0
-        
-        if let recognitionRequest = recognitionRequest {
-            recognitionRequest.endAudio()
-            self.recognitionRequest = nil
-        }
-        
-        if let recognitionTask = recognitionTask {
-            recognitionTask.finish()
-            self.recognitionTask = nil
-        }
         
         if audioEngine.isRunning {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -194,6 +161,41 @@ class SpeechRecognizer: ObservableObject {
             }
         }
     }
+    
+    // MARK: - Recognition Controls
+    
+    func stopRecognize() {
+        guard isRecording, !isRecognitionPaused else { return }
+        
+        isRecognitionPaused = true
+        stopSilenceTimer()
+        
+        if let recognitionRequest = recognitionRequest {
+            recognitionRequest.endAudio()
+            self.recognitionRequest = nil
+        }
+        
+        if let recognitionTask = recognitionTask {
+            recognitionTask.finish()
+            self.recognitionTask = nil
+        }
+    }
+    
+    func startRecognize() {
+        guard isRecording, isRecognitionPaused, recognitionTask == nil else { return }
+        
+        let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        recognitionRequest.requiresOnDeviceRecognition = true
+        recognitionRequest.shouldReportPartialResults = true
+        self.recognitionRequest = recognitionRequest
+        
+        let inputNode = audioEngine.inputNode
+        isRecognitionPaused = false
+        startRecognitionTask(request: recognitionRequest, inputNode: inputNode)
+        startSilenceTimer(timeout: 30.0) // First wait
+    }
+    
+    // MARK: - Availability Checks
     
     @MainActor
     func checkAvailability() async -> Bool {
@@ -250,13 +252,49 @@ class SpeechRecognizer: ObservableObject {
     
     // MARK: - Private Methods
     
-    private func startSilenceTimer(timeout: Double? = nil) {
-        guard !manuallyConfirmSpeech else { return }
-        let interval = timeout ?? 1
+    private func startRecognitionTask(
+        request recognitionRequest: SFSpeechAudioBufferRecognitionRequest,
+        inputNode: AVAudioInputNode
+    ) {
+        // Erase previous text
+        recognizedText = ""
+        
+        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
+            guard let self = self else { return }
+            
+            var isFinal = false
+            
+            // Handle speech result
+            if let result = result {
+                DispatchQueue.main.async {
+                    let newText = result.bestTranscription.formattedString
+                    if self.isRecording && !self.isRecognitionPaused && !newText.isEmpty {
+                        self.recognizedText = newText
+                        // Wait after speech
+                        if !self.manuallyConfirmSpeech {
+                            self.startSilenceTimer(timeout: 1.0)
+                        }
+                    }
+                }
+                isFinal = result.isFinal
+            }
+            
+            // Handle final
+            if error != nil || isFinal {
+                if self.isRecognitionPaused {
+                    return
+                }
+                inputNode.removeTap(onBus: 0)
+                self.stopRecording()
+            }
+        }
+    }
+    
+    private func startSilenceTimer(timeout: Double) {
         stopSilenceTimer()
         
         DispatchQueue.main.async {
-            self.silenceTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+            self.silenceTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { [weak self] _ in
                 self?.silenceTimerFired()
             }
         }
@@ -270,5 +308,17 @@ class SpeechRecognizer: ObservableObject {
     private func silenceTimerFired() {
         guard isRecording else { return }
         onSilenceTimeout?()
+    }
+    
+    // Handle Audio Session Interruptions
+    @objc private func handleInterruption(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else { return }
+        
+        if type == .began {
+            stopRecording()
+        }
     }
 }

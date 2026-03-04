@@ -10,6 +10,24 @@ import SwiftUI
 struct HelpView: View {
     @Environment(\.dismiss) private var dismiss
     
+    private var canOpenSettingsURL: Bool {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return false }
+        return UIApplication.shared.canOpenURL(settingsURL)
+    }
+    
+    private func openSettingsURL() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        if UIApplication.shared.canOpenURL(settingsURL) {
+            UIApplication.shared.open(settingsURL)
+        }
+    }
+    
+    @State var unAuthorizationStatus: UNAuthorizationStatus?
+    
+    private func updateUNAuthorizationStatus() async {
+        unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
+    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -19,13 +37,10 @@ struct HelpView: View {
                     // 設定 → アプリ → Side Searchで「サイドボタンを押してSide Searchを使用」をオンにすることで設定できます。
                     Text("If you are in a region where Side Button customization is enabled, you can quickly launch the Side Search assistant by pressing and holding the Side Button.")
                     Text("You can set it up by going to Settings → Apps → Side Search and turning on \"Press Side Button for Side Search\".")
-                    Button() {
-                        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-                        if UIApplication.shared.canOpenURL(settingsURL) {
-                            UIApplication.shared.open(settingsURL)
+                    if canOpenSettingsURL {
+                        Button(action: { openSettingsURL() }) {
+                            Label("Open Settings", systemImage: "gear")
                         }
-                    } label: {
-                        Label("Open Settings", systemImage: "gear")
                     }
                 } header: { Label("Side Button Tip", systemImage: "button.vertical.right.press") }
                 
@@ -43,8 +58,40 @@ struct HelpView: View {
                         Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios")!) {
                             Label("Run a shortcut using a URL scheme", systemImage: "book")
                         }
-                        
                     } header: { Label("Search URL Tip", systemImage: "magnifyingglass") }
+                }
+                
+                if AssistantType.current.DescriptionProviderType.backgroundSupports {
+                    Section {
+                        // 対応するアシスタントでは、音声認識中にアプリを閉じてもバックグラウンドで会話を続けることができます。
+                        // アシスタントの返事は通知で受け取ることができます。バックグラウンドで会話をするにはSide Searchの通知を許可する必要があります。
+                        Text("With a compatible assistant, you can continue conversations in the background even if you close Side Search during speech recognition.")
+                        Text("You can receive the assistant's replies via notifications. To have conversations in the background, you need to allow notifications for Side Search.")
+                        if unAuthorizationStatus == .notDetermined {
+                            Button(action: {
+                                Task {
+                                    _ = await UserNotificationSupport.requestAuthorization()
+                                    unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
+                                }
+                            }) {
+                                Label("Allow Notifications", systemImage: "app.badge")
+                            }
+                        } else if unAuthorizationStatus == .denied {
+                            if canOpenSettingsURL {
+                                Button(action: { openSettingsURL() }) {
+                                    Label("Allow in Settings", systemImage: "gear")
+                                }
+                            }
+                        }
+                    } header: { Label("Background Tip", systemImage: "arrow.clockwise")
+                    } footer: {
+                        if unAuthorizationStatus == .authorized {
+                            Text("Notifications allowed.")
+                        }
+                    }
+                    .task {
+                        unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
+                    }
                 }
                 
                 // MARK: - Shortcut Tip
@@ -70,10 +117,12 @@ struct HelpView: View {
                 
                 Section {
                     NavigationLink(destination: AboutView()) {
-                        Text("About")
+                        Label("About", systemImage: "info.circle")
+                            .foregroundColor(.primary)
                     }
                     NavigationLink(destination: LicensesView()) {
-                        Text("Licenses")
+                        Label("Licenses", systemImage: "book.closed")
+                            .foregroundColor(.primary)
                     }
                 }
             }

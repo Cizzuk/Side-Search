@@ -11,6 +11,8 @@ import SwiftUI
 import TemporaryScreenCurtain
 
 struct MainView: View {
+    @Environment(\.scenePhase) var scenePhase
+    
     @StateObject var viewModel = MainViewModel()
     
     @State private var showClearInAppBrowserDataAlert = false
@@ -128,6 +130,7 @@ struct MainView: View {
                 showClearInAppBrowserDataAlert = false
                 viewModel.activateAssistant()
             }
+            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
         }
         // MARK: - Sheets
         .sheet(isPresented: $viewModel.showHelpView) {
