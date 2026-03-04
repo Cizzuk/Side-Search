@@ -12,6 +12,7 @@ struct AssistantView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
     
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
     
@@ -167,8 +168,9 @@ struct AssistantView: View {
             } message: {
                 Text(viewModel.errorMessage)
             }
+            // MARK: - Events
             .onAppear {
-                viewModel.assistantType = assistantType
+                viewModel.currentScenePhase = scenePhase
                 viewModel.startAssistant()
             }
             .onDisappear() {
@@ -177,6 +179,10 @@ struct AssistantView: View {
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 viewModel.activateAssistant()
             }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)) { _ in
+                viewModel.dismissAssistant()
+            }
+            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
         }
         .background(
             AngularGradient(

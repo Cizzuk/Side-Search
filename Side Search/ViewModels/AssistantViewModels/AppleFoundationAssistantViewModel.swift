@@ -18,7 +18,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     
     // MARK: - Initialization
     
-    override init() {
+    override init(assistantType: AssistantType = .appleFoundation) {
         // Initialize Language Model Session with custom instructions if provided
         if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             self.session = LanguageModelSession()
@@ -26,7 +26,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
             self.session = LanguageModelSession(instructions: assistantModel.customInstructions)
         }
         
-        super.init()
+        super.init(assistantType: assistantType)
     }
     
     // MARK: - Helper Methods
@@ -46,13 +46,13 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
         
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
-        stopRecording()
+        pauseRecognize()
         
         // Add user message to history
         let userInput = inputText
         inputText = ""
         let userMessage = AssistantMessage(from: .user, content: userInput)
-        messageHistory.append(userMessage)
+        addMessage(userMessage)
         
         // Generate response
         Task {
@@ -66,8 +66,9 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
             
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.messageHistory.append(message)
+                self.addMessage(message)
                 self.responseIsPreparing = false
+                self.resumeRecognize()
             }
         }
     }

@@ -22,7 +22,7 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     ])
     
     static var assistantIsAI: Bool = true
-    static var backgroundSupports: Bool = false
+    static var backgroundSupports: Bool = true
     
     static var makeSettingsView: any View { AppleFoundationAssistantSettingsView() }
 

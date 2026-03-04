@@ -53,8 +53,9 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Variables
     
-    // Set from View
-    var assistantType: AssistantType?
+    var assistantType: AssistantType
+    
+    var currentScenePhase: ScenePhase = .active
     
     @Published var detent: PresentationDetent = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
@@ -97,7 +98,8 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    init() {
+    init(assistantType: AssistantType) {
+        self.assistantType = assistantType
         setupSpeechRecognizerBindings()
     }
     
@@ -111,6 +113,7 @@ class AssistantViewModel: ObservableObject {
         speechRecognizer.$isRecording
             .sink { [weak self] recording in
                 self?.isRecording = recording
+                self?.updateLiveActivityStatus()
             }
             .store(in: &cancellables)
         
@@ -137,17 +140,47 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Lifecycle
+    
+    func onChange(scenePhase: ScenePhase) {
+        currentScenePhase = scenePhase
+        switch scenePhase {
+        case .active:
+            break
+        case .inactive:
+            break
+        case .background:
+            // Background support check
+            Task {
+                if !(await isBackgroundAvailable()) {
+                    stopRecording()
+                }
+            }
+        @unknown default:
+            break
+        }
+    }
+    
+    func isBackgroundAvailable() async -> Bool {
+        if !assistantType.DescriptionProviderType.backgroundSupports {
+            return false
+        } else if !(await UserNotificationSupport.isAvailable()) {
+            return false
+        }
+        return true
+    }
+    
     // MARK: - Methods
     
     func dismissAssistant() {
         stopRecording()
         saveChatHistory()
+        AssistantActivityManager.endAll()
     }
     
     func saveChatHistory() {
         guard UserDefaults.standard.bool(forKey: "chatHistoryEnabled"),
-              !messageHistory.isEmpty,
-              let assistantType = assistantType
+              !messageHistory.isEmpty
         else { return }
         
         let chat = ChatHistory.Chat(
@@ -173,6 +206,14 @@ class AssistantViewModel: ObservableObject {
     func stopRecording() {
         speechRecognizer.stopRecording()
     }
+
+    func pauseRecognize() {
+        speechRecognizer.stopRecognize()
+    }
+
+    func resumeRecognize() {
+        speechRecognizer.startRecognize()
+    }
     
     func toggleRecording() {
         if isRecording {
@@ -186,15 +227,31 @@ class AssistantViewModel: ObservableObject {
         // MARK: Override in subclass
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
-        stopRecording()
+        pauseRecognize()
         
         // Add user message to history
         let userInput = inputText
         let userMessage = AssistantMessage(from: .user, content: userInput)
-        messageHistory.append(userMessage)
+        addMessage(userMessage)
         
         inputText = ""
         responseIsPreparing = false
+        resumeRecognize()
+    }
+    
+    func addMessage(_ message: AssistantMessage) {
+        messageHistory.append(message)
+        
+        // Send user notification
+        if message.from != .user && currentScenePhase != .active {
+            Task {
+                if await UserNotificationSupport.requestAuthorization() {
+                    await UserNotificationSupport.sendAssistantMessage(message: message)
+                } else {
+                    stopRecording()
+                }
+            }
+        }
     }
     
     func openSafariView(at url: URL) {
@@ -221,6 +278,18 @@ class AssistantViewModel: ObservableObject {
             confirmInput()
         } else {
             stopRecording()
+        }
+    }
+    
+    func updateLiveActivityStatus() {
+        guard assistantType.DescriptionProviderType.backgroundSupports else { return }
+        
+        if isRecording {
+            if !AssistantActivityManager.isActive() {
+                AssistantActivityManager.start()
+            }
+        } else {
+            AssistantActivityManager.endAll()
         }
     }
 }
