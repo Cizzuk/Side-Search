@@ -28,7 +28,7 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
-        stopRecording()
+        pauseRecognize()
         
         // Add user message to history
         let userInput = inputText
@@ -44,6 +44,7 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
             guard let self = self else { return }
             messageHistory.append(assistantMessage)
             responseIsPreparing = false
+            resumeRecognize()
         }
     }
 }

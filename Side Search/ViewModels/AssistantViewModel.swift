@@ -173,6 +173,14 @@ class AssistantViewModel: ObservableObject {
     func stopRecording() {
         speechRecognizer.stopRecording()
     }
+
+    func pauseRecognize() {
+        speechRecognizer.pauseRecognize()
+    }
+
+    func resumeRecognize() {
+        speechRecognizer.resumeRecognize()
+    }
     
     func toggleRecording() {
         if isRecording {
