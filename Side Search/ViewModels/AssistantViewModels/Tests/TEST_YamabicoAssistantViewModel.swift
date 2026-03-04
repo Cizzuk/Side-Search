@@ -34,7 +34,7 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         let userInput = inputText
         inputText = ""
         let userMessage = AssistantMessage(from: .user, content: userInput)
-        messageHistory.append(userMessage)
+        addMessage(userMessage)
         
         let response = "\(userInput)..."
         let assistantMessage = AssistantMessage(from: .assistant, content: response)
@@ -42,7 +42,7 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
         // Simulate a response from Yamabico
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            messageHistory.append(assistantMessage)
+            addMessage(assistantMessage)
             responseIsPreparing = false
             resumeRecognize()
         }

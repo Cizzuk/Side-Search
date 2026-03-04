@@ -79,12 +79,12 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     @MainActor
     func generate(prompt: String) async {
         // Add user message to history
-        messageHistory.append(AssistantMessage(from: .user, content: prompt))
+        addMessage(AssistantMessage(from: .user, content: prompt))
         chatHistory.append(GeminiContent(role: "user", parts: [GeminiPart(text: prompt)]))
         
         guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(assistantModel.model):generateContent")
         else {
-            messageHistory.append(AssistantMessage(from: .system, content: "Invalid URL"))
+            addMessage(AssistantMessage(from: .system, content: "Invalid URL"))
             return
         }
         
@@ -98,7 +98,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         do {
             request.httpBody = try JSONEncoder().encode(GeminiRequest(contents: chatHistory))
         } catch {
-            messageHistory.append(AssistantMessage(from: .system, content: error.localizedDescription))
+            addMessage(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
         
@@ -107,7 +107,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         do {
             (data, _) = try await URLSession.shared.data(for: request)
         } catch {
-            messageHistory.append(AssistantMessage(from: .system, content: error.localizedDescription))
+            addMessage(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
         
@@ -116,7 +116,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         do {
             response = try JSONDecoder().decode(GeminiResponse.self, from: data)
         } catch {
-            messageHistory.append(AssistantMessage(from: .system, content: error.localizedDescription))
+            addMessage(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
         
@@ -128,13 +128,13 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
                let error = dict["error"] as? [String: Any],
                let message = error["message"] as? String {
                 // Try to extract error message
-                messageHistory.append(AssistantMessage(from: .system, content: message))
+                addMessage(AssistantMessage(from: .system, content: message))
             } else if let errorString = String(data: data, encoding: .utf8) {
                 // Raw error string
-                messageHistory.append(AssistantMessage(from: .system, content: errorString))
+                addMessage(AssistantMessage(from: .system, content: errorString))
             } else {
                 // Unknown error
-                messageHistory.append(AssistantMessage(from: .system, content: "Unknown error occurred"))
+                addMessage(AssistantMessage(from: .system, content: "Unknown error occurred"))
             }
             return
         }
@@ -154,7 +154,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         // Add assistant message to history
         chatHistory.append(GeminiContent(role: "model", parts: [GeminiPart(text: text)]))
         let message = AssistantMessage(from: .assistant, content: text, sources: sources)
-        messageHistory.append(message)
+        addMessage(message)
     }
     
     // MARK: - Override Methods

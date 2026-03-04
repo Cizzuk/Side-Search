@@ -46,6 +46,6 @@ class URLBasedAssistantViewModel: AssistantViewModel {
             self.showError = true
         }
         
-        messageHistory.append(userMessage)
+        addMessage(userMessage)
     }
 }

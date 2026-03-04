@@ -52,7 +52,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
         let userInput = inputText
         inputText = ""
         let userMessage = AssistantMessage(from: .user, content: userInput)
-        messageHistory.append(userMessage)
+        addMessage(userMessage)
         
         // Generate response
         Task {
@@ -66,7 +66,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
             
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.messageHistory.append(message)
+                self.addMessage(message)
                 self.responseIsPreparing = false
                 self.resumeRecognize()
             }

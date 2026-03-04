@@ -151,12 +151,23 @@ class AssistantViewModel: ObservableObject {
             break
         case .background:
             // Background support check
-            if !assistantType.DescriptionProviderType.backgroundSupports {
-                stopRecording()
+            Task {
+                if !(await isBackgroundAvailable()) {
+                    stopRecording()
+                }
             }
         @unknown default:
             break
         }
+    }
+    
+    func isBackgroundAvailable() async -> Bool {
+        if !assistantType.DescriptionProviderType.backgroundSupports {
+            return false
+        } else if !(await UserNotificationSupport.isAvailable()) {
+            return false
+        }
+        return true
     }
     
     // MARK: - Methods
@@ -165,6 +176,21 @@ class AssistantViewModel: ObservableObject {
         stopRecording()
         saveChatHistory()
         AssistantActivityManager.endAll()
+    }
+    
+    func addMessage(_ message: AssistantMessage) {
+        messageHistory.append(message)
+        
+        // Send user notification
+        if message.from != .user && currentScenePhase != .active {
+            Task {
+                if await UserNotificationSupport.requestAuthorization() {
+                    await UserNotificationSupport.sendAssistantMessage(message: message)
+                } else {
+                    stopRecording()
+                }
+            }
+        }
     }
     
     func saveChatHistory() {
@@ -221,7 +247,7 @@ class AssistantViewModel: ObservableObject {
         // Add user message to history
         let userInput = inputText
         let userMessage = AssistantMessage(from: .user, content: userInput)
-        messageHistory.append(userMessage)
+        addMessage(userMessage)
         
         inputText = ""
         responseIsPreparing = false
