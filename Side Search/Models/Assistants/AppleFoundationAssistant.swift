@@ -19,7 +19,9 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
         Color(red: 255/255, green: 46/255,  blue: 84/255),
         Color(red: 201/255, green: 89/255,  blue: 221/255),
     ])
+    
     static var assistantIsAI: Bool = true
+    static var backgroundSupports: Bool = false
     
     static var makeSettingsView: any View { AppleFoundationAssistantSettingsView() }
 

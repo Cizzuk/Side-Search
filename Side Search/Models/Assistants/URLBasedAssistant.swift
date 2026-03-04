@@ -17,7 +17,9 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
         Color(red: 51/255, green: 153/255,  blue: 255/255),
         Color(red: 51/255, green: 102/255,  blue: 255/255),
     ])
+    
     static var assistantIsAI: Bool = false
+    static var backgroundSupports: Bool = false
     
     static var makeSettingsView: any View { URLBasedAssistantSettingsView() }
     
