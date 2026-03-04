@@ -82,11 +82,11 @@ struct AssistantActivityWidget: Widget {
     }
     
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: AssistantActivityAttributes.self) { context in
+        ActivityConfiguration(for: AssistantActivityAttributes.self) { _ in
             MainActivityView()
                 .activitySystemActionForegroundColor(.red)
             
-        } dynamicIsland: { context in
+        } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     IconImage(size: 50)
