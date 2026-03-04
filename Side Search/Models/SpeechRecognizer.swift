@@ -257,7 +257,10 @@ class SpeechRecognizer: ObservableObject {
                     let newText = result.bestTranscription.formattedString
                     if self.isRecording && !self.isRecognitionPaused && !newText.isEmpty {
                         self.recognizedText = newText
-                        self.startSilenceTimer(timeout: 1.0) // Wait after speech
+                        // Wait after speech
+                        if !self.manuallyConfirmSpeech {
+                            self.startSilenceTimer(timeout: 1.0)
+                        }
                     }
                 }
                 isFinal = result.isFinal
@@ -275,7 +278,6 @@ class SpeechRecognizer: ObservableObject {
     }
     
     private func startSilenceTimer(timeout: Double) {
-        guard !manuallyConfirmSpeech else { return }
         stopSilenceTimer()
         
         DispatchQueue.main.async {
