@@ -175,11 +175,11 @@ class AssistantViewModel: ObservableObject {
     }
 
     func pauseRecognize() {
-        speechRecognizer.pauseRecognize()
+        speechRecognizer.stopRecognize()
     }
 
     func resumeRecognize() {
-        speechRecognizer.resumeRecognize()
+        speechRecognizer.startRecognize()
     }
     
     func toggleRecording() {

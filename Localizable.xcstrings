@@ -1058,16 +1058,6 @@
         }
       }
     },
-    "Unable to create a recognition request." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "認識リクエストを作成できませんでした。"
-          }
-        }
-      }
-    },
     "Unknown microphone authorization status." : {
       "localizations" : {
         "ja" : {

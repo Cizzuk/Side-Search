@@ -80,26 +80,8 @@ class SpeechRecognizer: ObservableObject {
                     return
                 }
                 
-                // Create the recognition request
-                recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-                
-                // Ensure the recognition request is valid
-                guard let recognitionRequest = recognitionRequest else {
-                    DispatchQueue.main.async {
-                        self.errorMessage = "Unable to create a recognition request."
-                        self.showError = true
-                    }
-                    return
-                }
-                
-                // Configure recognition request
-                recognitionRequest.requiresOnDeviceRecognition = true
-                recognitionRequest.shouldReportPartialResults = true
-                
                 // Configure the input node
                 let inputNode = audioEngine.inputNode
-                
-                startRecognitionTask(request: recognitionRequest, inputNode: inputNode)
                 
                 // Configure the microphone input
                 let recordingFormat = inputNode.outputFormat(forBus: 0)
@@ -128,8 +110,9 @@ class SpeechRecognizer: ObservableObject {
                         try audioEngine.start()
                         DispatchQueue.main.async {
                             self.isRecording = true
+                            self.isRecognitionPaused = true
+                            self.startRecognize()
                         }
-                        startSilenceTimer(timeout: 10.0)
                     } catch {
                         DispatchQueue.main.async {
                             self.errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
@@ -143,21 +126,11 @@ class SpeechRecognizer: ObservableObject {
     }
     
     func stopRecording() {
+        stopRecognize()
         isRecognitionPaused = false
-        stopSilenceTimer()
         
         isRecording = false
         micLevel = 0.0
-        
-        if let recognitionRequest = recognitionRequest {
-            recognitionRequest.endAudio()
-            self.recognitionRequest = nil
-        }
-        
-        if let recognitionTask = recognitionTask {
-            recognitionTask.finish()
-            self.recognitionTask = nil
-        }
         
         if audioEngine.isRunning {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -178,7 +151,7 @@ class SpeechRecognizer: ObservableObject {
     
     // MARK: - Recognition Controls
     
-    func pauseRecognize() {
+    func stopRecognize() {
         guard isRecording, !isRecognitionPaused else { return }
         
         isRecognitionPaused = true
@@ -190,12 +163,12 @@ class SpeechRecognizer: ObservableObject {
         }
         
         if let recognitionTask = recognitionTask {
-            recognitionTask.cancel()
+            recognitionTask.finish()
             self.recognitionTask = nil
         }
     }
     
-    func resumeRecognize() {
+    func startRecognize() {
         guard isRecording, isRecognitionPaused, recognitionTask == nil else { return }
         
         let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
@@ -206,7 +179,7 @@ class SpeechRecognizer: ObservableObject {
         let inputNode = audioEngine.inputNode
         isRecognitionPaused = false
         startRecognitionTask(request: recognitionRequest, inputNode: inputNode)
-        startSilenceTimer(timeout: 20.0)
+        startSilenceTimer(timeout: 15.0)
     }
     
     // MARK: - Availability Checks
@@ -270,6 +243,9 @@ class SpeechRecognizer: ObservableObject {
         request recognitionRequest: SFSpeechAudioBufferRecognitionRequest,
         inputNode: AVAudioInputNode
     ) {
+        // Erase previous text
+        recognizedText = ""
+        
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self = self else { return }
             
@@ -279,12 +255,12 @@ class SpeechRecognizer: ObservableObject {
             if let result = result {
                 DispatchQueue.main.async {
                     let newText = result.bestTranscription.formattedString
-                    if self.isRecording && !newText.isEmpty {
+                    if self.isRecording && !self.isRecognitionPaused && !newText.isEmpty {
                         self.recognizedText = newText
+                        self.startSilenceTimer(timeout: 1.0)
                     }
                 }
                 isFinal = result.isFinal
-                self.startSilenceTimer()
             }
             
             // Handle final
@@ -298,13 +274,12 @@ class SpeechRecognizer: ObservableObject {
         }
     }
     
-    private func startSilenceTimer(timeout: Double? = nil) {
+    private func startSilenceTimer(timeout: Double) {
         guard !manuallyConfirmSpeech else { return }
-        let interval = timeout ?? 1
         stopSilenceTimer()
         
         DispatchQueue.main.async {
-            self.silenceTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+            self.silenceTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { [weak self] _ in
                 self?.silenceTimerFired()
             }
         }
