@@ -165,11 +165,11 @@ class AssistantViewModel: ObservableObject {
         if !assistantType.DescriptionProviderType.backgroundSupports {
             return false
         }
-        if ProcessInfo().isiOSAppOnMac {
-            return true
-        }
         if AccessibilitySettings.isAssistiveAccessEnabled {
             return false
+        }
+        if ProcessInfo().isiOSAppOnMac {
+            return true
         }
         if !(await UserNotificationSupport.isAvailable()) {
             return false
