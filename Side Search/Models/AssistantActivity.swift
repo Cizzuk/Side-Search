@@ -8,7 +8,7 @@
 import ActivityKit
 import Foundation
 
-struct AssistantActivityAttributes: ActivityAttributes {
+nonisolated struct AssistantActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable { }
 }
 
@@ -55,14 +55,14 @@ class AssistantActivityManager {
             staleDate: nil
         )
         
-        for activity in activities {
-            Task {
+        Task.detached {
+            for activity in activities {
                 await activity.end(
                     content,
                     dismissalPolicy: .immediate
                 )
+                print("Ended assistant activity: \(activity)")
             }
-            print("Ended assistant activity: \(activity)")
         }
     }
 }
