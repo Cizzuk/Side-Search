@@ -476,6 +476,16 @@
         }
       }
     },
+    "Google AI Mode" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google AIモード"
+          }
+        }
+      }
+    },
     "Google Gemini API" : {
       "localizations" : {
         "ja" : {
