@@ -47,6 +47,16 @@ struct HelpView: View {
                     } header: { Label("Search URL Tip", systemImage: "magnifyingglass") }
                 }
                 
+                if AssistantType.current.DescriptionProviderType.backgroundSupports {
+                    Section {
+                        // 対応するアシスタントでは、音声認識中にアプリを閉じてもバックグラウンドで会話を続けることができます。
+                        // アシスタントの返事は通知で受け取ることができます。バックグラウンドで会話をするにはSide Searchの通知を許可する必要があります。
+                        Text("With a compatible assistant, you can continue conversations in the background even if you close Side Search during speech recognition.")
+                        Text("You can receive the assistant's replies via notifications. To have conversations in the background, you need to allow notifications for Side Search.")
+                        
+                    } header: { Label("Background Tip", systemImage: "arrow.clockwise") }
+                }
+                
                 // MARK: - Shortcut Tip
                 Section {
                     // ショートカットを使ってSide Searchのアシスタントを起動することができます。
@@ -70,10 +80,12 @@ struct HelpView: View {
                 
                 Section {
                     NavigationLink(destination: AboutView()) {
-                        Text("About")
+                        Label("About", systemImage: "info.circle")
+                            .foregroundColor(.primary)
                     }
                     NavigationLink(destination: LicensesView()) {
-                        Text("Licenses")
+                        Label("Licenses", systemImage: "book.closed")
+                            .foregroundColor(.primary)
                     }
                 }
             }
