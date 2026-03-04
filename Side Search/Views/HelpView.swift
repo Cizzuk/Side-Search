@@ -10,6 +10,8 @@ import SwiftUI
 struct HelpView: View {
     @Environment(\.dismiss) private var dismiss
     
+    @State var unAuthorizationStatus: UNAuthorizationStatus?
+    
     var body: some View {
         NavigationStack {
             List {
@@ -43,7 +45,6 @@ struct HelpView: View {
                         Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios")!) {
                             Label("Run a shortcut using a URL scheme", systemImage: "book")
                         }
-                        
                     } header: { Label("Search URL Tip", systemImage: "magnifyingglass") }
                 }
                 
@@ -53,8 +54,34 @@ struct HelpView: View {
                         // アシスタントの返事は通知で受け取ることができます。バックグラウンドで会話をするにはSide Searchの通知を許可する必要があります。
                         Text("With a compatible assistant, you can continue conversations in the background even if you close Side Search during speech recognition.")
                         Text("You can receive the assistant's replies via notifications. To have conversations in the background, you need to allow notifications for Side Search.")
-                        
-                    } header: { Label("Background Tip", systemImage: "arrow.clockwise") }
+                        if unAuthorizationStatus == .notDetermined {
+                            Button(action: {
+                                Task {
+                                    _ = await UserNotificationSupport.requestAuthorization()
+                                    unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
+                                }
+                            }) {
+                                Label("Allow Notifications", systemImage: "app.badge")
+                            }
+                        } else if unAuthorizationStatus == .denied {
+                            Button() {
+                                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+                                if UIApplication.shared.canOpenURL(settingsURL) {
+                                    UIApplication.shared.open(settingsURL)
+                                }
+                            } label: {
+                                Label("Allow in Settings", systemImage: "gear")
+                            }
+                        }
+                    } header: { Label("Background Tip", systemImage: "arrow.clockwise")
+                    } footer: {
+                        if unAuthorizationStatus == .authorized {
+                            Text("Notifications allowed.")
+                        }
+                    }
+                    .task {
+                        unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
+                    }
                 }
                 
                 // MARK: - Shortcut Tip
