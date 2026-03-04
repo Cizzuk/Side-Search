@@ -53,8 +53,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Variables
     
-    // Set from View
-    var assistantType: AssistantType?
+    var assistantType: AssistantType
     
     @Published var detent: PresentationDetent = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
@@ -97,7 +96,8 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    init() {
+    init(assistantType: AssistantType) {
+        self.assistantType = assistantType
         setupSpeechRecognizerBindings()
     }
     
@@ -147,10 +147,7 @@ class AssistantViewModel: ObservableObject {
             break
         case .background:
             // Background support check
-            if let assistantType = assistantType,
-               assistantType.DescriptionProviderType.backgroundSupports {
-                
-            } else {
+            if !assistantType.DescriptionProviderType.backgroundSupports {
                 stopRecording()
             }
         @unknown default:
@@ -167,8 +164,7 @@ class AssistantViewModel: ObservableObject {
     
     func saveChatHistory() {
         guard UserDefaults.standard.bool(forKey: "chatHistoryEnabled"),
-              !messageHistory.isEmpty,
-              let assistantType = assistantType
+              !messageHistory.isEmpty
         else { return }
         
         let chat = ChatHistory.Chat(

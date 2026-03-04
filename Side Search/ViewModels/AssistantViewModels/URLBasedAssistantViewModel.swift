@@ -15,8 +15,8 @@ class URLBasedAssistantViewModel: AssistantViewModel {
     
     // MARK: - Initialization
     
-    override init() {
-        super.init()
+    override init(assistantType: AssistantType = .urlBased) {
+        super.init(assistantType: assistantType)
     }
     
     // MARK: - Override Methods

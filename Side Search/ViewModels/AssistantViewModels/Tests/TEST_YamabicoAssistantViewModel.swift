@@ -15,8 +15,8 @@ class TEST_YamabicoAssistantViewModel: AssistantViewModel {
     
     // MARK: - Initialization
     
-    override init() {
-        super.init()
+    override init(assistantType: AssistantType = .test_yamabico) {
+        super.init(assistantType: assistantType)
     }
     
     // MARK: - Override Methods

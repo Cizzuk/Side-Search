@@ -169,7 +169,6 @@ struct AssistantView: View {
                 Text(viewModel.errorMessage)
             }
             .onAppear {
-                viewModel.assistantType = assistantType
                 viewModel.startAssistant()
             }
             .onDisappear() {
