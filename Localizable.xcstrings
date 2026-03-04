@@ -78,6 +78,16 @@
         }
       }
     },
+    "Assistant is Active" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタント作動中"
+          }
+        }
+      }
+    },
     "Assistant Screen Size" : {
       "localizations" : {
         "ja" : {

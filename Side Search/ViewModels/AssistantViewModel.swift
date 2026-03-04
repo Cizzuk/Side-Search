@@ -113,6 +113,7 @@ class AssistantViewModel: ObservableObject {
         speechRecognizer.$isRecording
             .sink { [weak self] recording in
                 self?.isRecording = recording
+                self?.updateLiveActivityStatus()
             }
             .store(in: &cancellables)
         
@@ -163,6 +164,7 @@ class AssistantViewModel: ObservableObject {
     func dismissAssistant() {
         stopRecording()
         saveChatHistory()
+        AssistantActivityManager.endAll()
     }
     
     func saveChatHistory() {
@@ -250,6 +252,18 @@ class AssistantViewModel: ObservableObject {
             confirmInput()
         } else {
             stopRecording()
+        }
+    }
+    
+    func updateLiveActivityStatus() {
+        guard assistantType.DescriptionProviderType.backgroundSupports else { return }
+        
+        if isRecording {
+            if !AssistantActivityManager.isActive() {
+                AssistantActivityManager.start()
+            }
+        } else {
+            AssistantActivityManager.endAll()
         }
     }
 }
