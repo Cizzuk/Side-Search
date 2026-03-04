@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MergeCodablePackage
 
 struct URLBasedAssistant: AssistantDescriptionProvider {
     static var assistantName = LocalizedStringResource("URL Based Assistant")
@@ -29,31 +30,34 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static func isBlocked() -> Bool { return false }
 }
 
-struct URLBasedAssistantModel: AssistantModel {
+struct URLBasedAssistantModel: AssistantModel, MergeCodable {
     private static let userDefaultsKey = "urlBasedAssistantSettings"
     
     // Model Settings
     var url: String
     var openIn: OpenInOption
+    static let url_default: String = SearchEnginePresets.defaultSearchEngine.url
+    static let openIn_default: OpenInOption = .inAppBrowser
+    
+    init() {
+        self.url = Self.url_default
+        self.openIn = Self.openIn_default
+    }
 
-    init(url: String = "", openIn: OpenInOption = .inAppBrowser) {
+    init(url: String = Self.url_default, openIn: OpenInOption = Self.openIn_default) {
         self.url = url
         self.openIn = openIn
     }
     
     static func load() -> Self {
-        if let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) {
-            let decoder = JSONDecoder()
-            if let model = try? decoder.decode(Self.self, from: rawData) {
-                return model
-            }
+        guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else {
+            return Self(url: SearchEnginePresets.defaultSearchEngine.url)
         }
-        return Self(url: SearchEnginePresets.defaultSearchEngine.url)
+        return decode(from: rawData)
     }
     
     func save() {
-        let encoder = JSONEncoder()
-        if let data = try? encoder.encode(self) {
+        if let data = encode() {
             UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
         }
     }

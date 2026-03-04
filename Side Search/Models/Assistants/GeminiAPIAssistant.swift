@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MergeCodablePackage
 
 struct GeminiAPIAssistant: AssistantDescriptionProvider {
     static var assistantName = LocalizedStringResource("Google Gemini API")
@@ -35,31 +36,30 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
     }
 }
 
-struct GeminiAPIAssistantModel: AssistantModel {
+struct GeminiAPIAssistantModel: AssistantModel, MergeCodable {
     private static let userDefaultsKey = "geminiAPIAssistantSettings"
     
     static var availableModels: [String] = []
     
     // Model Settings
     var model: String
+    static let model_default: String = "gemini-2.5-flash"
     
-    init(model: String = "gemini-2.5-flash") {
+    init() {
+        model = Self.model_default
+    }
+    
+    init(model: String = Self.model_default) {
         self.model = model
     }
     
     static func load() -> Self {
-        if let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) {
-            let decoder = JSONDecoder()
-            if let model = try? decoder.decode(Self.self, from: rawData) {
-                return model
-            }
-        }
-        return Self()
+        guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else { return Self() }
+        return decode(from: rawData)
     }
     
     func save() {
-        let encoder = JSONEncoder()
-        if let data = try? encoder.encode(self) {
+        if let data = encode() {
             UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
         }
     }
