@@ -166,7 +166,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
-        stopRecording()
+        pauseRecognize()
         
         let userInput = inputText
         inputText = ""
@@ -174,6 +174,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         Task {
             await generate(prompt: userInput)
             responseIsPreparing = false
+            resumeRecognize()
         }
     }
 }

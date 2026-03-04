@@ -46,7 +46,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
         
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
-        stopRecording()
+        pauseRecognize()
         
         // Add user message to history
         let userInput = inputText
@@ -68,6 +68,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
                 guard let self = self else { return }
                 self.messageHistory.append(message)
                 self.responseIsPreparing = false
+                self.resumeRecognize()
             }
         }
     }
