@@ -179,7 +179,7 @@ class SpeechRecognizer: ObservableObject {
         let inputNode = audioEngine.inputNode
         isRecognitionPaused = false
         startRecognitionTask(request: recognitionRequest, inputNode: inputNode)
-        startSilenceTimer(timeout: 60.0) // First wait
+        startSilenceTimer(timeout: 30.0) // First wait
     }
     
     // MARK: - Availability Checks
