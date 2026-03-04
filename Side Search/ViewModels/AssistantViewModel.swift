@@ -194,7 +194,7 @@ class AssistantViewModel: ObservableObject {
         // MARK: Override in subclass
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
-        stopRecording()
+        pauseRecognize()
         
         // Add user message to history
         let userInput = inputText
@@ -203,6 +203,7 @@ class AssistantViewModel: ObservableObject {
         
         inputText = ""
         responseIsPreparing = false
+        resumeRecognize()
     }
     
     func openSafariView(at url: URL) {
