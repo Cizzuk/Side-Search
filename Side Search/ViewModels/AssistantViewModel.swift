@@ -162,6 +162,9 @@ class AssistantViewModel: ObservableObject {
     }
     
     func isBackgroundAvailable() async -> Bool {
+        if ProcessInfo().isiOSAppOnMac {
+            return true
+        }
         if !assistantType.DescriptionProviderType.backgroundSupports {
             return false
         }
