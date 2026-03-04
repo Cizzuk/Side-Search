@@ -63,6 +63,8 @@ class AssistantViewModel: ObservableObject {
         return DetentOption.defaultDetent.presentationDetent
     }()
     
+    @Published var currentScenePhase: ScenePhase = .active
+    
     // Input Field
     @Published var inputText = ""
     @Published var shouldInputFocused = false
@@ -140,6 +142,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Lifecycle
     
     func onChange(scenePhase: ScenePhase) {
+        currentScenePhase = scenePhase
         switch scenePhase {
         case .active:
             break
