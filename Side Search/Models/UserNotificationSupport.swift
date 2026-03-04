@@ -8,11 +8,16 @@
 import UserNotifications
 
 class UserNotificationSupport {
-    static func isAvailable() async -> Bool {
+    static func authorizationStatus() async -> UNAuthorizationStatus {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
+        return settings.authorizationStatus
+    }
+    
+    static func isAvailable() async -> Bool {
+        let authorizationStatus = await authorizationStatus()
         
-        if settings.authorizationStatus == .notDetermined || settings.authorizationStatus == .authorized {
+        if authorizationStatus == .notDetermined || authorizationStatus == .authorized {
             return true
         }
         
