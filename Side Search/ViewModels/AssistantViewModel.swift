@@ -55,6 +55,8 @@ class AssistantViewModel: ObservableObject {
     
     var assistantType: AssistantType
     
+    var currentScenePhase: ScenePhase = .active
+    
     @Published var detent: PresentationDetent = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
            let option = DetentOption(rawValue: rawValue) {
@@ -62,8 +64,6 @@ class AssistantViewModel: ObservableObject {
         }
         return DetentOption.defaultDetent.presentationDetent
     }()
-    
-    @Published var currentScenePhase: ScenePhase = .active
     
     // Input Field
     @Published var inputText = ""
