@@ -178,12 +178,12 @@
         }
       }
     },
-    "By setting up automation in the Shortcuts, you can perform other actions when Side Search is launched." : {
+    "By setting up automation, you can also perform other actions when Side Search is launched. I recommend turning on \"Start with Mic Muted\"." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ショートカットのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。"
+            "value" : "オートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。「マイクミュートで開始」をオンにすることをおすすめします。"
           }
         }
       }
@@ -1199,6 +1199,7 @@
       }
     },
     "You can find it in the Shortcuts under \"Side Search\" by selecting the \"Start Assistant\" action." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
