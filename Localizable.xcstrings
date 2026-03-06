@@ -1198,17 +1198,6 @@
         }
       }
     },
-    "You can find it in the Shortcuts under \"Side Search\" by selecting the \"Start Assistant\" action." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ショートカットで「Side Search」の「アシスタントを開始」アクションから利用できます。"
-          }
-        }
-      }
-    },
     "You can launch the Side Search assistant using the Shortcuts." : {
       "localizations" : {
         "ja" : {
