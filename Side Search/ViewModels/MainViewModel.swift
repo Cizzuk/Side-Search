@@ -13,6 +13,7 @@ import SwiftUI
 class MainViewModel: ObservableObject {
     @Published var showSwitchAssistantView = false
     @Published var showAssistant = false
+    @Published var showAssistantFullScreen = false
     @Published var showChatHistoryView = false
     @Published var showHelpView = false
     @Published var showChangeIconView = false
@@ -36,7 +37,13 @@ class MainViewModel: ObservableObject {
         case .switchAssistant:
             showSwitchAssistantView = true
         case .assistant:
-            showAssistant = true
+            if assistantViewDetent == .fullScreen {
+                showAssistant = false
+                showAssistantFullScreen = true
+            } else {
+                showAssistantFullScreen = false
+                showAssistant = true
+            }
         case .chatHistory:
             showChatHistoryView = true
         case .help:
@@ -53,6 +60,7 @@ class MainViewModel: ObservableObject {
     func closeAllModals() {
         showSwitchAssistantView = false
         showAssistant = false
+        showAssistantFullScreen = false
         showChatHistoryView = false
         showHelpView = false
         showChangeIconView = false

@@ -14,6 +14,7 @@ class AssistantViewModel: ObservableObject {
         case small
         case normal
         case large
+        case fullScreen
         
         var id: String { rawValue }
         
@@ -32,6 +33,8 @@ class AssistantViewModel: ObservableObject {
                 return "Normal"
             case .large:
                 return "Large"
+            case .fullScreen:
+                return "Full Screen"
             }
         }
         
@@ -42,6 +45,8 @@ class AssistantViewModel: ObservableObject {
             case .normal:
                 return .medium
             case .large:
+                return .large
+            case .fullScreen:
                 return .large
             }
         }

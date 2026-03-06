@@ -183,17 +183,17 @@ struct AssistantView: View {
                 viewModel.dismissAssistant()
             }
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
-        }
-        .background(
-            AngularGradient(
-                gradient: assistantType.DescriptionProviderType.assistantGradient,
-                center: .center,
-                angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
+            .background(
+                AngularGradient(
+                    gradient: assistantType.DescriptionProviderType.assistantGradient,
+                    center: .center,
+                    angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
+                )
+                .ignoresSafeArea()
+                .opacity((0.15 + Double(viewModel.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
+                .blur(radius: 30)
             )
-            .ignoresSafeArea()
-            .opacity((0.15 + Double(viewModel.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
-            .blur(radius: 30)
-        )
+        }
         .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)

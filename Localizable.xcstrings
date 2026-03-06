@@ -476,6 +476,16 @@
         }
       }
     },
+    "Full Screen" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フルスクリーン"
+          }
+        }
+      }
+    },
     "Gemini" : {
       "localizations" : {
         "ja" : {
