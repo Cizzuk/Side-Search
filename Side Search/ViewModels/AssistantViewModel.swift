@@ -104,6 +104,16 @@ class AssistantViewModel: ObservableObject {
         setupNotificationObservers()
         setupSpeechRecognizerBindings()
     }
+
+    deinit {
+        // Remove All Darwin Notification Observers
+        CFNotificationCenterRemoveObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            Unmanaged.passUnretained(self).toOpaque(),
+            nil,
+            nil
+        )
+    }
     
     private static let endAssistantDarwinCallback: CFNotificationCallback = { _, observer, _, _, _ in
         guard let observer else { return }
