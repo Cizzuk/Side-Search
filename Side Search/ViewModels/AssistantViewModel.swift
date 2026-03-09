@@ -13,24 +13,19 @@ import UIKit
 class AssistantViewModel: ObservableObject {
     enum DetentOption: String, CaseIterable, Identifiable {
         case small
-        case normal
+        case medium
         case large
         case fullScreen
         
         var id: String { rawValue }
         
-        static var defaultDetent: Self {
-            if UIAccessibility.isVoiceOverRunning {
-                return .fullScreen
-            }
-            return .normal
-        }
+        static var defaultDetent: Self = .fullScreen
         
         var displayName: LocalizedStringResource {
             switch self {
             case .small:
                 return "Small"
-            case .normal:
+            case .medium:
                 return "Normal"
             case .large:
                 return "Large"
@@ -43,7 +38,7 @@ class AssistantViewModel: ObservableObject {
             switch self {
             case .small:
                 return .fraction(0.3)
-            case .normal:
+            case .medium:
                 return .medium
             case .large:
                 return .large
