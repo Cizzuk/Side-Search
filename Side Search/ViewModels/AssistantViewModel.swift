@@ -159,6 +159,7 @@ class AssistantViewModel: ObservableObject {
         speechRecognizer.$isRecording
             .sink { [weak self] recording in
                 self?.isRecording = recording
+                self?.updateIdleTimerDisabled()
                 self?.updateLiveActivityStatus()
             }
             .store(in: &cancellables)
@@ -228,6 +229,7 @@ class AssistantViewModel: ObservableObject {
     func dismissAssistant() {
         stopRecording()
         saveChatHistory()
+        UIApplication.shared.isIdleTimerDisabled = false
         AssistantActivityManager.endAll()
     }
     
@@ -331,6 +333,14 @@ class AssistantViewModel: ObservableObject {
             confirmInput()
         } else {
             stopRecording()
+        }
+    }
+    
+    func updateIdleTimerDisabled() {
+        if isRecording {
+            UIApplication.shared.isIdleTimerDisabled = true
+        } else {
+            UIApplication.shared.isIdleTimerDisabled = false
         }
     }
     
