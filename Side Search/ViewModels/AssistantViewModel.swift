@@ -21,7 +21,7 @@ class AssistantViewModel: ObservableObject {
         
         static var defaultDetent: Self {
             if UIAccessibility.isVoiceOverRunning {
-                return .large
+                return .fullScreen
             }
             return .normal
         }
