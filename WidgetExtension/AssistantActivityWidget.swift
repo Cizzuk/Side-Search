@@ -80,14 +80,14 @@ struct AssistantActivityWidget: Widget {
         
         @MainActor
         func perform() async throws -> some IntentResult {
-//            GroupUserDefaults.set(true, forKey: CFNotificationFlags.shouldEndAssistant)
-//            CFNotificationCenterPostNotification(
-//                CFNotificationCenterGetDarwinNotifyCenter(),
-//                .shouldEndAssistant,
-//                nil,
-//                nil,
-//                true
-//            )
+            GroupUserDefaults.set(true, forKey: CFNotificationFlags.shouldEndAssistant)
+            CFNotificationCenterPostNotification(
+                CFNotificationCenterGetDarwinNotifyCenter(),
+                .shouldEndAssistant,
+                nil,
+                nil,
+                true
+            )
             
             return .result()
         }

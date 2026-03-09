@@ -5,9 +5,10 @@
 //  Created by Cizzuk on 2025/12/24.
 //
 
+import AVFAudio
 import Combine
-import UIKit
 import SwiftUI
+import UIKit
 
 class AssistantViewModel: ObservableObject {
     enum DetentOption: String, CaseIterable, Identifiable {
@@ -105,7 +106,52 @@ class AssistantViewModel: ObservableObject {
     
     init(assistantType: AssistantType) {
         self.assistantType = assistantType
+        setupNotificationObservers()
         setupSpeechRecognizerBindings()
+    }
+    
+    private static let endAssistantDarwinCallback: CFNotificationCallback = { _, observer, _, _, _ in
+        guard let observer else { return }
+        let viewModel = Unmanaged<AssistantViewModel>.fromOpaque(observer).takeUnretainedValue()
+        
+        // Check Flag
+        if GroupUserDefaults.bool(forKey: CFNotificationFlags.shouldEndAssistant) {
+            viewModel.dismissAssistant()
+            GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
+        }
+    }
+    
+    func setupNotificationObservers() {
+        // Observe Darwin Notification for ending assistant from Live Activity
+        GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
+        CFNotificationCenterAddObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            Unmanaged.passUnretained(self).toOpaque(),
+            AssistantViewModel.endAssistantDarwinCallback,
+            CFNotificationName.shouldEndAssistant.rawValue,
+            nil,
+            .deliverImmediately
+        )
+        
+        // Observe AVAudioSession Interruptions
+        NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)
+            .sink { [weak self] notification in
+                guard let userInfo = notification.userInfo,
+                      let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+                      let type = AVAudioSession.InterruptionType(rawValue: typeValue),
+                      type == .began
+                else { return }
+                
+                self?.dismissAssistant()
+            }
+            .store(in: &cancellables)
+        
+        // Observe App Termination
+        NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)
+            .sink { [weak self] _ in
+                self?.dismissAssistant()
+            }
+            .store(in: &cancellables)
     }
     
     func setupSpeechRecognizerBindings() {

@@ -179,9 +179,6 @@ struct AssistantView: View {
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 viewModel.activateAssistant()
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)) { _ in
-                viewModel.dismissAssistant()
-            }
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .background(
                 AngularGradient(
