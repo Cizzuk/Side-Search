@@ -55,6 +55,8 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Variables
     
     var assistantType: AssistantType
+    var chatID = UUID()
+    var chatDate = Date()
     
     var currentScenePhase: ScenePhase = .active
     @Published var shouldDismiss = false
@@ -251,6 +253,8 @@ class AssistantViewModel: ObservableObject {
         else { return }
         
         let chat = ChatHistory.Chat(
+            id: chatID,
+            date: chatDate,
             assistantType: assistantType,
             messages: messageHistory
         )
@@ -308,6 +312,9 @@ class AssistantViewModel: ObservableObject {
     
     func addMessage(_ message: AssistantMessage) {
         messageHistory.append(message)
+        
+        // Set last message date as chat date
+        chatDate = Date()
         
         // Send user notification
         if message.from != .user && currentScenePhase != .active {
