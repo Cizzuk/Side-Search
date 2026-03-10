@@ -57,6 +57,7 @@ class AssistantViewModel: ObservableObject {
     var assistantType: AssistantType
     
     var currentScenePhase: ScenePhase = .active
+    @Published var shouldDismiss = false
     
     @Published var detent: PresentationDetent = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
@@ -237,6 +238,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Methods
     
     func dismissAssistant() {
+        shouldDismiss = true
         stopRecording()
         saveChatHistory()
         UIApplication.shared.isIdleTimerDisabled = false
