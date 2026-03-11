@@ -6,6 +6,7 @@
 //
 
 import ActivityKit
+import AppIntents
 import SwiftUI
 import WidgetKit
 
@@ -59,6 +60,39 @@ struct AssistantActivityWidget: Widget {
         }
     }
     
+    struct EndAssistantButton: View {
+        var body: some View {
+            Button(intent: EndAssistantButtonIntent()) {
+                Label("End Assistant", systemImage: "xmark")
+                    .labelStyle(.iconOnly)
+                    .font(.system(size: 30, weight: .bold))
+                    .padding(5)
+            }
+            .tint(.dropblue)
+            .padding(5)
+        }
+    }
+    
+    struct EndAssistantButtonIntent: AppIntent {
+        static let title: LocalizedStringResource = "End Assistant"
+        static var openAppWhenRun = false
+        static var isDiscoverable = false
+        
+        @MainActor
+        func perform() async throws -> some IntentResult {
+            GroupUserDefaults.set(true, forKey: CFNotificationFlags.shouldEndAssistant)
+            CFNotificationCenterPostNotification(
+                CFNotificationCenterGetDarwinNotifyCenter(),
+                .shouldEndAssistant,
+                nil,
+                nil,
+                true
+            )
+            
+            return .result()
+        }
+    }
+    
     struct MainActivityView: View {
         @Environment(\.activityFamily) var activityFamily
         
@@ -70,9 +104,12 @@ struct AssistantActivityWidget: Widget {
                     DescriptionText(showSubtitle: false)
                 }
             case .medium:
-                HStack(spacing: 10) {
-                    IconImage(size: 40)
+                HStack(spacing: 15) {
+                    IconImage(size: 45)
+                        .padding(.leading, 10)
                     DescriptionText()
+                    Spacer()
+                    EndAssistantButton()
                 }
                 .padding()
             @unknown default:
@@ -89,12 +126,17 @@ struct AssistantActivityWidget: Widget {
         } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    IconImage(size: 50)
-                        .padding(5)
+                    IconImage(size: 55)
+                        .padding(.vertical, 5)
+                        .padding(.leading, 10)
                 }
                 DynamicIslandExpandedRegion(.center) {
                     DescriptionText()
                         .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                DynamicIslandExpandedRegion(.trailing) {
+                    EndAssistantButton()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             } compactLeading: {
                 IconImage()

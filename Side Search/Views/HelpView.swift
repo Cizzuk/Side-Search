@@ -61,47 +61,43 @@ struct HelpView: View {
                     } header: { Label("Search URL Tip", systemImage: "magnifyingglass") }
                 }
                 
-                if AssistantType.current.DescriptionProviderType.backgroundSupports {
-                    Section {
-                        // 対応するアシスタントでは、音声認識中にアプリを閉じてもバックグラウンドで会話を続けることができます。
-                        // アシスタントの返事は通知で受け取ることができます。バックグラウンドで会話をするにはSide Searchの通知を許可する必要があります。
-                        Text("With a compatible assistant, you can continue conversations in the background even if you close Side Search during speech recognition.")
-                        Text("You can receive the assistant's replies via notifications. To have conversations in the background, you need to allow notifications for Side Search.")
-                        if unAuthorizationStatus == .notDetermined {
-                            Button(action: {
-                                Task {
-                                    _ = await UserNotificationSupport.requestAuthorization()
-                                    unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
-                                }
-                            }) {
-                                Label("Allow Notifications", systemImage: "app.badge")
+                Section {
+                    // 対応するアシスタントでは、音声認識中にアプリを閉じてもバックグラウンドで会話を続けることができます。
+                    // アシスタントの返事は通知で受け取ることができます。バックグラウンドで会話をするにはSide Searchの通知を許可する必要があります。
+                    Text("With a compatible assistant, you can continue conversations in the background even if you close Side Search during speech recognition.")
+                    Text("You can receive the assistant's replies via notifications. To have conversations in the background, you need to allow notifications for Side Search.")
+                    if unAuthorizationStatus == .notDetermined {
+                        Button(action: {
+                            Task {
+                                _ = await UserNotificationSupport.requestAuthorization()
+                                unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
                             }
-                        } else if unAuthorizationStatus == .denied {
-                            if canOpenSettingsURL {
-                                Button(action: { openSettingsURL() }) {
-                                    Label("Allow in Settings", systemImage: "gear")
-                                }
+                        }) {
+                            Label("Allow Notifications", systemImage: "app.badge")
+                        }
+                    } else if unAuthorizationStatus == .denied {
+                        if canOpenSettingsURL {
+                            Button(action: { openSettingsURL() }) {
+                                Label("Allow in Settings", systemImage: "gear")
                             }
                         }
-                    } header: { Label("Background Tip", systemImage: "arrow.clockwise")
-                    } footer: {
-                        if unAuthorizationStatus == .authorized {
-                            Text("Notifications allowed.")
-                        }
                     }
-                    .task {
-                        unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
+                } header: { Label("Background Tip", systemImage: "arrow.clockwise")
+                } footer: {
+                    if unAuthorizationStatus == .authorized {
+                        Text("Notifications allowed.")
                     }
+                }
+                .task {
+                    unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
                 }
                 
                 // MARK: - Shortcut Tip
                 Section {
                     // ショートカットを使ってSide Searchのアシスタントを起動することができます。
-                    // ショートカットで「Side Search」から「アシスタントを開始」アクションから利用できます。
-                    // ショートカットのオートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。
+                    // オートメーションを設定すれば、Side Searchを起動した時に別のアクションを実行することもできます。「マイクミュートで開始」をオンにすることをおすすめします。
                     Text("You can launch the Side Search assistant using the Shortcuts.")
-                    Text("You can find it in the Shortcuts under \"Side Search\" by selecting the \"Start Assistant\" action.")
-                    Text("By setting up automation in the Shortcuts, you can perform other actions when Side Search is launched.")
+                    Text("By setting up automation, you can also perform other actions when Side Search is launched. I recommend turning on \"Start with Mic Muted\".")
                     Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/create-a-new-personal-automation-apdfbdbd7123/ios")!) {
                         Label("Create a new personal automation in Shortcuts", systemImage: "book")
                     }

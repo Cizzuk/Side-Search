@@ -162,6 +162,13 @@ struct MainView: View {
                     in: ns_assistantView
                 ))
         }
+        .fullScreenCover(isPresented: $viewModel.showAssistantFullScreen) {
+            AssistantView()
+                .navigationTransition(.zoom(
+                    sourceID: id_activateAssistantButton,
+                    in: ns_assistantView
+                ))
+        }
         .fullScreenCover(isPresented: $viewModel.showSafariView) {
             if let url = viewModel.safariViewURL {
                 SafariView(url: url)

@@ -5,33 +5,32 @@
 //  Created by Cizzuk on 2025/12/24.
 //
 
+import AVFAudio
 import Combine
-import UIKit
 import SwiftUI
+import UIKit
 
 class AssistantViewModel: ObservableObject {
     enum DetentOption: String, CaseIterable, Identifiable {
         case small
-        case normal
+        case medium
         case large
+        case fullScreen
         
         var id: String { rawValue }
         
-        static var defaultDetent: Self {
-            if UIAccessibility.isVoiceOverRunning {
-                return .large
-            }
-            return .normal
-        }
+        static var defaultDetent: Self = .fullScreen
         
         var displayName: LocalizedStringResource {
             switch self {
             case .small:
                 return "Small"
-            case .normal:
+            case .medium:
                 return "Normal"
             case .large:
                 return "Large"
+            case .fullScreen:
+                return "Full Screen"
             }
         }
         
@@ -39,9 +38,11 @@ class AssistantViewModel: ObservableObject {
             switch self {
             case .small:
                 return .fraction(0.3)
-            case .normal:
+            case .medium:
                 return .medium
             case .large:
+                return .large
+            case .fullScreen:
                 return .large
             }
         }
@@ -54,8 +55,11 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Variables
     
     var assistantType: AssistantType
+    var chatID = UUID()
+    var chatDate = Date()
     
     var currentScenePhase: ScenePhase = .active
+    @Published var shouldDismiss = false
     
     @Published var detent: PresentationDetent = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
@@ -100,7 +104,62 @@ class AssistantViewModel: ObservableObject {
     
     init(assistantType: AssistantType) {
         self.assistantType = assistantType
+        setupNotificationObservers()
         setupSpeechRecognizerBindings()
+    }
+
+    deinit {
+        // Remove All Darwin Notification Observers
+        CFNotificationCenterRemoveObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            Unmanaged.passUnretained(self).toOpaque(),
+            nil,
+            nil
+        )
+    }
+    
+    private static let endAssistantDarwinCallback: CFNotificationCallback = { _, observer, _, _, _ in
+        guard let observer else { return }
+        let viewModel = Unmanaged<AssistantViewModel>.fromOpaque(observer).takeUnretainedValue()
+        
+        // Check Flag
+        if GroupUserDefaults.bool(forKey: CFNotificationFlags.shouldEndAssistant) {
+            viewModel.dismissAssistant()
+            GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
+        }
+    }
+    
+    func setupNotificationObservers() {
+        // Observe Darwin Notification for ending assistant from Live Activity
+        GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
+        CFNotificationCenterAddObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            Unmanaged.passUnretained(self).toOpaque(),
+            AssistantViewModel.endAssistantDarwinCallback,
+            CFNotificationName.shouldEndAssistant.rawValue,
+            nil,
+            .deliverImmediately
+        )
+        
+        // Observe AVAudioSession Interruptions
+        NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)
+            .sink { [weak self] notification in
+                guard let userInfo = notification.userInfo,
+                      let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+                      let type = AVAudioSession.InterruptionType(rawValue: typeValue),
+                      type == .began
+                else { return }
+                
+                self?.dismissAssistant()
+            }
+            .store(in: &cancellables)
+        
+        // Observe App Termination
+        NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)
+            .sink { [weak self] _ in
+                self?.dismissAssistant()
+            }
+            .store(in: &cancellables)
     }
     
     func setupSpeechRecognizerBindings() {
@@ -113,6 +172,7 @@ class AssistantViewModel: ObservableObject {
         speechRecognizer.$isRecording
             .sink { [weak self] recording in
                 self?.isRecording = recording
+                self?.updateIdleTimerDisabled()
                 self?.updateLiveActivityStatus()
             }
             .store(in: &cancellables)
@@ -180,8 +240,10 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Methods
     
     func dismissAssistant() {
+        shouldDismiss = true
         stopRecording()
         saveChatHistory()
+        UIApplication.shared.isIdleTimerDisabled = false
         AssistantActivityManager.endAll()
     }
     
@@ -191,6 +253,8 @@ class AssistantViewModel: ObservableObject {
         else { return }
         
         let chat = ChatHistory.Chat(
+            id: chatID,
+            date: chatDate,
             assistantType: assistantType,
             messages: messageHistory
         )
@@ -249,6 +313,9 @@ class AssistantViewModel: ObservableObject {
     func addMessage(_ message: AssistantMessage) {
         messageHistory.append(message)
         
+        // Set last message date as chat date
+        chatDate = Date()
+        
         // Send user notification
         if message.from != .user && currentScenePhase != .active {
             Task {
@@ -285,6 +352,14 @@ class AssistantViewModel: ObservableObject {
             confirmInput()
         } else {
             stopRecording()
+        }
+    }
+    
+    func updateIdleTimerDisabled() {
+        if isRecording {
+            UIApplication.shared.isIdleTimerDisabled = true
+        } else {
+            UIApplication.shared.isIdleTimerDisabled = false
         }
     }
     
