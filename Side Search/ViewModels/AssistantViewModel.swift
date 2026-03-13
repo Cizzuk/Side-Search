@@ -212,7 +212,9 @@ class AssistantViewModel: ObservableObject {
         case .background:
             // Background support check
             Task {
-                if !(await isBackgroundAvailable()) {
+                if await isBackgroundAvailable() {
+                    let _ = await UserNotificationSupport.requestAuthorization()
+                } else {
                     stopRecording()
                 }
             }
@@ -318,8 +320,6 @@ class AssistantViewModel: ObservableObject {
             Task {
                 if await UserNotificationSupport.requestAuthorization() {
                     await UserNotificationSupport.sendAssistantMessage(message: message)
-                } else {
-                    stopRecording()
                 }
             }
         }
