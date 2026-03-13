@@ -86,33 +86,39 @@ class MainViewModel: ObservableObject {
     }
     
     func activateAssistant() {
-        // Close sheets and covers
-        closeAllModals()
+        var transaction = Transaction()
+        // Disable animations when activating assistant from background
+        transaction.disablesAnimations = UIApplication.shared.applicationState != .active
         
-        // Check current assistant type
-        if currentAssistant != .urlBased {
-            showModal(.assistant)
-            return
-        }
-        
-        let SearchEngine = URLBasedAssistantModel.load()
-        
-        // Check if query input is needed
-        if SearchEngine.needQueryInput() {
-            showModal(.assistant)
-            return
-        }
-        
-        // Check if SafariView is available
-        if SearchEngine.openIn == .inAppBrowser && SearchEngine.checkSafariViewAvailability() {
-            safariViewURL = URL(string: SearchEngine.url)
-            showModal(.safari)
-            return
-        }
-        
-        if let url = URL(string: SearchEngine.url) {
-            showModal(.tmpCurtain)
-            UIApplication.shared.open(url)
+        withTransaction(transaction) {
+            // Close sheets and covers
+            closeAllModals()
+            
+            // Check current assistant type
+            if currentAssistant != .urlBased {
+                showModal(.assistant)
+                return
+            }
+            
+            let SearchEngine = URLBasedAssistantModel.load()
+            
+            // Check if query input is needed
+            if SearchEngine.needQueryInput() {
+                showModal(.assistant)
+                return
+            }
+            
+            // Check if SafariView is available
+            if SearchEngine.openIn == .inAppBrowser && SearchEngine.checkSafariViewAvailability() {
+                safariViewURL = URL(string: SearchEngine.url)
+                showModal(.safari)
+                return
+            }
+            
+            if let url = URL(string: SearchEngine.url) {
+                showModal(.tmpCurtain)
+                UIApplication.shared.open(url)
+            }
         }
     }
     
@@ -175,6 +181,20 @@ class MainViewModel: ObservableObject {
     @Published var startWithMicMuted: Bool = UserDefaults.standard.bool(forKey: "startWithMicMuted") {
         didSet {
             UserDefaults.standard.set(startWithMicMuted, forKey: "startWithMicMuted")
+        }
+    }
+    
+    // Continue in Background
+    @Published var continueInBackground: Bool = {
+        // Default to true
+        if UserDefaults.standard.object(forKey: "continueInBackground") == nil {
+            UserDefaults.standard.set(true, forKey: "continueInBackground")
+            return true
+        }
+        return UserDefaults.standard.bool(forKey: "continueInBackground")
+    }() {
+        didSet {
+            UserDefaults.standard.set(continueInBackground, forKey: "continueInBackground")
         }
     }
     

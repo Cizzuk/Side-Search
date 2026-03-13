@@ -36,7 +36,7 @@ struct MainView: View {
                 
                 // Speech Recognition Settings
                 Section {
-                    Picker("Speech Language", selection: Binding(
+                    Picker("Language", selection: Binding(
                         get: { viewModel.speechLocale },
                         set: { newValue in
                             viewModel.speechLocale = newValue
@@ -48,9 +48,13 @@ struct MainView: View {
                         }
                     }
                     
-                    Toggle("Manually Confirm Speech", isOn: $viewModel.manuallyConfirmSpeech)
+                    Toggle("Manually Confirm", isOn: $viewModel.manuallyConfirmSpeech)
 
                     Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
+                    
+                    if viewModel.currentAssistant.DescriptionProviderType.backgroundSupports {
+                        Toggle("Continue in Background", isOn: $viewModel.continueInBackground)
+                    }
                 } header: { Text("Speech Settings") }
                 
                 Section {

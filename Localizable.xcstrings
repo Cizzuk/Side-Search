@@ -346,6 +346,16 @@
         }
       }
     },
+    "Continue in Background" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドで継続"
+          }
+        }
+      }
+    },
     "Copilot Search" : {
       "localizations" : {
         "ja" : {
@@ -481,7 +491,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "フルスクリーン"
+            "value" : "全画面"
           }
         }
       }
@@ -556,12 +566,12 @@
         }
       }
     },
-    "If setting it up is difficult, you can easily set it up by choosing from \"Search URL Presets\"." : {
+    "If you allow notifications, you can receive the assistant's replies via notifications." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "もし設定が難しい場合は、「検索URLのプリセット」からお好きなものを選んで簡単に設定することができます。"
+            "value" : "通知を許可すれば、アシスタントの返事を通知で確認することができます。"
           }
         }
       }
@@ -616,12 +626,22 @@
         }
       }
     },
+    "Language" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "言語"
+          }
+        }
+      }
+    },
     "Large" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "大きい"
+            "value" : "大"
           }
         }
       }
@@ -656,12 +676,22 @@
         }
       }
     },
-    "Manually Confirm Speech" : {
+    "Manually Confirm" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "手動で音声認識を完了する"
+            "value" : "手動で完了する"
+          }
+        }
+      }
+    },
+    "Medium" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中"
           }
         }
       }
@@ -685,16 +715,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "モデル"
-          }
-        }
-      }
-    },
-    "Normal" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通常"
           }
         }
       }
@@ -877,7 +897,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "小さい"
+            "value" : "小"
           }
         }
       }
@@ -898,16 +918,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "話す"
-          }
-        }
-      }
-    },
-    "Speech Language" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "話す言語"
           }
         }
       }
@@ -1032,11 +1042,15 @@
         }
       }
     },
-    "TEST Assistant. Echo user input." : {
-      "shouldTranslate" : false
-    },
-    "TEST Yamabico Assistant" : {
-      "shouldTranslate" : false
+    "The confirmed supported region is Japan only." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在確認されている対応地域は、日本のみです。"
+          }
+        }
+      }
     },
     "The Search URL is necessary to set your preferred AI assistant or search engine URL." : {
       "localizations" : {
@@ -1214,16 +1228,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ショートカットを使ってSide Searchのアシスタントを起動することができます。"
-          }
-        }
-      }
-    },
-    "You can receive the assistant's replies via notifications. To have conversations in the background, you need to allow notifications for Side Search." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アシスタントの返事は通知で受け取ることができます。バックグラウンドで会話をするにはSide Searchの通知を許可する必要があります。"
           }
         }
       }

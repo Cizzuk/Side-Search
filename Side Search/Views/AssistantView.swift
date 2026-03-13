@@ -174,7 +174,7 @@ struct AssistantView: View {
                 viewModel.startAssistant()
             }
             .onDisappear() {
-                viewModel.dismissAssistant()
+                viewModel.dismissAssistant(fromView: true)
             }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
                 viewModel.activateAssistant()

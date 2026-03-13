@@ -26,7 +26,7 @@ class AssistantViewModel: ObservableObject {
             case .small:
                 return "Small"
             case .medium:
-                return "Normal"
+                return "Medium"
             case .large:
                 return "Large"
             case .fullScreen:
@@ -206,13 +206,15 @@ class AssistantViewModel: ObservableObject {
         currentScenePhase = scenePhase
         switch scenePhase {
         case .active:
-            break
+            updateLiveActivityStatus()
         case .inactive:
             break
         case .background:
             // Background support check
             Task {
-                if !(await isBackgroundAvailable()) {
+                if await isBackgroundAvailable() {
+                    let _ = await UserNotificationSupport.requestAuthorization()
+                } else {
                     stopRecording()
                 }
             }
@@ -231,16 +233,13 @@ class AssistantViewModel: ObservableObject {
         if ProcessInfo().isiOSAppOnMac {
             return true
         }
-        if !(await UserNotificationSupport.isAvailable()) {
-            return false
-        }
         return true
     }
     
     // MARK: - Methods
     
-    func dismissAssistant() {
-        shouldDismiss = true
+    func dismissAssistant(fromView: Bool = false) {
+        if !fromView { shouldDismiss = true }
         stopRecording()
         saveChatHistory()
         UIApplication.shared.isIdleTimerDisabled = false
@@ -321,8 +320,6 @@ class AssistantViewModel: ObservableObject {
             Task {
                 if await UserNotificationSupport.requestAuthorization() {
                     await UserNotificationSupport.sendAssistantMessage(message: message)
-                } else {
-                    stopRecording()
                 }
             }
         }
