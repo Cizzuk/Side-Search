@@ -129,6 +129,7 @@ struct AssistantActivityWidget: Widget {
                     IconImage(size: 55)
                         .padding(.vertical, 5)
                         .padding(.leading, 10)
+                        .frame(maxHeight: .infinity)
                 }
                 DynamicIslandExpandedRegion(.center) {
                     DescriptionText()
