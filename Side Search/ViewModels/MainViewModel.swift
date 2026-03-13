@@ -37,12 +37,17 @@ class MainViewModel: ObservableObject {
         case .switchAssistant:
             showSwitchAssistantView = true
         case .assistant:
-            if assistantViewDetent == .fullScreen {
-                showAssistant = false
-                showAssistantFullScreen = true
-            } else {
-                showAssistantFullScreen = false
-                showAssistant = true
+            var transaction = Transaction()
+            // Disable animations when activating assistant from background
+            transaction.disablesAnimations = UIApplication.shared.applicationState != .active
+            withTransaction(transaction) {
+                if assistantViewDetent == .fullScreen {
+                    showAssistant = false
+                    showAssistantFullScreen = true
+                } else {
+                    showAssistantFullScreen = false
+                    showAssistant = true
+                }
             }
         case .chatHistory:
             showChatHistoryView = true
