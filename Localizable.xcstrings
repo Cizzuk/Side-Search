@@ -1042,12 +1042,6 @@
         }
       }
     },
-    "TEST Assistant. Echo user input." : {
-      "shouldTranslate" : false
-    },
-    "TEST Yamabico Assistant" : {
-      "shouldTranslate" : false
-    },
     "The confirmed supported region is Japan only." : {
       "localizations" : {
         "ja" : {

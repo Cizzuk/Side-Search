@@ -12,8 +12,6 @@ enum AssistantType: String, CaseIterable, Codable {
     case urlBased
     case appleFoundation
     case geminiAPI
-    // Tests
-    case test_yamabico
     
     static var defaultType: AssistantType {
         return .urlBased
@@ -27,8 +25,6 @@ enum AssistantType: String, CaseIterable, Codable {
             return AppleFoundationAssistant.self
         case .geminiAPI:
             return GeminiAPIAssistant.self
-        case .test_yamabico:
-            return TEST_YamabicoAssistant.self
         }
     }
     
@@ -40,8 +36,6 @@ enum AssistantType: String, CaseIterable, Codable {
             return AppleFoundationAssistantModel.self
         case .geminiAPI:
             return GeminiAPIAssistantModel.self
-        case .test_yamabico:
-            return TEST_YamabicoAssistantModel.self
         }
     }
     
