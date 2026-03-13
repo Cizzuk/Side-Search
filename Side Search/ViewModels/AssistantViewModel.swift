@@ -224,14 +224,14 @@ class AssistantViewModel: ObservableObject {
     }
     
     func isBackgroundAvailable() async -> Bool {
+        if !UserDefaults.standard.bool(forKey: "continueInBackground") {
+            return false
+        }
         if !assistantType.DescriptionProviderType.backgroundSupports {
             return false
         }
         if AccessibilitySettings.isAssistiveAccessEnabled {
             return false
-        }
-        if ProcessInfo().isiOSAppOnMac {
-            return true
         }
         return true
     }
