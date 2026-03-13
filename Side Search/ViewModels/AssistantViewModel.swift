@@ -26,7 +26,7 @@ class AssistantViewModel: ObservableObject {
             case .small:
                 return "Small"
             case .medium:
-                return "Normal"
+                return "Medium"
             case .large:
                 return "Large"
             case .fullScreen:

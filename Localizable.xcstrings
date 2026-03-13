@@ -491,7 +491,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "フルスクリーン"
+            "value" : "全画面"
           }
         }
       }
@@ -641,7 +641,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "大きい"
+            "value" : "大"
           }
         }
       }
@@ -686,6 +686,16 @@
         }
       }
     },
+    "Medium" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中"
+          }
+        }
+      }
+    },
     "Microphone access denied. Please enable it in Settings." : {
       "localizations" : {
         "ja" : {
@@ -705,16 +715,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "モデル"
-          }
-        }
-      }
-    },
-    "Normal" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通常"
           }
         }
       }
@@ -897,7 +897,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "小さい"
+            "value" : "小"
           }
         }
       }
