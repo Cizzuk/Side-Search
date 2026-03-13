@@ -238,8 +238,8 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Methods
     
-    func dismissAssistant() {
-        shouldDismiss = true
+    func dismissAssistant(fromView: Bool = false) {
+        if !fromView { shouldDismiss = true }
         stopRecording()
         saveChatHistory()
         UIApplication.shared.isIdleTimerDisabled = false
