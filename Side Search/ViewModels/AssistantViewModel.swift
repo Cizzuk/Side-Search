@@ -231,9 +231,6 @@ class AssistantViewModel: ObservableObject {
         if ProcessInfo().isiOSAppOnMac {
             return true
         }
-        if !(await UserNotificationSupport.isAvailable()) {
-            return false
-        }
         return true
     }
     
