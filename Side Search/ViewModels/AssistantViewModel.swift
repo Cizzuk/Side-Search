@@ -206,7 +206,7 @@ class AssistantViewModel: ObservableObject {
         currentScenePhase = scenePhase
         switch scenePhase {
         case .active:
-            break
+            updateLiveActivityStatus()
         case .inactive:
             break
         case .background:
