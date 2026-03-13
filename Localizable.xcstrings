@@ -346,6 +346,16 @@
         }
       }
     },
+    "Continue in Background" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドで継続"
+          }
+        }
+      }
+    },
     "Copilot Search" : {
       "localizations" : {
         "ja" : {
@@ -616,6 +626,16 @@
         }
       }
     },
+    "Language" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "言語"
+          }
+        }
+      }
+    },
     "Large" : {
       "localizations" : {
         "ja" : {
@@ -656,12 +676,12 @@
         }
       }
     },
-    "Manually Confirm Speech" : {
+    "Manually Confirm" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "手動で音声認識を完了する"
+            "value" : "手動で完了する"
           }
         }
       }
@@ -898,16 +918,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "話す"
-          }
-        }
-      }
-    },
-    "Speech Language" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "話す言語"
           }
         }
       }

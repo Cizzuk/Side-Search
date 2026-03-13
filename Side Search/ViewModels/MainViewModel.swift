@@ -183,6 +183,20 @@ class MainViewModel: ObservableObject {
         }
     }
     
+    // Continue in Background
+    @Published var continueInBackground: Bool = {
+        // Default to true
+        if UserDefaults.standard.object(forKey: "continueInBackground") == nil {
+            UserDefaults.standard.set(true, forKey: "continueInBackground")
+            return true
+        }
+        return UserDefaults.standard.bool(forKey: "continueInBackground")
+    }() {
+        didSet {
+            UserDefaults.standard.set(continueInBackground, forKey: "continueInBackground")
+        }
+    }
+    
     // Assistant View Detent
     @Published var assistantViewDetent: AssistantViewModel.DetentOption = {
         if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
