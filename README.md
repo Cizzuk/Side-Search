@@ -1,8 +1,8 @@
 # Side Seaerch
 
-お好みのAIアシスタントや検索エンジンを、あなたの音声アシスタントにします。対応する地域では、サイドボタンを長押しして起動できる音声対応アプリです。
+お好みのAIアシスタントや検索エンジンを、あなたの音声アシスタントにします。
 
-このアプリは[Side Button Access](https://developer.apple.com/documentation/AppIntents/Launching-your-voice-based-conversational-app-from-the-side-button-of-iPhone)を利用した、日本にあるiPhone向けの音声ベース会話アプリです。
+このアプリは[Side Button Access](https://developer.apple.com/documentation/AppIntents/Launching-your-voice-based-conversational-app-from-the-side-button-of-iPhone)を利用した、サイドボタンをカスタマイズするための音声ベース会話アプリです。
 
 **[App Storeからダウンロード](https://apps.apple.com/app/side-search/id6756973793)**
 
@@ -12,8 +12,8 @@
 
 ### サイドボタンから起動
 
-対応する地域では、サイドボタンにSide Searchを割り当てることができます。
-お好みのアシスタントを、デフォルトのアシスタントにしましょう。
+日本のiPhoneでは、サイドボタンにSide Searchのアシスタントを割り当てることができます。  
+サイドボタンを長押しして、お気に入りのアシスタントを起動できます。
 
 ### アシスタント
 
