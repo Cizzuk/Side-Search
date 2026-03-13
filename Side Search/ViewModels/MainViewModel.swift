@@ -37,17 +37,12 @@ class MainViewModel: ObservableObject {
         case .switchAssistant:
             showSwitchAssistantView = true
         case .assistant:
-            var transaction = Transaction()
-            // Disable animations when activating assistant from background
-            transaction.disablesAnimations = UIApplication.shared.applicationState != .active
-            withTransaction(transaction) {
-                if assistantViewDetent == .fullScreen {
-                    showAssistant = false
-                    showAssistantFullScreen = true
-                } else {
-                    showAssistantFullScreen = false
-                    showAssistant = true
-                }
+            if assistantViewDetent == .fullScreen {
+                showAssistant = false
+                showAssistantFullScreen = true
+            } else {
+                showAssistantFullScreen = false
+                showAssistant = true
             }
         case .chatHistory:
             showChatHistoryView = true
@@ -91,33 +86,39 @@ class MainViewModel: ObservableObject {
     }
     
     func activateAssistant() {
-        // Close sheets and covers
-        closeAllModals()
+        var transaction = Transaction()
+        // Disable animations when activating assistant from background
+        transaction.disablesAnimations = UIApplication.shared.applicationState != .active
         
-        // Check current assistant type
-        if currentAssistant != .urlBased {
-            showModal(.assistant)
-            return
-        }
-        
-        let SearchEngine = URLBasedAssistantModel.load()
-        
-        // Check if query input is needed
-        if SearchEngine.needQueryInput() {
-            showModal(.assistant)
-            return
-        }
-        
-        // Check if SafariView is available
-        if SearchEngine.openIn == .inAppBrowser && SearchEngine.checkSafariViewAvailability() {
-            safariViewURL = URL(string: SearchEngine.url)
-            showModal(.safari)
-            return
-        }
-        
-        if let url = URL(string: SearchEngine.url) {
-            showModal(.tmpCurtain)
-            UIApplication.shared.open(url)
+        withTransaction(transaction) {
+            // Close sheets and covers
+            closeAllModals()
+            
+            // Check current assistant type
+            if currentAssistant != .urlBased {
+                showModal(.assistant)
+                return
+            }
+            
+            let SearchEngine = URLBasedAssistantModel.load()
+            
+            // Check if query input is needed
+            if SearchEngine.needQueryInput() {
+                showModal(.assistant)
+                return
+            }
+            
+            // Check if SafariView is available
+            if SearchEngine.openIn == .inAppBrowser && SearchEngine.checkSafariViewAvailability() {
+                safariViewURL = URL(string: SearchEngine.url)
+                showModal(.safari)
+                return
+            }
+            
+            if let url = URL(string: SearchEngine.url) {
+                showModal(.tmpCurtain)
+                UIApplication.shared.open(url)
+            }
         }
     }
     
