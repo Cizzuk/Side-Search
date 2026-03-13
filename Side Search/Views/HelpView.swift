@@ -35,8 +35,10 @@ struct HelpView: View {
                 Section {
                     // サイドボタンのカスタマイズが可能な地域では、サイドボタンを長押しすることでSide Searchのアシスタントをすぐに起動できます。
                     // 設定 → アプリ → Side Searchで「サイドボタンを押してSide Searchを使用」をオンにすることで設定できます。
+                    // 現在確認されている対応地域は、日本のみです。
                     Text("If you are in a region where Side Button customization is enabled, you can quickly launch the Side Search assistant by pressing and holding the Side Button.")
                     Text("You can set it up by going to Settings → Apps → Side Search and turning on \"Press Side Button for Side Search\".")
+                    Text("The confirmed supported region is Japan only.")
                     if canOpenSettingsURL {
                         Button(action: { openSettingsURL() }) {
                             Label("Open Settings", systemImage: "gear")
@@ -48,11 +50,9 @@ struct HelpView: View {
                     // MARK: - Search URL Tip
                     Section {
                         // 検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。
-                        // もし設定が難しい場合は、「検索URLのプリセット」からお好きなものを選んで簡単に設定することができます。
                         // クエリ部分を「%s」にすると、Side Searchの音声認識を利用できます。
                         // 検索URLにはアプリのURLスキームを使用することができます。アシスタントをデフォルトのアプリで開くように設定すれば、ユニバーサルリンクも使用できます。
                         Text("The Search URL is necessary to set your preferred AI assistant or search engine URL.")
-                        Text("If setting it up is difficult, you can easily set it up by choosing from \"Search URL Presets\".")
                         Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.")
                         Text("You can use the app's URL scheme for the Search URL. If you set the assistant to Open in Default App, you can also use Universal Links.")
                         Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios")!) {

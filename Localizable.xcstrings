@@ -556,16 +556,6 @@
         }
       }
     },
-    "If setting it up is difficult, you can easily set it up by choosing from \"Search URL Presets\"." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "もし設定が難しい場合は、「検索URLのプリセット」からお好きなものを選んで簡単に設定することができます。"
-          }
-        }
-      }
-    },
     "If you allow notifications, you can receive the assistant's replies via notifications." : {
       "localizations" : {
         "ja" : {
@@ -1047,6 +1037,16 @@
     },
     "TEST Yamabico Assistant" : {
       "shouldTranslate" : false
+    },
+    "The confirmed supported region is Japan only." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在確認されている対応地域は、日本のみです。"
+          }
+        }
+      }
     },
     "The Search URL is necessary to set your preferred AI assistant or search engine URL." : {
       "localizations" : {
