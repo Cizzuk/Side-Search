@@ -23,6 +23,11 @@ struct AssistantView: View {
         _viewModel = StateObject(wrappedValue: AssistantType.current.makeAssistantViewModel())
     }
     
+    func dismissView() {
+        viewModel.dismissAssistant(fromView: true)
+        dismiss()
+    }
+    
     var body: some View {
         NavigationStack {
             ScrollViewReader { proxy in
@@ -128,11 +133,11 @@ struct AssistantView: View {
             .animation(.smooth, value: viewModel.inputText)
             .animation(.smooth, value: viewModel.messageHistory.count)
             .scrollDismissesKeyboard(.interactively)
-            .accessibilityAction(.escape) { dismiss() }
+            .accessibilityAction(.escape) { dismissView() }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("End Assistant", systemImage: "xmark") {
-                        dismiss()
+                    Button(action: { dismissView() }) {
+                        Label("End Assistant", systemImage: "xmark")
                     }
                 }
                 ToolbarItemGroup(placement: .primaryAction) {
@@ -142,9 +147,7 @@ struct AssistantView: View {
                     }
                     .tint(viewModel.isRecording ? .orange : .primary)
                     
-                    Button(action: {
-                        viewModel.confirmInput()
-                    }) {
+                    Button(action: { viewModel.confirmInput() }) {
                         Label("Confirm", systemImage: assistantType.DescriptionProviderType.assistantSystemImage)
                             .foregroundStyle(.white)
                     }
@@ -162,7 +165,7 @@ struct AssistantView: View {
             .alert("Error", isPresented: $viewModel.showError) {
                 Button("OK") {
                     if viewModel.isCriticalError {
-                        dismiss()
+                        viewModel.dismissAssistant()
                     }
                 }
             } message: {
@@ -180,9 +183,7 @@ struct AssistantView: View {
                 viewModel.activateAssistant()
             }
             .onReceive(viewModel.$shouldDismiss) { shouldDismiss in
-                if shouldDismiss {
-                    dismiss()
-                }
+                if shouldDismiss { dismiss() }
             }
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .background(

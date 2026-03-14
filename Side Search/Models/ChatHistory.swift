@@ -32,7 +32,12 @@ class ChatHistory {
     
     static func add(_ chat: Chat) {
         var chats = loadChats()
-        chats.append(chat)
+        // If id already exists, replace it, else append
+        if let index = chats.firstIndex(where: { $0.id == chat.id }) {
+            chats[index] = chat
+        } else {
+            chats.append(chat)
+        }
         if let data = try? JSONEncoder().encode(chats) {
             UserDefaults.standard.set(data, forKey: userDefaultsKey)
         }

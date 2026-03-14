@@ -59,6 +59,7 @@ class AssistantViewModel: ObservableObject {
     var chatDate = Date()
     
     var currentScenePhase: ScenePhase = .active
+    var isDismissed = false
     @Published var shouldDismiss = false
     
     @Published var detent: PresentationDetent = {
@@ -107,16 +108,12 @@ class AssistantViewModel: ObservableObject {
         setupNotificationObservers()
         setupSpeechRecognizerBindings()
     }
-
+    
     deinit {
-        // Remove All Darwin Notification Observers
-        CFNotificationCenterRemoveObserver(
-            CFNotificationCenterGetDarwinNotifyCenter(),
-            Unmanaged.passUnretained(self).toOpaque(),
-            nil,
-            nil
-        )
+        if !isDismissed { dismissAssistant() }
     }
+    
+    // MARK: - Notification Observers
     
     private static let endAssistantDarwinCallback: CFNotificationCallback = { _, observer, _, _, _ in
         guard let observer else { return }
@@ -161,6 +158,18 @@ class AssistantViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    func removeNotificationObservers() {
+        // Remove All Darwin Notification Observers
+        CFNotificationCenterRemoveObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            Unmanaged.passUnretained(self).toOpaque(),
+            nil,
+            nil
+        )
+    }
+    
+    // MARK: - Variable Bindings
     
     func setupSpeechRecognizerBindings() {
         speechRecognizer.$recognizedText
@@ -239,7 +248,11 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Methods
     
     func dismissAssistant(fromView: Bool = false) {
+        guard !isDismissed else { return }
+        isDismissed = true
+        
         if !fromView { shouldDismiss = true }
+        removeNotificationObservers()
         stopRecording()
         saveChatHistory()
         UIApplication.shared.isIdleTimerDisabled = false
@@ -276,11 +289,11 @@ class AssistantViewModel: ObservableObject {
     func stopRecording() {
         speechRecognizer.stopRecording()
     }
-
+    
     func pauseRecognize() {
         speechRecognizer.stopRecognize()
     }
-
+    
     func resumeRecognize() {
         speechRecognizer.startRecognize()
     }
