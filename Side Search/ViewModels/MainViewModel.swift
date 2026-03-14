@@ -73,7 +73,7 @@ class MainViewModel: ObservableObject {
     func onChange(scenePhase: ScenePhase) {
         switch scenePhase {
         case .active:
-            if !showAssistant && AssistantActivityManager.isActive() {
+            if !(showAssistant || showAssistantFullScreen) && AssistantActivityManager.isActive() {
                 AssistantActivityManager.endAll()
             }
         case .inactive:
