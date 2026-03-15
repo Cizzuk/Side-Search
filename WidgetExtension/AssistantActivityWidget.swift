@@ -121,7 +121,7 @@ struct AssistantActivityWidget: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: AssistantActivityAttributes.self) { _ in
             MainActivityView()
-                .activitySystemActionForegroundColor(.red)
+                .activitySystemActionForegroundColor(.dropblue)
             
         } dynamicIsland: { _ in
             DynamicIsland {
