@@ -73,8 +73,11 @@ class MainViewModel: ObservableObject {
     func onChange(scenePhase: ScenePhase) {
         switch scenePhase {
         case .active:
-            if !(showAssistant || showAssistantFullScreen) && AssistantActivityManager.isActive() {
-                AssistantActivityManager.endAll()
+            if !(showAssistant || showAssistantFullScreen) {
+                ActivateIntent.setShouldBackground(false)
+                if AssistantActivityManager.isActive() {
+                    AssistantActivityManager.endAll()
+                }
             }
         case .inactive:
             break

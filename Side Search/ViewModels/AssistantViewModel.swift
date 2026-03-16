@@ -182,6 +182,7 @@ class AssistantViewModel: ObservableObject {
             .sink { [weak self] recording in
                 self?.isRecording = recording
                 self?.updateIdleTimerDisabled()
+                self?.updateActivateIntent()
                 self?.updateLiveActivityStatus()
             }
             .store(in: &cancellables)
@@ -256,6 +257,7 @@ class AssistantViewModel: ObservableObject {
         stopRecording()
         saveChatHistory()
         UIApplication.shared.isIdleTimerDisabled = false
+        ActivateIntent.setShouldBackground(false)
         AssistantActivityManager.endAll()
     }
     
@@ -350,6 +352,7 @@ class AssistantViewModel: ObservableObject {
     
     // Handle repressing the Side Button
     func activateAssistant() {
+        updateActivateIntent()
         if !isRecording && !startWithMicMuted {
             startRecording()
         }
@@ -370,6 +373,19 @@ class AssistantViewModel: ObservableObject {
             UIApplication.shared.isIdleTimerDisabled = true
         } else {
             UIApplication.shared.isIdleTimerDisabled = false
+        }
+    }
+    
+    func updateActivateIntent() {
+        guard assistantType.DescriptionProviderType.backgroundSupports else {
+            ActivateIntent.setShouldBackground(false)
+            return
+        }
+        
+        if isRecording {
+            ActivateIntent.setShouldBackground(true)
+        } else {
+            ActivateIntent.setShouldBackground(false)
         }
     }
     
