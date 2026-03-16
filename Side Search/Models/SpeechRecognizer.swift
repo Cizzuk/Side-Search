@@ -104,6 +104,16 @@ class SpeechRecognizer: ObservableObject {
                 // Configure the microphone input
                 let recordingFormat = inputNode.outputFormat(forBus: 0)
                 inputNode.removeTap(onBus: 0)
+                
+                // Check microphone availability
+                guard inputNode.inputFormat(forBus: 0).channelCount > 0 else {
+                    DispatchQueue.main.async {
+                        self.errorMessage = "No microphone input available."
+                        self.showError = true
+                    }
+                    return
+                }
+                
                 inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
                     self.recognitionRequest?.append(buffer)
                     

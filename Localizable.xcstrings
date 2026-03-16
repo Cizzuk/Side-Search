@@ -719,6 +719,16 @@
         }
       }
     },
+    "No microphone input available." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイク入力が利用できません。"
+          }
+        }
+      }
+    },
     "Notifications allowed." : {
       "localizations" : {
         "ja" : {
