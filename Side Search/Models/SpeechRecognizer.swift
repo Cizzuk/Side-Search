@@ -135,6 +135,7 @@ class SpeechRecognizer: ObservableObject {
                         DispatchQueue.main.async {
                             self.errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
                             self.showError = true
+                            self.stopRecording()
                         }
                         return
                     }
