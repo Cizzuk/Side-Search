@@ -8,6 +8,7 @@
 import AVFoundation
 import Combine
 import Speech
+import UIKit
 
 class SpeechRecognizer: ObservableObject {
     @Published var isRecording = false
@@ -97,7 +98,6 @@ class SpeechRecognizer: ObservableObject {
                 
                 // Configure the microphone input
                 let recordingFormat = inputNode.outputFormat(forBus: 0)
-                inputNode.removeTap(onBus: 0)
                 
                 // Check microphone availability
                 guard inputNode.inputFormat(forBus: 0).channelCount > 0 else {
@@ -109,22 +109,24 @@ class SpeechRecognizer: ObservableObject {
                     self.recognitionRequest?.append(buffer)
                     
                     // micLevel update
-                    guard let channelData = buffer.floatChannelData?[0] else { return }
-                    let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
-                    let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
-                    let avgPower = 20 * log10(rms)
-                    let minDb: Float = -80.0
-                    let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
-                    DispatchQueue.main.async {
-                        self.micLevel = normalizedPower
+                    if UIApplication.shared.applicationState != .background {
+                        guard let channelData = buffer.floatChannelData?[0] else { return }
+                        let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
+                        let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
+                        let avgPower = 20 * log10(rms)
+                        let minDb: Float = -80.0
+                        let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
+                        DispatchQueue.main.async {
+                            self.micLevel = normalizedPower
+                        }
                     }
                 }
-                
-                audioEngine.prepare()
                 
                 // Start audio engine
                 DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                     guard let self = self else { return }
+                    audioEngine.prepare()
+                    
                     do {
                         try audioEngine.start()
                         DispatchQueue.main.async {
@@ -158,7 +160,7 @@ class SpeechRecognizer: ObservableObject {
             
             // Deactivate the audio session
             do {
-                try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+                try AVAudioSession.sharedInstance().setActive(false)
             } catch {
                 print("Failed to deactivate audio session: \(error)")
             }
