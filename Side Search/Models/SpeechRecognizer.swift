@@ -8,13 +8,14 @@
 import AVFoundation
 import Combine
 import Speech
+import UIKit
 
 class SpeechRecognizer: ObservableObject {
     @Published var isRecording = false
     @Published var isRecognizing = false
     
     @Published var recognizedText = ""
-    @Published var micLevel: Float = 0.0
+    @Published var micLevel: Float = 0.0 // For UI animation
     
     @Published var errorMessage: LocalizedStringResource = ""
     @Published var showError = false
@@ -23,6 +24,8 @@ class SpeechRecognizer: ObservableObject {
     var onSilenceTimeout: (() -> Void)?
     
     // MARK: - Private Properties
+    
+    private var isInBackground = false
     
     private let audioEngine = AVAudioEngine()
     
@@ -53,6 +56,20 @@ class SpeechRecognizer: ObservableObject {
             selector: #selector(handleInterruption(_:)),
             name: AVAudioSession.interruptionNotification,
             object: AVAudioSession.sharedInstance()
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppStateChange),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppStateChange),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
         )
     }
     
@@ -106,17 +123,7 @@ class SpeechRecognizer: ObservableObject {
                 
                 inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
                     self.recognitionRequest?.append(buffer)
-                    
-                    // micLevel update
-                    guard let channelData = buffer.floatChannelData?[0] else { return }
-                    let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
-                    let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
-                    let avgPower = 20 * log10(rms)
-                    let minDb: Float = -80.0
-                    let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
-                    DispatchQueue.main.async {
-                        self.micLevel = normalizedPower
-                    }
+                    self.calcMicLevel(from: buffer)
                 }
                 
                 // Start audio engine
@@ -307,12 +314,33 @@ class SpeechRecognizer: ObservableObject {
         }
     }
     
+    // Handle App State Changes
+    @objc private func handleAppStateChange() {
+        isInBackground = UIApplication.shared.applicationState == .background
+    }
+    
     // MARK: - Helpers
     
     private func showErrorMessage(_ message: LocalizedStringResource) {
         DispatchQueue.main.async {
             self.errorMessage = message
             self.showError = true
+        }
+    }
+    
+    private func calcMicLevel(from buffer: AVAudioPCMBuffer) {
+        // Only calc in foreground
+        guard !isInBackground else { return }
+        
+        guard let channelData = buffer.floatChannelData?[0] else { return }
+        let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
+        let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
+        let avgPower = 20 * log10(rms)
+        let minDb: Float = -80.0
+        let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
+        
+        DispatchQueue.main.async {
+            self.micLevel = normalizedPower
         }
     }
 }
