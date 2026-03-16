@@ -100,7 +100,7 @@ class SpeechRecognizer: ObservableObject {
                     try audioSession.setCategory(
                         .playAndRecord,
                         mode: .measurement,
-                        options: [.allowBluetoothA2DP, .duckOthers]
+                        options: [.allowBluetoothA2DP, .mixWithOthers]
                     )
                     try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
                     try audioSession.setActive(true)
