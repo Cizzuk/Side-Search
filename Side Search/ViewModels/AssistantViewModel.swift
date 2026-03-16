@@ -88,6 +88,7 @@ class AssistantViewModel: ObservableObject {
     
     // Speech Recognizer
     @Published var isRecording = false
+    @Published var isRecognizing = false
     @Published var micLevel: Float = 0.0
     
     let speechRecognizer = SpeechRecognizer()
@@ -184,6 +185,12 @@ class AssistantViewModel: ObservableObject {
                 self?.updateIdleTimerDisabled()
                 self?.updateActivateIntent()
                 self?.updateLiveActivityStatus()
+            }
+            .store(in: &cancellables)
+        
+        speechRecognizer.$isRecognizing
+            .sink { [weak self] recognizing in
+                self?.isRecognizing = recognizing
             }
             .store(in: &cancellables)
         
@@ -368,7 +375,6 @@ class AssistantViewModel: ObservableObject {
     
     // Handle Speech Recognizer Silence Timeout
     func handleSilenceTimeout() {
-        guard speechRecognizer.isRecording else { return }
         if !inputText.isEmpty {
             confirmInput()
         } else {
