@@ -246,7 +246,32 @@ class AssistantViewModel: ObservableObject {
         return true
     }
     
-    // MARK: - Methods
+    // MARK: - Override Methods
+    
+    func startAssistant() {
+        // MARK: Override in subclass if needed
+        if !startWithMicMuted {
+            startRecording()
+        }
+    }
+    
+    func confirmInput() {
+        // MARK: Override in subclass
+        guard !responseIsPreparing else { return }
+        responseIsPreparing = true
+        pauseRecognize()
+        
+        // Add user message to history
+        let userInput = inputText
+        let userMessage = AssistantMessage(from: .user, content: userInput)
+        addMessage(userMessage)
+        
+        inputText = ""
+        responseIsPreparing = false
+        resumeRecognize()
+    }
+    
+    // MARK: - View Actions
     
     func dismissAssistant(fromView: Bool = false) {
         guard !isDismissed else { return }
@@ -260,6 +285,18 @@ class AssistantViewModel: ObservableObject {
         ActivateIntent.setShouldBackground(false)
         AssistantActivityManager.endAll()
     }
+    
+    func openSafariView(at url: URL) {
+        if SafariView.checkAvailability(at: url) {
+            searchURL = url
+            showSafariView = true
+        } else {
+            // Fallback
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    // MARK: - Message History Management
     
     func saveChatHistory() {
         guard UserDefaults.standard.bool(forKey: "chatHistoryEnabled"),
@@ -276,12 +313,23 @@ class AssistantViewModel: ObservableObject {
         ChatHistory.add(chat)
     }
     
-    func startAssistant() {
-        // MARK: Override in subclass if needed
-        if !startWithMicMuted {
-            startRecording()
+    func addMessage(_ message: AssistantMessage) {
+        messageHistory.append(message)
+        
+        // Set last message date as chat date
+        chatDate = Date()
+        
+        // Send user notification
+        if message.from != .user && currentScenePhase != .active {
+            Task {
+                if await UserNotificationSupport.requestAuthorization() {
+                    await UserNotificationSupport.sendAssistantMessage(message: message)
+                }
+            }
         }
     }
+    
+    // MARK: - Speech Recognizer Actions
     
     func startRecording() {
         guard !responseIsPreparing else { return }
@@ -308,50 +356,10 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func confirmInput() {
-        // MARK: Override in subclass
-        guard !responseIsPreparing else { return }
-        responseIsPreparing = true
-        pauseRecognize()
-        
-        // Add user message to history
-        let userInput = inputText
-        let userMessage = AssistantMessage(from: .user, content: userInput)
-        addMessage(userMessage)
-        
-        inputText = ""
-        responseIsPreparing = false
-        resumeRecognize()
-    }
-    
-    func addMessage(_ message: AssistantMessage) {
-        messageHistory.append(message)
-        
-        // Set last message date as chat date
-        chatDate = Date()
-        
-        // Send user notification
-        if message.from != .user && currentScenePhase != .active {
-            Task {
-                if await UserNotificationSupport.requestAuthorization() {
-                    await UserNotificationSupport.sendAssistantMessage(message: message)
-                }
-            }
-        }
-    }
-    
-    func openSafariView(at url: URL) {
-        if SafariView.checkAvailability(at: url) {
-            searchURL = url
-            showSafariView = true
-        } else {
-            // Fallback
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-    }
+    // MARK: - Handlers
     
     // Handle repressing the Side Button
-    func activateAssistant() {
+    func handleActivateIntent() {
         updateActivateIntent()
         if !isRecording && !startWithMicMuted {
             startRecording()
@@ -367,6 +375,8 @@ class AssistantViewModel: ObservableObject {
             stopRecording()
         }
     }
+    
+    // MARK: - Helpers
     
     func updateIdleTimerDisabled() {
         if isRecording {

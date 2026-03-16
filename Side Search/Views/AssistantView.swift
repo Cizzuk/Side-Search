@@ -180,7 +180,7 @@ struct AssistantView: View {
                 viewModel.dismissAssistant(fromView: true)
             }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
-                viewModel.activateAssistant()
+                viewModel.handleActivateIntent()
             }
             .onReceive(viewModel.$shouldDismiss) { shouldDismiss in
                 if shouldDismiss { dismiss() }
