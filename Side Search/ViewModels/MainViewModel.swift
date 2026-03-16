@@ -73,20 +73,29 @@ class MainViewModel: ObservableObject {
     func onChange(scenePhase: ScenePhase) {
         switch scenePhase {
         case .active:
-            if !(showAssistant || showAssistantFullScreen) {
-                ActivateIntent.setShouldBackground(false)
-                if AssistantActivityManager.isActive() {
-                    AssistantActivityManager.endAll()
-                }
-            }
+            validateAppState()
         case .inactive:
             break
         case .background:
-            break
+            validateAppState()
         @unknown default:
             break
         }
     }
+    
+    func validateAppState() {
+        currentAssistant = AssistantType.current
+        
+        if !(showAssistant || showAssistantFullScreen) {
+            ActivateIntent.setShouldBackground(false)
+            
+            if AssistantActivityManager.isActive() {
+                AssistantActivityManager.endAll()
+            }
+        }
+    }
+    
+    // MARK: - Assistant
     
     func activateAssistant() {
         var transaction = Transaction()
@@ -200,6 +209,8 @@ class MainViewModel: ObservableObject {
             UserDefaults.standard.set(continueInBackground, forKey: "continueInBackground")
         }
     }
+    
+    // MARK: - Other Settings
     
     // Assistant View Detent
     @Published var assistantViewDetent: AssistantViewModel.DetentOption = {
