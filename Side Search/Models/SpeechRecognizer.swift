@@ -199,7 +199,12 @@ class SpeechRecognizer: ObservableObject {
         let inputNode = audioEngine.inputNode
         isRecognizing = true
         startRecognitionTask(request: recognitionRequest, inputNode: inputNode)
-        startSilenceTimer(timeout: 30.0) // First wait
+        resetSilenceTimer() // First wait
+    }
+    
+    func resetSilenceTimer() {
+        guard isRecording else { return }
+        startSilenceTimer(timeout: 10.0)
     }
     
     private func startRecognitionTask(

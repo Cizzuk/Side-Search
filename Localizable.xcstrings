@@ -108,6 +108,16 @@
         }
       }
     },
+    "Assistant is off" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントオフ"
+          }
+        }
+      }
+    },
     "Assistant Screen Size" : {
       "localizations" : {
         "ja" : {
@@ -815,6 +825,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "プライバシーポリシー"
+          }
+        }
+      }
+    },
+    "Recognition paused" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識停止中"
           }
         }
       }

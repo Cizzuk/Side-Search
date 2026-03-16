@@ -27,16 +27,17 @@ struct AssistantActivityWidget: Widget {
         }
     }
     
-    struct RecordImage: View {
+    struct StateImage: View {
         var size: CGFloat? = nil
+        var systemName: String
 
         var body: some View {
-            Image(systemName: "microphone.fill")
+            Image(systemName: systemName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
                 .padding(.vertical, 2)
-                .padding(.trailing, 3)
+                .padding(.trailing, 2)
                 .accessibilityLabel("Assistant is Active")
                 .foregroundStyle(.dropblue)
         }
@@ -44,15 +45,16 @@ struct AssistantActivityWidget: Widget {
     
     struct DescriptionText: View {
         var showSubtitle: Bool = true
+        var state: LocalizedStringResource? = nil
         
         var body: some View {
             VStack(alignment: .leading) {
-                Text("Assistant is Active")
+                Text("Side Search")
                     .font(.headline)
                     .bold()
                     .foregroundStyle(.dropblue)
-                if showSubtitle {
-                    Text("Side Search")
+                if let state = state, showSubtitle {
+                    Text(state)
                         .font(.subheadline)
                         .foregroundStyle(.dropblue.opacity(0.8))
                 }
@@ -95,6 +97,7 @@ struct AssistantActivityWidget: Widget {
     
     struct MainActivityView: View {
         @Environment(\.activityFamily) var activityFamily
+        var context: ActivityViewContext<AssistantActivityAttributes>
         
         var body: some View {
             switch activityFamily {
@@ -107,7 +110,7 @@ struct AssistantActivityWidget: Widget {
                 HStack(spacing: 15) {
                     IconImage(size: 45)
                         .padding(.leading, 10)
-                    DescriptionText()
+                    DescriptionText(state: context.state.state.description)
                     Spacer()
                     EndAssistantButton()
                 }
@@ -119,11 +122,11 @@ struct AssistantActivityWidget: Widget {
     }
     
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: AssistantActivityAttributes.self) { _ in
-            MainActivityView()
+        ActivityConfiguration(for: AssistantActivityAttributes.self) { context in
+            MainActivityView(context: context)
                 .activitySystemActionForegroundColor(.dropblue)
             
-        } dynamicIsland: { _ in
+        } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     IconImage(size: 55)
@@ -132,7 +135,7 @@ struct AssistantActivityWidget: Widget {
                         .frame(maxHeight: .infinity)
                 }
                 DynamicIslandExpandedRegion(.center) {
-                    DescriptionText()
+                    DescriptionText(state: context.state.state.description)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
@@ -142,7 +145,7 @@ struct AssistantActivityWidget: Widget {
             } compactLeading: {
                 IconImage()
             } compactTrailing: {
-                RecordImage()
+                StateImage(systemName: context.state.state.systemImage)
             } minimal: {
                 IconImage()
             }

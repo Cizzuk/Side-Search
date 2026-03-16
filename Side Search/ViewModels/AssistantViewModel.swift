@@ -70,12 +70,26 @@ class AssistantViewModel: ObservableObject {
         return DetentOption.defaultDetent.presentationDetent
     }()
     
+    // Assistant State
+    @Published var isRecording = false {
+        didSet {
+            updateIdleTimerDisabled()
+            updateActivateIntent()
+            updateLiveActivityStatus()
+        }
+    }
+    @Published var isRecognizing = false {
+        didSet { updateLiveActivityStatus() }
+    }
+    @Published var responseIsPreparing = false {
+        didSet { updateLiveActivityStatus() }
+    }
+    
     // Input Field
     @Published var inputText = ""
     @Published var shouldInputFocused = false
     
     @Published var messageHistory: [AssistantMessage] = []
-    @Published var responseIsPreparing = false
     
     // Web View
     @Published var searchURL: URL?
@@ -86,9 +100,6 @@ class AssistantViewModel: ObservableObject {
     @Published var isCriticalError = false
     @Published var showError = false
     
-    // Speech Recognizer
-    @Published var isRecording = false
-    @Published var isRecognizing = false
     @Published var micLevel: Float = 0.0
     
     let speechRecognizer = SpeechRecognizer()
@@ -182,9 +193,6 @@ class AssistantViewModel: ObservableObject {
         speechRecognizer.$isRecording
             .sink { [weak self] recording in
                 self?.isRecording = recording
-                self?.updateIdleTimerDisabled()
-                self?.updateActivateIntent()
-                self?.updateLiveActivityStatus()
             }
             .store(in: &cancellables)
         
@@ -223,7 +231,9 @@ class AssistantViewModel: ObservableObject {
         currentScenePhase = scenePhase
         switch scenePhase {
         case .active:
-            updateLiveActivityStatus()
+            if !responseIsPreparing && isRecording && !isRecognizing {
+                stopRecording()
+            }
         case .inactive:
             break
         case .background:
@@ -368,8 +378,19 @@ class AssistantViewModel: ObservableObject {
     // Handle repressing the Side Button
     func handleActivateIntent() {
         updateActivateIntent()
+        
         if !isRecording && !startWithMicMuted {
             startRecording()
+            return
+        }
+        
+        if isRecording {
+            if isRecognizing {
+                speechRecognizer.resetSilenceTimer()
+            } else {
+                resumeRecognize()
+            }
+            return
         }
     }
     
@@ -377,8 +398,15 @@ class AssistantViewModel: ObservableObject {
     func handleSilenceTimeout() {
         if !inputText.isEmpty {
             confirmInput()
-        } else {
-            stopRecording()
+            return
+        }
+        
+        Task {
+            if await isBackgroundAvailable() && currentScenePhase == .background {
+                pauseRecognize()
+            } else {
+                stopRecording()
+            }
         }
     }
     
@@ -408,12 +436,33 @@ class AssistantViewModel: ObservableObject {
     func updateLiveActivityStatus() {
         guard assistantType.DescriptionProviderType.backgroundSupports else { return }
         
-        if isRecording {
-            if !AssistantActivityManager.isActive() {
-                AssistantActivityManager.start()
-            }
-        } else {
+        let state = makeLiveActivityState()
+        
+        if state.state == .off {
             AssistantActivityManager.endAll()
+            return
         }
+        
+        if AssistantActivityManager.isActive() {
+            AssistantActivityManager.update(state: state)
+        } else {
+            AssistantActivityManager.start(state: state)
+        }
+    }
+    
+    func makeLiveActivityState() -> AssistantActivityAttributes.ContentState {
+        if responseIsPreparing {
+            return .init(state: .waitingForResponse)
+        }
+        
+        if isRecording {
+            if isRecognizing {
+                return .init(state: .listening)
+            } else {
+                return .init(state: .pausingRecognition)
+            }
+        }
+        
+        return .init(state: .off)
     }
 }
