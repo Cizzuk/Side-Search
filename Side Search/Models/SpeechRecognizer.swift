@@ -83,8 +83,13 @@ class SpeechRecognizer: ObservableObject {
                 // Configure the audio session
                 let audioSession = AVAudioSession.sharedInstance()
                 do {
-                    try audioSession.setCategory(.playAndRecord, mode: .measurement, options: .allowBluetoothA2DP)
-                    try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+                    try audioSession.setCategory(
+                        .playAndRecord,
+                        mode: .measurement,
+                        options: [.allowBluetoothA2DP, .duckOthers]
+                    )
+                    try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+                    try audioSession.setActive(true)
                 } catch {
                     DispatchQueue.main.async {
                         self.errorMessage = "Audio session setup failed: \(error.localizedDescription)"
