@@ -8,7 +8,6 @@
 import AVFoundation
 import Combine
 import Speech
-import UIKit
 
 class SpeechRecognizer: ObservableObject {
     @Published var isRecording = false
@@ -109,16 +108,14 @@ class SpeechRecognizer: ObservableObject {
                     self.recognitionRequest?.append(buffer)
                     
                     // micLevel update
-                    if UIApplication.shared.applicationState != .background {
-                        guard let channelData = buffer.floatChannelData?[0] else { return }
-                        let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
-                        let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
-                        let avgPower = 20 * log10(rms)
-                        let minDb: Float = -80.0
-                        let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
-                        DispatchQueue.main.async {
-                            self.micLevel = normalizedPower
-                        }
+                    guard let channelData = buffer.floatChannelData?[0] else { return }
+                    let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
+                    let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
+                    let avgPower = 20 * log10(rms)
+                    let minDb: Float = -80.0
+                    let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
+                    DispatchQueue.main.async {
+                        self.micLevel = normalizedPower
                     }
                 }
                 
