@@ -91,10 +91,7 @@ class SpeechRecognizer: ObservableObject {
                     try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
                     try audioSession.setActive(true)
                 } catch {
-                    DispatchQueue.main.async {
-                        self.errorMessage = "Audio session setup failed: \(error.localizedDescription)"
-                        self.showError = true
-                    }
+                    showErrorMessage("Audio session setup failed: \(error.localizedDescription)")
                     return
                 }
                 
@@ -107,10 +104,7 @@ class SpeechRecognizer: ObservableObject {
                 
                 // Check microphone availability
                 guard inputNode.inputFormat(forBus: 0).channelCount > 0 else {
-                    DispatchQueue.main.async {
-                        self.errorMessage = "No microphone input available."
-                        self.showError = true
-                    }
+                    showErrorMessage("No microphone input available.")
                     return
                 }
                 
@@ -143,10 +137,9 @@ class SpeechRecognizer: ObservableObject {
                         }
                     } catch {
                         DispatchQueue.main.async {
-                            self.errorMessage = "Audio engine couldn't start: \(error.localizedDescription)"
-                            self.showError = true
                             self.stopRecording()
                         }
+                        showErrorMessage("Audio engine couldn't start: \(error.localizedDescription)")
                         return
                     }
                 }
@@ -213,11 +206,6 @@ class SpeechRecognizer: ObservableObject {
     
     @MainActor
     func checkAvailability() async -> Bool {
-        func showErrorMessage(_ message: LocalizedStringResource) {
-            self.errorMessage = message
-            self.showError = true
-        }
-        
         // 1. Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
@@ -265,6 +253,13 @@ class SpeechRecognizer: ObservableObject {
     }
     
     // MARK: - Private Methods
+    
+    private func showErrorMessage(_ message: LocalizedStringResource) {
+        DispatchQueue.main.async {
+            self.errorMessage = message
+            self.showError = true
+        }
+    }
     
     private func startRecognitionTask(
         request recognitionRequest: SFSpeechAudioBufferRecognitionRequest,
