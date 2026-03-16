@@ -107,7 +107,7 @@ class SpeechRecognizer: ObservableObject {
                 inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
                     self.recognitionRequest?.append(buffer)
                     
-                    // bgIllumination update
+                    // micLevel update
                     guard let channelData = buffer.floatChannelData?[0] else { return }
                     let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
                     let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
