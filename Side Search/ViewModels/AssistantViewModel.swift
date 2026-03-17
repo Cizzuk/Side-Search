@@ -402,7 +402,7 @@ class AssistantViewModel: ObservableObject {
         }
         
         Task {
-            if await isBackgroundAvailable() && currentScenePhase == .background {
+            if await isBackgroundAvailable() && currentScenePhase == .background && UserDefaults.standard.bool(forKey: "standbyInBackground") {
                 pauseRecognize()
             } else {
                 stopRecording()

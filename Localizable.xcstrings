@@ -148,6 +148,16 @@
         }
       }
     },
+    "Background Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドの設定"
+          }
+        }
+      }
+    },
     "Background Tip" : {
       "localizations" : {
         "ja" : {
@@ -174,6 +184,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Brave Search"
+          }
+        }
+      }
+    },
+    "By keeping the microphone on, you can have the assistant standby in the background. While in standby, you can use the Side Button or Action Button to resume the assistant without opening the app." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイクをオンにし続けることで、アシスタントをバックグラウンドで待機させることができます。待機中はサイドボタンやアクションボタンなどを使用して、アプリを開かずにアシスタントを再開できます。"
           }
         }
       }
@@ -632,6 +652,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kagi"
+          }
+        }
+      }
+    },
+    "Keep on Standby" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "待機させる"
           }
         }
       }

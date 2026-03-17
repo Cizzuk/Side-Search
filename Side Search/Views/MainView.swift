@@ -51,11 +51,24 @@ struct MainView: View {
                     Toggle("Manually Confirm", isOn: $viewModel.manuallyConfirmSpeech)
 
                     Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
-                    
-                    if viewModel.currentAssistant.DescriptionProviderType.backgroundSupports {
-                        Toggle("Continue in Background", isOn: $viewModel.continueInBackground)
-                    }
                 } header: { Text("Speech Settings") }
+                
+                // Background Settings
+                if viewModel.currentAssistant.DescriptionProviderType.backgroundSupports {
+                    Section {
+                        Toggle("Continue in Background", isOn: $viewModel.continueInBackground)
+                        
+                        if viewModel.continueInBackground {
+                            Toggle("Keep on Standby", isOn: $viewModel.standbyInBackground)
+                        }
+                    } header: {
+                        Text("Background Settings")
+                    } footer: {
+                        if viewModel.continueInBackground {
+                            Text("By keeping the microphone on, you can have the assistant standby in the background. While in standby, you can use the Side Button or Action Button to resume the assistant without opening the app.")
+                        }
+                    }
+                }
                 
                 Section {
                     Picker("Assistant Screen Size", selection: $viewModel.assistantViewDetent) {
@@ -93,6 +106,7 @@ struct MainView: View {
                 }
             }
             .animation(.default, value: viewModel.currentAssistant)
+            .animation(.default, value: viewModel.continueInBackground)
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)

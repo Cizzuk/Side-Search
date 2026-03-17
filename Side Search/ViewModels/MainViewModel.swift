@@ -196,6 +196,8 @@ class MainViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Background Settings
+    
     // Continue in Background
     @Published var continueInBackground: Bool = {
         // Default to true
@@ -207,6 +209,12 @@ class MainViewModel: ObservableObject {
     }() {
         didSet {
             UserDefaults.standard.set(continueInBackground, forKey: "continueInBackground")
+        }
+    }
+    
+    @Published var standbyInBackground: Bool = UserDefaults.standard.bool(forKey: "standbyInBackground") {
+        didSet {
+            UserDefaults.standard.set(standbyInBackground, forKey: "standbyInBackground")
         }
     }
     
