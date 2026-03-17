@@ -414,7 +414,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Helpers
     
     func updateIdleTimerDisabled() {
-        if isRecording {
+        if isRecognizing {
             UIApplication.shared.isIdleTimerDisabled = true
         } else {
             UIApplication.shared.isIdleTimerDisabled = false
