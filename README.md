@@ -1,6 +1,6 @@
 # Side Seaerch
 
-お好みのAIアシスタントや検索エンジンを、あなたの音声アシスタントにします。
+サイドボタンやアクションボタンから素早く起動して、お好みのAIアシスタントや検索エンジンを、音声アシスタントとして利用できます。
 
 このアプリは[Side Button Access](https://developer.apple.com/documentation/AppIntents/Launching-your-voice-based-conversational-app-from-the-side-button-of-iPhone)を利用した、サイドボタンをカスタマイズするための音声ベース会話アプリです。
 
