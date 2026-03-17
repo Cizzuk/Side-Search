@@ -16,12 +16,9 @@ struct AssistantView: View {
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
     
-    private let assistantType = AssistantType.current
-    @StateObject private var viewModel: AssistantViewModel
+    @StateObject private var viewModel = UserSettings.shared.currentAssistant.makeAssistantViewModel()
     
-    init() {
-        _viewModel = StateObject(wrappedValue: AssistantType.current.makeAssistantViewModel())
-    }
+    private let assistantType = UserSettings.shared.currentAssistant
     
     func dismissView() {
         viewModel.dismissAssistant(fromView: true)

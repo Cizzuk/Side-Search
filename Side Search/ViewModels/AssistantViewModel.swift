@@ -11,6 +11,8 @@ import SwiftUI
 import UIKit
 
 class AssistantViewModel: ObservableObject {
+    private let userSettings = UserSettings.shared
+
     enum DetentOption: String, CaseIterable, Identifiable {
         case small
         case medium
@@ -62,13 +64,7 @@ class AssistantViewModel: ObservableObject {
     var isDismissed = false
     @Published var shouldDismiss = false
     
-    @Published var detent: PresentationDetent = {
-        if let rawValue = UserDefaults.standard.string(forKey: "assistantViewDetent"),
-           let option = DetentOption(rawValue: rawValue) {
-            return option.presentationDetent
-        }
-        return DetentOption.defaultDetent.presentationDetent
-    }()
+    @Published var detent = UserSettings.shared.assistantViewDetent.presentationDetent
     
     // Assistant State
     @Published var isRecording = false {
@@ -110,7 +106,7 @@ class AssistantViewModel: ObservableObject {
             return true
         }
         
-        return UserDefaults.standard.bool(forKey: "startWithMicMuted")
+        return userSettings.startWithMicMuted
     }
     
     // MARK: - Initialization
@@ -251,7 +247,7 @@ class AssistantViewModel: ObservableObject {
     }
     
     func isBackgroundAvailable() async -> Bool {
-        if !UserDefaults.standard.bool(forKey: "continueInBackground") {
+        if !userSettings.continueInBackground {
             return false
         }
         if !assistantType.DescriptionProviderType.backgroundSupports {
@@ -316,7 +312,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Message History Management
     
     func saveChatHistory() {
-        guard UserDefaults.standard.bool(forKey: "chatHistoryEnabled"),
+        guard userSettings.chatHistoryEnabled,
               !messageHistory.isEmpty
         else { return }
         
@@ -402,7 +398,7 @@ class AssistantViewModel: ObservableObject {
         }
         
         Task {
-            if await isBackgroundAvailable() && currentScenePhase == .background && UserDefaults.standard.bool(forKey: "standbyInBackground") {
+            if await isBackgroundAvailable() && currentScenePhase == .background && userSettings.standbyInBackground {
                 // Enter standby in background
                 pauseRecognize()
             } else {

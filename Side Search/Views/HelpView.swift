@@ -10,6 +10,8 @@ import SwiftUI
 struct HelpView: View {
     @Environment(\.dismiss) private var dismiss
     
+    @ObservedObject private var userSettings = UserSettings.shared
+    
     private var canOpenSettingsURL: Bool {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return false }
         return UIApplication.shared.canOpenURL(settingsURL)
@@ -46,7 +48,7 @@ struct HelpView: View {
                     }
                 } header: { Label("Side Button Tip", systemImage: "button.vertical.right.press") }
                 
-                if AssistantType.current == .urlBased {
+                if userSettings.currentAssistant == .urlBased {
                     // MARK: - Search URL Tip
                     Section {
                         // 検索URLは、お好みのAIアシスタントや検索エンジンのURLを設定するために必要です。

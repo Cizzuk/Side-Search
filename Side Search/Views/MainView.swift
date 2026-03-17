@@ -14,6 +14,7 @@ struct MainView: View {
     @Environment(\.scenePhase) var scenePhase
     
     @StateObject var viewModel = MainViewModel()
+    @StateObject private var userSettings = UserSettings.shared
     
     @State private var showClearInAppBrowserDataAlert = false
     
@@ -30,16 +31,16 @@ struct MainView: View {
         NavigationStack {
             List {
                 // MARK: Assistant Settings
-                AnyView(viewModel.currentAssistant.makeSettingsView())
+                AnyView(userSettings.currentAssistant.makeSettingsView())
                 
                 // MARK: - Shared Settings
                 
                 // Speech Recognition Settings
                 Section {
                     Picker("Language", selection: Binding(
-                        get: { viewModel.speechLocale },
+                        get: { userSettings.speechLocale },
                         set: { newValue in
-                            viewModel.speechLocale = newValue
+                            userSettings.speechLocale = newValue
                         }
                     )) {
                         ForEach(SFSpeechRecognizer.supportedLocales().sorted(by: { $0.identifier < $1.identifier }), id: \.self) { locale in
@@ -48,36 +49,36 @@ struct MainView: View {
                         }
                     }
                     
-                    Toggle("Manually Confirm", isOn: $viewModel.manuallyConfirmSpeech)
+                    Toggle("Manually Confirm", isOn: $userSettings.manuallyConfirmSpeech)
 
-                    Toggle("Start with Mic Muted", isOn: $viewModel.startWithMicMuted)
+                    Toggle("Start with Mic Muted", isOn: $userSettings.startWithMicMuted)
                 } header: { Text("Speech Settings") }
                 
                 // Background Settings
-                if viewModel.currentAssistant.DescriptionProviderType.backgroundSupports {
+                if userSettings.currentAssistant.DescriptionProviderType.backgroundSupports {
                     Section {
-                        Toggle("Continue in Background", isOn: $viewModel.continueInBackground)
+                        Toggle("Continue in Background", isOn: $userSettings.continueInBackground)
                         
-                        if viewModel.continueInBackground {
-                            Toggle("Keep on Standby", isOn: $viewModel.standbyInBackground)
+                        if userSettings.continueInBackground {
+                            Toggle("Keep on Standby", isOn: $userSettings.standbyInBackground)
                         }
                     } header: {
                         Text("Background Settings")
                     } footer: {
-                        if viewModel.continueInBackground {
+                        if userSettings.continueInBackground {
                             Text("By keeping the microphone on, you can have the assistant standby in the background. While in standby, you can use the Side Button or Action Button to resume the assistant without opening the app.")
                         }
                     }
                 }
                 
                 Section {
-                    Picker("Assistant Screen Size", selection: $viewModel.assistantViewDetent) {
+                    Picker("Assistant Screen Size", selection: $userSettings.assistantViewDetent) {
                         ForEach(AssistantViewModel.DetentOption.allCases) { option in
                             Text(option.displayName).tag(option)
                         }
                     }
                     
-                    Toggle("Disable Markdown Rendering", isOn: $viewModel.disableMarkdownRendering)
+                    Toggle("Disable Markdown Rendering", isOn: $userSettings.disableMarkdownRendering)
                 }
                 
                 Section {
@@ -105,8 +106,8 @@ struct MainView: View {
                     }
                 }
             }
-            .animation(.default, value: viewModel.currentAssistant)
-            .animation(.default, value: viewModel.continueInBackground)
+            .animation(.default, value: userSettings.currentAssistant)
+            .animation(.default, value: userSettings.continueInBackground)
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
@@ -115,8 +116,8 @@ struct MainView: View {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { viewModel.showModal(.switchAssistant) }) {
                         HStack {
-                            Image(systemName: viewModel.currentAssistant.DescriptionProviderType.assistantSystemImage)
-                            Text(viewModel.currentAssistant.DescriptionProviderType.assistantName)
+                            Image(systemName: userSettings.currentAssistant.DescriptionProviderType.assistantSystemImage)
+                            Text(userSettings.currentAssistant.DescriptionProviderType.assistantName)
                         }
                         .padding(.horizontal, 10)
                     }
@@ -167,7 +168,7 @@ struct MainView: View {
         }
         .sheet(isPresented: $viewModel.showChangeIconView) { ChangeIconView() }
         .sheet(isPresented: $viewModel.showSwitchAssistantView) {
-            SwitchAssistantView(currentAssistant: $viewModel.currentAssistant)
+            SwitchAssistantView(currentAssistant: $userSettings.currentAssistant)
                 .navigationTransition(.zoom(
                     sourceID: id_switchAssistantViewButton,
                     in: ns_switchAssistantView

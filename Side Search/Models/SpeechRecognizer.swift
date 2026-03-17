@@ -11,6 +11,8 @@ import Speech
 import UIKit
 
 class SpeechRecognizer: ObservableObject {
+    private let userSettings = UserSettings.shared
+
     @Published var isRecording = false
     @Published var isRecognizing = false
     
@@ -31,8 +33,8 @@ class SpeechRecognizer: ObservableObject {
     
     private var speechRecognizer: SFSpeechRecognizer? {
         // Get a Locale Setting
-        if let speechLocale = UserDefaults.standard.string(forKey: "speechLocale") {
-            return SFSpeechRecognizer(locale: Locale(identifier: speechLocale))
+        if let speechLocale = userSettings.speechLocale {
+            return SFSpeechRecognizer(locale: speechLocale)
         }
         
         // Fallback if no locale is set
@@ -45,7 +47,7 @@ class SpeechRecognizer: ObservableObject {
     // Silence Detection Settings
     private var silenceTimer: Timer?
     private var manuallyConfirmSpeech: Bool {
-        UserDefaults.standard.bool(forKey: "manuallyConfirmSpeech")
+        userSettings.manuallyConfirmSpeech
     }
     
     // MARK: - Initialization

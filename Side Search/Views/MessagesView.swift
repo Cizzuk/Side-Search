@@ -14,7 +14,8 @@ struct MessagesView: View {
     var openSafariView: (URL) -> Void
     
     @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
-    private let disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: "disableMarkdownRendering")
+    
+    @ObservedObject private var userSettings = UserSettings.shared
     
     @State private var isCopied: Bool = false
     @State private var showTranslation: Bool = false
@@ -56,7 +57,7 @@ struct MessagesView: View {
             
             Spacer(minLength: 15)
             
-            if disableMarkdownRendering {
+            if userSettings.disableMarkdownRendering {
                 Text(message.content)
                     .textSelection(.enabled)
             } else {
