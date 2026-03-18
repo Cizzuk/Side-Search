@@ -382,7 +382,7 @@ class AssistantViewModel: ObservableObject {
         
         if isRecording {
             if isRecognizing {
-                speechRecognizer.resetSilenceTimer()
+                speechRecognizer.setFirstSilenceTimer()
             } else {
                 resumeRecognize()
             }
