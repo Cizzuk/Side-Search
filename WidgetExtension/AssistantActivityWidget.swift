@@ -21,7 +21,7 @@ struct AssistantActivityWidget: Widget {
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
-                .padding(.vertical, 2)
+                .padding(.vertical, 1.5)
                 .foregroundStyle(.dropblue)
         }
     }
@@ -106,7 +106,9 @@ struct AssistantActivityWidget: Widget {
                 .activitySystemActionForegroundColor(.dropblue)
             
         } dynamicIsland: { context in
+            let activeOpacity = context.state.state.isActive ? 1.0 : 0.75
             let compactA11yLabel: LocalizedStringResource = "\(context.state.state.description), \("Side Search")"
+            
             return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     IconImage(size: 55)
@@ -125,17 +127,20 @@ struct AssistantActivityWidget: Widget {
                 }
             } compactLeading: {
                 IconImage()
-                    .padding(.leading, 2)
+                    .padding(.leading, 1.5)
+                    .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             } compactTrailing: {
                 StateImage(systemName: context.state.state.systemImage)
                     .padding(.horizontal, context.state.state.imageHPadding)
+                    .opacity(activeOpacity)
                     .accessibilityHidden(true)
             } minimal: {
-                IconImage()
+                StateImage(systemName: context.state.state.systemImage)
+                    .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             }
-            .keylineTint(.dropblue)
+            .keylineTint(context.state.state.isActive ? .dropblue : nil)
         }
         .supplementalActivityFamilies([.small])
     }

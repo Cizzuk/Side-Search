@@ -28,6 +28,15 @@ nonisolated struct AssistantActivityAttributes: ActivityAttributes {
             }
         }
         
+        var isActive: Bool {
+            switch self {
+            case .listening, .waitingForResponse:
+                return true
+            case .pausingRecognition, .off:
+                return false
+            }
+        }
+        
         var systemImage: String {
             switch self {
             case .listening:
