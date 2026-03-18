@@ -437,14 +437,14 @@ class AssistantViewModel: ObservableObject {
         
         let state = makeLiveActivityState()
         
-        // If mic is off, end activity
-        if state.state == .off {
-            AssistantActivityManager.endAll()
-            return
-        }
-        
-        // If activity is already active, update state
         if AssistantActivityManager.isActive() {
+            // If mic is off, end activity
+            if state.state == .off {
+                AssistantActivityManager.endAll()
+                return
+            }
+            
+            // Else, update activity
             AssistantActivityManager.update(state: state)
             return
         }
