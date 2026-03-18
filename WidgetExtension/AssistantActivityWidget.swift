@@ -81,12 +81,14 @@ struct AssistantActivityWidget: Widget {
             case .small:
                 HStack(spacing: 10) {
                     IconImage(size: 30)
+                        .accessibilityHidden(true)
                     DescriptionText(showSubtitle: false)
                 }
             case .medium:
                 HStack(spacing: 15) {
                     IconImage(size: 45)
                         .padding(.leading, 10)
+                        .accessibilityHidden(true)
                     DescriptionText(description: context.state.state.description)
                     Spacer()
                     EndAssistantButton()
