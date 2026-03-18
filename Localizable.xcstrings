@@ -506,6 +506,16 @@
         }
       }
     },
+    "End the Side Search assistant if it's active." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Searchのアシスタントを使用中の場合、終了します。"
+          }
+        }
+      }
+    },
     "Error" : {
       "localizations" : {
         "ja" : {

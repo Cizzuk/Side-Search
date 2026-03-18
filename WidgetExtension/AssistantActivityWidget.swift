@@ -64,7 +64,7 @@ struct AssistantActivityWidget: Widget {
     
     struct EndAssistantButton: View {
         var body: some View {
-            Button(intent: EndAssistantButtonIntent()) {
+            Button(intent: EndAssistantIntent()) {
                 Label("End Assistant", systemImage: "xmark")
                     .labelStyle(.iconOnly)
                     .font(.system(size: 30, weight: .bold))
@@ -72,26 +72,6 @@ struct AssistantActivityWidget: Widget {
             }
             .tint(.dropblue)
             .padding(5)
-        }
-    }
-    
-    struct EndAssistantButtonIntent: AppIntent {
-        static let title: LocalizedStringResource = "End Assistant"
-        static var openAppWhenRun = false
-        static var isDiscoverable = false
-        
-        @MainActor
-        func perform() async throws -> some IntentResult {
-            GroupUserDefaults.set(true, forKey: CFNotificationFlags.shouldEndAssistant)
-            CFNotificationCenterPostNotification(
-                CFNotificationCenterGetDarwinNotifyCenter(),
-                .shouldEndAssistant,
-                nil,
-                nil,
-                true
-            )
-            
-            return .result()
         }
     }
     
