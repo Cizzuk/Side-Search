@@ -89,7 +89,7 @@ class AssistantActivityManager {
             staleDate: nil
         )
         
-        Task.detached {
+        Task {
             for activity in activities {
                 guard activity.content.state != state else { continue }
                 await activity.update(content)
@@ -99,8 +99,6 @@ class AssistantActivityManager {
     }
     
     static func endAll() {
-        let activities = Activity<AssistantActivityAttributes>.activities
-        
         let contentState = AssistantActivityAttributes.ContentState()
         
         let content = ActivityContent(
@@ -109,6 +107,8 @@ class AssistantActivityManager {
         )
         
         Task.detached {
+            let activities = Activity<AssistantActivityAttributes>.activities
+            
             for activity in activities {
                 await activity.end(
                     content,

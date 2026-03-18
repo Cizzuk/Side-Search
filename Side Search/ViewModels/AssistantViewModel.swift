@@ -431,18 +431,26 @@ class AssistantViewModel: ObservableObject {
     }
     
     func updateLiveActivityStatus() {
-        guard assistantType.DescriptionProviderType.backgroundSupports else { return }
+        guard assistantType.DescriptionProviderType.backgroundSupports,
+              !isDismissed
+        else { return }
         
         let state = makeLiveActivityState()
         
+        // If mic is off, end activity
         if state.state == .off {
             AssistantActivityManager.endAll()
             return
         }
         
+        // If activity is already active, update state
         if AssistantActivityManager.isActive() {
             AssistantActivityManager.update(state: state)
-        } else {
+            return
+        }
+        
+        // If recognizing started, start activity
+        if state.state == .listening {
             AssistantActivityManager.start(state: state)
         }
     }
