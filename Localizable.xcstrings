@@ -18,6 +18,17 @@
       },
       "shouldTranslate" : false
     },
+    "%@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "About" : {
       "localizations" : {
         "ja" : {
@@ -94,16 +105,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アシスタント"
-          }
-        }
-      }
-    },
-    "Assistant is Active" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アシスタント作動中"
           }
         }
       }

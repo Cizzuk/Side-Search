@@ -22,7 +22,6 @@ struct AssistantActivityWidget: Widget {
                 .scaledToFit()
                 .frame(width: size, height: size)
                 .padding(.vertical, 2)
-                .accessibilityLabel("Side Search")
                 .foregroundStyle(.dropblue)
         }
     }
@@ -37,15 +36,13 @@ struct AssistantActivityWidget: Widget {
                 .scaledToFit()
                 .frame(width: size, height: size)
                 .padding(.vertical, 2)
-                .padding(.trailing, 2)
-                .accessibilityLabel("Assistant is Active")
                 .foregroundStyle(.dropblue)
         }
     }
     
     struct DescriptionText: View {
         var showSubtitle: Bool = true
-        var state: LocalizedStringResource? = nil
+        var description: LocalizedStringResource? = nil
         
         var body: some View {
             VStack(alignment: .leading) {
@@ -53,8 +50,8 @@ struct AssistantActivityWidget: Widget {
                     .font(.headline)
                     .bold()
                     .foregroundStyle(.dropblue)
-                if let state = state, showSubtitle {
-                    Text(state)
+                if let description = description, showSubtitle {
+                    Text(description)
                         .font(.subheadline)
                         .foregroundStyle(.dropblue.opacity(0.8))
                 }
@@ -90,7 +87,7 @@ struct AssistantActivityWidget: Widget {
                 HStack(spacing: 15) {
                     IconImage(size: 45)
                         .padding(.leading, 10)
-                    DescriptionText(state: context.state.state.description)
+                    DescriptionText(description: context.state.state.description)
                     Spacer()
                     EndAssistantButton()
                 }
@@ -107,15 +104,17 @@ struct AssistantActivityWidget: Widget {
                 .activitySystemActionForegroundColor(.dropblue)
             
         } dynamicIsland: { context in
-            DynamicIsland {
+            let compactA11yLabel: LocalizedStringResource = "\(context.state.state.description), \("Side Search")"
+            return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     IconImage(size: 55)
                         .padding(.vertical, 5)
                         .padding(.leading, 10)
                         .frame(maxHeight: .infinity)
+                        .accessibilityHidden(true)
                 }
                 DynamicIslandExpandedRegion(.center) {
-                    DescriptionText(state: context.state.state.description)
+                    DescriptionText(description: context.state.state.description)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
@@ -124,10 +123,15 @@ struct AssistantActivityWidget: Widget {
                 }
             } compactLeading: {
                 IconImage()
+                    .padding(.leading, 2)
+                    .accessibilityLabel(compactA11yLabel)
             } compactTrailing: {
                 StateImage(systemName: context.state.state.systemImage)
+                    .padding(.horizontal, context.state.state.imageHPadding)
+                    .accessibilityHidden(true)
             } minimal: {
                 IconImage()
+                    .accessibilityLabel(compactA11yLabel)
             }
             .keylineTint(.dropblue)
         }

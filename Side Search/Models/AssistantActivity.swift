@@ -40,6 +40,19 @@ nonisolated struct AssistantActivityAttributes: ActivityAttributes {
                 return "microphone.badge.xmark"
             }
         }
+        
+        var imageHPadding: CGFloat {
+            switch self {
+            case .listening:
+                return 3
+            case .waitingForResponse:
+                return 0
+            case .pausingRecognition:
+                return 1
+            case .off:
+                return 0
+            }
+        }
     }
     
     struct ContentState: Codable, Hashable {
