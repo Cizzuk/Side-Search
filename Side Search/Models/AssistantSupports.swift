@@ -5,7 +5,6 @@
 //  Created by Cizzuk on 2026/01/25.
 //
 
-import Foundation
 import SwiftUI
 
 enum AssistantType: String, CaseIterable, Codable {
