@@ -337,7 +337,7 @@ class SpeechRecognizer: ObservableObject {
     
     private func calcMicLevel(from buffer: AVAudioPCMBuffer) {
         // Only calc in foreground
-        guard !isInBackground else { return }
+        guard !isInBackground && isRecognizing else { return }
         
         guard let channelData = buffer.floatChannelData?[0] else { return }
         let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
