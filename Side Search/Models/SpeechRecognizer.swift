@@ -29,8 +29,8 @@ class SpeechRecognizer: ObservableObject {
     
     private var isInBackground = false
     
+    private let audioSession = AVAudioSession()
     private let audioEngine = AVAudioEngine()
-    private let audioSession = AVAudioSession.sharedInstance()
     
     private var speechRecognizer: SFSpeechRecognizer? {
         // Get a Locale Setting
@@ -108,19 +108,14 @@ class SpeechRecognizer: ObservableObject {
                     return
                 }
                 
-                // Configure the input node
-                let inputNode = audioEngine.inputNode
-                
                 // Configure the microphone input
-                let recordingFormat = inputNode.outputFormat(forBus: 0)
-                
-                // Check microphone availability
-                guard inputNode.inputFormat(forBus: 0).channelCount > 0 else {
-                    showErrorMessage("No microphone input available.")
-                    return
-                }
-                
-                inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+                audioEngine.inputNode.reset()
+                audioEngine.inputNode.removeTap(onBus: 0)
+                audioEngine.inputNode.installTap(
+                    onBus: 0,
+                    bufferSize: 1024,
+                    format: audioEngine.mainMixerNode.outputFormat(forBus: 0)
+                ) { (buffer, when) in
                     self.recognitionRequest?.append(buffer)
                     self.calcMicLevel(from: buffer)
                 }
@@ -270,6 +265,14 @@ class SpeechRecognizer: ObservableObject {
             }
         } else {
             showErrorMessage("Speech recognizer could not be initialized.")
+            return false
+        }
+        
+        // 3. Check microphone availability
+        guard audioSession.isInputAvailable,
+              audioEngine.inputNode.numberOfInputs > 0,
+              audioEngine.inputNode.inputFormat(forBus: 0).channelCount > 0 else {
+            showErrorMessage("No microphone input available.")
             return false
         }
         
