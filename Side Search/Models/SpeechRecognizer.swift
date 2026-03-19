@@ -29,9 +29,9 @@ class SpeechRecognizer: ObservableObject {
     
     private var isInBackground = false
     
-    private let audioSession = AVAudioSession.sharedInstance()
-    private let audioEngine = AVAudioEngine()
-    private let audioMixer = AVAudioMixerNode()
+    lazy private var audioSession = AVAudioSession.sharedInstance()
+    lazy private var audioEngine = AVAudioEngine()
+    lazy private var audioMixer = AVAudioMixerNode()
     
     private var speechRecognizer: SFSpeechRecognizer? {
         // Get a Locale Setting
@@ -129,24 +129,21 @@ class SpeechRecognizer: ObservableObject {
                 }
                 
                 // Start audio engine
-                DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                    guard let self = self else { return }
-                    audioEngine.prepare()
-                    
-                    do {
-                        try audioEngine.start()
-                        DispatchQueue.main.async {
-                            self.isRecording = true
-                            // Start speech recognition
-                            self.startRecognize()
-                        }
-                    } catch {
-                        DispatchQueue.main.async {
-                            self.stopRecording()
-                        }
-                        showErrorMessage("Audio engine couldn't start: \(error.localizedDescription)")
-                        return
+                audioEngine.prepare()
+                
+                do {
+                    try audioEngine.start()
+                    DispatchQueue.main.async {
+                        self.isRecording = true
+                        // Start speech recognition
+                        self.startRecognize()
                     }
+                } catch {
+                    DispatchQueue.main.async {
+                        self.stopRecording()
+                    }
+                    showErrorMessage("Audio engine couldn't start: \(error.localizedDescription)")
+                    return
                 }
             }
         }
