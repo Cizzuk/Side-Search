@@ -307,7 +307,8 @@ class SpeechRecognizer: ObservableObject {
     
     // Handle Audio Session Interruptions
     @objc private func handleInterruption(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
+        guard isRecording,
+              let userInfo = notification.userInfo,
               let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
               let type = AVAudioSession.InterruptionType(rawValue: typeValue)
         else { return }
