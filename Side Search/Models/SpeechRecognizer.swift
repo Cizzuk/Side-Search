@@ -297,8 +297,11 @@ class SpeechRecognizer: ObservableObject {
     private func startSilenceTimer(timeout: Double) {
         stopSilenceTimer()
         
-        silenceTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { [weak self] _ in
-            self?.silenceTimerFired()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            silenceTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { _ in
+                self.silenceTimerFired()
+            }
         }
     }
     
