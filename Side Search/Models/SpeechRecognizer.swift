@@ -103,23 +103,26 @@ class SpeechRecognizer: ObservableObject {
                         options: [.allowBluetoothA2DP, .mixWithOthers]
                     )
                     try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-                    try audioSession.setActive(true)
+                    try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
                 } catch {
                     showErrorMessage("Audio session setup failed: \(error.localizedDescription)")
                     return
                 }
                 
+                audioEngine.inputNode.reset()
+                audioEngine.inputNode.removeTap(onBus: 0)
                 let format = audioEngine.inputNode.inputFormat(forBus: 0)
                 
                 // Setup the mixer
-                audioEngine.attach(audioMixer)
-                audioEngine.connect(audioEngine.inputNode, to: audioMixer, format: format)
-                audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: format)
+                if !audioEngine.attachedNodes.contains(audioMixer) {
+                    audioEngine.attach(audioMixer)
+                    audioEngine.connect(audioEngine.inputNode, to: audioMixer, format: format)
+                    audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: format)
+                }
+                
                 audioMixer.outputVolume = 0.0
                 
                 // Setup the microphone input
-                audioEngine.inputNode.reset()
-                audioEngine.inputNode.removeTap(onBus: 0)
                 audioEngine.inputNode.installTap(
                     onBus: 0,
                     bufferSize: 1024,
