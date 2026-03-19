@@ -188,39 +188,57 @@ class SpeechRecognizer: ObservableObject {
     // MARK: - Speech Recognition Controls
     
     func stopRecognize() {
-        isRecognizing = false
+        guard isRecognizing else { return }
+        
         stopSilenceTimer()
         
-        if let recognitionRequest = recognitionRequest {
-            recognitionRequest.endAudio()
-            self.recognitionRequest = nil
-        }
-        
-        if let recognitionTask = recognitionTask {
-            recognitionTask.finish()
-            self.recognitionTask = nil
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            if let recognitionRequest = recognitionRequest {
+                recognitionRequest.endAudio()
+                self.recognitionRequest = nil
+            }
+            
+            if let recognitionTask = recognitionTask {
+                recognitionTask.finish()
+                self.recognitionTask = nil
+            }
+            
+            DispatchQueue.main.async {
+                self.isRecognizing = false
+            }
         }
     }
     
     func startRecognize() {
-        guard isRecording, !isRecognizing, recognitionTask == nil else { return }
+        guard isRecording, !isRecognizing else { return }
         
-        let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        recognitionRequest.requiresOnDeviceRecognition = true
-        recognitionRequest.shouldReportPartialResults = true
-        self.recognitionRequest = recognitionRequest
-        
-        isRecognizing = true
-        startRecognitionTask(request: recognitionRequest, inputNode: audioEngine.inputNode)
-        setFirstSilenceTimer() // First wait
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            recognitionRequest.requiresOnDeviceRecognition = true
+            recognitionRequest.shouldReportPartialResults = true
+            self.recognitionRequest = recognitionRequest
+            
+            startRecognitionTask(request: recognitionRequest, inputNode: audioEngine.inputNode)
+            setFirstSilenceTimer() // First wait
+            
+            DispatchQueue.main.async {
+                self.isRecognizing = true
+            }
+        }
     }
     
     private func startRecognitionTask(
         request recognitionRequest: SFSpeechAudioBufferRecognitionRequest,
         inputNode: AVAudioInputNode
     ) {
-        // Erase previous text
-        recognizedText = ""
+        DispatchQueue.main.async {
+            // Erase previous text
+            self.recognizedText = ""
+        }
         
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self = self else { return }
