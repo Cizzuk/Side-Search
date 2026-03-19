@@ -129,19 +129,24 @@ class SpeechRecognizer: ObservableObject {
             
             guard !isRecording else { return }
             
-            showError = false
-            stopRecognize()
-            
-            do {
-                try configureAudioSession()
-                try configureAudioEngine()
-                try audioEngine.start()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard let self = self else { return }
                 
-                isRecording = true
-                startRecognize()
-            } catch {
-                stopRecording()
-                showErrorMessage("Failed to start recording: \(error.localizedDescription)")
+                stopRecognize()
+                
+                do {
+                    try configureAudioSession()
+                    try configureAudioEngine()
+                    try audioEngine.start()
+                    
+                    DispatchQueue.main.async {
+                        self.isRecording = true
+                        self.startRecognize()
+                    }
+                } catch {
+                    stopRecording()
+                    showErrorMessage("Failed to start recording: \(error.localizedDescription)")
+                }
             }
         }
     }
@@ -152,8 +157,10 @@ class SpeechRecognizer: ObservableObject {
         deactivateAudioSession()
         
         if isRecording {
-            isRecording = false
-            micLevel = 0.0
+            DispatchQueue.main.async {
+                self.isRecording = false
+                self.micLevel = 0.0
+            }
         }
     }
     
@@ -173,7 +180,9 @@ class SpeechRecognizer: ObservableObject {
         }
         
         if isRecognizing {
-            isRecognizing = false
+            DispatchQueue.main.async {
+                self.isRecognizing = false
+            }
         }
     }
     
@@ -197,7 +206,10 @@ class SpeechRecognizer: ObservableObject {
         
         startRecognitionTask(request: request, recognizer: recognizer)
         setFirstSilenceTimer()
-        isRecognizing = true
+        
+        DispatchQueue.main.async {
+            self.isRecognizing = true
+        }
     }
     
     private func startRecognitionTask(
@@ -205,7 +217,9 @@ class SpeechRecognizer: ObservableObject {
         recognizer: SFSpeechRecognizer
     ) {
         // Erase previous text
-        recognizedText = ""
+        DispatchQueue.main.async {
+            self.recognizedText = ""
+        }
         
         recognitionTask = recognizer.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self = self else { return }
