@@ -30,6 +30,7 @@ class SpeechRecognizer: ObservableObject {
     private var isInBackground = false
     
     private let audioEngine = AVAudioEngine()
+    private let audioSession = AVAudioSession.sharedInstance()
     
     private var speechRecognizer: SFSpeechRecognizer? {
         // Get a Locale Setting
@@ -57,7 +58,7 @@ class SpeechRecognizer: ObservableObject {
             self,
             selector: #selector(handleInterruption(_:)),
             name: AVAudioSession.interruptionNotification,
-            object: AVAudioSession.sharedInstance()
+            object: audioSession
         )
         
         NotificationCenter.default.addObserver(
@@ -94,7 +95,6 @@ class SpeechRecognizer: ObservableObject {
                 guard let self = self else { return }
                 
                 // Configure the audio session
-                let audioSession = AVAudioSession.sharedInstance()
                 do {
                     try audioSession.setCategory(
                         .playAndRecord,
