@@ -94,6 +94,13 @@ class SpeechRecognizer: ObservableObject {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 guard let self = self else { return }
                 
+                guard audioSession.isInputAvailable,
+                      audioEngine.inputNode.numberOfInputs > 0,
+                      audioEngine.inputNode.inputFormat(forBus: 0).channelCount > 0 else {
+                    showErrorMessage("No microphone input available.")
+                    return
+                }
+                
                 // Configure the audio session
                 do {
                     try audioSession.setCategory(
@@ -274,14 +281,6 @@ class SpeechRecognizer: ObservableObject {
             }
         } else {
             showErrorMessage("Speech recognizer could not be initialized.")
-            return false
-        }
-        
-        // 3. Check microphone availability
-        guard audioSession.isInputAvailable,
-              audioEngine.inputNode.numberOfInputs > 0,
-              audioEngine.inputNode.inputFormat(forBus: 0).channelCount > 0 else {
-            showErrorMessage("No microphone input available.")
             return false
         }
         
