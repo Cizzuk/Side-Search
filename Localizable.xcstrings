@@ -18,6 +18,17 @@
       },
       "shouldTranslate" : false
     },
+    "%@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "About" : {
       "localizations" : {
         "ja" : {
@@ -98,12 +109,12 @@
         }
       }
     },
-    "Assistant is Active" : {
+    "Assistant is off" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アシスタント作動中"
+            "value" : "アシスタントオフ"
           }
         }
       }
@@ -118,22 +129,12 @@
         }
       }
     },
-    "Audio engine couldn't start: %@" : {
+    "Background Settings" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "オーディオエンジンを開始できませんでした: %@"
-          }
-        }
-      }
-    },
-    "Audio session setup failed: %@" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "オーディオセッションのセットアップに失敗しました: %@"
+            "value" : "バックグラウンドの設定"
           }
         }
       }
@@ -164,6 +165,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Brave Search"
+          }
+        }
+      }
+    },
+    "By keeping the microphone on, you can have the assistant standby in the background. While in standby, you can use the Side Button or Action Button to resume the assistant without opening the app." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイクをオンにし続けることで、アシスタントをバックグラウンドで待機させることができます。待機中はサイドボタンやアクションボタンなどを使用して、アプリを開かずにアシスタントを再開できます。"
           }
         }
       }
@@ -476,12 +487,42 @@
         }
       }
     },
+    "End the Side Search assistant if it's active." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Searchのアシスタントを使用中の場合、終了します。"
+          }
+        }
+      }
+    },
     "Error" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "エラー"
+          }
+        }
+      }
+    },
+    "Failed to prepare speech recognition." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識の準備に失敗しました。"
+          }
+        }
+      }
+    },
+    "Failed to start recording: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "録音開始に失敗しました: %@"
           }
         }
       }
@@ -622,6 +663,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kagi"
+          }
+        }
+      }
+    },
+    "Keep on Standby" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "待機させる"
           }
         }
       }
@@ -809,6 +860,16 @@
         }
       }
     },
+    "Recognition paused" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識停止中"
+          }
+        }
+      }
+    },
     "Run a shortcut using a URL scheme" : {
       "localizations" : {
         "ja" : {
@@ -928,6 +989,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "音声認識は現在、このデバイスでは利用できません。"
+          }
+        }
+      }
+    },
+    "Speech recognition stopped: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識が停止しました: %@"
           }
         }
       }

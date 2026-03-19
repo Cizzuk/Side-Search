@@ -5,7 +5,6 @@
 //  Created by Cizzuk on 2026/01/25.
 //
 
-import Foundation
 import SwiftUI
 
 enum AssistantType: String, CaseIterable, Codable {
@@ -45,15 +44,6 @@ enum AssistantType: String, CaseIterable, Codable {
     
     func makeAssistantViewModel() -> AssistantViewModel {
         return DescriptionProviderType.makeAssistantViewModel()
-    }
-    
-    static var current: AssistantType {
-        if let rawValue = UserDefaults.standard.string(forKey: "currentAssistant"),
-           let type = AssistantType(rawValue: rawValue),
-           (!type.DescriptionProviderType.isBlocked() && type.DescriptionProviderType.isAvailable()) {
-            return type
-        }
-        return .defaultType
     }
 }
 

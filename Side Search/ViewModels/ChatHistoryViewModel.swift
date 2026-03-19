@@ -16,12 +16,6 @@ class ChatHistoryViewModel: ObservableObject {
     @Published var searchURL: URL?
     @Published var showSafariView = false
     
-    @Published var chatHistoryEnabled: Bool = UserDefaults.standard.bool(forKey: "chatHistoryEnabled") {
-        didSet {
-            UserDefaults.standard.set(chatHistoryEnabled, forKey: "chatHistoryEnabled")
-        }
-    }
-    
     func openSafariView(at url: URL) {
         if SafariView.checkAvailability(at: url) {
             searchURL = url

@@ -21,38 +21,37 @@ struct AssistantActivityWidget: Widget {
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
-                .padding(.vertical, 2)
-                .accessibilityLabel("Side Search")
+                .padding(.vertical, 1.5)
                 .foregroundStyle(.dropblue)
         }
     }
     
-    struct RecordImage: View {
+    struct StateImage: View {
         var size: CGFloat? = nil
+        var systemName: String
 
         var body: some View {
-            Image(systemName: "microphone.fill")
+            Image(systemName: systemName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
                 .padding(.vertical, 2)
-                .padding(.trailing, 3)
-                .accessibilityLabel("Assistant is Active")
                 .foregroundStyle(.dropblue)
         }
     }
     
     struct DescriptionText: View {
         var showSubtitle: Bool = true
+        var description: LocalizedStringResource? = nil
         
         var body: some View {
             VStack(alignment: .leading) {
-                Text("Assistant is Active")
+                Text("Side Search")
                     .font(.headline)
                     .bold()
                     .foregroundStyle(.dropblue)
-                if showSubtitle {
-                    Text("Side Search")
+                if let description = description, showSubtitle {
+                    Text(description)
                         .font(.subheadline)
                         .foregroundStyle(.dropblue.opacity(0.8))
                 }
@@ -62,7 +61,7 @@ struct AssistantActivityWidget: Widget {
     
     struct EndAssistantButton: View {
         var body: some View {
-            Button(intent: EndAssistantButtonIntent()) {
+            Button(intent: EndAssistantIntent()) {
                 Label("End Assistant", systemImage: "xmark")
                     .labelStyle(.iconOnly)
                     .font(.system(size: 30, weight: .bold))
@@ -73,41 +72,24 @@ struct AssistantActivityWidget: Widget {
         }
     }
     
-    struct EndAssistantButtonIntent: AppIntent {
-        static let title: LocalizedStringResource = "End Assistant"
-        static var openAppWhenRun = false
-        static var isDiscoverable = false
-        
-        @MainActor
-        func perform() async throws -> some IntentResult {
-            GroupUserDefaults.set(true, forKey: CFNotificationFlags.shouldEndAssistant)
-            CFNotificationCenterPostNotification(
-                CFNotificationCenterGetDarwinNotifyCenter(),
-                .shouldEndAssistant,
-                nil,
-                nil,
-                true
-            )
-            
-            return .result()
-        }
-    }
-    
     struct MainActivityView: View {
         @Environment(\.activityFamily) var activityFamily
+        var context: ActivityViewContext<AssistantActivityAttributes>
         
         var body: some View {
             switch activityFamily {
             case .small:
                 HStack(spacing: 10) {
                     IconImage(size: 30)
+                        .accessibilityHidden(true)
                     DescriptionText(showSubtitle: false)
                 }
             case .medium:
                 HStack(spacing: 15) {
                     IconImage(size: 45)
                         .padding(.leading, 10)
-                    DescriptionText()
+                        .accessibilityHidden(true)
+                    DescriptionText(description: context.state.state.description)
                     Spacer()
                     EndAssistantButton()
                 }
@@ -119,20 +101,24 @@ struct AssistantActivityWidget: Widget {
     }
     
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: AssistantActivityAttributes.self) { _ in
-            MainActivityView()
-                .activitySystemActionForegroundColor(.red)
+        ActivityConfiguration(for: AssistantActivityAttributes.self) { context in
+            MainActivityView(context: context)
+                .activitySystemActionForegroundColor(.dropblue)
             
-        } dynamicIsland: { _ in
-            DynamicIsland {
+        } dynamicIsland: { context in
+            let activeOpacity = context.state.state.isActive ? 1.0 : 0.75
+            let compactA11yLabel: LocalizedStringResource = "\(context.state.state.description), \("Side Search")"
+            
+            return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     IconImage(size: 55)
                         .padding(.vertical, 5)
                         .padding(.leading, 10)
                         .frame(maxHeight: .infinity)
+                        .accessibilityHidden(true)
                 }
                 DynamicIslandExpandedRegion(.center) {
-                    DescriptionText()
+                    DescriptionText(description: context.state.state.description)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
@@ -141,12 +127,21 @@ struct AssistantActivityWidget: Widget {
                 }
             } compactLeading: {
                 IconImage()
+                    .padding(.leading, 1.5)
+                    .opacity(activeOpacity)
+                    .accessibilityLabel(compactA11yLabel)
             } compactTrailing: {
-                RecordImage()
+                StateImage(systemName: context.state.state.systemImage)
+                    .padding(.horizontal, context.state.state.imageHPadding)
+                    .opacity(activeOpacity)
+                    .accessibilityHidden(true)
             } minimal: {
-                IconImage()
+                StateImage(systemName: context.state.state.systemImage)
+                    .padding(.horizontal, context.state.state.imageHPadding)
+                    .opacity(activeOpacity)
+                    .accessibilityLabel(compactA11yLabel)
             }
-            .keylineTint(.dropblue)
+            .keylineTint(context.state.state.isActive ? .dropblue : nil)
         }
         .supplementalActivityFamilies([.small])
     }

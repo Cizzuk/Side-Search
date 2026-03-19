@@ -16,7 +16,16 @@ struct ActivateIntent: AppIntent {
     static let title: LocalizedStringResource = "Start Assistant"
     static let description: LocalizedStringResource = "Start the Side Search assistant."
     static let isDiscoverable = true
-    static let supportedModes: IntentModes = .foreground
+    static var supportedModes: IntentModes = .foreground
+    
+    @MainActor
+    static func setShouldBackground(_ value: Bool) {
+        if value {
+            Self.supportedModes = .background
+        } else {
+            Self.supportedModes = .foreground
+        }
+    }
     
     @MainActor
     func perform() async throws -> some IntentResult {

@@ -16,12 +16,9 @@ struct AssistantView: View {
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
     
-    private let assistantType = AssistantType.current
-    @StateObject private var viewModel: AssistantViewModel
+    @StateObject private var viewModel = UserSettings.shared.currentAssistant.makeAssistantViewModel()
     
-    init() {
-        _viewModel = StateObject(wrappedValue: AssistantType.current.makeAssistantViewModel())
-    }
+    private let assistantType = UserSettings.shared.currentAssistant
     
     func dismissView() {
         viewModel.dismissAssistant(fromView: true)
@@ -56,7 +53,7 @@ struct AssistantView: View {
                             
                             Spacer(minLength: 15)
                             
-                            TextField(viewModel.isRecording ? "Listening..." : "Ask Assistant",
+                            TextField(viewModel.isRecognizing ? "Listening..." : "Ask Assistant",
                                       text: $viewModel.inputText, axis: .vertical)
                             .bold()
                             .submitLabel(.return)
@@ -80,9 +77,10 @@ struct AssistantView: View {
                             if isAssistiveAccessEnabled {
                                 Spacer(minLength: 30)
                                 Button(action: { viewModel.toggleRecording() }) {
-                                    Label(viewModel.isRecording ? "Stop" : "Speak",
-                                          systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
+                                    Label(viewModel.isRecognizing ? "Stop" : "Speak",
+                                          systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
                                 }
+                                .disabled(viewModel.responseIsPreparing)
                                 
                                 Button(action: { viewModel.confirmInput() }) {
                                     Label("OK", systemImage: "checkmark")
@@ -180,7 +178,7 @@ struct AssistantView: View {
                 viewModel.dismissAssistant(fromView: true)
             }
             .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
-                viewModel.activateAssistant()
+                viewModel.handleActivateIntent()
             }
             .onReceive(viewModel.$shouldDismiss) { shouldDismiss in
                 if shouldDismiss { dismiss() }

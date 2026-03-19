@@ -9,7 +9,64 @@ import ActivityKit
 import Foundation
 
 nonisolated struct AssistantActivityAttributes: ActivityAttributes {
-    struct ContentState: Codable, Hashable { }
+    enum AssistantState: String, Codable, Hashable {
+        case listening          // Speech recognition is active
+        case waitingForResponse // Waiting for assistant's response
+        case pausingRecognition // Speech recognition is paused but microphone is still active
+        case off                // Microphone is off and not listening
+        
+        var description: LocalizedStringResource {
+            switch self {
+            case .listening:
+                return "Listening..."
+            case .waitingForResponse:
+                return "Waiting for assistant..."
+            case .pausingRecognition:
+                return "Recognition paused"
+            case .off:
+                return "Assistant is off"
+            }
+        }
+        
+        var isActive: Bool {
+            switch self {
+            case .listening, .waitingForResponse:
+                return true
+            case .pausingRecognition, .off:
+                return false
+            }
+        }
+        
+        var systemImage: String {
+            switch self {
+            case .listening:
+                return "microphone.fill"
+            case .waitingForResponse:
+                return "progress.indicator"
+            case .pausingRecognition:
+                return "microphone.slash"
+            case .off:
+                return "microphone.badge.xmark"
+            }
+        }
+        
+        var imageHPadding: CGFloat {
+            switch self {
+            case .listening:
+                return 3
+            case .waitingForResponse:
+                return 0
+            case .pausingRecognition:
+                return 1
+            case .off:
+                return 0
+            }
+        }
+    }
+    
+    struct ContentState: Codable, Hashable {
+        var state: AssistantState = .listening
+    }
 }
 
 class AssistantActivityManager {
@@ -17,7 +74,10 @@ class AssistantActivityManager {
         return !Activity<AssistantActivityAttributes>.activities.isEmpty
     }
     
-    static func start(endDate: Date? = nil) {
+    static func start(
+        endDate: Date? = nil,
+        state: AssistantActivityAttributes.ContentState
+    ) {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else {
             print("Activities are not enabled. Cannot start assistant activity.")
             return
@@ -26,10 +86,8 @@ class AssistantActivityManager {
         
         let attributes = AssistantActivityAttributes()
         
-        let contentState = AssistantActivityAttributes.ContentState()
-        
         let content = ActivityContent(
-            state: contentState,
+            state: state,
             staleDate: endDate
         )
         
@@ -39,9 +97,26 @@ class AssistantActivityManager {
                 content: content,
                 pushType: nil
             )
-            print("Started assistant activity: \(activity)")
+            print("Started assistant activity: \(activity) with state: \(state)")
         } catch {
             print("Failed to start assistant activity: \(error)")
+        }
+    }
+    
+    static func update(state: AssistantActivityAttributes.ContentState) {
+        let activities = Activity<AssistantActivityAttributes>.activities
+        
+        let content = ActivityContent(
+            state: state,
+            staleDate: nil
+        )
+        
+        Task {
+            for activity in activities {
+                guard activity.content.state != state else { continue }
+                await activity.update(content)
+                print("Updated assistant activity: \(activity) to state: \(state)")
+            }
         }
     }
     

@@ -9,14 +9,17 @@ import SwiftUI
 
 struct ChatHistoryView: View {
     @Environment(\.dismiss) private var dismiss
+    
     @StateObject var viewModel = ChatHistoryViewModel()
+    @StateObject private var userSettings = UserSettings.shared
+    
     @State private var showClearAllHistoryAlert = false
     
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    Toggle("Enable Chat History", isOn: $viewModel.chatHistoryEnabled)
+                    Toggle("Enable Chat History", isOn: $userSettings.chatHistoryEnabled)
                 }
                 
                 ForEach(viewModel.chats) { chat in
