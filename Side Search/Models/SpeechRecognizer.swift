@@ -12,7 +12,7 @@ import UIKit
 
 class SpeechRecognizer: ObservableObject {
     private let userSettings = UserSettings.shared
-
+    
     @Published var isRecording = false
     @Published var isRecognizing = false
     
@@ -28,10 +28,11 @@ class SpeechRecognizer: ObservableObject {
     // MARK: - Private Properties
     
     private var isInBackground = false
+    private var isAudioSessionActive = false
+    private var isInputTapInstalled = false
     
     lazy private var audioSession = AVAudioSession.sharedInstance()
     lazy private var audioEngine = AVAudioEngine()
-    lazy private var audioMixer = AVAudioMixerNode()
     
     private var speechRecognizer: SFSpeechRecognizer? {
         // Get a Locale Setting
@@ -52,6 +53,17 @@ class SpeechRecognizer: ObservableObject {
         userSettings.manuallyConfirmSpeech
     }
     
+    private enum RecognizerError: LocalizedError {
+        case microphoneUnavailable
+        
+        var errorDescription: String? {
+            switch self {
+            case .microphoneUnavailable:
+                return "No microphone input available."
+            }
+        }
+    }
+    
     // MARK: - Initialization
     
     init() {
@@ -59,14 +71,28 @@ class SpeechRecognizer: ObservableObject {
             self,
             selector: #selector(handleInterruption(_:)),
             name: AVAudioSession.interruptionNotification,
-            object: audioSession
+            object: nil
         )
         
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleAvailableInputsChange),
+            selector: #selector(validateMicState(_:)),
             name: AVAudioSession.availableInputsChangeNotification,
-            object: audioSession
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(validateMicState(_:)),
+            name: AVAudioSession.routeChangeNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleMediaServicesReset),
+            name: AVAudioSession.mediaServicesWereResetNotification,
+            object: nil
         )
         
         NotificationCenter.default.addObserver(
@@ -85,6 +111,13 @@ class SpeechRecognizer: ObservableObject {
     }
     
     deinit {
+        stopSilenceTimer()
+        recognitionRequest?.endAudio()
+        recognitionRequest = nil
+        recognitionTask?.cancel()
+        recognitionTask = nil
+        stopAudioEngine()
+        deactivateAudioSession()
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -92,180 +125,109 @@ class SpeechRecognizer: ObservableObject {
     
     func startRecording() {
         Task {
-            // Cancel any existing recognition task
-            stopRecognize()
-            
-            // Check Availability
             guard await checkAvailability() else { return }
             
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                guard let self = self else { return }
+            guard !isRecording else { return }
+            
+            showError = false
+            stopRecognize()
+            
+            do {
+                try configureAudioSession()
+                try configureAudioEngine()
+                try audioEngine.start()
                 
-                // Reset audio engine and mixer
-                audioEngine.reset()
-                audioMixer.reset()
-                
-                // Check microphone availability
-                guard isMicrophoneAvailable() else {
-                    showErrorMessage("No microphone input available.")
-                    return
-                }
-                
-                // Configure the audio session
-                do {
-                    try audioSession.setCategory(
-                        .playAndRecord,
-                        mode: .measurement,
-                        options: [.allowBluetoothA2DP, .mixWithOthers]
-                    )
-                    try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-                    try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-                } catch {
-                    showErrorMessage("Audio session setup failed: \(error.localizedDescription)")
-                    return
-                }
-                
-                let format = audioEngine.inputNode.inputFormat(forBus: 0)
-                
-                // Setup the mixer
-                if audioEngine.attachedNodes.contains(audioMixer) {
-                    audioEngine.disconnectNodeInput(audioMixer)
-                    audioEngine.disconnectNodeOutput(audioMixer)
-                    audioEngine.detach(audioMixer)
-                }
-                
-                audioEngine.attach(audioMixer)
-                audioEngine.connect(audioEngine.inputNode, to: audioMixer, format: format)
-                audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: format)
-                audioMixer.outputVolume = 0.0
-                
-                // Setup the microphone input
-                audioEngine.inputNode.installTap(
-                    onBus: 0,
-                    bufferSize: 1024,
-                    format: format
-                ) { [weak self] (buffer, when) in
-                    guard let self = self else { return }
-                    recognitionRequest?.append(buffer)
-                    calcMicLevel(from: buffer)
-                }
-                
-                // Start audio engine
-                audioEngine.prepare()
-                
-                do {
-                    try audioEngine.start()
-                    DispatchQueue.main.async {
-                        self.isRecording = true
-                        // Start speech recognition
-                        self.startRecognize()
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        self.stopRecording()
-                    }
-                    showErrorMessage("Audio engine couldn't start: \(error.localizedDescription)")
-                    return
-                }
+                isRecording = true
+                startRecognize()
+            } catch {
+                stopRecording()
+                showErrorMessage("Failed to start recording: \(error.localizedDescription)")
             }
         }
     }
     
     func stopRecording() {
         stopRecognize()
+        stopAudioEngine()
+        deactivateAudioSession()
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            
-            audioEngine.stop()
-            audioEngine.inputNode.removeTap(onBus: 0)
-            
-            if isRecording {
-                // Deactivate the audio session
-                do {
-                    try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-                } catch {
-                    print("Failed to deactivate audio session: \(error)")
-                }
-            }
-            
-            DispatchQueue.main.async {
-                self.isRecording = false
-                self.micLevel = 0.0
-            }
+        if isRecording {
+            isRecording = false
+            micLevel = 0.0
         }
     }
     
     // MARK: - Speech Recognition Controls
     
     func stopRecognize() {
-        guard isRecognizing else { return }
-        
         stopSilenceTimer()
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            
-            if let recognitionRequest = recognitionRequest {
-                recognitionRequest.endAudio()
-                self.recognitionRequest = nil
-            }
-            
-            if let recognitionTask = recognitionTask {
-                recognitionTask.finish()
-                self.recognitionTask = nil
-            }
-            
-            DispatchQueue.main.async {
-                self.isRecognizing = false
-            }
+        if let request = recognitionRequest {
+            request.endAudio()
+            recognitionRequest = nil
+        }
+        
+        if let task = recognitionTask {
+            task.cancel()
+            recognitionTask = nil
+        }
+        
+        if isRecognizing {
+            isRecognizing = false
         }
     }
     
     func startRecognize() {
         guard isRecording, !isRecognizing else { return }
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            
-            let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-            recognitionRequest.requiresOnDeviceRecognition = true
-            recognitionRequest.shouldReportPartialResults = true
-            self.recognitionRequest = recognitionRequest
-            
-            startRecognitionTask(request: recognitionRequest, inputNode: audioEngine.inputNode)
-            setFirstSilenceTimer() // First wait
-            
-            DispatchQueue.main.async {
-                self.isRecognizing = true
-            }
+        guard let recognizer = speechRecognizer else {
+            handleRecognitionError("Failed to prepare speech recognition.")
+            return
         }
+        
+        guard recognizer.isAvailable else {
+            handleRecognitionError("Speech recognition is currently unavailable on this device.")
+            return
+        }
+        
+        let request = SFSpeechAudioBufferRecognitionRequest()
+        request.requiresOnDeviceRecognition = true
+        request.shouldReportPartialResults = true
+        recognitionRequest = request
+        
+        startRecognitionTask(request: request, recognizer: recognizer)
+        setFirstSilenceTimer()
+        isRecognizing = true
     }
     
     private func startRecognitionTask(
         request recognitionRequest: SFSpeechAudioBufferRecognitionRequest,
-        inputNode: AVAudioInputNode
+        recognizer: SFSpeechRecognizer
     ) {
-        DispatchQueue.main.async {
-            // Erase previous text
-            self.recognizedText = ""
-        }
+        // Erase previous text
+        recognizedText = ""
         
-        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
+        recognitionTask = recognizer.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self = self else { return }
             
             // Handle speech result
             if let result = result {
                 let newText = result.bestTranscription.formattedString
-                DispatchQueue.main.async {
-                    if self.isRecording && self.isRecognizing && !newText.isEmpty {
-                        self.recognizedText = newText
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    if isRecording && isRecognizing && !newText.isEmpty {
+                        recognizedText = newText
                         // Wait after speech
-                        if !self.manuallyConfirmSpeech {
-                            self.startSilenceTimer(timeout: 1.0)
+                        if !manuallyConfirmSpeech {
+                            startSilenceTimer(timeout: 1.0)
                         }
                     }
                 }
+            }
+            
+            if let error = error {
+                guard isRecognizing else { return }
+                handleRecognitionError("Speech recognition stopped: \(error.localizedDescription)")
             }
         }
     }
@@ -273,7 +235,7 @@ class SpeechRecognizer: ObservableObject {
     // MARK: - Availability Checks
     
     @MainActor
-    func checkAvailability() async -> Bool {
+    private func checkAvailability() async -> Bool {
         // 1. Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
@@ -302,7 +264,6 @@ class SpeechRecognizer: ObservableObject {
             return false
         }
         
-        
         // 2. Check Speech Recognition Availability
         
         // Check supported locales
@@ -325,20 +286,19 @@ class SpeechRecognizer: ObservableObject {
         return true
     }
     
-    func isMicrophoneAvailable() -> Bool {
-        return audioSession.isInputAvailable && audioEngine.inputNode.numberOfInputs > 0
+    private func isMicrophoneAvailable() -> Bool {
+        audioSession.isInputAvailable
+        && audioEngine.inputNode.numberOfInputs > 0
+        && audioEngine.inputNode.inputFormat(forBus: 0).channelCount > 0
     }
-        
     
     // MARK: - Silence Detection Timer
     
     private func startSilenceTimer(timeout: Double) {
         stopSilenceTimer()
         
-        DispatchQueue.main.async {
-            self.silenceTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { [weak self] _ in
-                self?.silenceTimerFired()
-            }
+        silenceTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { [weak self] _ in
+            self?.silenceTimerFired()
         }
     }
     
@@ -359,7 +319,6 @@ class SpeechRecognizer: ObservableObject {
     
     // MARK: - Handlers
     
-    // Handle Audio Session Interruptions
     @objc private func handleInterruption(_ notification: Notification) {
         guard isRecording,
               let userInfo = notification.userInfo,
@@ -372,17 +331,46 @@ class SpeechRecognizer: ObservableObject {
         }
     }
     
-    // Handle Available Inputs Change
-    @objc private func handleAvailableInputsChange() {
-        guard isRecording else { return }
-        if !isMicrophoneAvailable() || !audioEngine.isRunning {
-            stopRecording()
-        }
+    @objc private func handleMediaServicesReset() {
+        stopRecording()
     }
     
-    // Handle App State Changes
     @objc private func handleAppStateChange() {
         isInBackground = UIApplication.shared.applicationState == .background
+        validateMicState()
+    }
+    
+    private func handleRecognitionError(_ message: LocalizedStringResource) {
+        // If record is already stopped, show error only
+        
+        guard isRecording else {
+            showErrorMessage(message)
+            return
+        }
+        
+        // If should & can keep recording for background standby, only stop recognition
+        
+        let shouldKeepRecording = (
+            userSettings.continueInBackground
+            && userSettings.standbyInBackground
+            && isInBackground
+        )
+        
+        let canKeepRecording = (
+            audioEngine.isRunning
+            && isMicrophoneAvailable()
+        )
+        
+        if shouldKeepRecording && canKeepRecording {
+            stopRecognize()
+            showErrorMessage(message)
+            return
+        }
+        
+        // Otherwise, stop recording
+        
+        stopRecording()
+        showErrorMessage(message)
     }
     
     // MARK: - Helpers
@@ -391,6 +379,14 @@ class SpeechRecognizer: ObservableObject {
         DispatchQueue.main.async {
             self.errorMessage = message
             self.showError = true
+        }
+    }
+    
+    @objc private func validateMicState(_ notification: Notification? = nil) {
+        guard isRecording else { return }
+        
+        if !isMicrophoneAvailable() || !audioEngine.isRunning {
+            stopRecording()
         }
     }
     
@@ -408,5 +404,71 @@ class SpeechRecognizer: ObservableObject {
         DispatchQueue.main.async {
             self.micLevel = normalizedPower
         }
+    }
+    
+    private func configureAudioSession() throws {
+        try audioSession.setCategory(
+            .playAndRecord,
+            mode: .default,
+            options: [.mixWithOthers, .allowBluetoothA2DP]
+        )
+        try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        isAudioSessionActive = true
+    }
+    
+    private func configureAudioEngine() throws {
+        guard isMicrophoneAvailable() else {
+            throw RecognizerError.microphoneUnavailable
+        }
+        
+        audioEngine.stop()
+        audioEngine.reset()
+        
+        if isInputTapInstalled {
+            audioEngine.inputNode.removeTap(onBus: 0)
+            isInputTapInstalled = false
+        }
+        
+        let inputNode = audioEngine.inputNode
+        let format = inputNode.inputFormat(forBus: 0)
+        guard format.channelCount > 0 else {
+            throw RecognizerError.microphoneUnavailable
+        }
+        
+        inputNode.installTap(
+            onBus: 0,
+            bufferSize: 1024,
+            format: format
+        ) { [weak self] buffer, _ in
+            guard let self = self else { return }
+            recognitionRequest?.append(buffer)
+            calcMicLevel(from: buffer)
+        }
+        
+        isInputTapInstalled = true
+        audioEngine.prepare()
+    }
+    
+    private func stopAudioEngine() {
+        audioEngine.stop()
+        audioEngine.reset()
+        
+        if isInputTapInstalled {
+            audioEngine.inputNode.removeTap(onBus: 0)
+            isInputTapInstalled = false
+        }
+    }
+    
+    private func deactivateAudioSession() {
+        guard isAudioSessionActive else { return }
+        
+        do {
+            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("Failed to deactivate audio session: \(error)")
+        }
+        
+        isAudioSessionActive = false
     }
 }

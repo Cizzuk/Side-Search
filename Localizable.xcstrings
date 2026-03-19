@@ -129,26 +129,6 @@
         }
       }
     },
-    "Audio engine couldn't start: %@" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "オーディオエンジンを開始できませんでした: %@"
-          }
-        }
-      }
-    },
-    "Audio session setup failed: %@" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "オーディオセッションのセットアップに失敗しました: %@"
-          }
-        }
-      }
-    },
     "Background Settings" : {
       "localizations" : {
         "ja" : {
@@ -527,6 +507,26 @@
         }
       }
     },
+    "Failed to prepare speech recognition." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識の準備に失敗しました。"
+          }
+        }
+      }
+    },
+    "Failed to start recording: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "録音開始に失敗しました: %@"
+          }
+        }
+      }
+    },
     "Full Screen" : {
       "localizations" : {
         "ja" : {
@@ -770,16 +770,6 @@
         }
       }
     },
-    "No microphone input available." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "マイク入力が利用できません。"
-          }
-        }
-      }
-    },
     "Notifications allowed." : {
       "localizations" : {
         "ja" : {
@@ -999,6 +989,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "音声認識は現在、このデバイスでは利用できません。"
+          }
+        }
+      }
+    },
+    "Speech recognition stopped: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識が停止しました: %@"
           }
         }
       }
