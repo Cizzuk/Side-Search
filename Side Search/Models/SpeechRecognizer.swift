@@ -126,9 +126,10 @@ class SpeechRecognizer: ObservableObject {
                     onBus: 0,
                     bufferSize: 1024,
                     format: format
-                ) { (buffer, when) in
-                    self.recognitionRequest?.append(buffer)
-                    self.calcMicLevel(from: buffer)
+                ) { [weak self] (buffer, when) in
+                    guard let self = self else { return }
+                    recognitionRequest?.append(buffer)
+                    calcMicLevel(from: buffer)
                 }
                 
                 // Start audio engine
