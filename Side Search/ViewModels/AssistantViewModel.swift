@@ -227,7 +227,7 @@ class AssistantViewModel: ObservableObject {
         currentScenePhase = scenePhase
         switch scenePhase {
         case .active:
-            if !responseIsPreparing && !isRecognizing {
+            if !responseIsPreparing && !isRecognizing && isRecording {
                 stopRecording()
             }
         case .inactive:
