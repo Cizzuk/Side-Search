@@ -137,6 +137,7 @@ struct AssistantActivityWidget: Widget {
                     .accessibilityHidden(true)
             } minimal: {
                 StateImage(systemName: context.state.state.systemImage)
+                    .padding(.horizontal, context.state.state.imageHPadding)
                     .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             }
