@@ -146,19 +146,6 @@ class AssistantViewModel: ObservableObject {
             .deliverImmediately
         )
         
-        // Observe AVAudioSession Interruptions
-        NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)
-            .sink { [weak self] notification in
-                guard let userInfo = notification.userInfo,
-                      let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
-                      let type = AVAudioSession.InterruptionType(rawValue: typeValue),
-                      type == .began
-                else { return }
-                
-                self?.dismissAssistant()
-            }
-            .store(in: &cancellables)
-        
         // Observe App Termination
         NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)
             .sink { [weak self] _ in
