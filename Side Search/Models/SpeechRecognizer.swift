@@ -111,12 +111,13 @@ class SpeechRecognizer: ObservableObject {
                 
                 let format = audioEngine.inputNode.inputFormat(forBus: 0)
                 
+                // Setup the mixer
                 audioEngine.attach(audioMixer)
                 audioEngine.connect(audioEngine.inputNode, to: audioMixer, format: format)
                 audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: format)
                 audioMixer.outputVolume = 0.0
                 
-                // Configure the microphone input
+                // Setup the microphone input
                 audioEngine.inputNode.reset()
                 audioEngine.inputNode.removeTap(onBus: 0)
                 audioEngine.inputNode.installTap(
