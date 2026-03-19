@@ -163,20 +163,24 @@ class SpeechRecognizer: ObservableObject {
     func stopRecording() {
         stopRecognize()
         
-        isRecording = false
-        micLevel = 0.0
-        
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             
             audioEngine.stop()
             audioEngine.inputNode.removeTap(onBus: 0)
             
-            // Deactivate the audio session
-            do {
-                try AVAudioSession.sharedInstance().setActive(false)
-            } catch {
-                print("Failed to deactivate audio session: \(error)")
+            if isRecording {
+                // Deactivate the audio session
+                do {
+                    try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+                } catch {
+                    print("Failed to deactivate audio session: \(error)")
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.isRecording = false
+                self.micLevel = 0.0
             }
         }
     }
