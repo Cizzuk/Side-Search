@@ -83,7 +83,6 @@ class SpeechRecognizer: ObservableObject {
     
     // MARK: - Recording Controls
     
-    @MainActor
     func startRecording() {
         Task {
             // Cancel any existing recognition task
