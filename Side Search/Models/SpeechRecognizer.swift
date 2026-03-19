@@ -90,9 +90,6 @@ class SpeechRecognizer: ObservableObject {
             // Check Availability
             guard await checkAvailability() else { return }
             
-            // Erase previous text
-            recognizedText = ""
-            
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 guard let self = self else { return }
                 
@@ -198,9 +195,8 @@ class SpeechRecognizer: ObservableObject {
         recognitionRequest.shouldReportPartialResults = true
         self.recognitionRequest = recognitionRequest
         
-        let inputNode = audioEngine.inputNode
         isRecognizing = true
-        startRecognitionTask(request: recognitionRequest, inputNode: inputNode)
+        startRecognitionTask(request: recognitionRequest, inputNode: audioEngine.inputNode)
         setFirstSilenceTimer() // First wait
     }
     
