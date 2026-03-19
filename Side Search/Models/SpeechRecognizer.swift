@@ -274,6 +274,11 @@ class SpeechRecognizer: ObservableObject {
             // Wait for user authorization
             let granted = await withCheckedContinuation { continuation in
                 AVAudioApplication.requestRecordPermission { granted in
+                    DispatchQueue.main.async {
+                        if !granted {
+                            UserSettings.shared.startWithMicMuted = true
+                        }
+                    }
                     continuation.resume(returning: granted)
                 }
             }
