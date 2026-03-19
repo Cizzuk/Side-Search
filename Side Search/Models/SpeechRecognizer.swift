@@ -64,6 +64,13 @@ class SpeechRecognizer: ObservableObject {
         
         NotificationCenter.default.addObserver(
             self,
+            selector: #selector(handleAvailableInputsChange),
+            name: AVAudioSession.availableInputsChangeNotification,
+            object: audioSession
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
             selector: #selector(handleAppStateChange),
             name: UIApplication.didBecomeActiveNotification,
             object: nil
@@ -94,9 +101,12 @@ class SpeechRecognizer: ObservableObject {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 guard let self = self else { return }
                 
-                guard audioSession.isInputAvailable,
-                      audioEngine.inputNode.numberOfInputs > 0,
-                      audioEngine.inputNode.inputFormat(forBus: 0).channelCount > 0 else {
+                // Reset audio engine and mixer
+                audioEngine.reset()
+                audioMixer.reset()
+                
+                // Check microphone availability
+                guard isMicrophoneAvailable() else {
                     showErrorMessage("No microphone input available.")
                     return
                 }
@@ -115,17 +125,18 @@ class SpeechRecognizer: ObservableObject {
                     return
                 }
                 
-                audioEngine.inputNode.reset()
-                audioEngine.inputNode.removeTap(onBus: 0)
                 let format = audioEngine.inputNode.inputFormat(forBus: 0)
                 
                 // Setup the mixer
-                if !audioEngine.attachedNodes.contains(audioMixer) {
-                    audioEngine.attach(audioMixer)
-                    audioEngine.connect(audioEngine.inputNode, to: audioMixer, format: format)
-                    audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: format)
+                if audioEngine.attachedNodes.contains(audioMixer) {
+                    audioEngine.disconnectNodeInput(audioMixer)
+                    audioEngine.disconnectNodeOutput(audioMixer)
+                    audioEngine.detach(audioMixer)
                 }
                 
+                audioEngine.attach(audioMixer)
+                audioEngine.connect(audioEngine.inputNode, to: audioMixer, format: format)
+                audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: format)
                 audioMixer.outputVolume = 0.0
                 
                 // Setup the microphone input
@@ -314,6 +325,11 @@ class SpeechRecognizer: ObservableObject {
         return true
     }
     
+    func isMicrophoneAvailable() -> Bool {
+        return audioSession.isInputAvailable && audioEngine.inputNode.numberOfInputs > 0
+    }
+        
+    
     // MARK: - Silence Detection Timer
     
     private func startSilenceTimer(timeout: Double) {
@@ -352,6 +368,14 @@ class SpeechRecognizer: ObservableObject {
         else { return }
         
         if type == .began {
+            stopRecording()
+        }
+    }
+    
+    // Handle Available Inputs Change
+    @objc private func handleAvailableInputsChange() {
+        guard isRecording else { return }
+        if !isMicrophoneAvailable() || !audioEngine.isRunning {
             stopRecording()
         }
     }
