@@ -29,8 +29,9 @@ class SpeechRecognizer: ObservableObject {
     
     private var isInBackground = false
     
-    private let audioSession = AVAudioSession()
+    private let audioSession = AVAudioSession.sharedInstance()
     private let audioEngine = AVAudioEngine()
+    private let audioMixer = AVAudioMixerNode()
     
     private var speechRecognizer: SFSpeechRecognizer? {
         // Get a Locale Setting
@@ -108,13 +109,20 @@ class SpeechRecognizer: ObservableObject {
                     return
                 }
                 
+                let format = audioEngine.inputNode.inputFormat(forBus: 0)
+                
+                audioEngine.attach(audioMixer)
+                audioEngine.connect(audioEngine.inputNode, to: audioMixer, format: format)
+                audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: format)
+                audioMixer.outputVolume = 0.0
+                
                 // Configure the microphone input
                 audioEngine.inputNode.reset()
                 audioEngine.inputNode.removeTap(onBus: 0)
                 audioEngine.inputNode.installTap(
                     onBus: 0,
                     bufferSize: 1024,
-                    format: audioEngine.mainMixerNode.outputFormat(forBus: 0)
+                    format: format
                 ) { (buffer, when) in
                     self.recognitionRequest?.append(buffer)
                     self.calcMicLevel(from: buffer)
