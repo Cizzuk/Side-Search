@@ -18,7 +18,7 @@
 		BE810EE12F388F4300B0B211 /* TemporaryScreenCurtain in Frameworks */ = {isa = PBXBuildFile; productRef = BE810EE02F388F4300B0B211 /* TemporaryScreenCurtain */; };
 		BE811A382F340E2D00894EA5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE811A372F340E2C00894EA5 /* WidgetKit.framework */; };
 		BE811A3A2F340E2D00894EA5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE811A392F340E2D00894EA5 /* SwiftUI.framework */; };
-		BE811A452F340E2D00894EA5 /* WidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BE811A352F340E2C00894EA5 /* WidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BE811A452F340E2D00894EA5 /* WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BE811A352F340E2C00894EA5 /* WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BE811A4D2F340EBE00894EA5 /* ActivateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1377E52EFBAAE20060D7E0 /* ActivateIntent.swift */; };
 		BE8AA7612EFC2EB100C02260 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
@@ -40,7 +40,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				BE811A452F340E2D00894EA5 /* WidgetExtensionExtension.appex in Embed Foundation Extensions */,
+				BE811A452F340E2D00894EA5 /* WidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -52,7 +52,7 @@
 		BE5046D92F5D8915002CDDB9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BE5046DC2F5D896A002CDDB9 /* WidgetExtensionExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetExtensionExtension.entitlements; sourceTree = "<group>"; };
 		BE79058E2F6A49DF000A6CB6 /* EndAssistantIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndAssistantIntent.swift; sourceTree = "<group>"; };
-		BE811A352F340E2C00894EA5 /* WidgetExtensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WidgetExtensionExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE811A352F340E2C00894EA5 /* WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE811A372F340E2C00894EA5 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		BE811A392F340E2D00894EA5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -60,19 +60,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		BE26D6B92F57D08100E28B78 /* Exceptions for "Side Search" folder in "WidgetExtensionExtension" target */ = {
+		BE26D6B92F57D08100E28B78 /* Exceptions for "Side Search" folder in "WidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Models/AssistantActivity.swift,
 			);
-			target = BE811A342F340E2C00894EA5 /* WidgetExtensionExtension */;
+			target = BE811A342F340E2C00894EA5 /* WidgetExtension */;
 		};
-		BE811A492F340E2D00894EA5 /* Exceptions for "WidgetExtension" folder in "WidgetExtensionExtension" target */ = {
+		BE811A492F340E2D00894EA5 /* Exceptions for "WidgetExtension" folder in "WidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = BE811A342F340E2C00894EA5 /* WidgetExtensionExtension */;
+			target = BE811A342F340E2C00894EA5 /* WidgetExtension */;
 		};
 		BE811A4F2F340F7100894EA5 /* Exceptions for "WidgetExtension" folder in "Side Search" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -88,7 +88,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				BE811A4F2F340F7100894EA5 /* Exceptions for "WidgetExtension" folder in "Side Search" target */,
-				BE811A492F340E2D00894EA5 /* Exceptions for "WidgetExtension" folder in "WidgetExtensionExtension" target */,
+				BE811A492F340E2D00894EA5 /* Exceptions for "WidgetExtension" folder in "WidgetExtension" target */,
 			);
 			path = WidgetExtension;
 			sourceTree = "<group>";
@@ -96,7 +96,7 @@
 		BEB06C4C2EFBA9AE0026CC6E /* Side Search */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				BE26D6B92F57D08100E28B78 /* Exceptions for "Side Search" folder in "WidgetExtensionExtension" target */,
+				BE26D6B92F57D08100E28B78 /* Exceptions for "Side Search" folder in "WidgetExtension" target */,
 			);
 			path = "Side Search";
 			sourceTree = "<group>";
@@ -154,7 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				BEB06C4A2EFBA9AE0026CC6E /* Side Search.app */,
-				BE811A352F340E2C00894EA5 /* WidgetExtensionExtension.appex */,
+				BE811A352F340E2C00894EA5 /* WidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -162,9 +162,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BE811A342F340E2C00894EA5 /* WidgetExtensionExtension */ = {
+		BE811A342F340E2C00894EA5 /* WidgetExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BE811A4A2F340E2D00894EA5 /* Build configuration list for PBXNativeTarget "WidgetExtensionExtension" */;
+			buildConfigurationList = BE811A4A2F340E2D00894EA5 /* Build configuration list for PBXNativeTarget "WidgetExtension" */;
 			buildPhases = (
 				BE811A312F340E2C00894EA5 /* Sources */,
 				BE811A322F340E2C00894EA5 /* Frameworks */,
@@ -177,11 +177,11 @@
 			fileSystemSynchronizedGroups = (
 				BE811A3B2F340E2D00894EA5 /* WidgetExtension */,
 			);
-			name = WidgetExtensionExtension;
+			name = WidgetExtension;
 			packageProductDependencies = (
 			);
 			productName = WidgetExtensionExtension;
-			productReference = BE811A352F340E2C00894EA5 /* WidgetExtensionExtension.appex */;
+			productReference = BE811A352F340E2C00894EA5 /* WidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		BEB06C492EFBA9AE0026CC6E /* Side Search */ = {
@@ -250,7 +250,7 @@
 			projectRoot = "";
 			targets = (
 				BEB06C492EFBA9AE0026CC6E /* Side Search */,
-				BE811A342F340E2C00894EA5 /* WidgetExtensionExtension */,
+				BE811A342F340E2C00894EA5 /* WidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -300,7 +300,7 @@
 /* Begin PBXTargetDependency section */
 		BE811A442F340E2D00894EA5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BE811A342F340E2C00894EA5 /* WidgetExtensionExtension */;
+			target = BE811A342F340E2C00894EA5 /* WidgetExtension */;
 			targetProxy = BE811A432F340E2D00894EA5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -582,7 +582,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BE811A4A2F340E2D00894EA5 /* Build configuration list for PBXNativeTarget "WidgetExtensionExtension" */ = {
+		BE811A4A2F340E2D00894EA5 /* Build configuration list for PBXNativeTarget "WidgetExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BE811A472F340E2D00894EA5 /* Debug */,
