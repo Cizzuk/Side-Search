@@ -298,6 +298,24 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Message History Management
     
+    func addMessage(_ message: AssistantMessage) {
+        messageHistory.append(message)
+        
+        // Set last message date as chat date
+        chatDate = Date()
+        
+        saveChatHistory()
+        
+        // Send user notification
+        if message.from != .user && currentScenePhase != .active {
+            Task {
+                if await UserNotificationSupport.requestAuthorization() {
+                    await UserNotificationSupport.sendAssistantMessage(message: message)
+                }
+            }
+        }
+    }
+    
     func saveChatHistory() {
         guard userSettings.chatHistoryEnabled,
               !messageHistory.isEmpty
@@ -310,23 +328,7 @@ class AssistantViewModel: ObservableObject {
             messages: messageHistory
         )
         
-        ChatHistory.add(chat)
-    }
-    
-    func addMessage(_ message: AssistantMessage) {
-        messageHistory.append(message)
-        
-        // Set last message date as chat date
-        chatDate = Date()
-        
-        // Send user notification
-        if message.from != .user && currentScenePhase != .active {
-            Task {
-                if await UserNotificationSupport.requestAuthorization() {
-                    await UserNotificationSupport.sendAssistantMessage(message: message)
-                }
-            }
-        }
+        ChatHistory.save(chat)
     }
     
     // MARK: - Speech Recognizer Actions

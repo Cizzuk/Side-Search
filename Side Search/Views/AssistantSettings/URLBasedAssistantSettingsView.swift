@@ -29,7 +29,7 @@ struct URLBasedAssistantSettingsView: View {
                 Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
             }
             .sheet(isPresented: $showPresets) {
-                SearchEnginePresetsView(SearchEngine: $assistantModel)
+                SearchEnginePresetsView(searchEngine: $assistantModel)
             }
             
             // Open In Section

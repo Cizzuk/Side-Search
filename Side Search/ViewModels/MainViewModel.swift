@@ -116,22 +116,22 @@ class MainViewModel: ObservableObject {
                 return
             }
             
-            let SearchEngine = URLBasedAssistantModel.load()
+            let searchEngine = URLBasedAssistantModel.load()
             
             // Check if query input is needed
-            if SearchEngine.needQueryInput() {
+            if searchEngine.needQueryInput() {
                 showModal(.assistant)
                 return
             }
             
             // Check if SafariView is available
-            if SearchEngine.openIn == .inAppBrowser && SearchEngine.checkSafariViewAvailability() {
-                safariViewURL = URL(string: SearchEngine.url)
+            if searchEngine.openIn == .inAppBrowser && searchEngine.checkSafariViewAvailability() {
+                safariViewURL = URL(string: searchEngine.url)
                 showModal(.safari)
                 return
             }
             
-            if let url = URL(string: SearchEngine.url) {
+            if let url = URL(string: searchEngine.url) {
                 showModal(.tmpCurtain)
                 UIApplication.shared.open(url)
             }
