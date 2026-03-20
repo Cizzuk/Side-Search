@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SearchEnginePresetsView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var SearchEngine: URLBasedAssistantModel
+    @Binding var searchEngine: URLBasedAssistantModel
     
     private let aiCSEList = SearchEnginePresets.aiAssistants
     private let normalCSEList = SearchEnginePresets.normalSearchEngines
@@ -23,7 +23,7 @@ struct SearchEnginePresetsView: View {
                         ForEach(aiCSEList.indices, id: \.self, content: { index in
                             let cse = aiCSEList[index]
                             PresetSEButton(action: {
-                                SearchEngine.url = cse.url
+                                searchEngine.url = cse.url
                                 dismiss()
                             }, cse: cse)
                         })
@@ -35,7 +35,7 @@ struct SearchEnginePresetsView: View {
                     ForEach(normalCSEList.indices, id: \.self, content: { index in
                         let cse = normalCSEList[index]
                         PresetSEButton(action: {
-                            SearchEngine.url = cse.url
+                            searchEngine.url = cse.url
                             dismiss()
                         }, cse: cse)
                     })
