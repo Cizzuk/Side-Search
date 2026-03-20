@@ -152,14 +152,18 @@ class SpeechRecognizer: ObservableObject {
     }
     
     func stopRecording() {
-        stopRecognize()
-        stopAudioEngine()
-        deactivateAudioSession()
-        
-        if isRecording {
-            DispatchQueue.main.async {
-                self.isRecording = false
-                self.micLevel = 0.0
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            stopRecognize()
+            stopAudioEngine()
+            deactivateAudioSession()
+            
+            if isRecording {
+                DispatchQueue.main.async {
+                    self.isRecording = false
+                    self.micLevel = 0.0
+                }
             }
         }
     }
