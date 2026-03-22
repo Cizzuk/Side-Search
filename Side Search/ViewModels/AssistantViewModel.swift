@@ -72,6 +72,7 @@ class AssistantViewModel: ObservableObject {
             updateIdleTimerDisabled()
             updateActivateIntent()
             updateLiveActivityStatus()
+            if isRecording { shouldUnfocusInput = true }
         }
     }
     @Published var isRecognizing = false {
@@ -83,6 +84,8 @@ class AssistantViewModel: ObservableObject {
     
     // Input Field
     @Published var inputText = ""
+    @Published var shouldFocusInput = false
+    @Published var shouldUnfocusInput = false
     
     @Published var messageHistory: [AssistantMessage] = []
     
@@ -247,13 +250,6 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Override Methods
     
-    func startAssistant() {
-        // MARK: Override in subclass if needed
-        if !startWithMicMuted {
-            startRecording()
-        }
-    }
-    
     func confirmInput() {
         // MARK: Override in subclass
         guard !responseIsPreparing else { return }
@@ -271,6 +267,26 @@ class AssistantViewModel: ObservableObject {
     }
     
     // MARK: - View Actions
+    
+    func activateAssistant() {
+        if isRecording {
+            if isRecognizing {
+                // Reset silence timer
+                speechRecognizer.setFirstSilenceTimer()
+            } else {
+                // Resume recognition
+                resumeRecognize()
+            }
+        } else {
+            if startWithMicMuted {
+                // Show keyboard
+                shouldFocusInput = true
+            } else {
+                // Start recording
+                startRecording()
+            }
+        }
+    }
     
     func dismissAssistant(fromView: Bool = false) {
         guard !isDismissed else { return }
@@ -361,21 +377,8 @@ class AssistantViewModel: ObservableObject {
     
     // Handle repressing the Side Button
     func handleActivateIntent() {
+        activateAssistant()
         updateActivateIntent()
-        
-        if !isRecording && !startWithMicMuted {
-            startRecording()
-            return
-        }
-        
-        if isRecording {
-            if isRecognizing {
-                speechRecognizer.setFirstSilenceTimer()
-            } else {
-                resumeRecognize()
-            }
-            return
-        }
     }
     
     // Handle Speech Recognizer Silence Timeout

@@ -67,6 +67,22 @@ struct AssistantView: View {
                                     viewModel.detent = .large
                                 }
                             }
+                            .onChange(of: viewModel.shouldFocusInput) {
+                                Task {
+                                    if viewModel.shouldFocusInput {
+                                        isInputFocused = true
+                                        viewModel.shouldFocusInput = false
+                                    }
+                                }
+                            }
+                            .onChange(of: viewModel.shouldUnfocusInput) {
+                                Task {
+                                    if viewModel.shouldUnfocusInput {
+                                        isInputFocused = false
+                                        viewModel.shouldUnfocusInput = false
+                                    }
+                                }
+                            }
                             
                             // Assistive Access Controls
                             if isAssistiveAccessEnabled {
@@ -167,7 +183,7 @@ struct AssistantView: View {
             // MARK: - Events
             .onAppear {
                 viewModel.currentScenePhase = scenePhase
-                viewModel.startAssistant()
+                viewModel.activateAssistant()
             }
             .onDisappear() {
                 viewModel.dismissAssistant(fromView: true)
