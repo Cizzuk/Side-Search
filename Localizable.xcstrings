@@ -447,12 +447,12 @@
         }
       }
     },
-    "Done" : {
+    "Dismiss Keyboard" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "完了"
+            "value" : "キーボードを閉じる"
           }
         }
       }
@@ -1119,6 +1119,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "音声認識を停止"
+          }
+        }
+      }
+    },
+    "Submit" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "送信"
           }
         }
       }
