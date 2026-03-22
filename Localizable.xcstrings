@@ -527,6 +527,16 @@
         }
       }
     },
+    "for \"%@\"." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "対象: \"%@\""
+          }
+        }
+      }
+    },
     "Full Screen" : {
       "localizations" : {
         "ja" : {
@@ -766,6 +776,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "モデル"
+          }
+        }
+      }
+    },
+    "No Results" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結果なし"
           }
         }
       }

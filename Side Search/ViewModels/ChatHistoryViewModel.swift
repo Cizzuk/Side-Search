@@ -12,6 +12,18 @@ import SwiftUI
 class ChatHistoryViewModel: ObservableObject {
     @Published var chats: [ChatHistory.Chat] = []
     
+    // Search Chat History
+    @Published var searchResults: [ChatHistory.Chat] = []
+    @Published var searchQuery = "" {
+        didSet {
+            if searchQuery.isEmpty {
+                searchResults = []
+            } else {
+                searchResults = ChatHistory.search(searchQuery)
+            }
+        }
+    }
+    
     // Web View
     @Published var searchURL: URL?
     @Published var showSafariView = false
