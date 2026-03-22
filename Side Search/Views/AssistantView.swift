@@ -67,11 +67,6 @@ struct AssistantView: View {
                                     viewModel.detent = .large
                                 }
                             }
-                            .onChange(of: viewModel.shouldInputFocused) {
-                                if viewModel.shouldInputFocused {
-                                    isInputFocused = true
-                                }
-                            }
                             
                             // Assistive Access Controls
                             if isAssistiveAccessEnabled {
