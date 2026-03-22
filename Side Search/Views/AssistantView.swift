@@ -219,7 +219,7 @@ struct AssistantView: View {
                 if shouldDismiss { dismiss() }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-                isKeyboardVisible = true
+                withAnimation { isKeyboardVisible = true }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
                 isKeyboardVisible = false
