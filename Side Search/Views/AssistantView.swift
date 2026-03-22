@@ -164,6 +164,23 @@ struct AssistantView: View {
                     .buttonStyle(.glassProminent)
                     .disabled(viewModel.responseIsPreparing)
                 }
+                
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button {
+                        if viewModel.inputText.isEmpty {
+                            isInputFocused = false
+                        } else {
+                            viewModel.confirmInput()
+                        }
+                    } label: {
+                        Label("Done", systemImage: "checkmark")
+                            .foregroundStyle(.white)
+                    }
+                    .tint(.dropblue)
+                    .buttonStyle(.glassProminent)
+                    .disabled(viewModel.responseIsPreparing)
+                }
             }
             .fullScreenCover(isPresented: $viewModel.showSafariView) {
                 if let url = viewModel.searchURL {
