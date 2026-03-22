@@ -83,7 +83,6 @@ class AssistantViewModel: ObservableObject {
     
     // Input Field
     @Published var inputText = ""
-    @Published var shouldInputFocused = false
     
     @Published var messageHistory: [AssistantMessage] = []
     
