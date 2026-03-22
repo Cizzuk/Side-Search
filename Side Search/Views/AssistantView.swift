@@ -15,6 +15,7 @@ struct AssistantView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
+    @State private var isKeyboardVisible = false
     
     @StateObject private var viewModel = UserSettings.shared.currentAssistant.makeAssistantViewModel()
     
@@ -165,22 +166,27 @@ struct AssistantView: View {
                     .buttonStyle(.glassProminent)
                     .disabled(viewModel.responseIsPreparing)
                 }
-                
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button {
-                        if viewModel.inputText.isEmpty {
-                            isInputFocused = false
-                        } else {
-                            viewModel.confirmInput()
+            }
+            .safeAreaInset(edge: .bottom) {
+                if isKeyboardVisible {
+                    HStack {
+                        Button(action: { isInputFocused = false }) {
+                            Label("Dismiss Keyboard", systemImage: "keyboard.chevron.compact.down")
+                                .labelStyle(.iconOnly)
                         }
-                    } label: {
-                        Label("Done", systemImage: "checkmark")
-                            .foregroundStyle(.white)
+                        .buttonStyle(.glass)
+                            
+                        Spacer()
+                        Button(action: { viewModel.confirmInput() }) {
+                            Label("Submit", systemImage: "checkmark")
+                                .labelStyle(.iconOnly)
+                        }
+                        .tint(.dropblue)
+                        .buttonStyle(.glassProminent)
+                        .disabled(viewModel.responseIsPreparing)
                     }
-                    .tint(.dropblue)
-                    .buttonStyle(.glassProminent)
-                    .disabled(viewModel.responseIsPreparing)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
                 }
             }
             .fullScreenCover(isPresented: $viewModel.showSafariView) {
@@ -211,6 +217,12 @@ struct AssistantView: View {
             }
             .onReceive(viewModel.$shouldDismiss) { shouldDismiss in
                 if shouldDismiss { dismiss() }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+                isKeyboardVisible = true
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                isKeyboardVisible = false
             }
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .background(
