@@ -18,7 +18,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     
     // MARK: - Initialization
     
-    required init(assistantType: AssistantType = .appleFoundation) {
+    required init(assistantType: AssistantType?) {
         // Initialize Language Model Session with custom instructions if provided
         if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             self.session = LanguageModelSession()
@@ -26,7 +26,7 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
             self.session = LanguageModelSession(instructions: assistantModel.customInstructions)
         }
         
-        super.init(assistantType: assistantType)
+        super.init(assistantType: .appleFoundation)
     }
     
     // MARK: - Helper Methods

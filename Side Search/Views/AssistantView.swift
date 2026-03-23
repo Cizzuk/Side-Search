@@ -24,7 +24,7 @@ struct AssistantView: View {
             _viewModel = StateObject(wrappedValue: vm)
         } else {
             let type = UserSettings.shared.currentAssistant
-            _viewModel = StateObject(wrappedValue: type.AssistantViewModelType.init(assistantType: type))
+            _viewModel = StateObject(wrappedValue: type.AssistantViewModelType.init())
         }
     }
     
