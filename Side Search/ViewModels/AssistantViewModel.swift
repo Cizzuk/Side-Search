@@ -81,7 +81,7 @@ class AssistantViewModel: ObservableObject {
             updateIdleTimerDisabled()
             updateActivateIntent()
             updateLiveActivityStatus()
-            if isRecording { shouldUnfocusInput = true }
+            if isRecording { shouldUnfocusInput.toggle() }
         }
     }
     @Published var isRecognizing = false {
@@ -93,8 +93,8 @@ class AssistantViewModel: ObservableObject {
     
     // Input Field
     @Published var inputText = ""
-    @Published var shouldFocusInput = false
-    @Published var shouldUnfocusInput = false
+    @Published var shouldFocusInput = false // Toggle to notify
+    @Published var shouldUnfocusInput = false // Toggle to notify
     
     // Web View
     @Published var searchURL: URL?
@@ -309,7 +309,7 @@ class AssistantViewModel: ObservableObject {
         } else {
             if startWithMicMuted {
                 // Show keyboard
-                shouldFocusInput = true
+                shouldFocusInput.toggle()
             } else {
                 // Start recording
                 startRecording()

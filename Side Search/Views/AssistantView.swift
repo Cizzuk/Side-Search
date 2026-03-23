@@ -192,18 +192,12 @@ struct AssistantView: View {
                 }
                 .onChange(of: viewModel.shouldFocusInput) {
                     Task {
-                        if viewModel.shouldFocusInput {
-                            isInputFocused = true
-                            viewModel.shouldFocusInput = false
-                        }
+                        isInputFocused = true
                     }
                 }
                 .onChange(of: viewModel.shouldUnfocusInput) {
                     Task {
-                        if viewModel.shouldUnfocusInput {
-                            isInputFocused = false
-                            viewModel.shouldUnfocusInput = false
-                        }
+                        isInputFocused = false
                     }
                 }
                 
