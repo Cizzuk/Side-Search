@@ -101,7 +101,7 @@ class AssistantViewModel: ObservableObject {
     @Published var micLevel: Float = 0.0
     
     let speechRecognizer = SpeechRecognizer()
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
     
     var startWithMicMuted: Bool {
         if AccessibilitySettings.isAssistiveAccessEnabled {
@@ -136,7 +136,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func setupNotificationObservers() {
+    private final func setupNotificationObservers() {
         // Observe Darwin Notification for ending assistant from Live Activity
         GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
         CFNotificationCenterAddObserver(
@@ -156,7 +156,7 @@ class AssistantViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func removeNotificationObservers() {
+    private final func removeNotificationObservers() {
         // Remove All Darwin Notification Observers
         CFNotificationCenterRemoveObserver(
             CFNotificationCenterGetDarwinNotifyCenter(),
@@ -168,7 +168,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Variable Bindings
     
-    func setupSpeechRecognizerBindings() {
+    private final func setupSpeechRecognizerBindings() {
         speechRecognizer.$recognizedText
             .sink { [weak self] text in
                 self?.inputText = text
@@ -212,7 +212,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Lifecycle
     
-    func onChange(scenePhase: ScenePhase) {
+    final func onChange(scenePhase: ScenePhase) {
         currentScenePhase = scenePhase
         switch scenePhase {
         case .active:
@@ -235,7 +235,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func isBackgroundAvailable() async -> Bool {
+    final func isBackgroundAvailable() async -> Bool {
         if !userSettings.continueInBackground {
             return false
         }
@@ -268,7 +268,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - View Actions
     
-    func activateAssistant() {
+    final func activateAssistant() {
         // Check availability
         guard assistantType.DescriptionProviderType.isAvailable(),
               !assistantType.DescriptionProviderType.isBlocked()
@@ -298,7 +298,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func dismissAssistant(fromView: Bool = false) {
+    final func dismissAssistant(fromView: Bool = false) {
         guard !isDismissed else { return }
         isDismissed = true
         
@@ -311,7 +311,7 @@ class AssistantViewModel: ObservableObject {
         AssistantActivityManager.endAll()
     }
     
-    func openSafariView(at url: URL) {
+    final func openSafariView(at url: URL) {
         if SafariView.checkAvailability(at: url) {
             searchURL = url
             showSafariView = true
@@ -323,7 +323,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Message History Management
     
-    func addMessage(_ message: AssistantMessage) {
+    final func addMessage(_ message: AssistantMessage) {
         messageHistory.append(message)
         
         // Set last message date as chat date
@@ -341,7 +341,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func saveChatHistory() {
+    final func saveChatHistory() {
         guard userSettings.chatHistoryEnabled,
               !messageHistory.isEmpty
         else { return }
@@ -358,24 +358,24 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Speech Recognizer Actions
     
-    func startRecording() {
+    final func startRecording() {
         guard !responseIsPreparing else { return }
         speechRecognizer.startRecording()
     }
     
-    func stopRecording() {
+    final func stopRecording() {
         speechRecognizer.stopRecording()
     }
     
-    func pauseRecognize() {
+    final func pauseRecognize() {
         speechRecognizer.stopRecognize()
     }
     
-    func resumeRecognize() {
+    final func resumeRecognize() {
         speechRecognizer.startRecognize()
     }
     
-    func toggleRecording() {
+    final func toggleRecording() {
         if isRecording {
             stopRecording()
         } else {
@@ -386,13 +386,13 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Handlers
     
     // Handle repressing the Side Button
-    func handleActivateIntent() {
+    final func handleActivateIntent() {
         activateAssistant()
         updateActivateIntent()
     }
     
     // Handle Speech Recognizer Silence Timeout
-    func handleSilenceTimeout() {
+    final func handleSilenceTimeout() {
         if !inputText.isEmpty {
             confirmInput()
             return
@@ -410,7 +410,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Helpers
     
-    func updateIdleTimerDisabled() {
+    private final func updateIdleTimerDisabled() {
         if isRecognizing {
             UIApplication.shared.isIdleTimerDisabled = true
         } else {
@@ -418,7 +418,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func updateActivateIntent() {
+    private final func updateActivateIntent() {
         guard assistantType.DescriptionProviderType.backgroundSupports else {
             ActivateIntent.setShouldBackground(false)
             return
@@ -431,7 +431,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func updateLiveActivityStatus() {
+    private final func updateLiveActivityStatus() {
         guard assistantType.DescriptionProviderType.backgroundSupports,
               !isDismissed
         else { return }
@@ -456,7 +456,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func makeLiveActivityState() -> AssistantActivityAttributes.ContentState {
+    private final func makeLiveActivityState() -> AssistantActivityAttributes.ContentState {
         if responseIsPreparing {
             return .init(state: .waitingForResponse)
         }
