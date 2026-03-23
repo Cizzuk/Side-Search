@@ -38,12 +38,26 @@ enum AssistantType: String, CaseIterable, Codable {
         }
     }
     
-    func makeSettingsView() -> any View {
-        return DescriptionProviderType.makeSettingsView
+    var AssistantViewModelType: AssistantViewModel.Type {
+        switch self {
+        case .urlBased:
+            return URLBasedAssistantViewModel.self
+        case .appleFoundation:
+            return AppleFoundationAssistantViewModel.self
+        case .geminiAPI:
+            return GeminiAPIAssistantViewModel.self
+        }
     }
     
-    func makeAssistantViewModel() -> AssistantViewModel {
-        return DescriptionProviderType.makeAssistantViewModel()
+    func makeSettingsView() -> any View {
+        switch self {
+        case .urlBased:
+            return URLBasedAssistantSettingsView()
+        case .appleFoundation:
+            return AppleFoundationAssistantSettingsView()
+        case .geminiAPI:
+            return GeminiAPIAssistantSettingsView()
+        }
     }
 }
 
@@ -56,12 +70,6 @@ protocol AssistantDescriptionProvider {
     
     static var assistantIsAI: Bool { get }
     static var backgroundSupports: Bool { get }
-    
-    // Settings
-    static var makeSettingsView: any View { get }
-    
-    // AssistantViewModel
-    static func makeAssistantViewModel() -> AssistantViewModel
     
     // Availability Check
     static func isAvailable() -> Bool

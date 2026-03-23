@@ -24,10 +24,6 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true
     
-    static var makeSettingsView: any View { AppleFoundationAssistantSettingsView() }
-
-    static func makeAssistantViewModel() -> AssistantViewModel { AppleFoundationAssistantViewModel() }
-    
     static func isAvailable() -> Bool {
         switch SystemLanguageModel.default.availability {
         case .available:

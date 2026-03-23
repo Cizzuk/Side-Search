@@ -56,8 +56,8 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Variables
     
-    var assistantType: AssistantType
-    var chatID = UUID()
+    let assistantType: AssistantType
+    let chatID = UUID()
     var chatDate = Date()
     
     var currentScenePhase: ScenePhase = .active
@@ -113,7 +113,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    init(assistantType: AssistantType) {
+    required init(assistantType: AssistantType) {
         self.assistantType = assistantType
         setupNotificationObservers()
         setupSpeechRecognizerBindings()

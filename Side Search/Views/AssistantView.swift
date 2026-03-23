@@ -17,9 +17,16 @@ struct AssistantView: View {
     @FocusState private var isInputFocused: Bool
     @State private var isKeyboardVisible = false
     
-    @StateObject private var viewModel = UserSettings.shared.currentAssistant.makeAssistantViewModel()
+    @StateObject private var viewModel: AssistantViewModel
     
-    private let assistantType = UserSettings.shared.currentAssistant
+    init(_ vm: AssistantViewModel? = nil) {
+        if let vm = vm {
+            _viewModel = StateObject(wrappedValue: vm)
+        } else {
+            let type = UserSettings.shared.currentAssistant
+            _viewModel = StateObject(wrappedValue: type.AssistantViewModelType.init(assistantType: type))
+        }
+    }
     
     func dismissView() {
         viewModel.dismissAssistant(fromView: true)
@@ -106,7 +113,7 @@ struct AssistantView: View {
                             viewModel.confirmInput()
                         }
                         
-                        if assistantType.DescriptionProviderType.assistantIsAI {
+                        if viewModel.assistantType.DescriptionProviderType.assistantIsAI {
                             Text("This assistant is AI and can make mistakes.")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
@@ -159,7 +166,7 @@ struct AssistantView: View {
                     .tint(viewModel.isRecording ? .orange : .primary)
                     
                     Button(action: { viewModel.confirmInput() }) {
-                        Label("Confirm", systemImage: assistantType.DescriptionProviderType.assistantSystemImage)
+                        Label("Confirm", systemImage: viewModel.assistantType.DescriptionProviderType.assistantSystemImage)
                             .foregroundStyle(.white)
                     }
                     .tint(.dropblue)
@@ -231,7 +238,7 @@ struct AssistantView: View {
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .background(
                 AngularGradient(
-                    gradient: assistantType.DescriptionProviderType.assistantGradient,
+                    gradient: viewModel.assistantType.DescriptionProviderType.assistantGradient,
                     center: .center,
                     angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
                 )

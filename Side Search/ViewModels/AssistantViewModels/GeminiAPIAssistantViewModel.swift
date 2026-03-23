@@ -70,7 +70,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     // MARK: - Initialization
     
-    override init(assistantType: AssistantType = .geminiAPI) {
+    required init(assistantType: AssistantType = .geminiAPI) {
         super.init(assistantType: assistantType)
     }
     

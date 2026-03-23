@@ -23,10 +23,6 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true
     
-    static var makeSettingsView: any View { GeminiAPIAssistantSettingsView() }
-    
-    static func makeAssistantViewModel() -> AssistantViewModel { GeminiAPIAssistantViewModel() }
-    
     static func isAvailable() -> Bool { return true }
     static func isBlocked() -> Bool {
         if GeoHelper.currentRegion == "CN" {

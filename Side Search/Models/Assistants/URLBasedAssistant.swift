@@ -22,10 +22,6 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static var assistantIsAI: Bool = false
     static var backgroundSupports: Bool = false
     
-    static var makeSettingsView: any View { URLBasedAssistantSettingsView() }
-    
-    static func makeAssistantViewModel() -> AssistantViewModel { URLBasedAssistantViewModel() }
-    
     static func isAvailable() -> Bool { return true }
     static func isBlocked() -> Bool { return false }
 }
