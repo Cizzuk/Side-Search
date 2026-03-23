@@ -15,7 +15,7 @@ class URLBasedAssistantViewModel: AssistantViewModel {
     
     // MARK: - Override Methods
     
-    override func confirmInput() {
+    override func processInput() {
         // Stop recording before searching
         stopRecording()
         

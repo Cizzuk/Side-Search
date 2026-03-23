@@ -153,7 +153,7 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     // MARK: - Override Methods
     
-    override func confirmInput() {
+    override func processInput() {
         // Prevent empty input
         guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         else { return }

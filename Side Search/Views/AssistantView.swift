@@ -203,11 +203,7 @@ struct AssistantView: View {
                 }
             }
             .alert("Error", isPresented: $viewModel.showError) {
-                Button("OK") {
-                    if viewModel.isCriticalError {
-                        viewModel.dismissAssistant()
-                    }
-                }
+                Button("OK") { }
             } message: {
                 Text(viewModel.errorMessage)
             }

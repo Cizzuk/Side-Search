@@ -23,7 +23,7 @@ class AssistantViewModel: ObservableObject {
     
     private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
-
+    
     enum DetentOption: String, CaseIterable, Identifiable {
         case small
         case medium
@@ -102,7 +102,6 @@ class AssistantViewModel: ObservableObject {
     
     // Error Alert
     @Published var errorMessage: LocalizedStringResource = ""
-    @Published var isCriticalError = false
     @Published var showError = false
     
     @Published var micLevel: Float = 0.0
@@ -264,7 +263,7 @@ class AssistantViewModel: ObservableObject {
         // MARK: Override in subclass
     }
     
-    func confirmInput() {
+    func processInput() {
         // MARK: Override in subclass
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
@@ -282,18 +281,22 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - View Actions
     
+    final func confirmInput() {
+        guard checkAvailability() else { return }
+        processInput()
+    }
+    
     final func activateAssistant() {
         updateActivateIntent()
         
         // Check availability
         guard chat.assistantType.canUse else {
             errorMessage = "This assistant is not available."
-            isCriticalError = true
             showError = true
             return
         }
         
-        guard !isCriticalError else { return }
+        guard checkAvailability() else { return }
         
         if isRecording {
             if isRecognizing {
@@ -369,7 +372,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Speech Recognizer Actions
     
     final func startRecording() {
-        guard !responseIsPreparing, !isCriticalError else { return }
+        guard !responseIsPreparing, checkAvailability() else { return }
         speechRecognizer.startRecording()
     }
     
@@ -382,7 +385,7 @@ class AssistantViewModel: ObservableObject {
     }
     
     final func resumeRecognize() {
-        guard !isCriticalError else { return }
+        guard checkAvailability() else { return }
         speechRecognizer.startRecognize()
     }
     
@@ -414,6 +417,17 @@ class AssistantViewModel: ObservableObject {
     }
     
     // MARK: - Helpers
+    
+    final func checkAvailability(shouldShowError: Bool = true) -> Bool {
+        if !chat.assistantType.canUse {
+            if shouldShowError {
+                errorMessage = "This assistant is not available."
+                showError = true
+            }
+            return false
+        }
+        return true
+    }
     
     private final func updateIdleTimerDisabled() {
         if isRecognizing {
