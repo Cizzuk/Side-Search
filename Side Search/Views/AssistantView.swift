@@ -173,6 +173,8 @@ struct AssistantView: View {
                         Button(action: { isInputFocused = false }) {
                             Label("Dismiss Keyboard", systemImage: "keyboard.chevron.compact.down")
                                 .labelStyle(.iconOnly)
+                                .font(.title3)
+                                .frame(minWidth: 30, minHeight: 30)
                         }
                         .buttonStyle(.glass)
                             
@@ -180,6 +182,8 @@ struct AssistantView: View {
                         Button(action: { viewModel.confirmInput() }) {
                             Label("Submit", systemImage: "checkmark")
                                 .labelStyle(.iconOnly)
+                                .font(.title3)
+                                .frame(minWidth: 30, minHeight: 30)
                         }
                         .tint(.dropblue)
                         .buttonStyle(.glassProminent)
