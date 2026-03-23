@@ -158,9 +158,18 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
 
         // Restore chat history
         chatHistory = chat.messages.compactMap { message in
-            guard message.from != .system else { return nil }
+            let role: String
+            switch message.from {
+            case .user:
+                role = "user"
+            case .assistant:
+                role = "model"
+            case .system:
+                return nil
+            }
+            
             return GeminiContent(
-                role: message.from == .user ? "user" : "model",
+                role: role,
                 parts: [GeminiPart(text: message.content)]
             )
         }
