@@ -26,8 +26,7 @@ class UserSettings: ObservableObject {
 
     @Published var currentAssistant: AssistantType = {
         if let rawValue = UserDefaults.standard.string(forKey: Keys.currentAssistant),
-           let storedAssistant = AssistantType(rawValue: rawValue),
-           storedAssistant.canUse {
+           let storedAssistant = AssistantType(rawValue: rawValue) {
             return storedAssistant
         }
         return .defaultType
