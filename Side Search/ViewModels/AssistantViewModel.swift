@@ -260,7 +260,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Override Methods
     
     func assistantInitialize() {
-        // MARK: Override in subclass
+        // MARK: Override in subclass if needed
     }
     
     func processInput() {
@@ -273,6 +273,13 @@ class AssistantViewModel: ObservableObject {
         let userInput = inputText
         let userMessage = AssistantMessage(from: .user, content: userInput)
         addMessage(userMessage)
+        
+        // Invalid assistant error
+        let assistantResponse = "Error. This assistant is invalid."
+        let assistantMessage = AssistantMessage(from: .system, content: assistantResponse)
+        addMessage(assistantMessage)
+        
+        print("AssistantViewModel: processInput() should be overridden in subclass.")
         
         inputText = ""
         responseIsPreparing = false
