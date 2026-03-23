@@ -23,6 +23,9 @@ struct Side_SearchApp: App {
                         break
                     }
                 }
+                .accessibilityAction(.magicTap) {
+                    NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
+                }
         }
         .commands {
             CommandGroup(replacing: .newItem) {

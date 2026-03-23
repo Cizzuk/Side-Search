@@ -151,7 +151,6 @@ struct AssistantView: View {
             .animation(.smooth, value: viewModel.messageHistory.count)
             .scrollDismissesKeyboard(.interactively)
             .accessibilityAction(.escape) { dismissView() }
-            .accessibilityAction(.magicTap) { viewModel.activateAssistant() }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(action: { dismissView() }) {
