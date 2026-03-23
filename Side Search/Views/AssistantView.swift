@@ -66,7 +66,6 @@ struct AssistantView: View {
             .animation(.smooth, value: viewModel.inputText)
             .animation(.smooth, value: viewModel.chat.messages.count)
             .scrollDismissesKeyboard(.interactively)
-            .accessibilityAction(.escape) { dismissView() }
             // MARK: - Toolbar
             .toolbar { toolbarContent }
             .safeAreaInset(edge: .bottom) { keyboardToolbar }
@@ -119,6 +118,7 @@ struct AssistantView: View {
         .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)
+        .accessibilityAction(.escape) { dismissView() }
         .accessibilityAction(.magicTap) {
             NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
         }
@@ -230,7 +230,9 @@ struct AssistantView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(action: { dismissView() }) {
+            Button(role: .close) {
+                dismissView()
+            } label: {
                 Label("End Assistant", systemImage: "xmark")
             }
         }
