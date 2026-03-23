@@ -168,7 +168,7 @@ struct AssistantView: View {
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                if isKeyboardVisible {
+                if isKeyboardVisible && !isAssistiveAccessEnabled {
                     HStack {
                         Button(action: { isInputFocused = false }) {
                             Label("Dismiss Keyboard", systemImage: "keyboard.chevron.compact.down")
