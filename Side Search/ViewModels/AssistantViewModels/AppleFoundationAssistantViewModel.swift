@@ -27,7 +27,6 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     @MainActor
     func generate(prompt: String) async throws -> String {
         let response = try await session.respond(to: prompt)
-        print(session.transcript)
         return response.content
     }
     
