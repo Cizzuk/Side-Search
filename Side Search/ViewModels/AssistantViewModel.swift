@@ -279,6 +279,8 @@ class AssistantViewModel: ObservableObject {
             return
         }
         
+        guard !isCriticalError else { return }
+        
         if isRecording {
             if isRecognizing {
                 // Reset silence timer
@@ -359,7 +361,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Speech Recognizer Actions
     
     final func startRecording() {
-        guard !responseIsPreparing else { return }
+        guard !responseIsPreparing, !isCriticalError else { return }
         speechRecognizer.startRecording()
     }
     
@@ -372,6 +374,7 @@ class AssistantViewModel: ObservableObject {
     }
     
     final func resumeRecognize() {
+        guard !isCriticalError else { return }
         speechRecognizer.startRecognize()
     }
     
