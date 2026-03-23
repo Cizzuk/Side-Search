@@ -150,6 +150,9 @@ struct MainView: View {
             }
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
         }
+        .accessibilityAction(.magicTap) {
+            NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
+        }
         // MARK: - Sheets
         .sheet(isPresented: $viewModel.showHelpView) {
             HelpView()
