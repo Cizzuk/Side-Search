@@ -249,6 +249,9 @@ struct AssistantView: View {
         .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)
+        .accessibilityAction(.magicTap) {
+            NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
+        }
     }
 }
 
