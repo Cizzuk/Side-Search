@@ -42,85 +42,83 @@ struct AssistantView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            ScrollViewReader { proxy in
-                ScrollView {
-                    assistantScrollContent
-                        .id("scrollAnchor")
-                        .padding(.horizontal, 25)
-                        .padding(.top, 10)
-                        .padding(.bottom, 0)
-                }
-                .onChange(of: viewModel.inputText) {
-                    if viewModel.isRecording {
-                        withAnimation {
-                            proxy.scrollTo("scrollAnchor", anchor: .bottom)
-                        }
-                    }
-                }
-                .onChange(of: viewModel.chat.messages.count) {
+        ScrollViewReader { proxy in
+            ScrollView {
+                assistantScrollContent
+                    .id("scrollAnchor")
+                    .padding(.horizontal, 25)
+                    .padding(.top, 10)
+                    .padding(.bottom, 0)
+            }
+            .onChange(of: viewModel.inputText) {
+                if viewModel.isRecording {
                     withAnimation {
-                        if let lastMessage = viewModel.chat.messages.last {
-                            if lastMessage.from == .user {
-                                proxy.scrollTo("scrollAnchor", anchor: .bottom)
-                            } else {
-                                proxy.scrollTo(lastMessage.id, anchor: .top)
-                            }
+                        proxy.scrollTo("scrollAnchor", anchor: .bottom)
+                    }
+                }
+            }
+            .onChange(of: viewModel.chat.messages.count) {
+                withAnimation {
+                    if let lastMessage = viewModel.chat.messages.last {
+                        if lastMessage.from == .user {
+                            proxy.scrollTo("scrollAnchor", anchor: .bottom)
+                        } else {
+                            proxy.scrollTo(lastMessage.id, anchor: .top)
                         }
                     }
                 }
             }
-            .animation(.smooth, value: viewModel.inputText)
-            .animation(.smooth, value: viewModel.chat.messages.count)
-            .scrollDismissesKeyboard(.interactively)
-            // MARK: - Toolbar
-            .toolbar { toolbarContent }
-            .safeAreaInset(edge: .bottom) { keyboardToolbar }
-            // MARK: - Sheets & Alerts
-            .fullScreenCover(isPresented: $viewModel.showSafariView) {
-                if let url = viewModel.searchURL {
-                    SafariView(url: url)
-                        .ignoresSafeArea()
-                }
-            }
-            .alert("Error", isPresented: $viewModel.showError) {
-                Button("OK") { }
-            } message: {
-                Text(viewModel.errorMessage)
-            }
-            // MARK: - Events
-            .onAppear {
-                viewModel.currentScenePhase = scenePhase
-                if autoActivate { viewModel.activateAssistant() }
-            }
-            .onDisappear() {
-                viewModel.dismissAssistant(fromView: true)
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
-                viewModel.activateAssistant()
-            }
-            .onReceive(viewModel.$shouldDismiss) { shouldDismiss in
-                if shouldDismiss { dismiss() }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-                withAnimation { isKeyboardVisible = true }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-                isKeyboardVisible = false
-            }
-            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
-            // MARK: - View Styles
-            .background(
-                AngularGradient(
-                    gradient: viewModel.chat.assistantType.DescriptionProviderType.assistantGradient,
-                    center: .center,
-                    angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
-                )
-                .ignoresSafeArea()
-                .opacity((0.15 + Double(viewModel.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
-                .blur(radius: 30)
-            )
         }
+        .animation(.smooth, value: viewModel.inputText)
+        .animation(.smooth, value: viewModel.chat.messages.count)
+        .scrollDismissesKeyboard(.interactively)
+        // MARK: - Toolbar
+        .toolbar { toolbarContent }
+        .safeAreaInset(edge: .bottom) { keyboardToolbar }
+        // MARK: - Sheets & Alerts
+        .fullScreenCover(isPresented: $viewModel.showSafariView) {
+            if let url = viewModel.searchURL {
+                SafariView(url: url)
+                    .ignoresSafeArea()
+            }
+        }
+        .alert("Error", isPresented: $viewModel.showError) {
+            Button("OK") { }
+        } message: {
+            Text(viewModel.errorMessage)
+        }
+        // MARK: - Events
+        .onAppear {
+            viewModel.currentScenePhase = scenePhase
+            if autoActivate { viewModel.activateAssistant() }
+        }
+        .onDisappear() {
+            viewModel.dismissAssistant(fromView: true)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
+            viewModel.activateAssistant()
+        }
+        .onReceive(viewModel.$shouldDismiss) { shouldDismiss in
+            if shouldDismiss { dismiss() }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            withAnimation { isKeyboardVisible = true }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            isKeyboardVisible = false
+        }
+        .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
+        // MARK: - View Styles
+        .background(
+            AngularGradient(
+                gradient: viewModel.chat.assistantType.DescriptionProviderType.assistantGradient,
+                center: .center,
+                angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
+            )
+            .ignoresSafeArea()
+            .opacity((0.15 + Double(viewModel.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
+            .blur(radius: 30)
+        )
         .navigationBarBackButtonHidden(!useNavigationBackButton)
         .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)

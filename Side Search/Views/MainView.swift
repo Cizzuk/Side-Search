@@ -177,14 +177,14 @@ struct MainView: View {
                 ))
         }
         .sheet(isPresented: $viewModel.showAssistant) {
-            AssistantView()
+            NavigationStack { AssistantView() }
                 .navigationTransition(.zoom(
                     sourceID: id_activateAssistantButton,
                     in: ns_assistantView
                 ))
         }
         .fullScreenCover(isPresented: $viewModel.showAssistantFullScreen) {
-            AssistantView()
+            NavigationStack { AssistantView() }
                 .navigationTransition(.zoom(
                     sourceID: id_activateAssistantButton,
                     in: ns_assistantView
