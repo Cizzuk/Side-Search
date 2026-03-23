@@ -13,12 +13,6 @@ class URLBasedAssistantViewModel: AssistantViewModel {
     
     private var assistantModel = URLBasedAssistantModel.load()
     
-    // MARK: - Initialization
-    
-    required init(assistantType: AssistantType?) {
-        super.init(assistantType: .urlBased)
-    }
-    
     // MARK: - Override Methods
     
     override func confirmInput() {

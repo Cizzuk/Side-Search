@@ -113,11 +113,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    required init(assistantType: AssistantType? = nil) {
-        guard let assistantType else {
-            fatalError("Assistant Type must be provided for AssistantViewModel initialization.")
-        }
-        
+    required init(assistantType: AssistantType) {
         self.assistantType = assistantType
         setupNotificationObservers()
         setupSpeechRecognizerBindings()

@@ -14,19 +14,12 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     
     private var assistantModel = AppleFoundationAssistantModel.load()
     
-    private var session: LanguageModelSession
-    
-    // MARK: - Initialization
-    
-    required init(assistantType: AssistantType?) {
-        // Initialize Language Model Session with custom instructions if provided
+    private var session: LanguageModelSession {
         if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            self.session = LanguageModelSession()
+            return LanguageModelSession()
         } else {
-            self.session = LanguageModelSession(instructions: assistantModel.customInstructions)
+            return LanguageModelSession(instructions: assistantModel.customInstructions)
         }
-        
-        super.init(assistantType: .appleFoundation)
     }
     
     // MARK: - Helper Methods

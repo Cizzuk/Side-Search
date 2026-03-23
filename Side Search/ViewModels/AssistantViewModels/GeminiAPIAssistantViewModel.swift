@@ -68,12 +68,6 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     private var chatHistory: [GeminiContent] = []
     
-    // MARK: - Initialization
-    
-    required init(assistantType: AssistantType?) {
-        super.init(assistantType: .geminiAPI)
-    }
-    
     // MARK: - Helper Methods
     
     @MainActor
