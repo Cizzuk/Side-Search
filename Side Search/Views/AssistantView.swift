@@ -209,7 +209,9 @@ struct AssistantView: View {
                     }
                     .disabled(viewModel.responseIsPreparing)
                     
-                    Button(action: { viewModel.confirmInput() }) {
+                    Button(role: .confirm) {
+                        viewModel.confirmInput()
+                    } label: {
                         Label("OK", systemImage: "checkmark")
                     }
                     .buttonStyle(.glassProminent)
@@ -241,7 +243,9 @@ struct AssistantView: View {
                 }
                 .tint(viewModel.isRecording ? .orange : .primary)
                 
-                Button(action: { viewModel.confirmInput() }) {
+                Button(role: .confirm) {
+                    viewModel.confirmInput()
+                } label: {
                     Label("Confirm", systemImage: viewModel.chat.assistantType.DescriptionProviderType.assistantSystemImage)
                         .foregroundStyle(.white)
                 }
@@ -256,7 +260,9 @@ struct AssistantView: View {
     private var keyboardToolbar: some View {
         if isKeyboardVisible && !isAssistiveAccessEnabled {
             HStack {
-                Button(action: { isInputFocused = false }) {
+                Button(role: .close) {
+                    isInputFocused = false
+                } label: {
                     Label("Dismiss Keyboard", systemImage: "keyboard.chevron.compact.down")
                         .labelStyle(.iconOnly)
                         .font(.title3)
@@ -265,7 +271,9 @@ struct AssistantView: View {
                 .buttonStyle(.glass)
                 
                 Spacer()
-                Button(action: { viewModel.confirmInput() }) {
+                Button(role: .confirm) {
+                    viewModel.confirmInput()
+                } label: {
                     Label("Submit", systemImage: "checkmark")
                         .labelStyle(.iconOnly)
                         .font(.title3)
