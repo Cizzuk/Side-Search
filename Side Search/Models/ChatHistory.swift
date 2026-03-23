@@ -56,21 +56,4 @@ class ChatHistory {
     static func clearAll() {
         UserDefaults.standard.removeObject(forKey: userDefaultsKey)
     }
-    
-    static func search(_ query: String) -> [Chat] {
-        let chats = loadChats()
-        let lowerQuery = query.lowercased() // Case-insensitive
-        
-        // Search in messages, assistant type
-        let filtered = chats.filter { chat in
-            let assistantName = String(localized: chat.assistantType.DescriptionProviderType.assistantName).lowercased()
-            
-            let matchesAssistant = assistantName.contains(lowerQuery)
-            let matchesMessages = chat.messages.contains { $0.content.lowercased().contains(lowerQuery) }
-            
-            return matchesAssistant || matchesMessages
-        }
-        
-        return filtered.sorted { $0.date > $1.date }
-    }
 }
