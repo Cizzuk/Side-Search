@@ -19,12 +19,8 @@ struct AssistantView: View {
     
     @StateObject private var viewModel: AssistantViewModel
     
-    init(_ vm: AssistantViewModel? = nil) {
-        if let vm = vm {
-            _viewModel = StateObject(wrappedValue: vm)
-        } else {
-            _viewModel = StateObject(wrappedValue: AssistantViewModel.make())
-        }
+    init(chat: ChatHistory.Chat? = nil) {
+        _viewModel = StateObject(wrappedValue: AssistantViewModel.make(chat: chat))
     }
     
     func dismissView() {
@@ -37,7 +33,7 @@ struct AssistantView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 45) {
-                        ForEach(viewModel.messageHistory) { message in
+                        ForEach(viewModel.chat.messages) { message in
                             MessagesView(message: message, openSafariView: { url in
                                 viewModel.openSafariView(at: url)
                             })
@@ -112,7 +108,7 @@ struct AssistantView: View {
                             viewModel.confirmInput()
                         }
                         
-                        if viewModel.assistantType.DescriptionProviderType.assistantIsAI {
+                        if viewModel.chat.assistantType.DescriptionProviderType.assistantIsAI {
                             Text("This assistant is AI and can make mistakes.")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
@@ -134,9 +130,9 @@ struct AssistantView: View {
                         }
                     }
                 }
-                .onChange(of: viewModel.messageHistory.count) {
+                .onChange(of: viewModel.chat.messages.count) {
                     withAnimation {
-                        if let lastMessage = viewModel.messageHistory.last {
+                        if let lastMessage = viewModel.chat.messages.last {
                             if lastMessage.from == .user {
                                 proxy.scrollTo("scrollAnchor", anchor: .bottom)
                             } else {
@@ -147,7 +143,7 @@ struct AssistantView: View {
                 }
             }
             .animation(.smooth, value: viewModel.inputText)
-            .animation(.smooth, value: viewModel.messageHistory.count)
+            .animation(.smooth, value: viewModel.chat.messages.count)
             .scrollDismissesKeyboard(.interactively)
             .accessibilityAction(.escape) { dismissView() }
             .toolbar {
@@ -164,7 +160,7 @@ struct AssistantView: View {
                     .tint(viewModel.isRecording ? .orange : .primary)
                     
                     Button(action: { viewModel.confirmInput() }) {
-                        Label("Confirm", systemImage: viewModel.assistantType.DescriptionProviderType.assistantSystemImage)
+                        Label("Confirm", systemImage: viewModel.chat.assistantType.DescriptionProviderType.assistantSystemImage)
                             .foregroundStyle(.white)
                     }
                     .tint(.dropblue)
@@ -236,7 +232,7 @@ struct AssistantView: View {
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
             .background(
                 AngularGradient(
-                    gradient: viewModel.assistantType.DescriptionProviderType.assistantGradient,
+                    gradient: viewModel.chat.assistantType.DescriptionProviderType.assistantGradient,
                     center: .center,
                     angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
                 )

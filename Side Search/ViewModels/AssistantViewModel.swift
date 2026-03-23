@@ -11,9 +11,14 @@ import SwiftUI
 import UIKit
 
 class AssistantViewModel: ObservableObject {
-    static func make(_ assistantType: AssistantType? = nil) -> AssistantViewModel {
-        let type = assistantType ?? UserSettings.shared.currentAssistant
-        return type.AssistantViewModelType.init(assistantType: type)
+    static func make(chat: ChatHistory.Chat? = nil) -> AssistantViewModel {
+        let chat = chat ?? ChatHistory.Chat(
+            id: UUID(),
+            date: Date(),
+            assistantType: UserSettings.shared.currentAssistant,
+            messages: []
+        )
+        return chat.assistantType.AssistantViewModelType.init(chat: chat)
     }
     
     private let userSettings = UserSettings.shared
@@ -61,9 +66,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Variables
     
-    let assistantType: AssistantType
-    let chatID = UUID()
-    var chatDate = Date()
+    @Published var chat: ChatHistory.Chat
     
     var currentScenePhase: ScenePhase = .active
     var isDismissed = false
@@ -92,8 +95,6 @@ class AssistantViewModel: ObservableObject {
     @Published var shouldFocusInput = false
     @Published var shouldUnfocusInput = false
     
-    @Published var messageHistory: [AssistantMessage] = []
-    
     // Web View
     @Published var searchURL: URL?
     @Published var showSafariView = false
@@ -118,8 +119,9 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    required init(assistantType: AssistantType) {
-        self.assistantType = assistantType
+    required init(chat: ChatHistory.Chat) {
+        self.chat = chat
+        
         setupNotificationObservers()
         setupSpeechRecognizerBindings()
         assistantInitialize()
@@ -245,7 +247,7 @@ class AssistantViewModel: ObservableObject {
         if !userSettings.continueInBackground {
             return false
         }
-        if !assistantType.DescriptionProviderType.backgroundSupports {
+        if !chat.assistantType.DescriptionProviderType.backgroundSupports {
             return false
         }
         if AccessibilitySettings.isAssistiveAccessEnabled {
@@ -282,8 +284,8 @@ class AssistantViewModel: ObservableObject {
         updateActivateIntent()
         
         // Check availability
-        guard assistantType.DescriptionProviderType.isAvailable(),
-              !assistantType.DescriptionProviderType.isBlocked()
+        guard chat.assistantType.DescriptionProviderType.isAvailable(),
+              !chat.assistantType.DescriptionProviderType.isBlocked()
         else {
             errorMessage = "This assistant is not available."
             isCriticalError = true
@@ -338,10 +340,10 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Message History Management
     
     final func addMessage(_ message: AssistantMessage) {
-        messageHistory.append(message)
+        chat.messages.append(message)
         
         // Set last message date as chat date
-        chatDate = Date()
+        chat.date = Date()
         
         saveChatHistory()
         
@@ -357,15 +359,8 @@ class AssistantViewModel: ObservableObject {
     
     final func saveChatHistory() {
         guard userSettings.chatHistoryEnabled,
-              !messageHistory.isEmpty
+              !chat.messages.isEmpty
         else { return }
-        
-        let chat = ChatHistory.Chat(
-            id: chatID,
-            date: chatDate,
-            assistantType: assistantType,
-            messages: messageHistory
-        )
         
         ChatHistory.save(chat)
     }
@@ -428,7 +423,7 @@ class AssistantViewModel: ObservableObject {
     }
     
     private final func updateActivateIntent() {
-        guard assistantType.DescriptionProviderType.backgroundSupports else {
+        guard chat.assistantType.DescriptionProviderType.backgroundSupports else {
             ActivateIntent.setShouldBackground(false)
             return
         }
@@ -441,7 +436,7 @@ class AssistantViewModel: ObservableObject {
     }
     
     private final func updateLiveActivityStatus() {
-        guard assistantType.DescriptionProviderType.backgroundSupports,
+        guard chat.assistantType.DescriptionProviderType.backgroundSupports,
               !isDismissed
         else { return }
         
