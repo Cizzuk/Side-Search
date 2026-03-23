@@ -84,7 +84,7 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    func validateAppState() {
+    private func validateAppState() {
         if userSettings.currentAssistant.DescriptionProviderType.isBlocked() ||
             !userSettings.currentAssistant.DescriptionProviderType.isAvailable() {
             userSettings.currentAssistant = .defaultType
