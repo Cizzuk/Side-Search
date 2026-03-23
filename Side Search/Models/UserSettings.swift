@@ -29,7 +29,7 @@ class UserSettings: ObservableObject {
            let storedAssistant = AssistantType(rawValue: rawValue) {
             return storedAssistant
         }
-        return .defaultType
+        return .default
     }() {
         didSet {
             UserDefaults.standard.set(currentAssistant.rawValue, forKey: Keys.currentAssistant)

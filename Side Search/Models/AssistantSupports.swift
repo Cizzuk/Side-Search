@@ -12,7 +12,7 @@ enum AssistantType: String, CaseIterable, Codable {
     case appleFoundation
     case geminiAPI
     
-    static var defaultType: AssistantType {
+    static var `default`: AssistantType {
         return .urlBased
     }
     
