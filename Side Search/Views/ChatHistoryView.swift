@@ -93,7 +93,7 @@ struct ChatHistoryView: View {
         
         var body: some View {
             ForEach(viewModel.chats) { chat in
-                NavigationLink(destination: AssistantView(chat: chat, autoActivate: false)) {
+                NavigationLink(destination: AssistantView(chat: chat, autoActivate: false, useNavigationBackButton: true)) {
                     VStack(alignment: .leading) {
                         Text(chat.previewText)
                             .font(.headline)

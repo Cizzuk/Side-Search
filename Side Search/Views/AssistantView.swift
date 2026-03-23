@@ -18,11 +18,18 @@ struct AssistantView: View {
     @State private var isKeyboardVisible = false
     
     @StateObject private var viewModel: AssistantViewModel
-    private let autoActivate: Bool
     
-    init(chat: ChatHistory.Chat? = nil, autoActivate: Bool = true) {
+    private let autoActivate: Bool
+    private let useNavigationBackButton: Bool
+    
+    init(
+        chat: ChatHistory.Chat? = nil,
+        autoActivate: Bool = true,
+        useNavigationBackButton: Bool = false
+    ) {
         _viewModel = StateObject(wrappedValue: AssistantViewModel.make(chat: chat))
         self.autoActivate = autoActivate
+        self.useNavigationBackButton = useNavigationBackButton
     }
     
     func dismissView() {
@@ -114,7 +121,7 @@ struct AssistantView: View {
                 .blur(radius: 30)
             )
         }
-        .navigationBarBackButtonHidden()
+        .navigationBarBackButtonHidden(!useNavigationBackButton)
         .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)
@@ -230,10 +237,12 @@ struct AssistantView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(role: .close) {
-                dismissView()
-            } label: {
-                Label("End Assistant", systemImage: "xmark")
+            if !useNavigationBackButton {
+                Button(role: .close) {
+                    dismissView()
+                } label: {
+                    Label("End Assistant", systemImage: "xmark")
+                }
             }
         }
         
