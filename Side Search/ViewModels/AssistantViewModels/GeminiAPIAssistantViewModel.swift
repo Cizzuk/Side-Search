@@ -152,6 +152,19 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     }
     
     // MARK: - Override Methods
+
+    override func assistantInitialize() {
+        guard !chat.messages.isEmpty else { return }
+
+        // Restore chat history
+        chatHistory = chat.messages.compactMap { message in
+            guard message.from != .system else { return nil }
+            return GeminiContent(
+                role: message.from == .user ? "user" : "model",
+                parts: [GeminiPart(text: message.content)]
+            )
+        }
+    }
     
     override func processInput() {
         // Prevent empty input
