@@ -86,10 +86,6 @@ class MainViewModel: ObservableObject {
     }
     
     private func validateAppState() {
-        if !userSettings.currentAssistant.canUse {
-            userSettings.currentAssistant = .defaultType
-        }
-        
         if !appFlags.isAssistantActive {
             ActivateIntent.setShouldBackground(false)
             
