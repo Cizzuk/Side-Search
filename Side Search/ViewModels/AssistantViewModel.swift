@@ -269,6 +269,16 @@ class AssistantViewModel: ObservableObject {
     // MARK: - View Actions
     
     func activateAssistant() {
+        // Check availability
+        guard assistantType.DescriptionProviderType.isAvailable(),
+              !assistantType.DescriptionProviderType.isBlocked()
+        else {
+            errorMessage = "This assistant is not available."
+            isCriticalError = true
+            showError = true
+            return
+        }
+        
         if isRecording {
             if isRecognizing {
                 // Reset silence timer
