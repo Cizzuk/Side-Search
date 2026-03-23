@@ -14,23 +14,46 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     
     private var assistantModel = AppleFoundationAssistantModel.load()
     
-    private var session: LanguageModelSession {
+    lazy private var session: LanguageModelSession = {
         if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return LanguageModelSession()
         } else {
             return LanguageModelSession(instructions: assistantModel.customInstructions)
         }
-    }
+    }()
     
     // MARK: - Helper Methods
     
     @MainActor
     func generate(prompt: String) async throws -> String {
         let response = try await session.respond(to: prompt)
+        print(session.transcript)
         return response.content
     }
     
     // MARK: - Override Methods
+    
+    override func assistantInitialize() {
+        guard !chat.messages.isEmpty else { return }
+        
+        // Restore chat history
+        let entries: some Sequence<Transcript.Entry> = chat.messages.compactMap { message in
+            let textSegment = Transcript.TextSegment(content: message.content)
+            
+            switch message.from {
+            case .user:
+                let prompt = Transcript.Prompt(segments: [.text(textSegment)])
+                return Transcript.Entry.prompt(prompt)
+            case .assistant:
+                let response = Transcript.Response(assetIDs: [], segments: [.text(textSegment)])
+                return Transcript.Entry.response(response)
+            case .system:
+                return nil
+            }
+        }
+        
+        session = LanguageModelSession(transcript: Transcript(entries: entries))
+    }
     
     override func processInput() {
         // Prevent empty input
