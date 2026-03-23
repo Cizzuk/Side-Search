@@ -92,7 +92,7 @@ struct ChatHistoryView: View {
         var chats: [ChatHistory.Chat]
         
         var body: some View {
-            ForEach(viewModel.chats) { chat in
+            ForEach(chats) { chat in
                 NavigationLink(destination: AssistantView(chat: chat, autoActivate: false, useNavigationBackButton: true)) {
                     VStack(alignment: .leading) {
                         Text(chat.previewText)
@@ -118,7 +118,7 @@ struct ChatHistoryView: View {
             }
             .onDelete { indexSet in
                 for index in indexSet {
-                    let chat = viewModel.chats[index]
+                    let chat = chats[index]
                     viewModel.delete(chat.id)
                 }
             }
