@@ -18,19 +18,19 @@ struct Side_SearchApp: App {
                 .onOpenURL { url in
                     switch url.host {
                     case "assistant":
-                        NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
+                        NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
                     default:
                         break
                     }
                 }
                 .accessibilityAction(.magicTap) {
-                    NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
+                    NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
                 }
         }
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button {
-                    NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
+                    NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
                 } label: {
                     Label("Start Assistant", image: "Sidefish")
                 }

@@ -144,7 +144,7 @@ struct MainView: View {
                 }
             }
             // MARK: - Events
-            .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+            .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
                 showClearInAppBrowserDataAlert = false
                 viewModel.activateAssistant()
             }

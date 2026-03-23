@@ -269,6 +269,8 @@ class AssistantViewModel: ObservableObject {
     // MARK: - View Actions
     
     final func activateAssistant() {
+        updateActivateIntent()
+        
         // Check availability
         guard assistantType.DescriptionProviderType.isAvailable(),
               !assistantType.DescriptionProviderType.isBlocked()
@@ -387,12 +389,6 @@ class AssistantViewModel: ObservableObject {
     }
     
     // MARK: - Handlers
-    
-    // Handle repressing the Side Button
-    final func handleActivateIntent() {
-        activateAssistant()
-        updateActivateIntent()
-    }
     
     // Handle Speech Recognizer Silence Timeout
     final func handleSilenceTimeout() {

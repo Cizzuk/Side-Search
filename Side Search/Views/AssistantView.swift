@@ -222,8 +222,8 @@ struct AssistantView: View {
             .onDisappear() {
                 viewModel.dismissAssistant(fromView: true)
             }
-            .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
-                viewModel.handleActivateIntent()
+            .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
+                viewModel.activateAssistant()
             }
             .onReceive(viewModel.$shouldDismiss) { shouldDismiss in
                 if shouldDismiss { dismiss() }
