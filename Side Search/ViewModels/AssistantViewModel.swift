@@ -11,6 +11,11 @@ import SwiftUI
 import UIKit
 
 class AssistantViewModel: ObservableObject {
+    static func make(_ assistantType: AssistantType? = nil) -> AssistantViewModel {
+        let type = assistantType ?? UserSettings.shared.currentAssistant
+        return type.AssistantViewModelType.init(assistantType: type)
+    }
+    
     private let userSettings = UserSettings.shared
 
     enum DetentOption: String, CaseIterable, Identifiable {

@@ -19,13 +19,8 @@ struct AssistantView: View {
     
     @StateObject private var viewModel: AssistantViewModel
     
-    init(_ vm: AssistantViewModel? = nil) {
-        if let vm = vm {
-            _viewModel = StateObject(wrappedValue: vm)
-        } else {
-            let type = UserSettings.shared.currentAssistant
-            _viewModel = StateObject(wrappedValue: type.AssistantViewModelType.init(assistantType: type))
-        }
+    init(_ assistantType: AssistantType? = nil) {
+        _viewModel = StateObject(wrappedValue: AssistantViewModel.make(assistantType))
     }
     
     func dismissView() {
