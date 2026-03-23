@@ -51,63 +51,65 @@ struct AssistantView: View {
                             }
                         }
                         
-                        VStack(alignment: .leading) {
-                            Text(AssistantMessage.From.user.displayName)
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-                            
-                            Spacer(minLength: 15)
-                            
-                            TextField(viewModel.isRecognizing ? "Listening..." : "Ask Assistant",
-                                      text: $viewModel.inputText, axis: .vertical)
-                            .bold()
-                            .submitLabel(.return)
-                            .focused($isInputFocused)
-                            .onSubmit {
+                        if viewModel.checkAvailability(shouldShowError: false) {
+                            VStack(alignment: .leading) {
+                                Text(AssistantMessage.From.user.displayName)
+                                    .font(.headline)
+                                    .foregroundStyle(.secondary)
+                                
+                                Spacer(minLength: 15)
+                                
+                                TextField(viewModel.isRecognizing ? "Listening..." : "Ask Assistant",
+                                          text: $viewModel.inputText, axis: .vertical)
+                                .bold()
+                                .submitLabel(.return)
+                                .focused($isInputFocused)
+                                .onSubmit {
+                                    viewModel.confirmInput()
+                                }
+                                .onChange(of: isInputFocused) {
+                                    if isInputFocused {
+                                        viewModel.stopRecording()
+                                        viewModel.detent = .large
+                                    }
+                                }
+                                .onChange(of: viewModel.shouldFocusInput) {
+                                    Task {
+                                        if viewModel.shouldFocusInput {
+                                            isInputFocused = true
+                                            viewModel.shouldFocusInput = false
+                                        }
+                                    }
+                                }
+                                .onChange(of: viewModel.shouldUnfocusInput) {
+                                    Task {
+                                        if viewModel.shouldUnfocusInput {
+                                            isInputFocused = false
+                                            viewModel.shouldUnfocusInput = false
+                                        }
+                                    }
+                                }
+                                
+                                // Assistive Access Controls
+                                if isAssistiveAccessEnabled {
+                                    Spacer(minLength: 30)
+                                    Button(action: { viewModel.toggleRecording() }) {
+                                        Label(viewModel.isRecognizing ? "Stop" : "Speak",
+                                              systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
+                                    }
+                                    .disabled(viewModel.responseIsPreparing)
+                                    
+                                    Button(action: { viewModel.confirmInput() }) {
+                                        Label("OK", systemImage: "checkmark")
+                                    }
+                                    .buttonStyle(.glassProminent)
+                                    .disabled(viewModel.responseIsPreparing)
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityAction(named: "Confirm") {
                                 viewModel.confirmInput()
                             }
-                            .onChange(of: isInputFocused) {
-                                if isInputFocused {
-                                    viewModel.stopRecording()
-                                    viewModel.detent = .large
-                                }
-                            }
-                            .onChange(of: viewModel.shouldFocusInput) {
-                                Task {
-                                    if viewModel.shouldFocusInput {
-                                        isInputFocused = true
-                                        viewModel.shouldFocusInput = false
-                                    }
-                                }
-                            }
-                            .onChange(of: viewModel.shouldUnfocusInput) {
-                                Task {
-                                    if viewModel.shouldUnfocusInput {
-                                        isInputFocused = false
-                                        viewModel.shouldUnfocusInput = false
-                                    }
-                                }
-                            }
-                            
-                            // Assistive Access Controls
-                            if isAssistiveAccessEnabled {
-                                Spacer(minLength: 30)
-                                Button(action: { viewModel.toggleRecording() }) {
-                                    Label(viewModel.isRecognizing ? "Stop" : "Speak",
-                                          systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
-                                }
-                                .disabled(viewModel.responseIsPreparing)
-                                
-                                Button(action: { viewModel.confirmInput() }) {
-                                    Label("OK", systemImage: "checkmark")
-                                }
-                                .buttonStyle(.glassProminent)
-                                .disabled(viewModel.responseIsPreparing)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityAction(named: "Confirm") {
-                            viewModel.confirmInput()
                         }
                         
                         if viewModel.chat.assistantType.DescriptionProviderType.assistantIsAI {
@@ -155,19 +157,21 @@ struct AssistantView: View {
                     }
                 }
                 ToolbarItemGroup(placement: .primaryAction) {
-                    Button(action: { viewModel.toggleRecording() }) {
-                        Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
-                              systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
+                    if viewModel.checkAvailability(shouldShowError: false) {
+                        Button(action: { viewModel.toggleRecording() }) {
+                            Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
+                                  systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
+                        }
+                        .tint(viewModel.isRecording ? .orange : .primary)
+                        
+                        Button(action: { viewModel.confirmInput() }) {
+                            Label("Confirm", systemImage: viewModel.chat.assistantType.DescriptionProviderType.assistantSystemImage)
+                                .foregroundStyle(.white)
+                        }
+                        .tint(.dropblue)
+                        .buttonStyle(.glassProminent)
+                        .disabled(viewModel.responseIsPreparing)
                     }
-                    .tint(viewModel.isRecording ? .orange : .primary)
-                    
-                    Button(action: { viewModel.confirmInput() }) {
-                        Label("Confirm", systemImage: viewModel.chat.assistantType.DescriptionProviderType.assistantSystemImage)
-                            .foregroundStyle(.white)
-                    }
-                    .tint(.dropblue)
-                    .buttonStyle(.glassProminent)
-                    .disabled(viewModel.responseIsPreparing)
                 }
             }
             .safeAreaInset(edge: .bottom) {
@@ -180,7 +184,7 @@ struct AssistantView: View {
                                 .frame(minWidth: 30, minHeight: 30)
                         }
                         .buttonStyle(.glass)
-                            
+                        
                         Spacer()
                         Button(action: { viewModel.confirmInput() }) {
                             Label("Submit", systemImage: "checkmark")
