@@ -117,6 +117,7 @@ class AssistantViewModel: ObservableObject {
         self.assistantType = assistantType
         setupNotificationObservers()
         setupSpeechRecognizerBindings()
+        assistantInitialize()
     }
     
     deinit {
@@ -249,6 +250,10 @@ class AssistantViewModel: ObservableObject {
     }
     
     // MARK: - Override Methods
+    
+    func assistantInitialize() {
+        // MARK: Override in subclass
+    }
     
     func confirmInput() {
         // MARK: Override in subclass
