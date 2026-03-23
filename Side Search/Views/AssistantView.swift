@@ -18,9 +18,11 @@ struct AssistantView: View {
     @State private var isKeyboardVisible = false
     
     @StateObject private var viewModel: AssistantViewModel
+    private let autoActivate: Bool
     
-    init(chat: ChatHistory.Chat? = nil) {
+    init(chat: ChatHistory.Chat? = nil, autoActivate: Bool = true) {
         _viewModel = StateObject(wrappedValue: AssistantViewModel.make(chat: chat))
+        self.autoActivate = autoActivate
     }
     
     func dismissView() {
@@ -212,7 +214,7 @@ struct AssistantView: View {
             // MARK: - Events
             .onAppear {
                 viewModel.currentScenePhase = scenePhase
-                viewModel.activateAssistant()
+                if autoActivate { viewModel.activateAssistant() }
             }
             .onDisappear() {
                 viewModel.dismissAssistant(fromView: true)
@@ -241,6 +243,7 @@ struct AssistantView: View {
                 .blur(radius: 30)
             )
         }
+        .navigationBarBackButtonHidden()
         .animation(.smooth, value: viewModel.micLevel)
         .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
         .presentationContentInteraction(.scrolls)

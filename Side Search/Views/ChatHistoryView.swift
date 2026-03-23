@@ -93,7 +93,7 @@ struct ChatHistoryView: View {
         
         var body: some View {
             ForEach(viewModel.chats) { chat in
-                NavigationLink(destination: ChatDetailView(viewModel: viewModel, chat: chat)) {
+                NavigationLink(destination: AssistantView(chat: chat, autoActivate: false)) {
                     VStack(alignment: .leading) {
                         Text(chat.previewText)
                             .font(.headline)
@@ -120,54 +120,6 @@ struct ChatHistoryView: View {
                 for index in indexSet {
                     let chat = viewModel.chats[index]
                     viewModel.delete(chat.id)
-                }
-            }
-        }
-    }
-    
-    // MARK: - Chat Detail View
-    
-    struct ChatDetailView: View {
-        @Environment(\.dismiss) private var dismiss
-        @ObservedObject var viewModel: ChatHistoryViewModel
-        var chat: ChatHistory.Chat
-        
-        var body: some View {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 45) {
-                    // Details
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(chat.date, style: .date)
-                            Text(chat.date, style: .time)
-                        }
-                        Spacer()
-                        Text(chat.assistantType.DescriptionProviderType.assistantName)
-                    }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    
-                    // Messages
-                    ForEach(chat.messages) { message in
-                        MessagesView(message: message, openSafariView: { url in
-                            viewModel.openSafariView(at: url)
-                        })
-                    }
-                }
-                .padding(.horizontal, 25)
-                .padding(.vertical, 20)
-            }
-            .navigationTitle(Text(chat.date, style: .date))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(role: .destructive) {
-                        viewModel.delete(chat.id)
-                        dismiss()
-                    } label: {
-                        Label("Delete", systemImage: "trash")
-                    }
-                    .tint(.red)
                 }
             }
         }

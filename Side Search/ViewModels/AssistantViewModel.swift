@@ -21,6 +21,7 @@ class AssistantViewModel: ObservableObject {
         return chat.assistantType.AssistantViewModelType.init(chat: chat)
     }
     
+    private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
 
     enum DetentOption: String, CaseIterable, Identifiable {
@@ -125,6 +126,7 @@ class AssistantViewModel: ObservableObject {
         setupNotificationObservers()
         setupSpeechRecognizerBindings()
         assistantInitialize()
+        appFlags.isAssistantActive = true
     }
     
     deinit {
@@ -284,9 +286,7 @@ class AssistantViewModel: ObservableObject {
         updateActivateIntent()
         
         // Check availability
-        guard chat.assistantType.DescriptionProviderType.isAvailable(),
-              !chat.assistantType.DescriptionProviderType.isBlocked()
-        else {
+        guard chat.assistantType.canUse else {
             errorMessage = "This assistant is not available."
             isCriticalError = true
             showError = true
@@ -325,6 +325,7 @@ class AssistantViewModel: ObservableObject {
         UIApplication.shared.isIdleTimerDisabled = false
         ActivateIntent.setShouldBackground(false)
         AssistantActivityManager.endAll()
+        appFlags.isAssistantActive = false
     }
     
     final func openSafariView(at url: URL) {

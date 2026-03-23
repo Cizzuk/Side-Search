@@ -27,8 +27,7 @@ class UserSettings: ObservableObject {
     @Published var currentAssistant: AssistantType = {
         if let rawValue = UserDefaults.standard.string(forKey: Keys.currentAssistant),
            let storedAssistant = AssistantType(rawValue: rawValue),
-           !storedAssistant.DescriptionProviderType.isBlocked(),
-           storedAssistant.DescriptionProviderType.isAvailable() {
+           storedAssistant.canUse {
             return storedAssistant
         }
         return .defaultType

@@ -5,7 +5,15 @@
 //  Created by Cizzuk on 2025/12/24.
 //
 
+import Combine
 import SwiftUI
+
+final class AppFlags: ObservableObject {
+    static let shared = AppFlags()
+    private init() {}
+    
+    @Published var isAssistantActive: Bool = false
+}
 
 @main
 struct Side_SearchApp: App {

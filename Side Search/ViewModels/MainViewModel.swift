@@ -10,6 +10,7 @@ import UIKit
 import SwiftUI
 
 class MainViewModel: ObservableObject {
+    private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
 
     @Published var showSwitchAssistantView = false
@@ -85,12 +86,11 @@ class MainViewModel: ObservableObject {
     }
     
     private func validateAppState() {
-        if userSettings.currentAssistant.DescriptionProviderType.isBlocked() ||
-            !userSettings.currentAssistant.DescriptionProviderType.isAvailable() {
+        if !userSettings.currentAssistant.canUse {
             userSettings.currentAssistant = .defaultType
         }
         
-        if !(showAssistant || showAssistantFullScreen) {
+        if !appFlags.isAssistantActive {
             ActivateIntent.setShouldBackground(false)
             
             if AssistantActivityManager.isActive() {
@@ -102,6 +102,8 @@ class MainViewModel: ObservableObject {
     // MARK: - Assistant
     
     func activateAssistant() {
+        guard !appFlags.isAssistantActive else { return }
+        
         var transaction = Transaction()
         // Disable animations when activating assistant from background
         transaction.disablesAnimations = UIApplication.shared.applicationState != .active
