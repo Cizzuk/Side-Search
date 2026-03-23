@@ -23,7 +23,6 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static var backgroundSupports: Bool = false
     
     static func isAvailable() -> Bool { return true }
-    static func isBlocked() -> Bool { return false }
 }
 
 struct URLBasedAssistantModel: AssistantModel, MergeCodable {

@@ -16,10 +16,6 @@ enum AssistantType: String, CaseIterable, Codable {
         return .urlBased
     }
     
-    var canUse: Bool {
-        self.DescriptionProviderType.isAvailable() && !self.DescriptionProviderType.isBlocked()
-    }
-    
     var DescriptionProviderType: any AssistantDescriptionProvider.Type {
         switch self {
         case .urlBased:
@@ -77,7 +73,6 @@ protocol AssistantDescriptionProvider {
     
     // Availability Check
     static func isAvailable() -> Bool
-    static func isBlocked() -> Bool
 }
 
 protocol AssistantModel: Codable, Equatable {

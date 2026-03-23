@@ -289,13 +289,6 @@ class AssistantViewModel: ObservableObject {
     final func activateAssistant() {
         updateActivateIntent()
         
-        // Check availability
-        guard chat.assistantType.canUse else {
-            errorMessage = "This assistant is not available."
-            showError = true
-            return
-        }
-        
         guard checkAvailability() else { return }
         
         if isRecording {
@@ -419,7 +412,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Helpers
     
     final func checkAvailability(shouldShowError: Bool = true) -> Bool {
-        if !chat.assistantType.canUse {
+        if !chat.assistantType.DescriptionProviderType.isAvailable() {
             if shouldShowError {
                 errorMessage = "This assistant is not available."
                 showError = true
