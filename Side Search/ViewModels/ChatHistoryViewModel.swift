@@ -18,22 +18,9 @@ class ChatHistoryViewModel: ObservableObject {
         didSet { updateSearch() }
     }
     
-    // Web View
-    @Published var searchURL: URL?
-    @Published var showSafariView = false
-    
-    func openSafariView(at url: URL) {
-        if SafariView.checkAvailability(at: url) {
-            searchURL = url
-            showSafariView = true
-        } else {
-            // Fallback
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-    }
-    
     func loadChats() {
         chats = ChatHistory.loadChats()
+        updateSearch()
     }
     
     func delete(_ chat: UUID) {
