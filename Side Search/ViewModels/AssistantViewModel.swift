@@ -261,6 +261,12 @@ class AssistantViewModel: ObservableObject {
         
         guard checkAvailability() else { return }
         
+        // If input text exists, confirm it
+        if !inputText.isEmpty {
+            confirmInput()
+            return
+        }
+        
         if isRecording {
             if isRecognizing {
                 // Reset silence timer
