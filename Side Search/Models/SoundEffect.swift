@@ -76,7 +76,7 @@ final class SoundEffect {
         case .always:
             break
         case .backgroundOnly:
-            guard UIApplication.shared.applicationState != .active else { return }
+            guard UIApplication.shared.applicationState == .background else { return }
         case .off:
             return
         }
