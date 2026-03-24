@@ -152,15 +152,13 @@ class SpeechRecognizer: ObservableObject {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             
-            stopRecognize()
             stopAudioEngine()
             deactivateAudioSession()
             
-            if isRecording {
-                DispatchQueue.main.async {
-                    self.isRecording = false
-                    self.micLevel = 0.0
-                }
+            DispatchQueue.main.async {
+                self.stopRecognize()
+                self.isRecording = false
+                self.micLevel = 0.0
             }
         }
     }
@@ -202,6 +200,10 @@ class SpeechRecognizer: ObservableObject {
             return
         }
         
+        DispatchQueue.main.async {
+            self.isRecognizing = true
+        }
+        
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.requiresOnDeviceRecognition = true
         request.shouldReportPartialResults = true
@@ -210,10 +212,6 @@ class SpeechRecognizer: ObservableObject {
         
         startRecognitionTask(request: request, recognizer: recognizer)
         setFirstSilenceTimer()
-        
-        DispatchQueue.main.async {
-            self.isRecognizing = true
-        }
     }
     
     private func startRecognitionTask(
