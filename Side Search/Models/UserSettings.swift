@@ -20,6 +20,7 @@ class UserSettings: ObservableObject {
         static let startWithMicMuted = "startWithMicMuted"
         static let continueInBackground = "continueInBackground"
         static let standbyInBackground = "standbyInBackground"
+        static let soundEffectsMode = "soundEffectsMode"
         static let disableMarkdownRendering = "disableMarkdownRendering"
     }
 

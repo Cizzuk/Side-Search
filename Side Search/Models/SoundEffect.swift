@@ -1,5 +1,5 @@
 //
-//  HapticManager.swift
+//  SoundEffect.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/03/24.
@@ -8,10 +8,14 @@
 import AVFoundation
 import CoreHaptics
 
-final class HapticManager {
-    static let shared = HapticManager()
+final class SoundEffect {
+    static let shared = SoundEffect()
     
     var engine: CHHapticEngine?
+    
+    enum Mode {
+        
+    }
     
     enum Sounds {
         case startRecognition
@@ -45,7 +49,7 @@ final class HapticManager {
         }
     }
     
-    func play(_ sound: HapticManager.Sounds) {
+    func play(_ sound: SoundEffect.Sounds) {
         guard let engine = engine else { return }
         
         DispatchQueue.global(qos: .userInitiated).async {
@@ -55,6 +59,7 @@ final class HapticManager {
             }
             
             do {
+                
                 try engine.playPattern(from: URL(fileURLWithPath: path))
             } catch {
                 print("Failed to play AHAP (\(sound)): \(error).")

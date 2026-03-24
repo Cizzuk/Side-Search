@@ -69,7 +69,7 @@ class AssistantViewModel: ObservableObject {
     let speechRecognizer = SpeechRecognizer()
     private var cancellables = Set<AnyCancellable>()
     
-    let hapticManager = HapticManager.shared
+    let soundEffect = SoundEffect.shared
     var shouldStartRecognitionFeedback = false
     
     var startWithMicMuted: Bool {
@@ -367,7 +367,7 @@ class AssistantViewModel: ObservableObject {
     // Handle Speech Recognizer Silence Timeout
     final func handleSilenceTimeout() {
         if !inputText.isEmpty {
-            HapticManager.shared.play(.completeRecognition)
+            soundEffect.play(.completeRecognition)
             confirmInput()
             return
         }
@@ -386,7 +386,7 @@ class AssistantViewModel: ObservableObject {
         guard shouldStartRecognitionFeedback else { return }
         shouldStartRecognitionFeedback = false
         if isRecognizing {
-            HapticManager.shared.play(.startRecognition)
+            soundEffect.play(.startRecognition)
         }
     }
     
