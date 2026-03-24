@@ -194,12 +194,14 @@ class SpeechRecognizer: ObservableObject {
         guard isRecording, !isRecognizing else { return }
         
         guard let recognizer = speechRecognizer else {
-            handleRecognitionError("Failed to prepare speech recognition.")
+            showErrorMessage("Failed to prepare speech recognition.")
+            stopRecording()
             return
         }
         
         guard recognizer.isAvailable else {
-            handleRecognitionError("Speech recognition is currently unavailable on this device.")
+            showErrorMessage("Speech recognition is currently unavailable on this device.")
+            stopRecording()
             return
         }
         
@@ -359,41 +361,6 @@ class SpeechRecognizer: ObservableObject {
     @objc private func handleAppStateChange() {
         isInBackground = UIApplication.shared.applicationState == .background
         validateMicState()
-    }
-    
-    private func handleRecognitionError(_ message: LocalizedStringResource) {
-        guard isRecognizing, recognitionTask != nil, recognitionRequest != nil else { return }
-        
-        // If record is already stopped, show error only
-        
-        guard isRecording else {
-            showErrorMessage(message)
-            return
-        }
-        
-        // If should & can keep recording for background standby, only stop recognition
-        
-        let shouldKeepRecording = (
-            userSettings.continueInBackground
-            && userSettings.standbyInBackground
-            && isInBackground
-        )
-        
-        let canKeepRecording = (
-            audioEngine.isRunning
-            && isMicrophoneAvailable()
-        )
-        
-        if shouldKeepRecording && canKeepRecording {
-            stopRecognize()
-            showErrorMessage(message)
-            return
-        }
-        
-        // Otherwise, stop recording
-        
-        stopRecording()
-        showErrorMessage(message)
     }
     
     // MARK: - Helpers
