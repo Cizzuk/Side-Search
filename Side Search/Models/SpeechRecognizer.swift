@@ -243,6 +243,10 @@ class SpeechRecognizer: ObservableObject {
             
             if let error = error {
                 guard isRecognizing else { return }
+                
+                // Ignore "No speech detected" error
+                if (error as NSError).code == 1110 { return }
+                
                 showErrorMessage("Speech recognition stopped: \(error.localizedDescription)")
                 stopRecording()
             }
