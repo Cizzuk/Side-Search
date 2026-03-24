@@ -261,6 +261,12 @@ class AssistantViewModel: ObservableObject {
         
         guard checkAvailability() else { return }
         
+        // If input text exists, confirm it
+        if !inputText.isEmpty {
+            confirmInput()
+            return
+        }
+        
         if isRecording {
             if isRecognizing {
                 // Reset silence timer
@@ -366,6 +372,8 @@ class AssistantViewModel: ObservableObject {
     
     // Handle Speech Recognizer Silence Timeout
     final func handleSilenceTimeout() {
+        guard !userSettings.manuallyConfirmSpeech else { return }
+        
         if !inputText.isEmpty {
             soundEffect.play(.completeRecognition)
             confirmInput()
