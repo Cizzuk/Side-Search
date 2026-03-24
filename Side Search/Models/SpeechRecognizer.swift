@@ -49,9 +49,6 @@ class SpeechRecognizer: ObservableObject {
     
     // Silence Detection Settings
     private var silenceTimer: Timer?
-    private var manuallyConfirmSpeech: Bool {
-        userSettings.manuallyConfirmSpeech
-    }
     
     private enum RecognizerError: LocalizedError {
         case microphoneUnavailable
@@ -238,9 +235,7 @@ class SpeechRecognizer: ObservableObject {
                     if isRecording && isRecognizing && !newText.isEmpty {
                         recognizedText = newText
                         // Wait after speech
-                        if !manuallyConfirmSpeech {
-                            startSilenceTimer(timeout: 1.0)
-                        }
+                        startSilenceTimer(timeout: 1.0)
                     }
                 }
             }
