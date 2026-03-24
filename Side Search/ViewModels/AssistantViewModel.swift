@@ -366,6 +366,8 @@ class AssistantViewModel: ObservableObject {
     
     // Handle Speech Recognizer Silence Timeout
     final func handleSilenceTimeout() {
+        guard !userSettings.manuallyConfirmSpeech else { return }
+        
         if !inputText.isEmpty {
             soundEffect.play(.completeRecognition)
             confirmInput()
