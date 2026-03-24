@@ -172,7 +172,7 @@ struct AssistantView: View {
                 
                 Spacer(minLength: 15)
                 
-                let assistantState = {
+                let assistantState: LocalizedStringResource = {
                     if viewModel.isRecognizing {
                         "Listening..."
                     } else if viewModel.isRecording {
