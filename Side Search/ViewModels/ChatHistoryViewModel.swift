@@ -52,7 +52,8 @@ class ChatHistoryViewModel: ObservableObject {
             .lowercased()
         
         if query.isEmpty {
-            return searchResults = []
+            searchResults = []
+            return
         }
         
         // Search in messages, assistant type
