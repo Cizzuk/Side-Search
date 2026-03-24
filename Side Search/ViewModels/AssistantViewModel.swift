@@ -35,14 +35,17 @@ class AssistantViewModel: ObservableObject {
     // Assistant State
     @Published var isRecording = false {
         didSet {
+            if isRecording { shouldUnfocusInput.toggle() }
             updateIdleTimerDisabled()
             updateActivateIntent()
             updateLiveActivityStatus()
-            if isRecording { shouldUnfocusInput.toggle() }
         }
     }
     @Published var isRecognizing = false {
-        didSet { updateLiveActivityStatus() }
+        didSet {
+            handleStartRecognitionFeedback()
+            updateLiveActivityStatus()
+        }
     }
     @Published var responseIsPreparing = false {
         didSet { updateLiveActivityStatus() }
@@ -65,6 +68,9 @@ class AssistantViewModel: ObservableObject {
     
     let speechRecognizer = SpeechRecognizer()
     private var cancellables = Set<AnyCancellable>()
+    
+    let hapticManager = HapticManager.shared
+    var shouldStartRecognitionFeedback = false
     
     var startWithMicMuted: Bool {
         if AccessibilitySettings.isAssistiveAccessEnabled {
@@ -261,6 +267,7 @@ class AssistantViewModel: ObservableObject {
                 speechRecognizer.setFirstSilenceTimer()
             } else {
                 // Resume recognition
+                shouldStartRecognitionFeedback = true
                 resumeRecognize()
             }
         } else {
@@ -269,6 +276,7 @@ class AssistantViewModel: ObservableObject {
                 shouldFocusInput.toggle()
             } else {
                 // Start recording
+                shouldStartRecognitionFeedback = true
                 startRecording()
             }
         }
@@ -359,6 +367,7 @@ class AssistantViewModel: ObservableObject {
     // Handle Speech Recognizer Silence Timeout
     final func handleSilenceTimeout() {
         if !inputText.isEmpty {
+            HapticManager.shared.play(.completeRecognition)
             confirmInput()
             return
         }
@@ -370,6 +379,14 @@ class AssistantViewModel: ObservableObject {
             } else {
                 stopRecording()
             }
+        }
+    }
+    
+    final func handleStartRecognitionFeedback() {
+        guard shouldStartRecognitionFeedback else { return }
+        shouldStartRecognitionFeedback = false
+        if isRecognizing {
+            HapticManager.shared.play(.startRecognition)
         }
     }
     
