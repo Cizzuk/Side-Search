@@ -20,11 +20,11 @@ nonisolated struct AssistantActivityAttributes: ActivityAttributes {
             case .listening:
                 return "Listening..."
             case .waitingForResponse:
-                return "Waiting for assistant..."
+                return "Waiting for Assistant..."
             case .pausingRecognition:
-                return "Recognition paused"
+                return "Recognition Paused"
             case .off:
-                return "Assistant is off"
+                return "Assistant is Off"
             }
         }
         

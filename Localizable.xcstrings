@@ -119,7 +119,7 @@
         }
       }
     },
-    "Assistant is off" : {
+    "Assistant is Off" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -880,7 +880,7 @@
         }
       }
     },
-    "Recognition paused" : {
+    "Recognition Paused" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -1093,12 +1093,12 @@
         }
       }
     },
-    "Stop Speech Recognition" : {
+    "Stop Microphone" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "音声認識を停止"
+            "value" : "マイクを停止"
           }
         }
       }
@@ -1273,12 +1273,12 @@
         }
       }
     },
-    "Waiting for assistant..." : {
+    "Waiting for Assistant..." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アシスタントを待っています…"
+            "value" : "アシスタントを待機中…"
           }
         }
       }
