@@ -69,6 +69,16 @@
         }
       }
     },
+    "Always On" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "常にオン"
+          }
+        }
+      }
+    },
     "API Key" : {
       "localizations" : {
         "ja" : {
@@ -115,6 +125,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アシスタントオフ"
+          }
+        }
+      }
+    },
+    "Background Only" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドのみ"
           }
         }
       }
@@ -770,6 +790,16 @@
         }
       }
     },
+    "Off" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オフ"
+          }
+        }
+      }
+    },
     "OK" : {
       "localizations" : {
         "ja" : {
@@ -942,6 +972,16 @@
     },
     "Side Search" : {
       "shouldTranslate" : false
+    },
+    "Sound Effects" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "効果音"
+          }
+        }
+      }
     },
     "Source" : {
       "localizations" : {

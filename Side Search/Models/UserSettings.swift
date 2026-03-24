@@ -116,6 +116,18 @@ class UserSettings: ObservableObject {
     
     // MARK: - Other Settings
     
+    @Published var soundEffectsMode: SoundEffect.Mode = {
+        if let rawValue = UserDefaults.standard.string(forKey: Keys.soundEffectsMode),
+           let mode = SoundEffect.Mode(rawValue: rawValue) {
+            return mode
+        }
+        return .default
+    }() {
+        didSet {
+            UserDefaults.standard.set(soundEffectsMode.rawValue, forKey: Keys.soundEffectsMode)
+        }
+    }
+    
     @Published var disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: Keys.disableMarkdownRendering) {
         didSet {
             UserDefaults.standard.set(disableMarkdownRendering, forKey: Keys.disableMarkdownRendering)
