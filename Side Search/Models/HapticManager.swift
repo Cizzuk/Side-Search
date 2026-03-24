@@ -14,18 +14,15 @@ final class HapticManager {
     var engine: CHHapticEngine?
     
     enum Sounds {
-        case recognitionStart
-        case recognitionStop
-        case recognitionComplete
+        case startRecognition
+        case completeRecognition
         
         var filename: String {
             switch self {
-            case .recognitionStart:
-                return "recognitionStart"
-            case .recognitionStop:
-                return "recognitionStop"
-            case .recognitionComplete:
-                return "recognitionComplete"
+            case .startRecognition:
+                return "startRecognition"
+            case .completeRecognition:
+                return "completeRecognition"
             }
         }
     }
