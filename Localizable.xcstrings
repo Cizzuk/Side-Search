@@ -1003,16 +1003,6 @@
         }
       }
     },
-    "Speech recognition is currently unavailable on this device." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "音声認識は現在、このデバイスでは利用できません。"
-          }
-        }
-      }
-    },
     "Speech recognition is not available in the selected language or on this device." : {
       "localizations" : {
         "ja" : {
@@ -1029,16 +1019,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "音声認識が停止しました: %@"
-          }
-        }
-      }
-    },
-    "Speech recognizer could not be initialized." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "音声認識の初期化に失敗しました。"
           }
         }
       }
