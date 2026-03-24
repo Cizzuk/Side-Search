@@ -122,7 +122,7 @@ class SpeechRecognizer: ObservableObject {
     
     func startRecording() {
         Task {
-            guard await checkAvailability() else { return }
+            guard await checkMicrophoneAuthorization() else { return }
             
             guard !isRecording else { return }
             
@@ -252,8 +252,8 @@ class SpeechRecognizer: ObservableObject {
     // MARK: - Availability Checks
     
     @MainActor
-    private func checkAvailability() async -> Bool {
-        // 1. Check Microphone Authorization
+    private func checkMicrophoneAuthorization() async -> Bool {
+        // Check Microphone Authorization
         switch AVAudioApplication.shared.recordPermission {
         case .granted:
             break
@@ -278,25 +278,6 @@ class SpeechRecognizer: ObservableObject {
             }
         default:
             showErrorMessage("Unknown microphone authorization status.")
-            return false
-        }
-        
-        // 2. Check Speech Recognition Availability
-        
-        // Check supported locales
-        guard !SFSpeechRecognizer.supportedLocales().isEmpty else {
-            showErrorMessage("Speech recognition is currently unavailable on this device.")
-            return false
-        }
-        
-        // Check supportsOnDeviceRecognition & initialization
-        if let recognizer = speechRecognizer {
-            if !recognizer.supportsOnDeviceRecognition {
-                showErrorMessage("Speech recognition is currently unavailable on this device.")
-                return false
-            }
-        } else {
-            showErrorMessage("Speech recognizer could not be initialized.")
             return false
         }
         
