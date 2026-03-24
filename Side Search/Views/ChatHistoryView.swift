@@ -77,12 +77,6 @@ struct ChatHistoryView: View {
                 viewModel.loadChats()
             }
         }
-        .fullScreenCover(isPresented: $viewModel.showSafariView) {
-            if let url = viewModel.searchURL {
-                SafariView(url: url)
-                    .ignoresSafeArea()
-            }
-        }
     }
     
     // MARK: - Chat Link List

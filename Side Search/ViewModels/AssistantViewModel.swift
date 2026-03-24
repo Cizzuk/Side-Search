@@ -263,6 +263,7 @@ class AssistantViewModel: ObservableObject {
         
         // If input text exists, confirm it
         if !inputText.isEmpty {
+            soundEffect.play(.completeRecognition)
             confirmInput()
             return
         }
