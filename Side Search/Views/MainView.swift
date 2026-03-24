@@ -72,12 +72,6 @@ struct MainView: View {
                 }
                 
                 Section {
-                    Picker("Assistant Screen Size", selection: $userSettings.assistantViewDetent) {
-                        ForEach(AssistantViewModel.DetentOption.allCases) { option in
-                            Text(option.displayName).tag(option)
-                        }
-                    }
-                    
                     Toggle("Disable Markdown Rendering", isOn: $userSettings.disableMarkdownRendering)
                 }
                 
@@ -183,7 +177,7 @@ struct MainView: View {
                     in: ns_assistantView
                 ))
         }
-        .fullScreenCover(isPresented: $viewModel.showAssistantFullScreen) {
+        .fullScreenCover(isPresented: $viewModel.showAssistant) {
             NavigationStack { AssistantView() }
                 .navigationTransition(.zoom(
                     sourceID: id_activateAssistantButton,

@@ -20,7 +20,6 @@ class UserSettings: ObservableObject {
         static let startWithMicMuted = "startWithMicMuted"
         static let continueInBackground = "continueInBackground"
         static let standbyInBackground = "standbyInBackground"
-        static let assistantViewDetent = "assistantViewDetent"
         static let disableMarkdownRendering = "disableMarkdownRendering"
     }
 
@@ -115,19 +114,7 @@ class UserSettings: ObservableObject {
     }
     
     // MARK: - Other Settings
-
-    @Published var assistantViewDetent: AssistantViewModel.DetentOption = {
-        if let rawValue = UserDefaults.standard.string(forKey: Keys.assistantViewDetent),
-           let option = AssistantViewModel.DetentOption(rawValue: rawValue) {
-            return option
-        }
-        return .defaultDetent
-    }() {
-        didSet {
-            UserDefaults.standard.set(assistantViewDetent.rawValue, forKey: Keys.assistantViewDetent)
-        }
-    }
-
+    
     @Published var disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: Keys.disableMarkdownRendering) {
         didSet {
             UserDefaults.standard.set(disableMarkdownRendering, forKey: Keys.disableMarkdownRendering)

@@ -121,8 +121,6 @@ struct AssistantView: View {
         )
         .navigationBarBackButtonHidden(!useNavigationBackButton)
         .animation(.smooth, value: viewModel.micLevel)
-        .presentationDetents(AssistantViewModel.DetentOption.allOption, selection: $viewModel.detent)
-        .presentationContentInteraction(.scrolls)
         .accessibilityAction(.escape) { dismissView() }
         .accessibilityAction(.magicTap) {
             NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
@@ -185,7 +183,6 @@ struct AssistantView: View {
                 .onChange(of: isInputFocused) {
                     if isInputFocused {
                         viewModel.stopRecording()
-                        viewModel.detent = .large
                     }
                 }
                 .onChange(of: viewModel.shouldFocusInput) {

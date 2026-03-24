@@ -119,16 +119,6 @@
         }
       }
     },
-    "Assistant Screen Size" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アシスタントの画面サイズ"
-          }
-        }
-      }
-    },
     "Background Settings" : {
       "localizations" : {
         "ja" : {
@@ -547,16 +537,6 @@
         }
       }
     },
-    "Full Screen" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全画面"
-          }
-        }
-      }
-    },
     "Gemini" : {
       "localizations" : {
         "ja" : {
@@ -707,16 +687,6 @@
         }
       }
     },
-    "Large" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "大"
-          }
-        }
-      }
-    },
     "License" : {
       "localizations" : {
         "ja" : {
@@ -753,16 +723,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "手動で完了する"
-          }
-        }
-      }
-    },
-    "Medium" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "中"
           }
         }
       }
@@ -982,16 +942,6 @@
     },
     "Side Search" : {
       "shouldTranslate" : false
-    },
-    "Small" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "小"
-          }
-        }
-      }
     },
     "Source" : {
       "localizations" : {
