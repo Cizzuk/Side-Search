@@ -118,9 +118,9 @@ struct AssistantView: View {
             .ignoresSafeArea()
             .opacity((0.15 + Double(viewModel.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
             .blur(radius: 30)
+            .animation(.smooth, value: viewModel.micLevel)
         )
         .navigationBarBackButtonHidden(!useNavigationBackButton)
-        .animation(.smooth, value: viewModel.micLevel)
         .accessibilityAction(.escape) { dismissView() }
         .accessibilityAction(.magicTap) {
             NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
@@ -142,7 +142,7 @@ struct AssistantView: View {
                 HStack {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
-                    Text("Waiting for assistant...")
+                    Text("Waiting for Assistant...")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -172,8 +172,16 @@ struct AssistantView: View {
                 
                 Spacer(minLength: 15)
                 
-                TextField(viewModel.isRecognizing ? "Listening..." : "Ask Assistant",
-                          text: $viewModel.inputText, axis: .vertical)
+                let assistantState = {
+                    if viewModel.isRecognizing {
+                        "Listening..."
+                    } else if viewModel.isRecording {
+                        "Recognition Paused"
+                    } else {
+                        "Ask Assistant"
+                    }
+                }()
+                TextField(assistantState, text: $viewModel.inputText, axis: .vertical)
                 .bold()
                 .submitLabel(.return)
                 .focused($isInputFocused)
@@ -200,7 +208,7 @@ struct AssistantView: View {
                 if isAssistiveAccessEnabled {
                     Spacer(minLength: 30)
                     Button(action: { viewModel.toggleRecording() }) {
-                        Label(viewModel.isRecognizing ? "Stop" : "Speak",
+                        Label(viewModel.isRecording ? "Stop" : "Speak",
                               systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
                     }
                     .disabled(viewModel.responseIsPreparing)
@@ -238,8 +246,8 @@ struct AssistantView: View {
         ToolbarItemGroup(placement: .primaryAction) {
             if isAssistantAvailable {
                 Button(action: { viewModel.toggleRecording() }) {
-                    Label(viewModel.isRecording ? "Stop Speech Recognition" : "Start Speech Recognition",
-                          systemImage: viewModel.isRecording ? "microphone.fill" : "microphone")
+                    Label(viewModel.isRecording ? "Stop Microphone" : "Start Speech Recognition",
+                          systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
                 }
                 .tint(viewModel.isRecording ? .orange : .primary)
                 
