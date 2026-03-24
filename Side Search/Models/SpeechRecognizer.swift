@@ -362,6 +362,8 @@ class SpeechRecognizer: ObservableObject {
     }
     
     private func handleRecognitionError(_ message: LocalizedStringResource) {
+        guard isRecognizing, recognitionTask != nil, recognitionRequest != nil else { return }
+        
         // If record is already stopped, show error only
         
         guard isRecording else {
