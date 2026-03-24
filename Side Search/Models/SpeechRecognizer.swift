@@ -245,7 +245,7 @@ class SpeechRecognizer: ObservableObject {
             
             if let error = error {
                 guard isRecognizing else { return }
-                handleRecognitionError("Speech recognition stopped: \(error.localizedDescription)")
+                showErrorMessage("Speech recognition stopped: \(error.localizedDescription)")
             }
         }
     }
