@@ -33,6 +33,7 @@ struct AssistantView: View {
     }
     
     func dismissView() {
+        guard !isAssistiveAccessEnabled else { return }
         viewModel.dismissAssistant(fromView: true)
         dismiss()
     }
@@ -233,33 +234,35 @@ struct AssistantView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            if !useNavigationBackButton {
-                Button(role: .close) {
-                    dismissView()
-                } label: {
-                    Label("End Assistant", systemImage: "xmark")
+        if !isAssistiveAccessEnabled {
+            ToolbarItem(placement: .cancellationAction) {
+                if !useNavigationBackButton {
+                    Button(role: .close) {
+                        dismissView()
+                    } label: {
+                        Label("End Assistant", systemImage: "xmark")
+                    }
                 }
             }
-        }
-        
-        ToolbarItemGroup(placement: .primaryAction) {
-            if isAssistantAvailable {
-                Button(action: { viewModel.toggleRecording() }) {
-                    Label(viewModel.isRecording ? "Stop Microphone" : "Start Speech Recognition",
-                          systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
+            
+            ToolbarItemGroup(placement: .primaryAction) {
+                if isAssistantAvailable {
+                    Button(action: { viewModel.toggleRecording() }) {
+                        Label(viewModel.isRecording ? "Stop Microphone" : "Start Speech Recognition",
+                              systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
+                    }
+                    .tint(viewModel.isRecording ? .orange : .primary)
+                    
+                    Button(role: .confirm) {
+                        viewModel.confirmInput()
+                    } label: {
+                        Label("Confirm", systemImage: viewModel.chat.assistantType.DescriptionProviderType.assistantSystemImage)
+                            .foregroundStyle(.white)
+                    }
+                    .tint(.dropblue)
+                    .buttonStyle(.glassProminent)
+                    .disabled(viewModel.responseIsPreparing)
                 }
-                .tint(viewModel.isRecording ? .orange : .primary)
-                
-                Button(role: .confirm) {
-                    viewModel.confirmInput()
-                } label: {
-                    Label("Confirm", systemImage: viewModel.chat.assistantType.DescriptionProviderType.assistantSystemImage)
-                        .foregroundStyle(.white)
-                }
-                .tint(.dropblue)
-                .buttonStyle(.glassProminent)
-                .disabled(viewModel.responseIsPreparing)
             }
         }
     }
