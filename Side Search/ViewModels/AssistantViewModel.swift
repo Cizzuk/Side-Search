@@ -261,30 +261,34 @@ class AssistantViewModel: ObservableObject {
         
         guard checkAvailability() else { return }
         
-        // If input text exists, confirm it
-        if !inputText.isEmpty {
-            soundEffect.play(.completeRecognition)
-            confirmInput()
-            return
-        }
-        
         if isRecording {
             if isRecognizing {
-                // Reset silence timer
-                speechRecognizer?.setFirstSilenceTimer()
+                if inputText.isEmpty {
+                    // Reset silence timer
+                    speechRecognizer?.setFirstSilenceTimer()
+                    return
+                } else {
+                    // If input text exists, confirm it
+                    soundEffect.play(.completeRecognition)
+                    confirmInput()
+                    return
+                }
             } else {
                 // Resume recognition
                 shouldStartRecognitionFeedback = true
                 resumeRecognize()
+                return
             }
         } else {
             if startWithMicMuted {
                 // Show keyboard
                 shouldFocusInput.toggle()
+                return
             } else {
                 // Start recording
                 shouldStartRecognitionFeedback = true
                 startRecording()
+                return
             }
         }
     }
