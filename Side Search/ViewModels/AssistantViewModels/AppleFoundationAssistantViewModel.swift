@@ -14,20 +14,13 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     
     private var assistantModel = AppleFoundationAssistantModel.load()
     
-    private var session: LanguageModelSession
-    
-    // MARK: - Initialization
-    
-    override init(assistantType: AssistantType = .appleFoundation) {
-        // Initialize Language Model Session with custom instructions if provided
+    lazy private var session: LanguageModelSession = {
         if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            self.session = LanguageModelSession()
+            return LanguageModelSession()
         } else {
-            self.session = LanguageModelSession(instructions: assistantModel.customInstructions)
+            return LanguageModelSession(instructions: assistantModel.customInstructions)
         }
-        
-        super.init(assistantType: assistantType)
-    }
+    }()
     
     // MARK: - Helper Methods
     
@@ -39,7 +32,29 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
     
     // MARK: - Override Methods
     
-    override func confirmInput() {
+    override func assistantInitialize() {
+        guard !chat.messages.isEmpty else { return }
+        
+        // Restore chat history
+        let entries: some Sequence<Transcript.Entry> = chat.messages.compactMap { message in
+            let textSegment = Transcript.TextSegment(content: message.content)
+            
+            switch message.from {
+            case .user:
+                let prompt = Transcript.Prompt(segments: [.text(textSegment)])
+                return Transcript.Entry.prompt(prompt)
+            case .assistant:
+                let response = Transcript.Response(assetIDs: [], segments: [.text(textSegment)])
+                return Transcript.Entry.response(response)
+            case .system:
+                return nil
+            }
+        }
+        
+        session = LanguageModelSession(transcript: Transcript(entries: entries))
+    }
+    
+    override func processInput() {
         // Prevent empty input
         guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         else { return }

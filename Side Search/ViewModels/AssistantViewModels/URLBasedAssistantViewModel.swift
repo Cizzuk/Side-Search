@@ -13,15 +13,9 @@ class URLBasedAssistantViewModel: AssistantViewModel {
     
     private var assistantModel = URLBasedAssistantModel.load()
     
-    // MARK: - Initialization
-    
-    override init(assistantType: AssistantType = .urlBased) {
-        super.init(assistantType: assistantType)
-    }
-    
     // MARK: - Override Methods
     
-    override func confirmInput() {
+    override func processInput() {
         // Stop recording before searching
         stopRecording()
         

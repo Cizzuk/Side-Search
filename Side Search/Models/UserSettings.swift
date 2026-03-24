@@ -20,18 +20,16 @@ class UserSettings: ObservableObject {
         static let startWithMicMuted = "startWithMicMuted"
         static let continueInBackground = "continueInBackground"
         static let standbyInBackground = "standbyInBackground"
-        static let assistantViewDetent = "assistantViewDetent"
+        static let soundEffectsMode = "soundEffectsMode"
         static let disableMarkdownRendering = "disableMarkdownRendering"
     }
 
     @Published var currentAssistant: AssistantType = {
         if let rawValue = UserDefaults.standard.string(forKey: Keys.currentAssistant),
-           let storedAssistant = AssistantType(rawValue: rawValue),
-           !storedAssistant.DescriptionProviderType.isBlocked(),
-           storedAssistant.DescriptionProviderType.isAvailable() {
+           let storedAssistant = AssistantType(rawValue: rawValue) {
             return storedAssistant
         }
-        return .defaultType
+        return .default
     }() {
         didSet {
             UserDefaults.standard.set(currentAssistant.rawValue, forKey: Keys.currentAssistant)
@@ -117,19 +115,19 @@ class UserSettings: ObservableObject {
     }
     
     // MARK: - Other Settings
-
-    @Published var assistantViewDetent: AssistantViewModel.DetentOption = {
-        if let rawValue = UserDefaults.standard.string(forKey: Keys.assistantViewDetent),
-           let option = AssistantViewModel.DetentOption(rawValue: rawValue) {
-            return option
+    
+    @Published var soundEffectsMode: SoundEffect.Mode = {
+        if let rawValue = UserDefaults.standard.string(forKey: Keys.soundEffectsMode),
+           let mode = SoundEffect.Mode(rawValue: rawValue) {
+            return mode
         }
-        return .defaultDetent
+        return .default
     }() {
         didSet {
-            UserDefaults.standard.set(assistantViewDetent.rawValue, forKey: Keys.assistantViewDetent)
+            UserDefaults.standard.set(soundEffectsMode.rawValue, forKey: Keys.soundEffectsMode)
         }
     }
-
+    
     @Published var disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: Keys.disableMarkdownRendering) {
         didSet {
             UserDefaults.standard.set(disableMarkdownRendering, forKey: Keys.disableMarkdownRendering)

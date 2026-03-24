@@ -18,41 +18,33 @@ struct ChatHistoryView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    Toggle("Enable Chat History", isOn: $userSettings.chatHistoryEnabled)
-                }
-                
-                ForEach(viewModel.chats) { chat in
-                    NavigationLink(destination: ChatDetailView(viewModel: viewModel, chat: chat)) {
-                        VStack(alignment: .leading) {
-                            Text(chat.previewText)
-                                .font(.headline)
-                                .lineLimit(2)
-                            Spacer()
-                            HStack {
-                                Text(chat.date, style: .date)
+                if viewModel.searchQuery.isEmpty {
+                    // Full history
+                    Section {
+                        Toggle("Enable Chat History", isOn: $userSettings.chatHistoryEnabled)
+                    }
+                    ChatLinkList(viewModel: viewModel, chats: viewModel.chats)
+                } else {
+                    if viewModel.searchResults.isEmpty {
+                        // No search results
+                        Section {} footer: {
+                            VStack {
+                                Label("No Results", systemImage: "magnifyingglass")
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .font(.headline)
                                 Spacer()
-                                Text(chat.assistantType.DescriptionProviderType.assistantName)
+                                Text("for \"\(viewModel.searchQuery)\".")
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .font(.caption)
                             }
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
                         }
-                    }
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            viewModel.delete(chat.id)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                    }
-                }
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        let chat = viewModel.chats[index]
-                        viewModel.delete(chat.id)
+                    } else {
+                        // Search results
+                        ChatLinkList(viewModel: viewModel, chats: viewModel.searchResults)
                     }
                 }
             }
+            .searchable(text: $viewModel.searchQuery)
             .animation(.default, value: viewModel.chats.count)
             .navigationTitle("Chat History")
             .navigationBarTitleDisplayMode(.inline)
@@ -93,49 +85,41 @@ struct ChatHistoryView: View {
         }
     }
     
-    // MARK: - Chat Detail View
+    // MARK: - Chat Link List
     
-    struct ChatDetailView: View {
-        @Environment(\.dismiss) private var dismiss
+    struct ChatLinkList: View {
         @ObservedObject var viewModel: ChatHistoryViewModel
-        var chat: ChatHistory.Chat
+        var chats: [ChatHistory.Chat]
         
         var body: some View {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 45) {
-                    // Details
+            ForEach(chats) { chat in
+                NavigationLink(destination: AssistantView(chat: chat, autoActivate: false, useNavigationBackButton: true)) {
                     VStack(alignment: .leading) {
+                        Text(chat.previewText)
+                            .font(.headline)
+                            .lineLimit(2)
+                        Spacer()
                         HStack {
                             Text(chat.date, style: .date)
-                            Text(chat.date, style: .time)
+                            Spacer()
+                            Text(chat.assistantType.DescriptionProviderType.assistantName)
                         }
-                        Spacer()
-                        Text(chat.assistantType.DescriptionProviderType.assistantName)
-                    }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    
-                    // Messages
-                    ForEach(chat.messages) { message in
-                        MessagesView(message: message, openSafariView: { url in
-                            viewModel.openSafariView(at: url)
-                        })
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
                     }
                 }
-                .padding(.horizontal, 25)
-                .padding(.vertical, 20)
-            }
-            .navigationTitle(Text(chat.date, style: .date))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                .contextMenu {
                     Button(role: .destructive) {
                         viewModel.delete(chat.id)
-                        dismiss()
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
-                    .tint(.red)
+                }
+            }
+            .onDelete { indexSet in
+                for index in indexSet {
+                    let chat = chats[index]
+                    viewModel.delete(chat.id)
                 }
             }
         }

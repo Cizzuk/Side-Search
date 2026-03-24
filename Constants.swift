@@ -9,6 +9,10 @@ import Foundation
 
 let GroupUserDefaults = UserDefaults(suiteName: "group.net.cizzuk.sidesearch")!
 
+extension Notification.Name {
+    static let assistantDidActivate = Notification.Name("assistantDidActivate")
+}
+
 enum CFNotificationFlags {
     static let shouldEndAssistant = "CFNotification.shouldEndAssistant"
 }

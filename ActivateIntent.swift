@@ -7,10 +7,6 @@
 
 import AppIntents
 
-extension Notification.Name {
-    static let activateIntentDidActivate = Notification.Name("activateIntentDidActivate")
-}
-
 @AppIntent(schema: .assistant.activate)
 struct ActivateIntent: AppIntent {
     static let title: LocalizedStringResource = "Start Assistant"
@@ -29,7 +25,7 @@ struct ActivateIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        NotificationCenter.default.post(name: .activateIntentDidActivate, object: nil)
+        NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
         return .result()
     }
 }

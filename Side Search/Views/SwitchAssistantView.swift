@@ -15,8 +15,7 @@ struct SwitchAssistantView: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(AssistantType.allCases.filter { !$0.DescriptionProviderType.isBlocked() },
-                            id: \.self) { type in
+                    ForEach(AssistantType.allCases, id: \.self) { type in
                         Button() {
                             currentAssistant = type
                             dismiss()

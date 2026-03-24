@@ -68,12 +68,6 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     private var chatHistory: [GeminiContent] = []
     
-    // MARK: - Initialization
-    
-    override init(assistantType: AssistantType = .geminiAPI) {
-        super.init(assistantType: assistantType)
-    }
-    
     // MARK: - Helper Methods
     
     @MainActor
@@ -158,8 +152,30 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     }
     
     // MARK: - Override Methods
+
+    override func assistantInitialize() {
+        guard !chat.messages.isEmpty else { return }
+
+        // Restore chat history
+        chatHistory = chat.messages.compactMap { message in
+            let role: String
+            switch message.from {
+            case .user:
+                role = "user"
+            case .assistant:
+                role = "model"
+            case .system:
+                return nil
+            }
+            
+            return GeminiContent(
+                role: role,
+                parts: [GeminiPart(text: message.content)]
+            )
+        }
+    }
     
-    override func confirmInput() {
+    override func processInput() {
         // Prevent empty input
         guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         else { return }

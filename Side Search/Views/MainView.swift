@@ -72,9 +72,9 @@ struct MainView: View {
                 }
                 
                 Section {
-                    Picker("Assistant Screen Size", selection: $userSettings.assistantViewDetent) {
-                        ForEach(AssistantViewModel.DetentOption.allCases) { option in
-                            Text(option.displayName).tag(option)
+                    Picker("Sound Effects", selection: $userSettings.soundEffectsMode) {
+                        ForEach(SoundEffect.Mode.allCases) { mode in
+                            Text(mode.displayName).tag(mode)
                         }
                     }
                     
@@ -111,7 +111,6 @@ struct MainView: View {
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
-            .accessibilityAction(.magicTap, { viewModel.activateAssistant() })
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { viewModel.showModal(.switchAssistant) }) {
@@ -145,11 +144,14 @@ struct MainView: View {
                 }
             }
             // MARK: - Events
-            .onReceive(NotificationCenter.default.publisher(for: .activateIntentDidActivate)) { _ in
+            .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
                 showClearInAppBrowserDataAlert = false
                 viewModel.activateAssistant()
             }
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
+        }
+        .accessibilityAction(.magicTap) {
+            NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
         }
         // MARK: - Sheets
         .sheet(isPresented: $viewModel.showHelpView) {
@@ -174,15 +176,8 @@ struct MainView: View {
                     in: ns_switchAssistantView
                 ))
         }
-        .sheet(isPresented: $viewModel.showAssistant) {
-            AssistantView()
-                .navigationTransition(.zoom(
-                    sourceID: id_activateAssistantButton,
-                    in: ns_assistantView
-                ))
-        }
-        .fullScreenCover(isPresented: $viewModel.showAssistantFullScreen) {
-            AssistantView()
+        .fullScreenCover(isPresented: $viewModel.showAssistant) {
+            NavigationStack { AssistantView() }
                 .navigationTransition(.zoom(
                     sourceID: id_activateAssistantButton,
                     in: ns_assistantView

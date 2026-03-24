@@ -24,24 +24,17 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true
     
-    static var makeSettingsView: any View { AppleFoundationAssistantSettingsView() }
-
-    static func makeAssistantViewModel() -> AssistantViewModel { AppleFoundationAssistantViewModel() }
-    
     static func isAvailable() -> Bool {
+        if GeoHelper.currentRegion == "CN" {
+            return false
+        }
+        
         switch SystemLanguageModel.default.availability {
         case .available:
             return true
         case .unavailable:
             return false
         }
-    }
-    
-    static func isBlocked() -> Bool {
-        if GeoHelper.currentRegion == "CN" {
-            return true
-        }
-        return false
     }
 }
 

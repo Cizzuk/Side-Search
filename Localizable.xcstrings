@@ -69,6 +69,16 @@
         }
       }
     },
+    "Always On" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "常にオン"
+          }
+        }
+      }
+    },
     "API Key" : {
       "localizations" : {
         "ja" : {
@@ -119,12 +129,12 @@
         }
       }
     },
-    "Assistant Screen Size" : {
+    "Background Only" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アシスタントの画面サイズ"
+            "value" : "バックグラウンドのみ"
           }
         }
       }
@@ -447,6 +457,16 @@
         }
       }
     },
+    "Dismiss Keyboard" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キーボードを閉じる"
+          }
+        }
+      }
+    },
     "DuckDuckGo" : {
       "localizations" : {
         "ja" : {
@@ -527,12 +547,12 @@
         }
       }
     },
-    "Full Screen" : {
+    "for \"%@\"." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全画面"
+            "value" : "対象: \"%@\""
           }
         }
       }
@@ -687,16 +707,6 @@
         }
       }
     },
-    "Large" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "大"
-          }
-        }
-      }
-    },
     "License" : {
       "localizations" : {
         "ja" : {
@@ -737,16 +747,6 @@
         }
       }
     },
-    "Medium" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "中"
-          }
-        }
-      }
-    },
     "Microphone access denied. Please enable it in Settings." : {
       "localizations" : {
         "ja" : {
@@ -770,12 +770,32 @@
         }
       }
     },
+    "No Results" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結果なし"
+          }
+        }
+      }
+    },
     "Notifications allowed." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "通知は許可されています。"
+          }
+        }
+      }
+    },
+    "Off" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オフ"
           }
         }
       }
@@ -953,12 +973,12 @@
     "Side Search" : {
       "shouldTranslate" : false
     },
-    "Small" : {
+    "Sound Effects" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "小"
+            "value" : "効果音"
           }
         }
       }
@@ -1093,6 +1113,16 @@
         }
       }
     },
+    "Submit" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "送信"
+          }
+        }
+      }
+    },
     "Switch Assistant" : {
       "localizations" : {
         "ja" : {
@@ -1139,6 +1169,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "このアシスタントはAIであるため、間違えることがあります。"
+          }
+        }
+      }
+    },
+    "This assistant is not available." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアシスタントは利用できません。"
           }
         }
       }

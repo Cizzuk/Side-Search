@@ -12,6 +12,12 @@ import SwiftUI
 class ChatHistoryViewModel: ObservableObject {
     @Published var chats: [ChatHistory.Chat] = []
     
+    // Search Chat History
+    @Published var searchResults: [ChatHistory.Chat] = []
+    @Published var searchQuery = "" {
+        didSet { updateSearch() }
+    }
+    
     // Web View
     @Published var searchURL: URL?
     @Published var showSafariView = false
@@ -38,5 +44,27 @@ class ChatHistoryViewModel: ObservableObject {
     func clearAll() {
         ChatHistory.clearAll()
         loadChats()
+    }
+    
+    func updateSearch() {
+        let query = searchQuery
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+        
+        if query.isEmpty {
+            return searchResults = []
+        }
+        
+        // Search in messages, assistant type
+        let filtered = chats.filter { chat in
+            let assistantName = String(localized: chat.assistantType.DescriptionProviderType.assistantName).lowercased()
+            
+            let matchesAssistant = assistantName.contains(query)
+            let matchesMessages = chat.messages.contains { $0.content.lowercased().contains(query) }
+            
+            return matchesAssistant || matchesMessages
+        }
+        
+        searchResults = filtered.sorted { $0.date > $1.date }
     }
 }
