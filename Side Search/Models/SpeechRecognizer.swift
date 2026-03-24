@@ -196,8 +196,8 @@ class SpeechRecognizer: ObservableObject {
             return
         }
         
-        guard recognizer.isAvailable else {
-            showErrorMessage("Speech recognition is currently unavailable on this device.")
+        guard recognizer.isAvailable, recognizer.supportsOnDeviceRecognition else {
+            showErrorMessage("Speech recognition is not available in the selected language or on this device.")
             stopRecording()
             return
         }
@@ -205,6 +205,7 @@ class SpeechRecognizer: ObservableObject {
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.requiresOnDeviceRecognition = true
         request.shouldReportPartialResults = true
+        request.taskHint = .dictation
         recognitionRequest = request
         
         startRecognitionTask(request: request, recognizer: recognizer)
@@ -243,6 +244,7 @@ class SpeechRecognizer: ObservableObject {
             if let error = error {
                 guard isRecognizing else { return }
                 showErrorMessage("Speech recognition stopped: \(error.localizedDescription)")
+                stopRecording()
             }
         }
     }
