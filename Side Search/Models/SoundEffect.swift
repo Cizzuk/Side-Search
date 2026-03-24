@@ -58,15 +58,6 @@ final class SoundEffect {
         } catch let error {
             print("CHHapticEngine Creation Error: \(error)")
         }
-        
-        guard let engine = engine else {
-            print("Failed to create engine!")
-            return
-        }
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            try? engine.start()
-        }
     }
     
     func play(_ sound: SoundEffect.Sounds) {
@@ -88,7 +79,7 @@ final class SoundEffect {
             }
             
             do {
-                
+                try engine.start()
                 try engine.playPattern(from: URL(fileURLWithPath: path))
             } catch {
                 print("Failed to play AHAP (\(sound)): \(error).")
