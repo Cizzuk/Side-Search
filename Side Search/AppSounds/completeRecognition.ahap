@@ -1,0 +1,48 @@
+{
+    "Version": 1.0,
+    "Metadata":
+        {
+            "Project" : "Side Search",
+            "Created" : "24 March 2026",
+            "Description" : "For Side Search - Created by Cizzuk"
+        },
+    "Pattern":
+    [
+        {
+            "Event":
+            {
+                "Time": 0.0,
+                "EventType": "AudioCustom",
+                "EventWaveformPath": "completeRecognition.m4a",
+                "EventParameters":
+                [
+                    { "ParameterID": "AudioVolume", "ParameterValue": 1.0 }
+                ]
+            }
+        },
+        {
+            "Event":
+            {
+                "Time": 0.0,
+                "EventType": "HapticTransient",
+                "EventParameters":
+                [
+                    { "ParameterID": "HapticIntensity", "ParameterValue": 0.8 },
+                    { "ParameterID": "HapticSharpness", "ParameterValue": 0.6 }
+                ]
+            }
+        },
+        {
+            "Event":
+            {
+                "Time": 0.107,
+                "EventType": "HapticTransient",
+                "EventParameters":
+                [
+                    { "ParameterID": "HapticIntensity", "ParameterValue": 0.8 },
+                    { "ParameterID": "HapticSharpness", "ParameterValue": 1.0 }
+                ]
+            }
+        }
+    ]
+}
