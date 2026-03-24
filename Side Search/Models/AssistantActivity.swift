@@ -92,12 +92,11 @@ class AssistantActivityManager {
         )
         
         do {
-            let activity = try Activity.request(
+            let _ = try Activity.request(
                 attributes: attributes,
                 content: content,
                 pushType: nil
             )
-            print("Started assistant activity: \(activity) with state: \(state)")
         } catch {
             print("Failed to start assistant activity: \(error)")
         }
@@ -115,7 +114,6 @@ class AssistantActivityManager {
             for activity in activities {
                 guard activity.content.state != state else { continue }
                 await activity.update(content)
-                print("Updated assistant activity: \(activity) to state: \(state)")
             }
         }
     }
@@ -136,7 +134,6 @@ class AssistantActivityManager {
                     content,
                     dismissalPolicy: .immediate
                 )
-                print("Ended assistant activity: \(activity)")
             }
         }
     }

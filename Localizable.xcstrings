@@ -1013,6 +1013,16 @@
         }
       }
     },
+    "Speech recognition is not available in the selected language or on this device." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識は、選択した言語で利用できないか、このデバイスで利用できません。"
+          }
+        }
+      }
+    },
     "Speech recognition stopped: %@" : {
       "localizations" : {
         "ja" : {
