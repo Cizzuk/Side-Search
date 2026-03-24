@@ -66,7 +66,7 @@ class AssistantViewModel: ObservableObject {
     
     @Published var micLevel: Float = 0.0
     
-    let speechRecognizer = SpeechRecognizer()
+    var speechRecognizer: SpeechRecognizer? = SpeechRecognizer()
     private var cancellables = Set<AnyCancellable>()
     
     let soundEffect = SoundEffect.shared
@@ -141,43 +141,43 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Variable Bindings
     
     private final func setupSpeechRecognizerBindings() {
-        speechRecognizer.$recognizedText
+        speechRecognizer?.$recognizedText
             .sink { [weak self] text in
                 self?.inputText = text
             }
             .store(in: &cancellables)
         
-        speechRecognizer.$isRecording
+        speechRecognizer?.$isRecording
             .sink { [weak self] recording in
                 self?.isRecording = recording
             }
             .store(in: &cancellables)
         
-        speechRecognizer.$isRecognizing
+        speechRecognizer?.$isRecognizing
             .sink { [weak self] recognizing in
                 self?.isRecognizing = recognizing
             }
             .store(in: &cancellables)
         
-        speechRecognizer.$micLevel
+        speechRecognizer?.$micLevel
             .sink { [weak self] level in
                 self?.micLevel = level
             }
             .store(in: &cancellables)
         
-        speechRecognizer.$errorMessage
+        speechRecognizer?.$errorMessage
             .sink { [weak self] message in
                 self?.errorMessage = message
             }
             .store(in: &cancellables)
         
-        speechRecognizer.$showError
+        speechRecognizer?.$showError
             .sink { [weak self] show in
                 self?.showError = show
             }
             .store(in: &cancellables)
         
-        speechRecognizer.onSilenceTimeout = { [weak self] in
+        speechRecognizer?.onSilenceTimeout = { [weak self] in
             self?.handleSilenceTimeout()
         }
     }
@@ -271,7 +271,7 @@ class AssistantViewModel: ObservableObject {
         if isRecording {
             if isRecognizing {
                 // Reset silence timer
-                speechRecognizer.setFirstSilenceTimer()
+                speechRecognizer?.setFirstSilenceTimer()
             } else {
                 // Resume recognition
                 shouldStartRecognitionFeedback = true
@@ -297,6 +297,8 @@ class AssistantViewModel: ObservableObject {
         removeNotificationObservers()
         stopRecording()
         saveChatHistory()
+        speechRecognizer = nil
+        
         UIApplication.shared.isIdleTimerDisabled = false
         ActivateIntent.setShouldBackground(false)
         AssistantActivityManager.endAll()
@@ -345,20 +347,20 @@ class AssistantViewModel: ObservableObject {
     
     final func startRecording() {
         guard !responseIsPreparing, checkAvailability() else { return }
-        speechRecognizer.startRecording()
+        speechRecognizer?.startRecording()
     }
     
     final func stopRecording() {
-        speechRecognizer.stopRecording()
+        speechRecognizer?.stopRecording()
     }
     
     final func pauseRecognize() {
-        speechRecognizer.stopRecognize()
+        speechRecognizer?.stopRecognize()
     }
     
     final func resumeRecognize() {
         guard checkAvailability() else { return }
-        speechRecognizer.startRecognize()
+        speechRecognizer?.startRecognize()
     }
     
     final func toggleRecording() {
