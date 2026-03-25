@@ -251,6 +251,8 @@ class AssistantViewModel: ObservableObject {
         
         guard checkAvailability() else { return }
         
+        showSafariView = false
+        
         if isRecording {
             if isRecognizing {
                 if inputText.isEmpty {
