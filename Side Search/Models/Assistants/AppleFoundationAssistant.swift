@@ -48,10 +48,6 @@ struct AppleFoundationAssistantModel: AssistantModel, MergeCodable {
     init() {
         self.customInstructions = Self.customInstructions_default
     }
-
-    init(customInstructions: String = Self.customInstructions_default) {
-        self.customInstructions = customInstructions
-    }
     
     static func load() -> Self {
         guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else { return Self() }
