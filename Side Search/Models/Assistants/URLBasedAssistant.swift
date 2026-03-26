@@ -38,15 +38,10 @@ struct URLBasedAssistantModel: AssistantModel, MergeCodable {
         self.url = Self.url_default
         self.openIn = Self.openIn_default
     }
-
-    init(url: String = Self.url_default, openIn: OpenInOption = Self.openIn_default) {
-        self.url = url
-        self.openIn = openIn
-    }
     
     static func load() -> Self {
         guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else {
-            return Self(url: SearchEnginePresets.defaultSearchEngine.url)
+            return Self()
         }
         return decode(from: rawData)
     }
