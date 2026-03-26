@@ -29,15 +29,14 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
     
     // For config
     private struct GeminiTool: Codable {
-        let google_search: GeminiGoogleSearch
+        var google_search: GeminiGoogleSearch? = nil
     }
     
-    private struct GeminiGoogleSearch: Codable {
-    }
+    private struct GeminiGoogleSearch: Codable { }
     
     private struct GeminiRequest: Codable {
         let contents: [GeminiContent]
-        var tools: [GeminiTool] = [GeminiTool(google_search: GeminiGoogleSearch())]
+        var tools: [GeminiTool] = []
     }
     
     // For response parsing
@@ -89,8 +88,14 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         // Create request body
+        var geminiRequest = GeminiRequest(contents: chatHistory)
+        if assistantModel.webSearch {
+            geminiRequest.tools.append(GeminiTool(google_search: GeminiGoogleSearch()))
+        }
+        
         do {
-            request.httpBody = try JSONEncoder().encode(GeminiRequest(contents: chatHistory))
+            request.httpBody = try JSONEncoder().encode(geminiRequest)
+            print("Request Body: \(String(data: request.httpBody!, encoding: .utf8) ?? "")")
         } catch {
             addMessage(AssistantMessage(from: .system, content: error.localizedDescription))
             return

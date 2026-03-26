@@ -497,6 +497,16 @@
         }
       }
     },
+    "Enable Web Search" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Web検索を有効にする"
+          }
+        }
+      }
+    },
     "End Assistant" : {
       "localizations" : {
         "ja" : {
@@ -1219,6 +1229,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "クッキーやキャッシュを含む、すべてのアプリ内ブラウザのデータが削除されます。"
+          }
+        }
+      }
+    },
+    "Tools" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ツール"
           }
         }
       }

@@ -41,12 +41,12 @@ struct GeminiAPIAssistantModel: AssistantModel, MergeCodable {
     var model: String
     static let model_default: String = "gemini-2.5-flash"
     
+    var webSearch: Bool
+    static let webSearch_default: Bool = true
+    
     init() {
         model = Self.model_default
-    }
-    
-    init(model: String = Self.model_default) {
-        self.model = model
+        webSearch = Self.webSearch_default
     }
     
     static func load() -> Self {
