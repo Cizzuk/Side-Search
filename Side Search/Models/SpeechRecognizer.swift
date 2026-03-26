@@ -377,13 +377,16 @@ class SpeechRecognizer: ObservableObject {
     }
     
     private func configureAudioSession() throws {
-        try audioSession.setCategory(
-            .playAndRecord,
-            mode: .default,
-            options: [.mixWithOthers, .allowBluetoothA2DP]
-        )
+        var options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetoothA2DP]
+        if userSettings.continueInBackground && userSettings.standbyInBackground {
+            options.insert(.mixWithOthers)
+        } else {
+            options.insert(.duckOthers)
+        }
+        
+        try audioSession.setCategory(.playAndRecord, options: options)
         try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        try audioSession.setActive(true)
         isAudioSessionActive = true
     }
     
@@ -433,12 +436,15 @@ class SpeechRecognizer: ObservableObject {
     private func deactivateAudioSession() {
         guard isAudioSessionActive else { return }
         
-        do {
-            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-        } catch {
-            print("Failed to deactivate audio session: \(error)")
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+                isAudioSessionActive = false
+            } catch {
+                print("Failed to deactivate audio session: \(error)")
+            }
         }
-        
-        isAudioSessionActive = false
     }
 }
