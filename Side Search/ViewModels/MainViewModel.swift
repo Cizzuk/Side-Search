@@ -89,12 +89,11 @@ class MainViewModel: ObservableObject {
     
     // MARK: - Assistant
     
-    func activateAssistant() {
+    func activateAssistant(disableAnimations: Bool = false) {
         guard !appFlags.isAssistantActive else { return }
         
         var transaction = Transaction()
-        // Disable animations when activating assistant from background
-        transaction.disablesAnimations = UIApplication.shared.applicationState != .active
+        transaction.disablesAnimations = disableAnimations
         
         withTransaction(transaction) {
             // Close sheets and covers
