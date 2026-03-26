@@ -441,7 +441,9 @@ class SpeechRecognizer: ObservableObject {
             
             do {
                 try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-                isAudioSessionActive = false
+                DispatchQueue.main.async {
+                    self.isAudioSessionActive = false
+                }
             } catch {
                 print("Failed to deactivate audio session: \(error)")
             }
