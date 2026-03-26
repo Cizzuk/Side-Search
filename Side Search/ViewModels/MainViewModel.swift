@@ -79,8 +79,8 @@ class MainViewModel: ObservableObject {
     
     private func validateAppState() {
         if !appFlags.isAssistantActive {
+            UIApplication.shared.isIdleTimerDisabled = false
             ActivateIntent.setShouldBackground(false)
-            
             if AssistantActivityManager.isActive() {
                 AssistantActivityManager.endAll()
             }
