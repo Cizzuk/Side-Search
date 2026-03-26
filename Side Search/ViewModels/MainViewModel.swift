@@ -79,8 +79,8 @@ class MainViewModel: ObservableObject {
     
     private func validateAppState() {
         if !appFlags.isAssistantActive {
+            UIApplication.shared.isIdleTimerDisabled = false
             ActivateIntent.setShouldBackground(false)
-            
             if AssistantActivityManager.isActive() {
                 AssistantActivityManager.endAll()
             }
@@ -89,12 +89,11 @@ class MainViewModel: ObservableObject {
     
     // MARK: - Assistant
     
-    func activateAssistant() {
+    func activateAssistant(disableAnimations: Bool = false) {
         guard !appFlags.isAssistantActive else { return }
         
         var transaction = Transaction()
-        // Disable animations when activating assistant from background
-        transaction.disablesAnimations = UIApplication.shared.applicationState != .active
+        transaction.disablesAnimations = disableAnimations || UIApplication.shared.applicationState != .active
         
         withTransaction(transaction) {
             // Close sheets and covers

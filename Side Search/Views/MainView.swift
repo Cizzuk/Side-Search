@@ -146,7 +146,7 @@ struct MainView: View {
             // MARK: - Events
             .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
                 showClearInAppBrowserDataAlert = false
-                viewModel.activateAssistant()
+                viewModel.activateAssistant(disableAnimations: true)
             }
             .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
         }

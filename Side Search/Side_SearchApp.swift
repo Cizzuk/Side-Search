@@ -19,7 +19,9 @@ final class AppFlags: ObservableObject {
 struct Side_SearchApp: App {
     var body: some Scene {
         AssistiveAccess {
-            AssistantView()
+            NavigationStack {
+                AssistantView(autoActivate: false)
+            }
         }
         WindowGroup {
             MainView()

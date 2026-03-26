@@ -72,14 +72,6 @@ class AssistantViewModel: ObservableObject {
     let soundEffect = SoundEffect.shared
     var shouldStartRecognitionFeedback = false
     
-    var startWithMicMuted: Bool {
-        if AccessibilitySettings.isAssistiveAccessEnabled {
-            return true
-        }
-        
-        return userSettings.startWithMicMuted
-    }
-    
     // MARK: - Initialization
     
     required init(chat: ChatHistory.Chat) {
@@ -259,6 +251,8 @@ class AssistantViewModel: ObservableObject {
         
         guard checkAvailability() else { return }
         
+        showSafariView = false
+        
         if isRecording {
             if isRecognizing {
                 if inputText.isEmpty {
@@ -278,7 +272,7 @@ class AssistantViewModel: ObservableObject {
                 return
             }
         } else {
-            if startWithMicMuted {
+            if userSettings.startWithMicMuted {
                 // Show keyboard
                 shouldFocusInput.toggle()
                 return
