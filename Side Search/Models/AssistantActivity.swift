@@ -128,13 +128,13 @@ class AssistantActivityManager {
             staleDate: nil
         )
         
-        Task.detached {
+        let semaphore = DispatchSemaphore(value: 0)
+        Task.detached(priority: .userInitiated) {
             for activity in activities {
-                await activity.end(
-                    content,
-                    dismissalPolicy: .immediate
-                )
+                await activity.end(content, dismissalPolicy: .immediate)
             }
+            semaphore.signal()
         }
+        semaphore.wait()
     }
 }
