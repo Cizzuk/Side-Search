@@ -95,7 +95,6 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
         
         do {
             request.httpBody = try JSONEncoder().encode(geminiRequest)
-            print("Request Body: \(String(data: request.httpBody!, encoding: .utf8) ?? "")")
         } catch {
             addMessage(AssistantMessage(from: .system, content: error.localizedDescription))
             return
