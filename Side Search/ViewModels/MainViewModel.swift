@@ -93,7 +93,7 @@ class MainViewModel: ObservableObject {
         guard !appFlags.isAssistantActive else { return }
         
         var transaction = Transaction()
-        transaction.disablesAnimations = disableAnimations
+        transaction.disablesAnimations = disableAnimations || UIApplication.shared.applicationState != .active
         
         withTransaction(transaction) {
             // Close sheets and covers
