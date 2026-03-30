@@ -66,13 +66,33 @@ struct MessagesView: View {
                     .textual.structuredTextStyle(TextualSideStyle())
             }
             
+            // MARK: - Sources
+            
             if !message.sources.isEmpty && !isAssistiveAccessEnabled {
                 Spacer(minLength: 15)
                 
                 ForEach(message.sources, id: \.url) { source in
                     Button(action: { openSafariView(source.url) }) {
                         Label(source.title, systemImage: "link")
-                            .font(.caption)
+                            .font(.subheadline)
+                            .padding(.vertical, 1)
+                            .padding(.trailing, 20)
+                    }
+                    .contextMenu {
+                        // Copy URL
+                        Button(action: { UIPasteboard.general.string = source.url.absoluteString }) {
+                            Label("Copy URL", systemImage: "document.on.document")
+                        }
+                        
+                        // In-App Browser
+                        Button(action: { openSafariView(source.url) }) {
+                            Label("Open in In-App Browser", systemImage: "safari")
+                        }
+                        
+                        // Default Browser
+                        Button(action: { UIApplication.shared.open(source.url) }) {
+                            Label("Open in Default App", systemImage: "arrow.up.forward.app")
+                        }
                     }
                 }
             }
