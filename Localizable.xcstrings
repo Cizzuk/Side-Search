@@ -397,6 +397,16 @@
         }
       }
     },
+    "Copy URL" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLをコピー"
+          }
+        }
+      }
+    },
     "Create a new personal automation in Shortcuts" : {
       "localizations" : {
         "ja" : {
@@ -826,6 +836,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "次で開く"
+          }
+        }
+      }
+    },
+    "Open in Default App" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトのアプリで開く"
+          }
+        }
+      }
+    },
+    "Open in In-App Browser" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ内ブラウザで開く"
           }
         }
       }
