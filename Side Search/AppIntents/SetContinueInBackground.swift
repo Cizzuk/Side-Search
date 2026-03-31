@@ -9,6 +9,7 @@ import AppIntents
 
 struct SetContinueInBackground: AppIntent {
     static let title: LocalizedStringResource = "Set Continue in Background"
+    static let description: LocalizedStringResource = "Sets the Side Search setting."
     
     static let openAppWhenRun = false
     static let isDiscoverable = true

@@ -9,6 +9,7 @@ import AppIntents
 
 struct SetStartWithMicMuted: AppIntent {
     static let title: LocalizedStringResource = "Set Start with Mic Muted"
+    static let description: LocalizedStringResource = "Sets the Side Search setting."
     
     static let openAppWhenRun = false
     static let isDiscoverable = true
