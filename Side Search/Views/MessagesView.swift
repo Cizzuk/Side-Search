@@ -88,11 +88,6 @@ struct MessagesView: View {
                             Label("Copy URL", systemImage: "document.on.document")
                         }
                         
-                        // In-App Browser
-                        Button(action: { openURL(source.url) }) {
-                            Label("Open in In-App Browser", systemImage: "safari")
-                        }
-                        
                         // Default Browser
                         Button(action: { UIApplication.shared.open(source.url) }) {
                             Label("Open in Default App", systemImage: "arrow.up.forward.app")
