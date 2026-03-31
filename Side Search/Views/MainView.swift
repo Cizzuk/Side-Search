@@ -116,7 +116,7 @@ struct MainView: View {
                     Button(action: { viewModel.showModal(.switchAssistant) }) {
                         HStack {
                             Image(systemName: userSettings.currentAssistant.DescriptionProviderType.assistantSystemImage)
-                            Text(userSettings.currentAssistant.DescriptionProviderType.assistantName)
+                            Text(userSettings.currentAssistant.displayName)
                         }
                         .padding(.horizontal, 10)
                     }

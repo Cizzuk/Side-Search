@@ -96,7 +96,7 @@ struct ChatHistoryView: View {
                         HStack {
                             Text(chat.date, style: .date)
                             Spacer()
-                            Text(chat.assistantType.DescriptionProviderType.assistantName)
+                            Text(chat.assistantType.displayName)
                         }
                         .font(.footnote)
                         .foregroundColor(.secondary)

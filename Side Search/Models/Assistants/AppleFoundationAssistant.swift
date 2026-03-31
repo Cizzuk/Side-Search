@@ -10,7 +10,6 @@ import SwiftUI
 import MergeCodablePackage
 
 struct AppleFoundationAssistant: AssistantDescriptionProvider {
-    static var assistantName = LocalizedStringResource("Apple Foundation Models")
     static var assistantDescription = LocalizedStringResource("This is an assistant that can converse using Foundation Models provided by Apple. To use it, Apple Intelligence must be available on your device. This assistant cannot search the internet.")
     static var assistantSystemImage = "apple.intelligence"
     static var assistantGradient = Gradient(colors: [

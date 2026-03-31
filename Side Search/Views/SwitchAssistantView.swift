@@ -22,7 +22,7 @@ struct SwitchAssistantView: View {
                         } label: {
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
-                                    Text(type.DescriptionProviderType.assistantName)
+                                    Text(type.displayName)
                                         .font(.title3)
                                     Spacer()
                                     Image(systemName: type.DescriptionProviderType.assistantSystemImage)

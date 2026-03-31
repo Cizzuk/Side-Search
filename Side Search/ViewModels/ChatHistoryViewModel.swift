@@ -45,7 +45,7 @@ class ChatHistoryViewModel: ObservableObject {
         
         // Search in messages, assistant type
         let filtered = chats.filter { chat in
-            let assistantName = String(localized: chat.assistantType.DescriptionProviderType.assistantName).lowercased()
+            let assistantName = String(localized: chat.assistantType.displayName).lowercased()
             
             let matchesAssistant = assistantName.contains(query)
             let matchesMessages = chat.messages.contains { $0.content.lowercased().contains(query) }

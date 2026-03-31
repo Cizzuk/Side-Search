@@ -5,15 +5,30 @@
 //  Created by Cizzuk on 2026/01/25.
 //
 
+import AppIntents
 import SwiftUI
 
-enum AssistantType: String, CaseIterable, Codable {
+enum AssistantType: String, CaseIterable, Codable, AppEnum {
     case urlBased
     case appleFoundation
     case geminiAPI
     
     static var `default`: AssistantType {
         return .urlBased
+    }
+    
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        TypeDisplayRepresentation(name: "Assistants")
+    }
+    
+    static let caseDisplayRepresentations: [AssistantType : DisplayRepresentation] = [
+        .urlBased: "URL Based Assistant",
+        .appleFoundation: "Apple Foundation Models",
+        .geminiAPI: "Google Gemini API"
+    ]
+    
+    var displayName: LocalizedStringResource {
+        return Self.caseDisplayRepresentations[self]?.title ?? ""
     }
     
     var DescriptionProviderType: any AssistantDescriptionProvider.Type {
@@ -63,7 +78,6 @@ enum AssistantType: String, CaseIterable, Codable {
 
 protocol AssistantDescriptionProvider {
     // Metadata
-    static var assistantName: LocalizedStringResource { get } // Keep this short
     static var assistantDescription: LocalizedStringResource { get }
     static var assistantSystemImage: String { get }
     static var assistantGradient: Gradient { get }

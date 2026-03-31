@@ -129,6 +129,16 @@
         }
       }
     },
+    "Assistants" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタント"
+          }
+        }
+      }
+    },
     "Background Only" : {
       "localizations" : {
         "ja" : {
