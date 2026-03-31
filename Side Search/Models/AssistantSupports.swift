@@ -21,7 +21,7 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
         TypeDisplayRepresentation(name: "Assistants")
     }
     
-    static let caseDisplayRepresentations: [AssistantType : DisplayRepresentation] = [
+    static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
         .urlBased: "URL Based Assistant",
         .appleFoundation: "Apple Foundation Models",
         .geminiAPI: "Google Gemini API"
