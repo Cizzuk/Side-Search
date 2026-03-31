@@ -5,6 +5,7 @@
 //  Created by Cizzuk on 2026/03/24.
 //
 
+import AppIntents
 import AVFoundation
 import CoreHaptics
 import UIKit
@@ -14,7 +15,7 @@ final class SoundEffect {
     
     var engine: CHHapticEngine?
     
-    enum Mode: String, CaseIterable, Identifiable {
+    enum Mode: String, CaseIterable, Identifiable, AppEnum {
         case always
         case backgroundOnly
         case off
@@ -25,15 +26,18 @@ final class SoundEffect {
             return .always
         }
         
+        static var typeDisplayRepresentation: TypeDisplayRepresentation {
+            TypeDisplayRepresentation(name: "Sound Effects Mode")
+        }
+        
+        static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
+            .always: "Always On",
+            .backgroundOnly: "Background Only",
+            .off: "Off"
+        ]
+        
         var displayName: LocalizedStringResource {
-            switch self {
-            case .always:
-                return "Always On"
-            case .backgroundOnly:
-                return "Background Only"
-            case .off:
-                return "Off"
-            }
+            return Self.caseDisplayRepresentations[self]?.title ?? ""
         }
     }
     

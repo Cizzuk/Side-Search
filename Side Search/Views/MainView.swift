@@ -50,9 +50,23 @@ struct MainView: View {
                     }
                     
                     Toggle("Manually Confirm", isOn: $userSettings.manuallyConfirmSpeech)
-
+                    
                     Toggle("Start with Mic Muted", isOn: $userSettings.startWithMicMuted)
                 } header: { Text("Speech Settings") }
+                
+                // URL Settings
+                Section {
+                    Picker("Open URLs in", selection: $userSettings.openURLsIn) {
+                        ForEach(UserSettings.URLOpeningOption.allCases, id: \.self) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                } header: {
+                    Text("URL Settings")
+                } footer: {
+                    Text("If you select Default App, the app associated with the URL or your default browser will open.")
+                        .padding(.bottom, 10)
+                }
                 
                 // Background Settings
                 if userSettings.currentAssistant.DescriptionProviderType.backgroundSupports {
@@ -77,7 +91,9 @@ struct MainView: View {
                             Text(mode.displayName).tag(mode)
                         }
                     }
-                    
+                }
+                
+                Section {
                     Toggle("Disable Markdown Rendering", isOn: $userSettings.disableMarkdownRendering)
                 }
                 
@@ -116,7 +132,7 @@ struct MainView: View {
                     Button(action: { viewModel.showModal(.switchAssistant) }) {
                         HStack {
                             Image(systemName: userSettings.currentAssistant.DescriptionProviderType.assistantSystemImage)
-                            Text(userSettings.currentAssistant.DescriptionProviderType.assistantName)
+                            Text(userSettings.currentAssistant.displayName)
                         }
                         .padding(.horizontal, 10)
                     }

@@ -22,7 +22,7 @@ struct SwitchAssistantView: View {
                         } label: {
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
-                                    Text(type.DescriptionProviderType.assistantName)
+                                    Text(type.displayName)
                                         .font(.title3)
                                     Spacer()
                                     Image(systemName: type.DescriptionProviderType.assistantSystemImage)
@@ -36,11 +36,11 @@ struct SwitchAssistantView: View {
                                 }
                                 Text(type.DescriptionProviderType.assistantDescription)
                                     .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                                     .accessibilityHidden(true)
                             }
                         }
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                         .accessibility(addTraits: currentAssistant == type ? [.isSelected] : [])
                         .accessibilityHint(type.DescriptionProviderType.assistantDescription)
                         .disabled(!type.DescriptionProviderType.isAvailable())

@@ -129,6 +129,16 @@
         }
       }
     },
+    "Assistants" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタント"
+          }
+        }
+      }
+    },
     "Background Only" : {
       "localizations" : {
         "ja" : {
@@ -397,6 +407,16 @@
         }
       }
     },
+    "Copy URL" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLをコピー"
+          }
+        }
+      }
+    },
     "Create a new personal automation in Shortcuts" : {
       "localizations" : {
         "ja" : {
@@ -657,12 +677,12 @@
         }
       }
     },
-    "If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened." : {
+    "If you select Default App, the app associated with the URL or your default browser will open." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルトのアプリで開く場合、検索URLに対応するアプリか、デフォルトのブラウザが開かれます。"
+            "value" : "デフォルトのアプリを選択すると、URLと関連するアプリか、デフォルトのブラウザが開かれます。"
           }
         }
       }
@@ -770,6 +790,16 @@
     "MIT License\n\nCopyright (c) 2025 Cizzuk\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE." : {
       "shouldTranslate" : false
     },
+    "Mode" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "モード"
+          }
+        }
+      }
+    },
     "Model" : {
       "localizations" : {
         "ja" : {
@@ -820,12 +850,12 @@
         }
       }
     },
-    "Open in" : {
+    "Open in Default App" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "次で開く"
+            "value" : "デフォルトのアプリで開く"
           }
         }
       }
@@ -846,6 +876,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ショートカットアプリを開く"
+          }
+        }
+      }
+    },
+    "Open URLs in" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次でURLを開く"
+          }
+        }
+      }
+    },
+    "Open URLs in ${option}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLを ${option} で開くように設定"
+          }
+        }
+      }
+    },
+    "Option" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オプション"
           }
         }
       }
@@ -960,6 +1020,146 @@
         }
       }
     },
+    "Set Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを設定"
+          }
+        }
+      }
+    },
+    "Set Assistant to ${type}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを ${type} に設定"
+          }
+        }
+      }
+    },
+    "Set Continue in Background" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「バックグラウンドで継続」を設定"
+          }
+        }
+      }
+    },
+    "Set Continue in Background to ${value}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「バックグラウンドで継続」を ${value} に設定"
+          }
+        }
+      }
+    },
+    "Set Keep on Standby in Background" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドで「待機させる」設定を変更"
+          }
+        }
+      }
+    },
+    "Set Keep on Standby in Background to ${value}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドで「待機させる」設定を ${value} に変更"
+          }
+        }
+      }
+    },
+    "Set Sound Effects Mode" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "効果音のモードを設定"
+          }
+        }
+      }
+    },
+    "Set Sound Effects Mode to ${mode}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "効果音のモードを ${mode} に設定"
+          }
+        }
+      }
+    },
+    "Set Start with Mic Muted" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「マイクミュートで開始」を設定"
+          }
+        }
+      }
+    },
+    "Set Start with Mic Muted to ${value}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「マイクミュートで開始」を ${value} に設定"
+          }
+        }
+      }
+    },
+    "Set URL Opening Option" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLを開くオプションを設定"
+          }
+        }
+      }
+    },
+    "Sets the assistant to be used in Side Search." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Searchで使用するアシスタントを設定します。"
+          }
+        }
+      }
+    },
+    "Sets the Side Search setting." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Searchの設定を変更します。"
+          }
+        }
+      }
+    },
+    "Share URL" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLを共有"
+          }
+        }
+      }
+    },
     "Shortcut Tip" : {
       "localizations" : {
         "ja" : {
@@ -989,6 +1189,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "効果音"
+          }
+        }
+      }
+    },
+    "Sound Effects Mode" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "効果音のモード"
           }
         }
       }
@@ -1279,6 +1489,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "URLベースアシスタント"
+          }
+        }
+      }
+    },
+    "URL Opening Option" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLを開くオプション"
+          }
+        }
+      }
+    },
+    "URL Settings" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLの設定"
           }
         }
       }

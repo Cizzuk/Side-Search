@@ -22,60 +22,23 @@ struct URLBasedAssistantSettingsView: View {
                     .textInputAutocapitalization(.never)
                     .environment(\.layoutDirection, .leftToRight)
                     .submitLabel(.done)
-            } header: { Text("Search URL")
-            } footer: { Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.") }
+            } header: {
+                Text("Search URL")
+            } footer: {
+                Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.")
+            }
             
-            Button(action: { showPresets = true }) {
-                Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
+            Section {
+                Button(action: { showPresets = true }) {
+                    Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
+                }
             }
             .sheet(isPresented: $showPresets) {
                 SearchEnginePresetsView(searchEngine: $assistantModel)
             }
-            
-            // Open In Section
-            Section {
-                Picker("Open in", selection: $assistantModel.openIn) {
-                    ForEach(URLBasedAssistantModel.OpenInOption.allCases, id: \.self) { option in
-                        Text(option.localizedName).tag(option)
-                    }
-                }
-            } footer: {
-                Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
-                    .padding(.bottom, 10)
-            }
         }
         .onChange(of: assistantModel) {
-            saveSettings()
+            assistantModel.save()
         }
-        .onAppear {
-            migrateUserDefaults()
-            saveSettings()
-        }
-    }
-    
-    private func saveSettings() {
-        assistantModel.save()
-    }
-    
-    private func migrateUserDefaults() {
-        guard let previousData = UserDefaults.standard.data(forKey: "defaultSearchEngine")
-        else { return }
-        defer {
-            UserDefaults.standard.removeObject(forKey: "defaultSearchEngine")
-            UserDefaults.standard.removeObject(forKey: "openIn")
-        }
-        
-        // Migrate URL
-        guard let jsonDict = try? JSONSerialization.jsonObject(with: previousData) as? [String: Any]
-        else { return }
-        if let url = jsonDict["url"] as? String {
-            assistantModel.url = url
-        }
-        
-        // Migrate OpenIn
-        guard let previousOpenIn = UserDefaults.standard.string(forKey: "openIn"),
-              let option = URLBasedAssistantModel.OpenInOption(rawValue: previousOpenIn)
-        else { return }
-        assistantModel.openIn = option
     }
 }

@@ -11,7 +11,7 @@ import Textual
 
 struct MessagesView: View {
     var message: AssistantMessage
-    var openSafariView: (URL) -> Void
+    var openURL: (URL) -> Void
     
     @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
     
@@ -64,15 +64,39 @@ struct MessagesView: View {
                 StructuredText(markdown: message.content, syntaxExtensions: [.math])
                     .textual.textSelection(.enabled)
                     .textual.structuredTextStyle(TextualSideStyle())
+                    .environment(\.openURL, OpenURLAction { url in
+                        openURL(url)
+                        return .handled
+                    })
             }
+            
+            // MARK: - Sources
             
             if !message.sources.isEmpty && !isAssistiveAccessEnabled {
                 Spacer(minLength: 15)
                 
                 ForEach(message.sources, id: \.url) { source in
-                    Button(action: { openSafariView(source.url) }) {
+                    Button(action: { openURL(source.url) }) {
                         Label(source.title, systemImage: "link")
-                            .font(.caption)
+                            .font(.subheadline)
+                            .padding(.vertical, 1)
+                            .padding(.trailing, 20)
+                    }
+                    .contextMenu {
+                        // Copy URL
+                        Button(action: { UIPasteboard.general.string = source.url.absoluteString }) {
+                            Label("Copy URL", systemImage: "document.on.document")
+                        }
+                        
+                        // Share URL
+                        ShareLink(item: source.url) {
+                            Label("Share URL", systemImage: "square.and.arrow.up")
+                        }
+                        
+                        // Default Browser
+                        Button(action: { UIApplication.shared.open(source.url) }) {
+                            Label("Open in Default App", systemImage: "arrow.up.forward.app")
+                        }
                     }
                 }
             }

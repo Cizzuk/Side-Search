@@ -25,12 +25,7 @@ class URLBasedAssistantViewModel: AssistantViewModel {
         var userMessage = AssistantMessage(from: .user, content: userInput)
         
         if let url = assistantModel.makeSearchURL(query: userInput) {
-            switch assistantModel.openIn {
-            case .inAppBrowser:
-                self.openSafariView(at: url)
-            case .defaultApp:
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
+            self.openURL(url)
             userMessage.sources.append(
                 AssistantMessage.Source(title: url.absoluteString, url: url)
             )

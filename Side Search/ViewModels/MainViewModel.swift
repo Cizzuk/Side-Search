@@ -113,16 +113,21 @@ class MainViewModel: ObservableObject {
                 return
             }
             
-            // Check if SafariView is available
-            if searchEngine.openIn == .inAppBrowser && searchEngine.checkSafariViewAvailability() {
-                safariViewURL = URL(string: searchEngine.url)
-                showModal(.safari)
-                return
-            }
-            
-            if let url = URL(string: searchEngine.url) {
-                showModal(.tmpCurtain)
-                UIApplication.shared.open(url)
+            if let url = searchEngine.makeSearchURL() {
+                switch userSettings.openURLsIn {
+                case .inAppBrowser:
+                    if SafariView.checkAvailability(at: url) {
+                        safariViewURL = url
+                        showModal(.safari)
+                    } else {
+                        // Fallback
+                        showModal(.tmpCurtain)
+                        UIApplication.shared.open(url)
+                    }
+                case .defaultApp:
+                    showModal(.tmpCurtain)
+                    UIApplication.shared.open(url)
+                }
             }
         }
     }

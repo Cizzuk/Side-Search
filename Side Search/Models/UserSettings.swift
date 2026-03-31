@@ -5,10 +5,11 @@
 //  Created by Cizzuk on 2026/03/17.
 //
 
+import AppIntents
 import Combine
 import Speech
 
-class UserSettings: ObservableObject {
+final class UserSettings: ObservableObject {
     static let shared = UserSettings()
     private init() { }
 
@@ -18,6 +19,7 @@ class UserSettings: ObservableObject {
         static let speechLocale = "speechLocale"
         static let manuallyConfirmSpeech = "manuallyConfirmSpeech"
         static let startWithMicMuted = "startWithMicMuted"
+        static let openURLsIn = "openURLsIn"
         static let continueInBackground = "continueInBackground"
         static let standbyInBackground = "standbyInBackground"
         static let soundEffectsMode = "soundEffectsMode"
@@ -91,6 +93,49 @@ class UserSettings: ObservableObject {
     @Published var startWithMicMuted: Bool = UserDefaults.standard.bool(forKey: Keys.startWithMicMuted) {
         didSet {
             UserDefaults.standard.set(startWithMicMuted, forKey: Keys.startWithMicMuted)
+        }
+    }
+    
+    // MARK: - URL Settings
+    
+    enum URLOpeningOption: String, CaseIterable, Identifiable, AppEnum {
+        case inAppBrowser, defaultApp
+        
+        var id: String { self.rawValue }
+        
+        static var `default`: Self {
+            return .inAppBrowser
+        }
+        
+        static var typeDisplayRepresentation: TypeDisplayRepresentation {
+            TypeDisplayRepresentation(name: "URL Opening Option")
+        }
+        
+        static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
+            .inAppBrowser: "In-App Browser",
+            .defaultApp: "Default App"
+        ]
+        
+        var displayName: LocalizedStringResource {
+            return Self.caseDisplayRepresentations[self]?.title ?? ""
+        }
+    }
+    
+    @Published var openURLsIn: URLOpeningOption = {
+        if let rawValue = UserDefaults.standard.string(forKey: Keys.openURLsIn),
+           let option = URLOpeningOption(rawValue: rawValue) {
+            return option
+        }
+        
+        if let oldOption = SettingsMigrator.migrateOpenURLsIn() {
+            UserDefaults.standard.set(oldOption.rawValue, forKey: Keys.openURLsIn)
+            return oldOption
+        }
+        
+        return .default
+    }() {
+        didSet {
+            UserDefaults.standard.set(openURLsIn.rawValue, forKey: Keys.openURLsIn)
         }
     }
     

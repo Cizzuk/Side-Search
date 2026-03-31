@@ -9,7 +9,6 @@ import SwiftUI
 import MergeCodablePackage
 
 struct URLBasedAssistant: AssistantDescriptionProvider {
-    static var assistantName = LocalizedStringResource("URL Based Assistant")
     static var assistantDescription = LocalizedStringResource("This can be used by setting URLs for AI assistants, search engines, etc. The assistant will open in the in-app browser or the default app. Side Search's speech recognition is optional.")
     static var assistantSystemImage = "magnifyingglass"
     static var assistantGradient = Gradient(colors: [
@@ -30,9 +29,11 @@ struct URLBasedAssistantModel: AssistantModel, MergeCodable {
     
     // Model Settings
     var url: String
-    var openIn: OpenInOption
     static let url_default: String = SearchEnginePresets.defaultSearchEngine.url
-    static let openIn_default: OpenInOption = .inAppBrowser
+    
+    // Deprecated
+    var openIn: OpenInOption?
+    static let openIn_default: OpenInOption? = nil
     
     init() {
         self.url = Self.url_default
@@ -56,15 +57,6 @@ struct URLBasedAssistantModel: AssistantModel, MergeCodable {
 extension URLBasedAssistantModel {
     enum OpenInOption: String, Codable, CaseIterable {
         case inAppBrowser, defaultApp
-        
-        var localizedName: LocalizedStringResource {
-            switch self {
-            case .inAppBrowser:
-                return "In-App Browser"
-            case .defaultApp:
-                return "Default App"
-            }
-        }
     }
     
     func makeSearchURL(query: String? = nil) -> URL? {
@@ -89,15 +81,6 @@ extension URLBasedAssistantModel {
             return false
         }
         return true
-    }
-    
-    func checkSafariViewAvailability() -> Bool {
-        if let url = makeSearchURL(query: "test"),
-           SafariView.checkAvailability(at: url) {
-            return true
-        } else {
-            return false
-        }
     }
     
     func needQueryInput() -> Bool {
