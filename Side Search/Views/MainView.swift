@@ -64,7 +64,7 @@ struct MainView: View {
                 } header: {
                     Text("URL Settings")
                 } footer: {
-                    Text("If you select open in Default App, the app corresponding to the URL or the default browser will be opened.")
+                    Text("If you select Default App, the app associated with the URL or your default browser will open.")
                         .padding(.bottom, 10)
                 }
                 

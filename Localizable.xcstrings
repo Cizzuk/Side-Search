@@ -677,12 +677,12 @@
         }
       }
     },
-    "If you select open in Default App, the app corresponding to the URL or the default browser will be opened." : {
+    "If you select Default App, the app associated with the URL or your default browser will open." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルトのアプリで開く場合、URLに対応するアプリか、デフォルトのブラウザが開かれます。"
+            "value" : "デフォルトのアプリを選択すると、URLと関連するアプリか、デフォルトのブラウザが開かれます。"
           }
         }
       }
