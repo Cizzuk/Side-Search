@@ -50,9 +50,23 @@ struct MainView: View {
                     }
                     
                     Toggle("Manually Confirm", isOn: $userSettings.manuallyConfirmSpeech)
-
+                    
                     Toggle("Start with Mic Muted", isOn: $userSettings.startWithMicMuted)
                 } header: { Text("Speech Settings") }
+                
+                // URL Settings
+                Section {
+                    Picker("Open URLs in", selection: $userSettings.openURLsIn) {
+                        ForEach(UserSettings.URLOpeningOption.allCases, id: \.self) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                } header: {
+                    Text("URL Settings")
+                } footer: {
+                    Text("If you select open in Default App, the app corresponding to the URL or the default browser will be opened.")
+                        .padding(.bottom, 10)
+                }
                 
                 // Background Settings
                 if userSettings.currentAssistant.DescriptionProviderType.backgroundSupports {
@@ -77,7 +91,9 @@ struct MainView: View {
                             Text(mode.displayName).tag(mode)
                         }
                     }
-                    
+                }
+                
+                Section {
                     Toggle("Disable Markdown Rendering", isOn: $userSettings.disableMarkdownRendering)
                 }
                 
