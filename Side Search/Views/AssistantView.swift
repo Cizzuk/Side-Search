@@ -78,7 +78,7 @@ struct AssistantView: View {
         .safeAreaInset(edge: .bottom) { keyboardToolbar }
         // MARK: - Sheets & Alerts
         .fullScreenCover(isPresented: $viewModel.showSafariView) {
-            if let url = viewModel.searchURL {
+            if let url = viewModel.safariViewURL {
                 SafariView(url: url)
                     .ignoresSafeArea()
             }

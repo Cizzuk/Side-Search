@@ -57,7 +57,7 @@ class AssistantViewModel: ObservableObject {
     @Published var shouldUnfocusInput = false // Toggle to notify
     
     // Web View
-    @Published var searchURL: URL?
+    @Published var safariViewURL: URL?
     @Published var showSafariView = false
     
     // Error Alert
@@ -307,14 +307,13 @@ class AssistantViewModel: ObservableObject {
         switch openingOption {
         case .inAppBrowser:
             if SafariView.checkAvailability(at: url) {
-                searchURL = url
+                safariViewURL = url
                 showSafariView = true
             } else {
-                // Fallback
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                UIApplication.shared.open(url)
             }
         case .defaultApp:
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url)
         }
     }
     

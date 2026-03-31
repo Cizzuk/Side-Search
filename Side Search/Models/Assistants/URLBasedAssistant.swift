@@ -83,15 +83,6 @@ extension URLBasedAssistantModel {
         return true
     }
     
-    func checkSafariViewAvailability() -> Bool {
-        if let url = makeSearchURL(query: "test"),
-           SafariView.checkAvailability(at: url) {
-            return true
-        } else {
-            return false
-        }
-    }
-    
     func needQueryInput() -> Bool {
         return self.url.contains("%s")
     }
