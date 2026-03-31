@@ -8,7 +8,7 @@
 import Combine
 import Speech
 
-class UserSettings: ObservableObject {
+final class UserSettings: ObservableObject {
     static let shared = UserSettings()
     private init() { }
 
