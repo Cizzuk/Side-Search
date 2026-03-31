@@ -128,6 +128,7 @@ final class UserSettings: ObservableObject {
         }
         
         if let oldOption = SettingsMigrator.migrateOpenURLsIn() {
+            UserDefaults.standard.set(oldOption.rawValue, forKey: Keys.openURLsIn)
             return oldOption
         }
         
