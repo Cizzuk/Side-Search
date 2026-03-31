@@ -5,6 +5,7 @@
 //  Created by Cizzuk on 2026/03/17.
 //
 
+import AppIntents
 import Combine
 import Speech
 
@@ -18,6 +19,7 @@ final class UserSettings: ObservableObject {
         static let speechLocale = "speechLocale"
         static let manuallyConfirmSpeech = "manuallyConfirmSpeech"
         static let startWithMicMuted = "startWithMicMuted"
+        static let openURLsIn = "openURLsIn"
         static let continueInBackground = "continueInBackground"
         static let standbyInBackground = "standbyInBackground"
         static let soundEffectsMode = "soundEffectsMode"
@@ -92,6 +94,50 @@ final class UserSettings: ObservableObject {
         didSet {
             UserDefaults.standard.set(startWithMicMuted, forKey: Keys.startWithMicMuted)
         }
+    }
+    
+    // MARK: - URL Settings
+    
+    enum URLOpeningOption: String, CaseIterable {
+        case inAppBrowser, defaultApp
+        
+        static var `default`: Self {
+            return .inAppBrowser
+        }
+        
+        static var typeDisplayRepresentation: TypeDisplayRepresentation {
+            TypeDisplayRepresentation(name: "URL Opening Option")
+        }
+        
+        static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
+            .inAppBrowser: "In-App Browser",
+            .defaultApp: "Default App"
+        ]
+        
+        var displayName: LocalizedStringResource {
+            return Self.caseDisplayRepresentations[self]?.title ?? ""
+        }
+    }
+    
+    @Published var openURLsIn: URLOpeningOption = {
+        if let rawValue = UserDefaults.standard.string(forKey: Keys.openURLsIn),
+           let option = URLOpeningOption(rawValue: rawValue) {
+            return option
+        }
+        
+        if let oldOption = oldVersionURLOpeningOption() {
+            return oldOption
+        }
+        
+        return .default
+    }() {
+        didSet {
+            UserDefaults.standard.set(openURLsIn.rawValue, forKey: Keys.openURLsIn)
+        }
+    }
+    
+    static func oldVersionURLOpeningOption() -> URLOpeningOption? {
+        return nil
     }
     
     // MARK: - Background Settings
