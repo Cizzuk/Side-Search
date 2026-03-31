@@ -99,7 +99,7 @@ struct ChatHistoryView: View {
                             Text(chat.assistantType.displayName)
                         }
                         .font(.footnote)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                     }
                 }
                 .contextMenu {

@@ -36,11 +36,11 @@ struct SwitchAssistantView: View {
                                 }
                                 Text(type.DescriptionProviderType.assistantDescription)
                                     .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                                     .accessibilityHidden(true)
                             }
                         }
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                         .accessibility(addTraits: currentAssistant == type ? [.isSelected] : [])
                         .accessibilityHint(type.DescriptionProviderType.assistantDescription)
                         .disabled(!type.DescriptionProviderType.isAvailable())

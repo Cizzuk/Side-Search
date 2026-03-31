@@ -66,12 +66,12 @@ struct SearchEnginePresetsView: View {
                         .bold()
                     Text(cse.url)
                         .lineLimit(1)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .font(.subheadline)
                 }
             }
             .accessibilityLabel(cse.name)
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
         }
     }
 }
