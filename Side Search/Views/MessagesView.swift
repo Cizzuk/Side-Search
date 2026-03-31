@@ -11,7 +11,7 @@ import Textual
 
 struct MessagesView: View {
     var message: AssistantMessage
-    var openSafariView: (URL) -> Void
+    var openURL: (URL) -> Void
     
     @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
     
@@ -64,6 +64,10 @@ struct MessagesView: View {
                 StructuredText(markdown: message.content, syntaxExtensions: [.math])
                     .textual.textSelection(.enabled)
                     .textual.structuredTextStyle(TextualSideStyle())
+                    .environment(\.openURL, OpenURLAction { url in
+                        openURL(url)
+                        return .handled
+                    })
             }
             
             // MARK: - Sources
@@ -72,7 +76,7 @@ struct MessagesView: View {
                 Spacer(minLength: 15)
                 
                 ForEach(message.sources, id: \.url) { source in
-                    Button(action: { openSafariView(source.url) }) {
+                    Button(action: { openURL(source.url) }) {
                         Label(source.title, systemImage: "link")
                             .font(.subheadline)
                             .padding(.vertical, 1)
@@ -85,7 +89,7 @@ struct MessagesView: View {
                         }
                         
                         // In-App Browser
-                        Button(action: { openSafariView(source.url) }) {
+                        Button(action: { openURL(source.url) }) {
                             Label("Open in In-App Browser", systemImage: "safari")
                         }
                         

@@ -134,9 +134,10 @@ struct AssistantView: View {
     private var assistantScrollContent: some View {
         VStack(alignment: .leading, spacing: 45) {
             ForEach(viewModel.chat.messages) { message in
-                MessagesView(message: message, openSafariView: { url in
-                    viewModel.openSafariView(at: url)
-                })
+                MessagesView(
+                    message: message,
+                    openURL: { url in viewModel.openURL(url) },
+                )
             }
             
             if viewModel.responseIsPreparing {

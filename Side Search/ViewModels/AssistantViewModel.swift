@@ -301,12 +301,19 @@ class AssistantViewModel: ObservableObject {
         appFlags.isAssistantActive = false
     }
     
-    final func openSafariView(at url: URL) {
-        if SafariView.checkAvailability(at: url) {
-            searchURL = url
-            showSafariView = true
-        } else {
-            // Fallback
+    final func openURL(_ url: URL, option: UserSettings.URLOpeningOption? = nil) {
+        let openingOption = option ?? userSettings.openURLsIn
+        
+        switch openingOption {
+        case .inAppBrowser:
+            if SafariView.checkAvailability(at: url) {
+                searchURL = url
+                showSafariView = true
+            } else {
+                // Fallback
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        case .defaultApp:
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
