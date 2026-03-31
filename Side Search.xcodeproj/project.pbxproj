@@ -75,13 +75,6 @@
 			);
 			target = BEB06C492EFBA9AE0026CC6E /* Side Search */;
 		};
-		BEC09CBB2F7B5A23005028B7 /* Exceptions for "AppIntents" folder in "WidgetExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				SetAssistant.swift,
-			);
-			target = BE811A342F340E2C00894EA5 /* WidgetExtension */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -102,12 +95,9 @@
 			path = "Side Search";
 			sourceTree = "<group>";
 		};
-		BEC09CB52F7B59DC005028B7 /* AppIntents */ = {
+		BEC09CB52F7B59DC005028B7 /* SharedIntents */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				BEC09CBB2F7B5A23005028B7 /* Exceptions for "AppIntents" folder in "WidgetExtension" target */,
-			);
-			path = AppIntents;
+			path = SharedIntents;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -149,7 +139,7 @@
 			children = (
 				BE5046DC2F5D896A002CDDB9 /* WidgetExtensionExtension.entitlements */,
 				BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */,
-				BEC09CB52F7B59DC005028B7 /* AppIntents */,
+				BEC09CB52F7B59DC005028B7 /* SharedIntents */,
 				BE5046D92F5D8915002CDDB9 /* Constants.swift */,
 				BEB06C4C2EFBA9AE0026CC6E /* Side Search */,
 				BE811A3B2F340E2D00894EA5 /* WidgetExtension */,
@@ -184,7 +174,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				BE811A3B2F340E2D00894EA5 /* WidgetExtension */,
-				BEC09CB52F7B59DC005028B7 /* AppIntents */,
+				BEC09CB52F7B59DC005028B7 /* SharedIntents */,
 			);
 			name = WidgetExtension;
 			packageProductDependencies = (
@@ -209,7 +199,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				BEB06C4C2EFBA9AE0026CC6E /* Side Search */,
-				BEC09CB52F7B59DC005028B7 /* AppIntents */,
+				BEC09CB52F7B59DC005028B7 /* SharedIntents */,
 			);
 			name = "Side Search";
 			packageProductDependencies = (
