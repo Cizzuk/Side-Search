@@ -9,7 +9,6 @@ import AppIntents
 
 struct SetStartWithMicMuted: AppIntent {
     static let title: LocalizedStringResource = "Set Start with Mic Muted"
-    static let description: LocalizedStringResource = "Sets the assistant to start with the microphone muted or unmuted."
     
     static let openAppWhenRun = false
     static let isDiscoverable = true
