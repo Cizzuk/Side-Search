@@ -22,26 +22,19 @@ struct URLBasedAssistantSettingsView: View {
                     .textInputAutocapitalization(.never)
                     .environment(\.layoutDirection, .leftToRight)
                     .submitLabel(.done)
-            } header: { Text("Search URL")
-            } footer: { Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.") }
+            } header: {
+                Text("Search URL")
+            } footer: {
+                Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.")
+            }
             
-            Button(action: { showPresets = true }) {
-                Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
+            Section {
+                Button(action: { showPresets = true }) {
+                    Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")
+                }
             }
             .sheet(isPresented: $showPresets) {
                 SearchEnginePresetsView(searchEngine: $assistantModel)
-            }
-            
-            // Open In Section
-            Section {
-                Picker("Open in", selection: $assistantModel.openIn) {
-                    ForEach(URLBasedAssistantModel.OpenInOption.allCases, id: \.self) { option in
-                        Text(option.localizedName).tag(option)
-                    }
-                }
-            } footer: {
-                Text("If you select Open in Default App, the app corresponding to the Search URL or the default browser will be opened.")
-                    .padding(.bottom, 10)
             }
         }
         .onChange(of: assistantModel) {
