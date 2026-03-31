@@ -38,14 +38,10 @@ struct URLBasedAssistantSettingsView: View {
             }
         }
         .onChange(of: assistantModel) {
-            saveSettings()
+            assistantModel.save()
         }
         .onAppear {
-            saveSettings()
+            assistantModel.save()
         }
-    }
-    
-    private func saveSettings() {
-        assistantModel.save()
     }
 }
