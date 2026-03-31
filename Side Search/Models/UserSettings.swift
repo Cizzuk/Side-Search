@@ -98,8 +98,10 @@ final class UserSettings: ObservableObject {
     
     // MARK: - URL Settings
     
-    enum URLOpeningOption: String, CaseIterable {
+    enum URLOpeningOption: String, CaseIterable, Identifiable, AppEnum {
         case inAppBrowser, defaultApp
+        
+        var id: String { self.rawValue }
         
         static var `default`: Self {
             return .inAppBrowser
