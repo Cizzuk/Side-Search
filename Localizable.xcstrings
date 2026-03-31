@@ -890,6 +890,26 @@
         }
       }
     },
+    "Open URLs in ${option}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLを ${option} で開くように設定"
+          }
+        }
+      }
+    },
+    "Option" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オプション"
+          }
+        }
+      }
+    },
     "Perplexity" : {
       "localizations" : {
         "ja" : {
@@ -1096,6 +1116,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "「マイクミュートで開始」を ${value} に設定"
+          }
+        }
+      }
+    },
+    "Set URL Opening Option" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLを開くオプションを設定"
           }
         }
       }
