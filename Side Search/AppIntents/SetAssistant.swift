@@ -14,7 +14,7 @@ struct SetAssistant: AppIntent {
     static let openAppWhenRun = false
     static let isDiscoverable = true
     
-    @Parameter(title: "Assistant")
+    @Parameter(title: "Assistant", default: .urlBased)
     var type: AssistantType
     
     static var parameterSummary: some ParameterSummary {
