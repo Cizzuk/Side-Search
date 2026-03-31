@@ -29,9 +29,11 @@ struct URLBasedAssistantModel: AssistantModel, MergeCodable {
     
     // Model Settings
     var url: String
-    var openIn: OpenInOption
     static let url_default: String = SearchEnginePresets.defaultSearchEngine.url
-    static let openIn_default: OpenInOption = .inAppBrowser
+    
+    // Deprecated
+    var openIn: OpenInOption?
+    static let openIn_default: OpenInOption? = nil
     
     init() {
         self.url = Self.url_default
@@ -55,15 +57,6 @@ struct URLBasedAssistantModel: AssistantModel, MergeCodable {
 extension URLBasedAssistantModel {
     enum OpenInOption: String, Codable, CaseIterable {
         case inAppBrowser, defaultApp
-        
-        var localizedName: LocalizedStringResource {
-            switch self {
-            case .inAppBrowser:
-                return "In-App Browser"
-            case .defaultApp:
-                return "Default App"
-            }
-        }
     }
     
     func makeSearchURL(query: String? = nil) -> URL? {

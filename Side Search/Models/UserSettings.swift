@@ -125,7 +125,7 @@ final class UserSettings: ObservableObject {
             return option
         }
         
-        if let oldOption = oldVersionURLOpeningOption() {
+        if let oldOption = SettingsMigrator.migrateOpenURLsIn() {
             return oldOption
         }
         
@@ -134,10 +134,6 @@ final class UserSettings: ObservableObject {
         didSet {
             UserDefaults.standard.set(openURLsIn.rawValue, forKey: Keys.openURLsIn)
         }
-    }
-    
-    static func oldVersionURLOpeningOption() -> URLOpeningOption? {
-        return nil
     }
     
     // MARK: - Background Settings
