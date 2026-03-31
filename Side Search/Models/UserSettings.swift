@@ -19,7 +19,7 @@ final class UserSettings: ObservableObject {
         static let speechLocale = "speechLocale"
         static let manuallyConfirmSpeech = "manuallyConfirmSpeech"
         static let startWithMicMuted = "startWithMicMuted"
-        static let openURLsIn = "openURLsIn"
+        static let openLinksIn = "openLinksIn"
         static let continueInBackground = "continueInBackground"
         static let standbyInBackground = "standbyInBackground"
         static let soundEffectsMode = "soundEffectsMode"
@@ -119,8 +119,8 @@ final class UserSettings: ObservableObject {
         }
     }
     
-    @Published var openURLsIn: URLOpeningOption = {
-        if let rawValue = UserDefaults.standard.string(forKey: Keys.openURLsIn),
+    @Published var openLinksIn: URLOpeningOption = {
+        if let rawValue = UserDefaults.standard.string(forKey: Keys.openLinksIn),
            let option = URLOpeningOption(rawValue: rawValue) {
             return option
         }
@@ -132,7 +132,7 @@ final class UserSettings: ObservableObject {
         return .default
     }() {
         didSet {
-            UserDefaults.standard.set(openURLsIn.rawValue, forKey: Keys.openURLsIn)
+            UserDefaults.standard.set(openLinksIn.rawValue, forKey: Keys.openLinksIn)
         }
     }
     
