@@ -88,6 +88,11 @@ struct MessagesView: View {
                             Label("Copy URL", systemImage: "document.on.document")
                         }
                         
+                        // Share URL
+                        ShareLink(item: source.url) {
+                            Label("Share URL", systemImage: "square.and.arrow.up")
+                        }
+                        
                         // Default Browser
                         Button(action: { UIApplication.shared.open(source.url) }) {
                             Label("Open in Default App", systemImage: "arrow.up.forward.app")
