@@ -41,34 +41,11 @@ struct URLBasedAssistantSettingsView: View {
             saveSettings()
         }
         .onAppear {
-            migrateUserDefaults()
             saveSettings()
         }
     }
     
     private func saveSettings() {
         assistantModel.save()
-    }
-    
-    private func migrateUserDefaults() {
-        guard let previousData = UserDefaults.standard.data(forKey: "defaultSearchEngine")
-        else { return }
-        defer {
-            UserDefaults.standard.removeObject(forKey: "defaultSearchEngine")
-            UserDefaults.standard.removeObject(forKey: "openIn")
-        }
-        
-        // Migrate URL
-        guard let jsonDict = try? JSONSerialization.jsonObject(with: previousData) as? [String: Any]
-        else { return }
-        if let url = jsonDict["url"] as? String {
-            assistantModel.url = url
-        }
-        
-        // Migrate OpenIn
-        guard let previousOpenIn = UserDefaults.standard.string(forKey: "openIn"),
-              let option = URLBasedAssistantModel.OpenInOption(rawValue: previousOpenIn)
-        else { return }
-        assistantModel.openIn = option
     }
 }
