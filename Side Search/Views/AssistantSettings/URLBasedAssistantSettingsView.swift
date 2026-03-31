@@ -40,8 +40,5 @@ struct URLBasedAssistantSettingsView: View {
         .onChange(of: assistantModel) {
             assistantModel.save()
         }
-        .onAppear {
-            assistantModel.save()
-        }
     }
 }
