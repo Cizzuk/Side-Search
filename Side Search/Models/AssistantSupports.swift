@@ -91,6 +91,7 @@ protocol AssistantDescriptionProvider {
     static var assistantDescription: LocalizedStringResource { get }
     static var assistantImage: Image { get }
     static var assistantGradient: Gradient { get }
+    static var assistantShapeStyle: AnyShapeStyle { get }
     
     static var assistantIsAI: Bool { get }
     static var backgroundSupports: Bool { get }

@@ -13,10 +13,19 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     static var assistantImage = Image(systemName: "magnifyingglass")
     static var assistantGradient = Gradient(colors: [
         Color(red: 51/255, green: 102/255,  blue: 255/255),
-        Color(red: 51/255, green: 102/255,  blue: 255/255),
         Color(red: 51/255, green: 153/255,  blue: 255/255),
         Color(red: 51/255, green: 102/255,  blue: 255/255),
     ])
+    static var assistantShapeStyle: AnyShapeStyle {
+        AnyShapeStyle(LinearGradient(
+            stops: [
+                Gradient.Stop(color: Color(red: 51/255, green: 153/255,  blue: 255/255), location: 0.0),
+                Gradient.Stop(color: Color(red: 51/255, green: 102/255,  blue: 255/255), location: 0.7),
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        ))
+    }
     
     static var assistantIsAI: Bool = false
     static var backgroundSupports: Bool = false

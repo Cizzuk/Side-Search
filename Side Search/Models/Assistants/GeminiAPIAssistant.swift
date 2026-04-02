@@ -18,6 +18,12 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
         Color(red: 219/255, green: 68/255, blue: 55/255),
         Color(red: 66/255,  green: 133/255, blue: 244/255),
     ])
+    static var assistantShapeStyle: AnyShapeStyle {
+        AnyShapeStyle(AngularGradient(
+            gradient: Self.assistantGradient,
+            center: .center
+        ))
+    }
     
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true

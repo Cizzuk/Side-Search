@@ -27,12 +27,7 @@ struct SwitchAssistantView: View {
                                     Spacer()
                                     type.DescriptionProviderType.assistantImage
                                         .font(.title3)
-                                        .foregroundStyle(
-                                            AngularGradient(
-                                                gradient: type.DescriptionProviderType.assistantGradient,
-                                                center: .center
-                                            )
-                                        )
+                                        .foregroundStyle(type.DescriptionProviderType.assistantShapeStyle)
                                 }
                                 Text(type.DescriptionProviderType.assistantDescription)
                                     .font(.subheadline)
