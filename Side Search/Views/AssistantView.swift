@@ -257,7 +257,8 @@ struct AssistantView: View {
                     Button(role: .confirm) {
                         viewModel.confirmInput()
                     } label: {
-                        Label("Confirm", systemImage: viewModel.chat.assistantType.DescriptionProviderType.assistantSystemImage)
+                        Label { Text("Confirm") }
+                        icon: { viewModel.chat.assistantType.DescriptionProviderType.assistantImage }
                             .foregroundStyle(.white)
                     }
                     .tint(.dropblue)

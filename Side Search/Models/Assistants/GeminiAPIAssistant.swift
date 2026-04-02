@@ -10,7 +10,7 @@ import MergeCodablePackage
 
 struct GeminiAPIAssistant: AssistantDescriptionProvider {
     static var assistantDescription = LocalizedStringResource("This is an assistant that can converse and search using Gemini provided by Google. To use it, you need to obtain an API key yourself from Google AI Studio. You are responsible for managing the costs and agreements related to your usage.")
-    static var assistantSystemImage = "sparkle"
+    static var assistantImage = Image(systemName: "sparkle")
     static var assistantGradient = Gradient(colors: [
         Color(red: 66/255,  green: 133/255, blue: 244/255),
         Color(red: 15/255,  green: 157/255, blue: 88/255),

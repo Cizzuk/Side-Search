@@ -11,11 +11,12 @@ import MergeCodablePackage
 
 struct SideBridgeAssistant: AssistantDescriptionProvider {
     static var assistantDescription = LocalizedStringResource("")
-    static var assistantSystemImage = "circle.fill"
+    static var assistantImage = Image("sidebridge")
     static var assistantGradient = Gradient(colors: [
-        Color(red: 102/255, green: 51/255,  blue: 255/255),
-        Color(red: 51/255, green: 102/255,  blue: 255/255),
-        Color(red: 102/255, green: 51/255,  blue: 255/255),
+        Color(red: 153/255, green: 51/255,  blue: 255/255),
+        Color(red: 153/255, green: 51/255,  blue: 255/255),
+        Color(red: 204/255, green: 102/255,  blue: 255/255),
+        Color(red: 153/255, green: 51/255,  blue: 255/255),
     ])
     
     static var assistantIsAI: Bool = false

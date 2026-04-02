@@ -25,7 +25,7 @@ struct SwitchAssistantView: View {
                                     Text(type.displayName)
                                         .font(.title3)
                                     Spacer()
-                                    Image(systemName: type.DescriptionProviderType.assistantSystemImage)
+                                    type.DescriptionProviderType.assistantImage
                                         .font(.title3)
                                         .foregroundStyle(
                                             AngularGradient(

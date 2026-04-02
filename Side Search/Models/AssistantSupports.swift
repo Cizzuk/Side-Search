@@ -89,7 +89,7 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
 protocol AssistantDescriptionProvider {
     // Metadata
     static var assistantDescription: LocalizedStringResource { get }
-    static var assistantSystemImage: String { get }
+    static var assistantImage: Image { get }
     static var assistantGradient: Gradient { get }
     
     static var assistantIsAI: Bool { get }

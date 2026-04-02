@@ -11,7 +11,7 @@ import MergeCodablePackage
 
 struct AppleFoundationAssistant: AssistantDescriptionProvider {
     static var assistantDescription = LocalizedStringResource("This is an assistant that can converse using Foundation Models provided by Apple. To use it, Apple Intelligence must be available on your device. This assistant cannot search the internet.")
-    static var assistantSystemImage = "apple.intelligence"
+    static var assistantImage = Image(systemName: "apple.intelligence")
     static var assistantGradient = Gradient(colors: [
         Color(red: 201/255, green: 89/255,  blue: 221/255),
         Color(red: 8/255,   green: 148/255, blue: 255/255),

@@ -131,7 +131,7 @@ struct MainView: View {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { viewModel.showModal(.switchAssistant) }) {
                         HStack {
-                            Image(systemName: userSettings.currentAssistant.DescriptionProviderType.assistantSystemImage)
+                            userSettings.currentAssistant.DescriptionProviderType.assistantImage
                             Text(userSettings.currentAssistant.displayName)
                         }
                         .padding(.horizontal, 10)
