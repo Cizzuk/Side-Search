@@ -1170,6 +1170,9 @@
         }
       }
     },
+    "Side Bridge" : {
+      "shouldTranslate" : false
+    },
     "Side Button Tip" : {
       "localizations" : {
         "ja" : {
