@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - 'AssistantMessage' does NOT conform to 'MergeCodable'.
+// Any changes to this struct should first make it conforms to 'MergeCodable'.
 struct AssistantMessage: Identifiable, Codable {
     enum From: Codable {
         case user
