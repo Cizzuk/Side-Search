@@ -47,12 +47,7 @@ struct AppleFoundationAssistantModel: AssistantModel, MergeCodable {
     private static let userDefaultsKey = "appleFoundationAssistantSettings"
     
     // Model Settings
-    var customInstructions: String
-    static let customInstructions_default: String = ""
-    
-    init() {
-        self.customInstructions = Self.customInstructions_default
-    }
+    var customInstructions: String = ""
     
     static func load() -> Self {
         guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else { return Self() }

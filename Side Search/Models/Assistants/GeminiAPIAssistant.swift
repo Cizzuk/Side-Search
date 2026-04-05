@@ -43,16 +43,8 @@ struct GeminiAPIAssistantModel: AssistantModel, MergeCodable {
     static var availableModels: [String] = []
     
     // Model Settings
-    var model: String
-    static let model_default: String = "gemini-2.5-flash"
-    
-    var webSearch: Bool
-    static let webSearch_default: Bool = true
-    
-    init() {
-        model = Self.model_default
-        webSearch = Self.webSearch_default
-    }
+    var model: String = "gemini-2.5-flash"
+    var webSearch: Bool = true
     
     static func load() -> Self {
         guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else { return Self() }
