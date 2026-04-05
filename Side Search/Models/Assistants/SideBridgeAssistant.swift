@@ -37,7 +37,8 @@ struct SideBridgeAssistant: AssistantDescriptionProvider {
 struct SideBridgeAssistantModel: AssistantModel, MergeCodable {
     private static let userDefaultsKey = "sideBridgeAssistantSettings"
     
-    init() { }
+    // Model Settings
+    var endpoint: String = ""
     
     static func load() -> Self {
         guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else { return Self() }
@@ -48,5 +49,26 @@ struct SideBridgeAssistantModel: AssistantModel, MergeCodable {
         if let data = encode() {
             UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
         }
+    }
+}
+
+extension SideBridgeAssistantModel {
+    // Auth Key in Keychain
+    private static let keychainKey = "sideBridgeAuthKey"
+    
+    static func loadAPIKey() -> String {
+        return KeychainSupport.load(key: keychainKey) ?? ""
+    }
+    
+    static func saveAPIKey(key: String) {
+        KeychainSupport.save(key: keychainKey, value: key)
+    }
+    
+    static func deleteAPIKey() {
+        KeychainSupport.delete(key: keychainKey)
+    }
+    
+    static func existsAPIKey() -> Bool {
+        return KeychainSupport.exists(key: keychainKey)
     }
 }
