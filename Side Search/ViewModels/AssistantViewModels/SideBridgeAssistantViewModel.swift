@@ -12,6 +12,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
     // MARK: - Assistant Settings
     
     private var assistantModel = SideBridgeAssistantModel.load()
+    private var authKey: String = SideBridgeAssistantModel.loadAuthKey()
     
     // MARK: - Override Methods
     
