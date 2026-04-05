@@ -81,7 +81,7 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
         case .geminiAPI:
             return GeminiAPIAssistantSettingsView()
         case .sideBridge:
-            return EmptyView()
+            return SideBridgeAssistantSettingsView()
         }
     }
 }

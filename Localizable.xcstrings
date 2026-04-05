@@ -139,6 +139,16 @@
         }
       }
     },
+    "Authentication Key" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "認証鍵"
+          }
+        }
+      }
+    },
     "Background Only" : {
       "localizations" : {
         "ja" : {
@@ -543,6 +553,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Side Searchのアシスタントを使用中の場合、終了します。"
+          }
+        }
+      }
+    },
+    "Endpoint URL" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エンドポイントのURL"
+          }
+        }
+      }
+    },
+    "Enter the authentication key if the endpoint requires authentication. Leave it blank if not required." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エンドポイントで認証が必要な場合は認証鍵を入力します。不要な場合は空にします。"
+          }
+        }
+      }
+    },
+    "Enter the URL for your custom Side Bridge endpoint." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなたのカスタムSide BridgeエンドポイントのURLを入力します。"
           }
         }
       }
