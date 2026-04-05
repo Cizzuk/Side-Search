@@ -777,6 +777,16 @@
         }
       }
     },
+    "Learn more about Side Bridge..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Bridgeの詳細…"
+          }
+        }
+      }
+    },
     "License" : {
       "localizations" : {
         "ja" : {

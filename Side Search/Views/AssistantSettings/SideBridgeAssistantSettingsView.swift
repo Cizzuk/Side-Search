@@ -24,7 +24,13 @@ struct SideBridgeAssistantSettingsView: View {
             } header: {
                 Text("Endpoint URL")
             } footer: {
-                Text("Enter the URL for your custom Side Bridge endpoint.")
+                VStack(alignment: .leading) {
+                    Text("Enter the URL for your custom Side Bridge endpoint.")
+                    Spacer()
+                    Link("Learn more about Side Bridge...", destination: URL(string: "https://cizz.uk/sidebridge")!)
+                        .font(.footnote)
+                }
+                .padding(.bottom, 10)
             }
             
             // Auth Key
