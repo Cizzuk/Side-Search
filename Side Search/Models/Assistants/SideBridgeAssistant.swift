@@ -56,19 +56,19 @@ extension SideBridgeAssistantModel {
     // Auth Key in Keychain
     private static let keychainKey = "sideBridgeAuthKey"
     
-    static func loadAPIKey() -> String {
+    static func loadAuthKey() -> String {
         return KeychainSupport.load(key: keychainKey) ?? ""
     }
     
-    static func saveAPIKey(key: String) {
+    static func saveAuthKey(key: String) {
         KeychainSupport.save(key: keychainKey, value: key)
     }
     
-    static func deleteAPIKey() {
+    static func deleteAuthKey() {
         KeychainSupport.delete(key: keychainKey)
     }
     
-    static func existsAPIKey() -> Bool {
+    static func existsAuthKey() -> Bool {
         return KeychainSupport.exists(key: keychainKey)
     }
 }
