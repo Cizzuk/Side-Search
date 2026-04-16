@@ -9,6 +9,29 @@ import UIKit
 
 class SideBridgeAssistantViewModel: AssistantViewModel {
     
+    private struct SideBridgeOptions: Codable {
+        var allowEmptyRequest: Bool?
+        var disableSendHistory: Bool?
+        var endSession: Bool?
+    }
+    
+    private struct SideBridgeRequest: Codable {
+        enum RequestType: String, Codable {
+            case newChat, resumeChat, sendMessage
+        }
+        
+        var sidebridge = "1.0"
+        var id: UUID
+        var type: RequestType
+        var messages: [AssistantMessage]?
+        var history: [AssistantMessage]?
+    }
+    
+    private struct SideBridgeResponse: Codable {
+        var messages: [AssistantMessage]?
+        var options: SideBridgeOptions?
+    }
+    
     // MARK: - Assistant Settings
     
     private var assistantModel = SideBridgeAssistantModel.load()
