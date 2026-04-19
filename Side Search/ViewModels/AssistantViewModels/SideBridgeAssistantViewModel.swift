@@ -15,6 +15,12 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         var endSession: Bool?
     }
     
+    private var currentOptions = SideBridgeOptions(
+        allowEmptyRequest: false,
+        disableSendHistory: false,
+        endSession: false
+    )
+    
     private struct SideBridgeRequest: Codable {
         enum RequestType: String, Codable {
             case newChat, resumeChat, sendMessage
