@@ -10,13 +10,11 @@ import UIKit
 class SideBridgeAssistantViewModel: AssistantViewModel {
     
     private struct SideBridgeOptions: Codable {
-        var allowEmptyRequest: Bool?
         var disableSendHistory: Bool?
         var endSession: Bool?
     }
     
     private var currentOptions = SideBridgeOptions(
-        allowEmptyRequest: false,
         disableSendHistory: false,
         endSession: false
     )
