@@ -320,7 +320,12 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Message History Management
     
     final func addMessage(_ message: AssistantMessage) {
-        chat.messages.append(message)
+        // If id already exists, replace it, else append
+        if let index = chat.messages.firstIndex(where: { $0.id == message.id }) {
+            chat.messages[index] = message
+        } else {
+            chat.messages.append(message)
+        }
         
         // Set last message date as chat date
         chat.date = Date()
