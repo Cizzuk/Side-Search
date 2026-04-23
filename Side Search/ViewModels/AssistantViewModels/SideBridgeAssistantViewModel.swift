@@ -6,35 +6,11 @@
 //
 
 import UIKit
+import SideBridge
 
 class SideBridgeAssistantViewModel: AssistantViewModel {
     
-    private struct SideBridgeOptions: Codable {
-        var disableSendHistory: Bool? = nil
-        var endSession: Bool? = nil
-    }
-    
-    private var currentOptions = SideBridgeOptions(
-        disableSendHistory: false,
-        endSession: false
-    )
-    
-    private struct SideBridgeRequest: Codable {
-        enum RequestType: String, Codable {
-            case newChat, resumeChat, sendMessage
-        }
-        
-        var sidebridge = "1.0"
-        var id: UUID
-        var type: RequestType
-        var messages: [AssistantMessage]?
-        var history: [AssistantMessage]?
-    }
-    
-    private struct SideBridgeResponse: Codable {
-        var messages: [AssistantMessage]?
-        var options: SideBridgeOptions?
-    }
+    private var currentOptions = SBOptions()
     
     // MARK: - Assistant Settings
     
@@ -42,8 +18,8 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
     private var authKey: String = SideBridgeAssistantModel.loadAuthKey()
     
     // MARK: - Helper Methods
-    
-    private func sendRequest(request: SideBridgeRequest) async throws -> SideBridgeResponse {
+
+    private func sendRequest(request: SBRequest) async throws -> SBResponse {
         guard let url = URL(string: assistantModel.endpoint) else {
             throw URLError(.badURL)
         }
@@ -68,10 +44,10 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         
         print("\n++++++++++\nReceived response: \(String(data: data, encoding: .utf8) ?? "")")
         
-        let sideBridgeResponse = try JSONDecoder().decode(SideBridgeResponse.self, from: data)
+        let sbResponse = try JSONDecoder().decode(SBResponse.self, from: data)
         
         // Update options
-        if let options = sideBridgeResponse.options {
+        if let options = sbResponse.options {
             if let disableSendHistory = options.disableSendHistory {
                 currentOptions.disableSendHistory = disableSendHistory
             }
@@ -80,26 +56,30 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
             }
         }
         
-        return sideBridgeResponse
+        return sbResponse
     }
     
     private func createRequest(
-        type: SideBridgeRequest.RequestType,
+        type: SBRequest.RequestType,
         messages: [AssistantMessage]? = nil
-    ) -> SideBridgeRequest {
+    ) -> SBRequest {
         
-        var request = SideBridgeRequest(
-            id: chat.id,
+        var request = SBRequest(
+            chatId: chat.id,
             type: type
         )
         
         if let messages = messages,
            !messages.isEmpty {
-            request.messages = messages
+            request.messages = messages.map { message in
+                message.toSBMessage()
+            }
         }
         
         if !(currentOptions.disableSendHistory ?? false) {
-            request.history = chat.messages
+            request.history = chat.messages.map { message in
+                message.toSBMessage()
+            }
         }
         
         return request
@@ -127,7 +107,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
                 let request = createRequest(type: .sendMessage, messages: messages)
                 let response = try await sendRequest(request: request)
                 for message in response.messages ?? [] {
-                    addMessage(message)
+                    addMessage(AssistantMessage.fromSBMessage(message))
                 }
             } catch {
                 let errorMessage = "Failed to communicate with SideBridge: \(error.localizedDescription)"
