@@ -15,6 +15,7 @@ struct AssistantMessage: Identifiable, Codable {
         case user
         case assistant
         case system
+        case unknown
         
         var displayName: LocalizedStringResource {
             switch self {
@@ -24,6 +25,8 @@ struct AssistantMessage: Identifiable, Codable {
                 return "Assistant"
             case .system:
                 return "System"
+            case .unknown:
+                return "Unknown"
             }
         }
     }
@@ -48,6 +51,8 @@ extension AssistantMessage.From {
             return .assistant
         case .system:
             return .system
+        case .unknown:
+            return .unknown
         }
     }
     
@@ -59,6 +64,8 @@ extension AssistantMessage.From {
             return .assistant
         case .system:
             return .system
+        case .unknown:
+            return .unknown
         }
     }
 }

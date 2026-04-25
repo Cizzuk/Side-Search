@@ -1516,6 +1516,16 @@
         }
       }
     },
+    "Unknown" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不明"
+          }
+        }
+      }
+    },
     "Unknown microphone authorization status." : {
       "localizations" : {
         "ja" : {
