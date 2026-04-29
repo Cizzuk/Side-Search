@@ -95,6 +95,7 @@ protocol AssistantDescriptionProvider {
     
     static var assistantIsAI: Bool { get }
     static var backgroundSupports: Bool { get }
+    static var chatRecoverySupports: Bool { get }
     
     // Availability Check
     static func isAvailable() -> Bool
