@@ -33,6 +33,7 @@ class AssistantViewModel: ObservableObject {
     @Published var shouldDismiss = false
     
     // Assistant State
+    @Published var isEnded = false
     @Published var isRecording = false {
         didSet {
             if isRecording { shouldUnfocusInput.toggle() }
@@ -411,6 +412,14 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Helpers
     
     final func checkAvailability(shouldShowError: Bool = true) -> Bool {
+        if isEnded {
+            if shouldShowError {
+                errorMessage = "The assistant has ended."
+                showError = true
+            }
+            return false
+        }
+        
         if !chat.assistantType.DescriptionProviderType.isAvailable() {
             if shouldShowError {
                 errorMessage = "This assistant is not available."
