@@ -1406,6 +1406,26 @@
         }
       }
     },
+    "The assistant has ended the conversation." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントが会話を終了しました。"
+          }
+        }
+      }
+    },
+    "The assistant has ended." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントは終了しました。"
+          }
+        }
+      }
+    },
     "The confirmed supported region is Japan only." : {
       "localizations" : {
         "ja" : {
