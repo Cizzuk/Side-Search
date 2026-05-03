@@ -67,13 +67,8 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         }
     }
     
-    private func createRequest(
-        messages: [AssistantMessage]? = nil
-    ) -> SBRequest {
-        
-        var request = SBRequest(
-            chatId: chat.id
-        )
+    private func createRequest(messages: [AssistantMessage]? = nil) -> SBRequest {
+        var request = SBRequest(chatId: chat.id)
         
         if let messages = messages,
            !messages.isEmpty {
