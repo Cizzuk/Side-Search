@@ -87,8 +87,8 @@ extension AssistantMessage {
             id: sbMessage.id,
             from: AssistantMessage.From.fromSBMessageFrom(sbMessage.from),
             content: sbMessage.content,
-            sources: sbMessage.sources.map { source in
-                Source(title: source.title, url: source.url)
+            sources: (sbMessage.sources ?? []).map { source in
+                AssistantMessage.Source(title: source.title, url: source.url)
             }
         )
     }
