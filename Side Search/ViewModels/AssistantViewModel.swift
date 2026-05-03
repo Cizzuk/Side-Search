@@ -33,7 +33,10 @@ class AssistantViewModel: ObservableObject {
     @Published var shouldDismiss = false
     
     // Assistant State
-    @Published var isEnded = false
+    @Published var isEnded = false {
+        didSet { if isEnded { stopRecording() } }
+    }
+    
     @Published var isRecording = false {
         didSet {
             if isRecording { shouldUnfocusInput.toggle() }
@@ -42,12 +45,14 @@ class AssistantViewModel: ObservableObject {
             updateLiveActivityStatus()
         }
     }
+    
     @Published var isRecognizing = false {
         didSet {
             handleStartRecognitionFeedback()
             updateLiveActivityStatus()
         }
     }
+    
     @Published var responseIsPreparing = false {
         didSet { updateLiveActivityStatus() }
     }
