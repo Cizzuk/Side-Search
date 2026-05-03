@@ -10,7 +10,14 @@ import SideBridge
 
 class SideBridgeAssistantViewModel: AssistantViewModel {
     
-    private var currentOptions = SBOptions()
+    private var currentOptions = SBOptions() {
+        didSet {
+            // Sync endSession State
+            if currentOptions.endSession == true {
+                isEnded = true
+            }
+        }
+    }
     
     // MARK: - Assistant Settings
     
