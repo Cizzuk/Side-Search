@@ -61,13 +61,11 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
     }
     
     private func createRequest(
-        type: SBRequest.RequestType,
         messages: [AssistantMessage]? = nil
     ) -> SBRequest {
         
         var request = SBRequest(
-            chatId: chat.id,
-            type: type
+            chatId: chat.id
         )
         
         if let messages = messages,
@@ -88,6 +86,16 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
     
     // MARK: - Override Methods
     
+    override func assistantInitialize() {
+        Task {
+            let request = SBRequest(chatId: chat.id)
+            let response = try await sendRequest(request: request)
+            for message in response.messages ?? [] {
+                addMessage(AssistantMessage.fromSBMessage(message))
+            }
+        }
+    }
+    
     override func processInput() {
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
@@ -105,7 +113,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         
         Task {
             do {
-                let request = createRequest(type: .sendMessage, messages: messages)
+                let request = createRequest(messages: messages)
                 let response = try await sendRequest(request: request)
                 for message in response.messages ?? [] {
                     addMessage(AssistantMessage.fromSBMessage(message))
