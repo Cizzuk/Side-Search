@@ -56,13 +56,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         
         // Update options
         if let options = sbResponse.options {
-            if let disableSendHistory = options.disableSendHistory {
-                currentOptions.disableSendHistory = disableSendHistory
-            }
-            if let endSession = options.endSession {
-                currentOptions.endSession = endSession
-                isEnded = endSession
-            }
+            currentOptions.merge(with: options)
         }
     }
     
