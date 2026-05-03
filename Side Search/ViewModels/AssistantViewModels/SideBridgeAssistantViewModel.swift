@@ -53,6 +53,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
             }
             if let endSession = options.endSession {
                 currentOptions.endSession = endSession
+                isEnded = endSession
             }
         }
         
