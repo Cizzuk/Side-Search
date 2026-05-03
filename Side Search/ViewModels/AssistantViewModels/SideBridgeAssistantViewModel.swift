@@ -106,11 +106,10 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         pauseRecognize()
         
         let userInput = inputText
-        var messages: [AssistantMessage] = []
+        let userMessage = AssistantMessage(from: .user, content: userInput)
+        var messages: [AssistantMessage] = [userMessage]
         
         if !userInput.isEmpty {
-            let userMessage = AssistantMessage(from: .user, content: userInput)
-            messages.append(userMessage)
             addMessage(userMessage)
             inputText = ""
         }
