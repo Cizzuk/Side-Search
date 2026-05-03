@@ -103,7 +103,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         
         let userInput = inputText
         let userMessage = AssistantMessage(from: .user, content: userInput)
-        var messages: [AssistantMessage] = [userMessage]
+        let messages: [AssistantMessage] = [userMessage]
         
         if !userInput.isEmpty {
             addMessage(userMessage)
