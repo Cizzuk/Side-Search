@@ -29,7 +29,6 @@ struct URLBasedAssistant: AssistantDescriptionProvider {
     
     static var assistantIsAI: Bool = false
     static var backgroundSupports: Bool = false
-    static var chatRecoverySupports: Bool = false
     
     static func isAvailable() -> Bool { return true }
 }

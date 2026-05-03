@@ -27,7 +27,6 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
     
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true
-    static var chatRecoverySupports: Bool = true
     
     static func isAvailable() -> Bool {
         if GeoHelper.currentRegion == "CN" {
