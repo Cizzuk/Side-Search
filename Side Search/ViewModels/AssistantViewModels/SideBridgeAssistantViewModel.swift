@@ -46,6 +46,14 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         
         let sbResponse = try JSONDecoder().decode(SBResponse.self, from: data)
         
+        return sbResponse
+    }
+    
+    private func responseHandler(sbResponse: SBResponse) {
+        for message in sbResponse.messages ?? [] {
+            addMessage(AssistantMessage.fromSBMessage(message))
+        }
+        
         // Update options
         if let options = sbResponse.options {
             if let disableSendHistory = options.disableSendHistory {
@@ -56,8 +64,6 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
                 isEnded = endSession
             }
         }
-        
-        return sbResponse
     }
     
     private func createRequest(
@@ -90,9 +96,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         Task {
             let request = SBRequest(chatId: chat.id)
             let response = try await sendRequest(request: request)
-            for message in response.messages ?? [] {
-                addMessage(AssistantMessage.fromSBMessage(message))
-            }
+            responseHandler(sbResponse: response)
         }
     }
     
@@ -115,9 +119,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
             do {
                 let request = createRequest(messages: messages)
                 let response = try await sendRequest(request: request)
-                for message in response.messages ?? [] {
-                    addMessage(AssistantMessage.fromSBMessage(message))
-                }
+                responseHandler(sbResponse: response)
             } catch {
                 let errorMessage = "Failed to communicate with SideBridge: \(error.localizedDescription)"
                 let assistantMessage = AssistantMessage(from: .system, content: errorMessage)
