@@ -54,7 +54,9 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
     
     private func responseHandler(sbResponse: SBResponse) {
         for message in sbResponse.messages ?? [] {
-            if message.content.isEmpty { continue }
+            if message.content.isEmpty && (message.sources == nil || message.sources?.isEmpty == true) {
+                continue
+            }
             addMessage(AssistantMessage.fromSBMessage(message))
         }
         
