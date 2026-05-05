@@ -43,11 +43,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         
         print("\n==========\nSending request: \(String(data: urlRequest.httpBody ?? Data(), encoding: .utf8) ?? "")")
         
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
-            throw URLError(.badServerResponse)
-        }
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
         
         print("\n++++++++++\nReceived response: \(String(data: data, encoding: .utf8) ?? "")")
         
@@ -119,7 +115,6 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
                 let errorMessage = "Failed to communicate with SideBridge: \(error.localizedDescription)"
                 let assistantMessage = AssistantMessage(from: .system, content: errorMessage)
                 addMessage(assistantMessage)
-                print("\n!!!!!!!!!!\n\(error)")
             }
             
             responseIsPreparing = false
