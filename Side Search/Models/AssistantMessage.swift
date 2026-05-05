@@ -76,7 +76,7 @@ extension AssistantMessage {
             id: id,
             from: from.toSBMessageFrom(),
             content: content,
-            sources: sources.map { source in
+            sources: sources.isEmpty ? nil : sources.map { source in
                 SBMessage.Source(title: source.title, url: source.url)
             }
         )
