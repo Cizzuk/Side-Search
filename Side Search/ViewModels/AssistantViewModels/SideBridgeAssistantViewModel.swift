@@ -87,7 +87,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
     
     override func assistantInitialize() {
         Task {
-            let request = SBRequest(chatId: chat.id)
+            let request = createRequest()
             let response = try await sendRequest(request: request)
             responseHandler(sbResponse: response)
         }
