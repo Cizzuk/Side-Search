@@ -36,7 +36,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if !authKey.isEmpty {
-            urlRequest.setValue(authKey, forHTTPHeaderField: "Authorization")
+            urlRequest.setValue(authKey, forHTTPHeaderField: "x-sidebridge-key")
         }
         
         urlRequest.httpBody = try JSONEncoder().encode(request)
