@@ -139,6 +139,16 @@
         }
       }
     },
+    "Authentication Key" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "認証鍵"
+          }
+        }
+      }
+    },
     "Background Only" : {
       "localizations" : {
         "ja" : {
@@ -547,6 +557,36 @@
         }
       }
     },
+    "Endpoint URL" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エンドポイントのURL"
+          }
+        }
+      }
+    },
+    "Enter the authentication key if the endpoint requires authentication. Leave it blank if not required." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エンドポイントで認証が必要な場合は認証鍵を入力します。不要な場合は空にします。"
+          }
+        }
+      }
+    },
+    "Enter the URL for your custom Side Bridge endpoint." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなたのカスタムSide BridgeエンドポイントのURLを入力します。"
+          }
+        }
+      }
+    },
     "Error" : {
       "localizations" : {
         "ja" : {
@@ -733,6 +773,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "言語"
+          }
+        }
+      }
+    },
+    "Learn more about Side Bridge..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Bridgeの詳細…"
           }
         }
       }
@@ -1170,6 +1220,9 @@
         }
       }
     },
+    "Side Bridge" : {
+      "shouldTranslate" : false
+    },
     "Side Button Tip" : {
       "localizations" : {
         "ja" : {
@@ -1353,6 +1406,16 @@
         }
       }
     },
+    "The assistant has ended the conversation." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントが会話を終了しました。"
+          }
+        }
+      }
+    },
     "The confirmed supported region is Japan only." : {
       "localizations" : {
         "ja" : {
@@ -1463,6 +1526,16 @@
         }
       }
     },
+    "Unknown" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不明"
+          }
+        }
+      }
+    },
     "Unknown microphone authorization status." : {
       "localizations" : {
         "ja" : {
@@ -1569,6 +1642,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "あなた"
+          }
+        }
+      }
+    },
+    "You can create and use your own endpoint called Side Bridge, which serves as a bridge between any conversational assistant and Side Search. This is for advanced users." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任意の会話型アシスタントとSide Searchの架け橋となる、Side Bridgeと呼ばれるエンドポイントをご自身で作成して利用できます。高度なユーザー向けです。"
           }
         }
       }

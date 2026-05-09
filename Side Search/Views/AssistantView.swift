@@ -152,13 +152,19 @@ struct AssistantView: View {
             
             inputSection
             
-            if viewModel.chat.assistantType.DescriptionProviderType.assistantIsAI {
-                Text("This assistant is AI and can make mistakes.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .opacity(0.7)
-                    .frame(maxWidth: .infinity, alignment: .center)
+            Group {
+                if viewModel.isEnded {
+                    Text("The assistant has ended the conversation.")
+                }
+                
+                if viewModel.chat.assistantType.DescriptionProviderType.assistantIsAI {
+                    Text("This assistant is AI and can make mistakes.")
+                }
             }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .opacity(0.7)
+            .frame(maxWidth: .infinity, alignment: .center)
             
             Spacer(minLength: 50)
         }
@@ -257,7 +263,8 @@ struct AssistantView: View {
                     Button(role: .confirm) {
                         viewModel.confirmInput()
                     } label: {
-                        Label("Confirm", systemImage: viewModel.chat.assistantType.DescriptionProviderType.assistantSystemImage)
+                        Label { Text("Confirm") }
+                        icon: { viewModel.chat.assistantType.DescriptionProviderType.assistantImage }
                             .foregroundStyle(.white)
                     }
                     .tint(.dropblue)

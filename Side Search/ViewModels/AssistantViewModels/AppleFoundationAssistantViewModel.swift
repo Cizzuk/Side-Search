@@ -48,6 +48,8 @@ class AppleFoundationAssistantViewModel: AssistantViewModel {
                 return Transcript.Entry.response(response)
             case .system:
                 return nil
+            case .unknown:
+                return nil
             }
         }
         

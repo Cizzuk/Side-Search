@@ -9,7 +9,7 @@ import Foundation
 
 class ChatHistory {
     // MARK: - 'Chat' does NOT conform to 'MergeCodable'.
-    // Any changes to this struct should first make it conforms to 'MergeCodable'.
+    // If future changes require merge support, first make this struct conform to 'MergeCodable'.
     struct Chat: Identifiable, Codable {
         var id = UUID()
         var date: Date = Date()

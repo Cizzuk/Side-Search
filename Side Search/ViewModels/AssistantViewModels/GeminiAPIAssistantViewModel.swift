@@ -170,6 +170,8 @@ class GeminiAPIAssistantViewModel: AssistantViewModel {
                 role = "model"
             case .system:
                 return nil
+            case .unknown:
+                return nil
             }
             
             return GeminiContent(
