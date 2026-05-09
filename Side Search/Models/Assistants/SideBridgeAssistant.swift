@@ -5,7 +5,6 @@
 //  Created by Cizzuk on 2025/12/24.
 //
 
-import FoundationModels
 import SwiftUI
 import MergeCodablePackage
 
