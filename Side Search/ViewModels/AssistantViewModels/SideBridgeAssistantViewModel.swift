@@ -41,11 +41,15 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         
         urlRequest.httpBody = try JSONEncoder().encode(request)
         
+        #if DEBUG
         print("\nSending request: \n\(String(data: urlRequest.httpBody ?? Data(), encoding: .utf8) ?? "")")
+        #endif
         
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
         
+        #if DEBUG
         print("\nReceived response: \n\(String(data: data, encoding: .utf8) ?? "")")
+        #endif
         
         let sbResponse = try JSONDecoder().decode(SBResponse.self, from: data)
         
