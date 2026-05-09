@@ -417,13 +417,7 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Helpers
     
     final func checkAvailability(shouldShowError: Bool = true) -> Bool {
-        if isEnded {
-            if shouldShowError {
-                errorMessage = "The assistant has ended."
-                showError = true
-            }
-            return false
-        }
+        if isEnded { return false }
         
         if !chat.assistantType.DescriptionProviderType.isAvailable() {
             if shouldShowError {
@@ -432,6 +426,7 @@ class AssistantViewModel: ObservableObject {
             }
             return false
         }
+        
         return true
     }
     
