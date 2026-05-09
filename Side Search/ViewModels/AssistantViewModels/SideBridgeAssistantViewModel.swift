@@ -120,7 +120,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
                 let response = try await sendRequest(request: request)
                 responseHandler(sbResponse: response)
             } catch {
-                let errorMessage = "Failed to communicate with SideBridge: \(error.localizedDescription)"
+                let errorMessage = "Failed to communicate with Side Bridge: \(error.localizedDescription)"
                 let assistantMessage = AssistantMessage(from: .system, content: errorMessage)
                 addMessage(assistantMessage)
             }
