@@ -56,6 +56,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         return sbResponse
     }
     
+    @MainActor
     private func responseHandler(sbResponse: SBResponse) {
         for message in sbResponse.messages ?? [] {
             if message.content.isEmpty { continue }
@@ -92,6 +93,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
     override func assistantInitialize() {
         Task {
             let request = createRequest()
+            // It is not required for the Bridge to return a response to the initial request.
             let response = try await sendRequest(request: request)
             responseHandler(sbResponse: response)
         }
@@ -106,6 +108,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         let userMessage = AssistantMessage(from: .user, content: userInput)
         let messages: [AssistantMessage] = [userMessage]
         
+        // Empty messages are sent but are not saved in the history.
         if !userInput.isEmpty {
             addMessage(userMessage)
             inputText = ""
