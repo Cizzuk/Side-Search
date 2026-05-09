@@ -9,7 +9,7 @@ import Foundation
 import SideBridge
 
 // MARK: - 'AssistantMessage' does NOT conform to 'MergeCodable'.
-// Any changes to this struct should first make it conforms to 'MergeCodable'.
+// If future changes require merge support, first make this struct conform to 'MergeCodable'.
 struct AssistantMessage: Identifiable, Codable {
     enum From: Codable, Equatable {
         case user
