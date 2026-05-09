@@ -56,7 +56,6 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
         return sbResponse
     }
     
-    @MainActor
     private func responseHandler(sbResponse: SBResponse) {
         for message in sbResponse.messages ?? [] {
             if message.content.isEmpty { continue }
@@ -91,11 +90,12 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
     // MARK: - Override Methods
     
     override func assistantInitialize() {
-        Task {
-            let request = createRequest()
-            // It is not required for the Bridge to return a response to the initial request.
-            let response = try await sendRequest(request: request)
-            responseHandler(sbResponse: response)
+        Task { @MainActor in
+            do {
+                let request = createRequest()
+                let response = try await sendRequest(request: request)
+                responseHandler(sbResponse: response)
+            } catch { } // Ignore errors for initial request
         }
     }
     
@@ -114,7 +114,7 @@ class SideBridgeAssistantViewModel: AssistantViewModel {
             inputText = ""
         }
         
-        Task {
+        Task { @MainActor in
             do {
                 let request = createRequest(messages: messages)
                 let response = try await sendRequest(request: request)
