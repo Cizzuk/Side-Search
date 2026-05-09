@@ -1646,6 +1646,16 @@
         }
       }
     },
+    "You can create and use your own endpoint called Side Bridge, which serves as a bridge between any conversational assistant and Side Search. This is for advanced users." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任意の会話型アシスタントとSide Searchの架け橋となる、Side Bridgeと呼ばれるエンドポイントをご自身で作成して利用できます。高度なユーザー向けです。"
+          }
+        }
+      }
+    },
     "You can launch the Side Search assistant using the Shortcuts." : {
       "localizations" : {
         "ja" : {

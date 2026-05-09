@@ -9,7 +9,7 @@ import SwiftUI
 import MergeCodablePackage
 
 struct SideBridgeAssistant: AssistantDescriptionProvider {
-    static var assistantDescription = LocalizedStringResource("")
+    static var assistantDescription = LocalizedStringResource("You can create and use your own endpoint called Side Bridge, which serves as a bridge between any conversational assistant and Side Search. This is for advanced users.")
     static var assistantImage = Image("sidebridge")
     static var assistantGradient = Gradient(colors: [
         Color(red: 136/255, green: 51/255,  blue: 255/255),
