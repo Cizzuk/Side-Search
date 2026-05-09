@@ -1416,16 +1416,6 @@
         }
       }
     },
-    "The assistant has ended." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アシスタントは終了しました。"
-          }
-        }
-      }
-    },
     "The confirmed supported region is Japan only." : {
       "localizations" : {
         "ja" : {
