@@ -12,6 +12,7 @@
 		BE4E0E2A2F35CBAC004383AB /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = BE4E0E292F35CBAC004383AB /* Textual */; };
 		BE5046DA2F5D8917002CDDB9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5046D92F5D8915002CDDB9 /* Constants.swift */; };
 		BE5046DB2F5D8917002CDDB9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5046D92F5D8915002CDDB9 /* Constants.swift */; };
+		BE7FC5142F9A4FD400452820 /* SideBridge in Frameworks */ = {isa = PBXBuildFile; productRef = BE7FC5132F9A4FD400452820 /* SideBridge */; };
 		BE810EE12F388F4300B0B211 /* TemporaryScreenCurtain in Frameworks */ = {isa = PBXBuildFile; productRef = BE810EE02F388F4300B0B211 /* TemporaryScreenCurtain */; };
 		BE811A382F340E2D00894EA5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE811A372F340E2C00894EA5 /* WidgetKit.framework */; };
 		BE811A3A2F340E2D00894EA5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE811A392F340E2D00894EA5 /* SwiftUI.framework */; };
@@ -116,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE7FC5142F9A4FD400452820 /* SideBridge in Frameworks */,
 				BE4E0E2A2F35CBAC004383AB /* Textual in Frameworks */,
 				BE810EE12F388F4300B0B211 /* TemporaryScreenCurtain in Frameworks */,
 				BE26D5152F57B15F00E28B78 /* MergeCodablePackage in Frameworks */,
@@ -206,6 +208,7 @@
 				BE4E0E292F35CBAC004383AB /* Textual */,
 				BE810EE02F388F4300B0B211 /* TemporaryScreenCurtain */,
 				BE26D5142F57B15F00E28B78 /* MergeCodablePackage */,
+				BE7FC5132F9A4FD400452820 /* SideBridge */,
 			);
 			productName = "Side Search";
 			productReference = BEB06C4A2EFBA9AE0026CC6E /* Side Search.app */;
@@ -243,6 +246,7 @@
 				BE4E0E282F35CBAC004383AB /* XCRemoteSwiftPackageReference "textual" */,
 				BE810EDF2F388F4300B0B211 /* XCRemoteSwiftPackageReference "swiftui-temporary-screen-curtain" */,
 				BE26D5132F57B15F00E28B78 /* XCRemoteSwiftPackageReference "swift-merge-codable" */,
+				BE7FC5122F9A4FD400452820 /* XCRemoteSwiftPackageReference "swift-sidebridge" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BEB06C4B2EFBA9AE0026CC6E /* Products */;
@@ -624,6 +628,14 @@
 				minimumVersion = 0.3.1;
 			};
 		};
+		BE7FC5122F9A4FD400452820 /* XCRemoteSwiftPackageReference "swift-sidebridge" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Cizzuk/swift-sidebridge";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		BE810EDF2F388F4300B0B211 /* XCRemoteSwiftPackageReference "swiftui-temporary-screen-curtain" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Cizzuk/swiftui-temporary-screen-curtain";
@@ -644,6 +656,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BE4E0E282F35CBAC004383AB /* XCRemoteSwiftPackageReference "textual" */;
 			productName = Textual;
+		};
+		BE7FC5132F9A4FD400452820 /* SideBridge */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE7FC5122F9A4FD400452820 /* XCRemoteSwiftPackageReference "swift-sidebridge" */;
+			productName = SideBridge;
 		};
 		BE810EE02F388F4300B0B211 /* TemporaryScreenCurtain */ = {
 			isa = XCSwiftPackageProductDependency;

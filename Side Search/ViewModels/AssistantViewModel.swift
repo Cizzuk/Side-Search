@@ -33,6 +33,10 @@ class AssistantViewModel: ObservableObject {
     @Published var shouldDismiss = false
     
     // Assistant State
+    @Published var isEnded = false {
+        didSet { if isEnded { stopRecording() } }
+    }
+    
     @Published var isRecording = false {
         didSet {
             if isRecording { shouldUnfocusInput.toggle() }
@@ -41,12 +45,14 @@ class AssistantViewModel: ObservableObject {
             updateLiveActivityStatus()
         }
     }
+    
     @Published var isRecognizing = false {
         didSet {
             handleStartRecognitionFeedback()
             updateLiveActivityStatus()
         }
     }
+    
     @Published var responseIsPreparing = false {
         didSet { updateLiveActivityStatus() }
     }
@@ -320,7 +326,12 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Message History Management
     
     final func addMessage(_ message: AssistantMessage) {
-        chat.messages.append(message)
+        // If id already exists, replace it, else append
+        if let index = chat.messages.firstIndex(where: { $0.id == message.id }) {
+            chat.messages[index] = message
+        } else {
+            chat.messages.append(message)
+        }
         
         // Set last message date as chat date
         chat.date = Date()
@@ -406,6 +417,8 @@ class AssistantViewModel: ObservableObject {
     // MARK: - Helpers
     
     final func checkAvailability(shouldShowError: Bool = true) -> Bool {
+        if isEnded { return false }
+        
         if !chat.assistantType.DescriptionProviderType.isAvailable() {
             if shouldShowError {
                 errorMessage = "This assistant is not available."
@@ -413,6 +426,7 @@ class AssistantViewModel: ObservableObject {
             }
             return false
         }
+        
         return true
     }
     

@@ -10,7 +10,7 @@ import MergeCodablePackage
 
 struct GeminiAPIAssistant: AssistantDescriptionProvider {
     static var assistantDescription = LocalizedStringResource("This is an assistant that can converse and search using Gemini provided by Google. To use it, you need to obtain an API key yourself from Google AI Studio. You are responsible for managing the costs and agreements related to your usage.")
-    static var assistantSystemImage = "sparkle"
+    static var assistantImage = Image(systemName: "sparkle")
     static var assistantGradient = Gradient(colors: [
         Color(red: 66/255,  green: 133/255, blue: 244/255),
         Color(red: 15/255,  green: 157/255, blue: 88/255),
@@ -18,6 +18,12 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
         Color(red: 219/255, green: 68/255, blue: 55/255),
         Color(red: 66/255,  green: 133/255, blue: 244/255),
     ])
+    static var assistantShapeStyle: AnyShapeStyle {
+        AnyShapeStyle(AngularGradient(
+            gradient: Self.assistantGradient,
+            center: .center
+        ))
+    }
     
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true
@@ -37,16 +43,8 @@ struct GeminiAPIAssistantModel: AssistantModel, MergeCodable {
     static var availableModels: [String] = []
     
     // Model Settings
-    var model: String
-    static let model_default: String = "gemini-2.5-flash"
-    
-    var webSearch: Bool
-    static let webSearch_default: Bool = true
-    
-    init() {
-        model = Self.model_default
-        webSearch = Self.webSearch_default
-    }
+    var model: String = "gemini-2.5-flash"
+    var webSearch: Bool = true
     
     static func load() -> Self {
         guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else { return Self() }

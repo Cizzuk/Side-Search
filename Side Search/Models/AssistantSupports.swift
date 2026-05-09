@@ -12,6 +12,7 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
     case urlBased
     case appleFoundation
     case geminiAPI
+    case sideBridge
     
     static var `default`: AssistantType {
         return .urlBased
@@ -24,7 +25,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
     static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
         .urlBased: "URL Based Assistant",
         .appleFoundation: "Apple Foundation Models",
-        .geminiAPI: "Google Gemini API"
+        .geminiAPI: "Google Gemini API",
+        .sideBridge: "Side Bridge"
     ]
     
     var displayName: LocalizedStringResource {
@@ -39,6 +41,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return AppleFoundationAssistant.self
         case .geminiAPI:
             return GeminiAPIAssistant.self
+        case .sideBridge:
+            return SideBridgeAssistant.self
         }
     }
     
@@ -50,6 +54,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return AppleFoundationAssistantModel.self
         case .geminiAPI:
             return GeminiAPIAssistantModel.self
+        case .sideBridge:
+            return SideBridgeAssistantModel.self
         }
     }
     
@@ -61,6 +67,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return AppleFoundationAssistantViewModel.self
         case .geminiAPI:
             return GeminiAPIAssistantViewModel.self
+        case .sideBridge:
+            return SideBridgeAssistantViewModel.self
         }
     }
     
@@ -72,6 +80,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return AppleFoundationAssistantSettingsView()
         case .geminiAPI:
             return GeminiAPIAssistantSettingsView()
+        case .sideBridge:
+            return SideBridgeAssistantSettingsView()
         }
     }
 }
@@ -79,8 +89,9 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
 protocol AssistantDescriptionProvider {
     // Metadata
     static var assistantDescription: LocalizedStringResource { get }
-    static var assistantSystemImage: String { get }
+    static var assistantImage: Image { get }
     static var assistantGradient: Gradient { get }
+    static var assistantShapeStyle: AnyShapeStyle { get }
     
     static var assistantIsAI: Bool { get }
     static var backgroundSupports: Bool { get }
