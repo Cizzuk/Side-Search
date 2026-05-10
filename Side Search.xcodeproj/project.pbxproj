@@ -632,8 +632,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Cizzuk/swift-sidebridge";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 		BE810EDF2F388F4300B0B211 /* XCRemoteSwiftPackageReference "swiftui-temporary-screen-curtain" */ = {
