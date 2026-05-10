@@ -248,7 +248,11 @@ class AssistantViewModel: ObservableObject {
     // MARK: - View Actions
     
     final func confirmInput() {
-        guard checkAvailability() else { return }
+        guard checkAvailability() else {
+            if isRecording { stopRecording() }
+            return
+        }
+        
         processInput()
     }
     
