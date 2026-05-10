@@ -312,6 +312,8 @@ class AssistantViewModel: ObservableObject {
     }
     
     final func openURL(_ url: URL, option: UserSettings.URLOpeningOption? = nil) {
+        if handleMagicLink(url) { return }
+        
         let openingOption = option ?? userSettings.openURLsIn
         
         switch openingOption {
@@ -325,6 +327,27 @@ class AssistantViewModel: ObservableObject {
         case .defaultApp:
             UIApplication.shared.open(url)
         }
+    }
+    
+    final func handleMagicLink(_ url: URL) -> Bool {
+        // Scheme & Host check
+        guard url.scheme == "sidesearch",
+              url.host == "magiclink"
+        else { return false }
+        
+        // Example: sidesearch://magiclink/?overrideInput=Hello%20World
+        
+        // Get query items
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        let queryItems = components?.queryItems
+        
+        // overrideInput
+        if let overrideInput = queryItems?.first(where: { $0.name == "overrideInput" })?.value {
+            stopRecording()
+            inputText = overrideInput
+        }
+        
+        return true
     }
     
     // MARK: - Message History Management
