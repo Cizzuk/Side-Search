@@ -29,6 +29,10 @@ Apple Intelligenceに対応しているデバイスで、プライバシー重�
 
 ご自身のAPIキーを使用して、Geminiと会話をしたり、Web検索を頼むことができます。
 
+### Side Bridge
+
+より高度なユーザー向けに、[Side Bridge](https://cizz.uk/sidebridge)と呼ばれるエンドポイントを作成することで、任意のアシスタントを利用できます。
+
 ## ライセンス
 
 このアプリは[MIT License](https://github.com/Cizzuk/Side-Search/blob/main/LICENSE)でライセンスされています。
