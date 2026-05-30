@@ -1586,6 +1586,16 @@
         }
       }
     },
+    "Use Bluetooth Microphones" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bluetoothマイクを使用"
+          }
+        }
+      }
+    },
     "Version" : {
       "localizations" : {
         "ja" : {
