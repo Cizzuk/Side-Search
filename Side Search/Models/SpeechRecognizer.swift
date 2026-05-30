@@ -378,6 +378,11 @@ class SpeechRecognizer: ObservableObject {
     
     private func configureAudioSession() throws {
         var options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetoothA2DP]
+        
+        if userSettings.allowBluetoothMic {
+            options.insert([.allowBluetoothHFP, .bluetoothHighQualityRecording])
+        }
+        
         if userSettings.continueInBackground && userSettings.standbyInBackground {
             options.insert(.mixWithOthers)
         } else {
