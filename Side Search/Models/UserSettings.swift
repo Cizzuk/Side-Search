@@ -19,6 +19,7 @@ final class UserSettings: ObservableObject {
         static let speechLocale = "speechLocale"
         static let manuallyConfirmSpeech = "manuallyConfirmSpeech"
         static let startWithMicMuted = "startWithMicMuted"
+        static let allowBluetoothMic = "allowBluetoothMic"
         static let openURLsIn = "openURLsIn"
         static let continueInBackground = "continueInBackground"
         static let standbyInBackground = "standbyInBackground"
@@ -93,6 +94,12 @@ final class UserSettings: ObservableObject {
     @Published var startWithMicMuted: Bool = UserDefaults.standard.bool(forKey: Keys.startWithMicMuted) {
         didSet {
             UserDefaults.standard.set(startWithMicMuted, forKey: Keys.startWithMicMuted)
+        }
+    }
+    
+    @Published var allowBluetoothMic: Bool = UserDefaults.standard.bool(forKey: Keys.allowBluetoothMic) {
+        didSet {
+            UserDefaults.standard.set(allowBluetoothMic, forKey: Keys.allowBluetoothMic)
         }
     }
     
