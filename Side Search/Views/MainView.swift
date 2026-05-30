@@ -52,6 +52,8 @@ struct MainView: View {
                     Toggle("Manually Confirm", isOn: $userSettings.manuallyConfirmSpeech)
                     
                     Toggle("Start with Mic Muted", isOn: $userSettings.startWithMicMuted)
+                    
+                    Toggle("Use Bluetooth Microphones", isOn: $userSettings.allowBluetoothMic)
                 } header: { Text("Speech Settings") }
                 
                 // URL Settings
