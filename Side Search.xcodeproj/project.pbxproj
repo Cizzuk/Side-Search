@@ -58,7 +58,7 @@
 		BE26D6B92F57D08100E28B78 /* Exceptions for "Side Search" folder in "WidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Models/AssistantActivity.swift,
+				Models/AssistantSupports/AssistantActivity.swift,
 			);
 			target = BE811A342F340E2C00894EA5 /* WidgetExtension */;
 		};

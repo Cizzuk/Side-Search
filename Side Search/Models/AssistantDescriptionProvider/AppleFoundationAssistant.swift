@@ -7,7 +7,6 @@
 
 import FoundationModels
 import SwiftUI
-import MergeCodablePackage
 
 struct AppleFoundationAssistant: AssistantDescriptionProvider {
     static var assistantDescription = LocalizedStringResource("This is an assistant that can converse using Foundation Models provided by Apple. To use it, Apple Intelligence must be available on your device. This assistant cannot search the internet.")
@@ -39,24 +38,6 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
             return true
         case .unavailable:
             return false
-        }
-    }
-}
-
-struct AppleFoundationAssistantModel: AssistantModel, MergeCodable {
-    private static let userDefaultsKey = "appleFoundationAssistantSettings"
-    
-    // Model Settings
-    var customInstructions: String = ""
-    
-    static func load() -> Self {
-        guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else { return Self() }
-        return decode(from: rawData)
-    }
-    
-    func save() {
-        if let data = encode() {
-            UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
         }
     }
 }
