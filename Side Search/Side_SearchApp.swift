@@ -45,4 +45,14 @@ struct Side_SearchApp: App {
             }
         }
     }
+    
+    static func validateAppState() {
+        if !AppFlags.shared.isAssistantActive {
+            UIApplication.shared.isIdleTimerDisabled = false
+            ActivateIntent.setShouldBackground(false)
+            if AssistantActivityManager.isActive() {
+                AssistantActivityManager.endAll()
+            }
+        }
+    }
 }
