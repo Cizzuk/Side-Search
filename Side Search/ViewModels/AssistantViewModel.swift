@@ -94,6 +94,32 @@ class AssistantViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    // MARK: - Actions
+    
+    func startRecording() {
+        service.startRecording()
+    }
+    
+    func stopRecording() {
+        service.stopRecording()
+    }
+    
+    func pauseRecognize() {
+        service.pauseRecognize()
+    }
+    
+    func resumeRecognize() {
+        service.resumeRecognize()
+    }
+    
+    func toggleRecording() {
+        if isRecording {
+            service.stopRecording()
+        } else {
+            service.startRecording()
+        }
+    }
+    
     func openURL(_ url: URL, option: UserSettings.URLOpeningOption? = nil) {
         if handleMagicLink(url) { return }
         

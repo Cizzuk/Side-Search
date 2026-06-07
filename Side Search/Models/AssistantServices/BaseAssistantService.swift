@@ -336,14 +336,6 @@ class BaseAssistantService: ObservableObject {
         speechRecognizer?.startRecognize()
     }
     
-    final func toggleRecording() {
-        if isRecording {
-            stopRecording()
-        } else {
-            startRecording()
-        }
-    }
-    
     // MARK: - Handlers
     
     // Handle Speech Recognizer Silence Timeout
