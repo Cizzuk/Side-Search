@@ -34,12 +34,8 @@ struct AssistantView: View {
     
     func dismissView() {
         guard !isAssistiveAccessEnabled else { return }
-        vm.dismissAssistant(fromView: true)
+        vm.dismissAssistant()
         dismiss()
-    }
-    
-    private var isAssistantAvailable: Bool {
-        vm.checkAvailability(shouldShowError: false)
     }
     
     var body: some View {
@@ -172,7 +168,7 @@ struct AssistantView: View {
     
     @ViewBuilder
     private var inputSection: some View {
-        if isAssistantAvailable {
+        if vm.isAssistantAvailable {
             VStack(alignment: .leading) {
                 Text(AssistantMessage.From.user.displayName)
                     .font(.headline)
@@ -253,7 +249,7 @@ struct AssistantView: View {
             }
             
             ToolbarItemGroup(placement: .primaryAction) {
-                if isAssistantAvailable {
+                if vm.isAssistantAvailable {
                     Button(action: { vm.toggleRecording() }) {
                         Label(vm.isRecording ? "Stop Microphone" : "Start Speech Recognition",
                               systemImage: vm.isRecognizing ? "microphone.fill" : "microphone")

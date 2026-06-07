@@ -9,26 +9,27 @@ import Combine
 import SwiftUI
 
 class AssistantViewModel: ObservableObject {
-    private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
     
     private let service: BaseAssistantService
     @Published var chat: ChatHistorySupport.Chat
     
-    // Assistant State
-    @Published var isEnded = false
-    @Published var isRecording = false {
-        didSet {
-            if isRecording { shouldUnfocusInput.toggle() }
-        }
-    }
-    @Published var isRecognizing = false
-    @Published var responseIsPreparing = false
-    
     // Input Field
     @Published var inputText = ""
     @Published var shouldFocusInput = false // Toggle to notify
     @Published var shouldUnfocusInput = false // Toggle to notify
+    
+    // View State
+    @Published var shouldDismiss = false
+    var isAssistantAvailable: Bool {
+        service.checkAvailability(shouldShowError: false)
+    }
+    
+    // Assistant State
+    @Published var isEnded = false
+    @Published var isRecording = false
+    @Published var isRecognizing = false
+    @Published var responseIsPreparing = false
     
     // Web View
     @Published var safariViewURL: URL?
@@ -59,6 +60,12 @@ class AssistantViewModel: ObservableObject {
     }
     
     private func setupBindings() {
+        service.dismissView = { [weak self] in
+            DispatchQueue.main.async {
+                self?.shouldDismiss = true
+            }
+        }
+        
         service.openURL = { [weak self] url in
             DispatchQueue.main.async {
                 self?.openURL(url)
@@ -78,9 +85,24 @@ class AssistantViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
+        service.$inputText
+            .removeDuplicates()
+            .sink { [weak self] inputText in
+                self?.inputText = inputText
+            }
+            .store(in: &cancellables)
+        
+        $inputText
+            .removeDuplicates()
+            .sink { [weak self] inputText in
+                self?.service.inputText = inputText
+            }
+            .store(in: &cancellables)
+        
         service.$isRecording
             .sink { [weak self] isRecording in
                 self?.isRecording = isRecording
+                if isRecording { self?.shouldUnfocusInput.toggle() }
             }
             .store(in: &cancellables)
         

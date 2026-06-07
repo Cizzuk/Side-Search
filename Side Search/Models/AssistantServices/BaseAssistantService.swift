@@ -18,9 +18,9 @@ class BaseAssistantService: ObservableObject {
     
     @Published var chat: ChatHistorySupport.Chat
     
+    // View State
     var currentScenePhase: ScenePhase = .active
     var isDismissed = false
-    
     @Published var shouldDismiss = false
     
     // Assistant State
@@ -51,6 +51,7 @@ class BaseAssistantService: ObservableObject {
     @Published var inputText = ""
     
     // Callbacks
+    var dismissView: (() -> Void)?
     var openURL: ((URL) -> Void)?
     var onError: ((LocalizedStringResource) -> Void)?
     
@@ -257,11 +258,11 @@ class BaseAssistantService: ObservableObject {
         }
     }
     
-    final func dismissAssistant(fromView: Bool = false) {
+    final func dismissAssistant() {
         guard !isDismissed else { return }
         isDismissed = true
         
-        if !fromView { shouldDismiss = true }
+        dismissView?()
         removeNotificationObservers()
         stopRecording()
         saveChatHistory()
