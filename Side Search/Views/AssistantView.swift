@@ -90,7 +90,7 @@ struct AssistantView: View {
             if autoActivate { vm.activateAssistant() }
         }
         .onDisappear() {
-            vm.dismissAssistant(fromView: true)
+            vm.dismissAssistant()
         }
         .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
             vm.activateAssistant()
@@ -189,23 +189,15 @@ struct AssistantView: View {
                 .bold()
                 .submitLabel(.return)
                 .focused($isInputFocused)
-                .onSubmit {
-                    vm.confirmInput()
-                }
+                .onSubmit { vm.confirmInput() }
                 .onChange(of: isInputFocused) {
-                    if isInputFocused {
-                        vm.stopRecording()
-                    }
+                    if isInputFocused { vm.stopRecording() }
                 }
                 .onChange(of: vm.shouldFocusInput) {
-                    Task {
-                        isInputFocused = true
-                    }
+                    Task { isInputFocused = true }
                 }
                 .onChange(of: vm.shouldUnfocusInput) {
-                    Task {
-                        isInputFocused = false
-                    }
+                    Task { isInputFocused = false }
                 }
                 
                 // Assistive Access
