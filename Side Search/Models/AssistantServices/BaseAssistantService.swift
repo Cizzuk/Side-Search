@@ -57,7 +57,7 @@ class BaseAssistantService: ObservableObject {
     @Published var showSafariView = false
     
     // Error Alert
-    var onError: ((String) -> Void)?
+    var onError: ((LocalizedStringResource) -> Void)?
     
     @Published var micLevel: Float = 0.0
     
