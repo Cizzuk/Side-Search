@@ -134,6 +134,10 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Actions
     
+    func scenePhaseUpdate(_ scenePhase: ScenePhase) {
+        service.scenePhaseUpdate(scenePhase)
+    }
+    
     func confirmInput() {
         service.confirmInput()
     }

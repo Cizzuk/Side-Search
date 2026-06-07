@@ -19,9 +19,8 @@ class BaseAssistantService: ObservableObject {
     @Published var chat: ChatHistorySupport.Chat
     
     // View State
-    var currentScenePhase: ScenePhase = .active
-    var isDismissed = false
-    @Published var shouldDismiss = false
+    var lastScenePhase: ScenePhase = .active
+    private var isDismissed = false
     
     // Assistant State
     @Published var isEnded = false {
@@ -155,8 +154,8 @@ class BaseAssistantService: ObservableObject {
     
     // MARK: - Lifecycle
     
-    final func onChange(scenePhase: ScenePhase) {
-        currentScenePhase = scenePhase
+    final func scenePhaseUpdate(_ scenePhase: ScenePhase) {
+        lastScenePhase = scenePhase
         switch scenePhase {
         case .active:
             break
@@ -290,7 +289,7 @@ class BaseAssistantService: ObservableObject {
         saveChatHistory()
         
         // Send user notification
-        if message.from != .user && currentScenePhase != .active {
+        if message.from != .user && lastScenePhase != .active {
             Task {
                 if await UserNotificationSupport.requestAuthorization() {
                     await UserNotificationSupport.sendAssistantMessage(message: message)
@@ -340,7 +339,7 @@ class BaseAssistantService: ObservableObject {
         }
         
         Task {
-            if await isBackgroundAvailable() && currentScenePhase == .background && userSettings.standbyInBackground {
+            if await isBackgroundAvailable() && lastScenePhase == .background && userSettings.standbyInBackground {
                 // Enter standby in background
                 pauseRecognize()
             } else {

@@ -86,7 +86,7 @@ struct AssistantView: View {
         }
         // MARK: - Events
         .onAppear {
-            vm.currentScenePhase = scenePhase
+            vm.scenePhaseUpdate(scenePhase)
             if autoActivate { vm.activateAssistant() }
         }
         .onDisappear() {
@@ -104,7 +104,7 @@ struct AssistantView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
             isKeyboardVisible = false
         }
-        .onChange(of: scenePhase) { vm.onChange(scenePhase: scenePhase) }
+        .onChange(of: scenePhase) { vm.scenePhaseUpdate(scenePhase) }
         // MARK: - View Styles
         .background(
             AngularGradient(
