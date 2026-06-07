@@ -9,6 +9,9 @@ import Combine
 import SwiftUI
 
 class AssistantViewModel: ObservableObject {
+    private let appFlags = AppFlags.shared
+    private let userSettings = UserSettings.shared
+    
     private let service: BaseAssistantService
     @Published var chat: ChatHistorySupport.Chat
     
@@ -29,6 +32,8 @@ class AssistantViewModel: ObservableObject {
     @Published var micLevel: Float = 0.0
     
     private var cancellables = Set<AnyCancellable>()
+    
+    // MARK: - Initialization
     
     init(chat: ChatHistorySupport.Chat? = nil) {
         let chat = chat ?? ChatHistorySupport.Chat(
