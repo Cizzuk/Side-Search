@@ -80,12 +80,14 @@ class AssistantViewModel: ObservableObject {
         }
         
         service.$chat
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] chat in
                 self?.chat = chat
             }
             .store(in: &cancellables)
         
         service.$inputText
+            .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .sink { [weak self] inputText in
                 self?.inputText = inputText
@@ -93,6 +95,7 @@ class AssistantViewModel: ObservableObject {
             .store(in: &cancellables)
         
         $inputText
+            .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .sink { [weak self] inputText in
                 self?.service.inputText = inputText
@@ -100,6 +103,7 @@ class AssistantViewModel: ObservableObject {
             .store(in: &cancellables)
         
         service.$isRecording
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] isRecording in
                 self?.isRecording = isRecording
                 if isRecording { self?.shouldUnfocusInput.toggle() }
@@ -107,18 +111,21 @@ class AssistantViewModel: ObservableObject {
             .store(in: &cancellables)
         
         service.$isRecognizing
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] isRecognizing in
                 self?.isRecognizing = isRecognizing
             }
             .store(in: &cancellables)
         
         service.$responseIsPreparing
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] responseIsPreparing in
                 self?.responseIsPreparing = responseIsPreparing
             }
             .store(in: &cancellables)
         
         service.$micLevel
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] micLevel in
                 self?.micLevel = micLevel
             }
@@ -187,7 +194,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    func handleMagicLink(_ url: URL) -> Bool {
+    private func handleMagicLink(_ url: URL) -> Bool {
         // Scheme & Host check
         guard url.scheme == "sidesearch",
               url.host == "magiclink"
