@@ -11,16 +11,6 @@ import SwiftUI
 import UIKit
 
 class BaseAssistantService: ObservableObject {
-    static func make(chat: ChatHistorySupport.Chat? = nil) -> BaseAssistantService {
-        let chat = chat ?? ChatHistorySupport.Chat(
-            id: UUID(),
-            date: Date(),
-            assistantType: UserSettings.shared.currentAssistant,
-            messages: []
-        )
-        return chat.assistantType.AssistantServiceType.init(chat: chat)
-    }
-    
     private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
     
