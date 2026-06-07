@@ -1,5 +1,5 @@
 //
-//  SettingsMigrator.swift
+//  SettingsMigration.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/03/31.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class SettingsMigrator {
+final class SettingsMigration {
     static func migrateOpenURLsIn() -> UserSettings.URLOpeningOption? {
         var assistantModel = URLBasedAssistantModel.load()
         
