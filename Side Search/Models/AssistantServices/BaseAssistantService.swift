@@ -81,11 +81,11 @@ class BaseAssistantService: ObservableObject {
     
     private static let endAssistantDarwinCallback: CFNotificationCallback = { _, observer, _, _, _ in
         guard let observer else { return }
-        let viewModel = Unmanaged<BaseAssistantService>.fromOpaque(observer).takeUnretainedValue()
+        let instance = Unmanaged<BaseAssistantService>.fromOpaque(observer).takeUnretainedValue()
         
         // Check Flag
         if GroupUserDefaults.bool(forKey: CFNotificationFlags.shouldEndAssistant) {
-            viewModel.dismissAssistant()
+            instance.dismissAssistant()
             GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
         }
     }
@@ -210,7 +210,7 @@ class BaseAssistantService: ObservableObject {
         let assistantMessage = AssistantMessage(from: .system, content: assistantResponse)
         addMessage(assistantMessage)
         
-        print("AssistantViewModel: processInput() should be overridden in subclass.")
+        print("Assistant Service: processInput() should be overridden in subclass.")
         
         inputText = ""
         responseIsPreparing = false
