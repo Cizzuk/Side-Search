@@ -61,11 +61,11 @@ class BaseAssistantService: ObservableObject {
     
     @Published var micLevel: Float = 0.0
     
-    var speechRecognizer: SpeechRecognizerService? = SpeechRecognizerService()
+    private var speechRecognizer: SpeechRecognizerService? = SpeechRecognizerService()
     private var cancellables = Set<AnyCancellable>()
     
-    let soundEffect = SoundEffectService.shared
-    var shouldStartRecognitionFeedback = false
+    private let soundEffect = SoundEffectService.shared
+    private var shouldStartRecognitionFeedback = false
     
     // MARK: - Initialization
     
