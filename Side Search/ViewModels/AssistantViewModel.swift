@@ -96,6 +96,19 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Actions
     
+    func confirmInput() {
+        service.confirmInput()
+    }
+    
+    func activateAssistant() {
+        service.activateAssistant()
+        showSafariView = false
+    }
+    
+    func dismissAssistant() {
+        service.dismissAssistant()
+    }
+    
     func startRecording() {
         service.startRecording()
     }
@@ -138,7 +151,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    final func handleMagicLink(_ url: URL) -> Bool {
+    func handleMagicLink(_ url: URL) -> Bool {
         // Scheme & Host check
         guard url.scheme == "sidesearch",
               url.host == "magiclink"
