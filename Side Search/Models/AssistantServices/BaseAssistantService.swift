@@ -20,6 +20,7 @@ class BaseAssistantService: ObservableObject {
     
     var currentScenePhase: ScenePhase = .active
     var isDismissed = false
+    
     @Published var shouldDismiss = false
     
     // Assistant State
@@ -29,7 +30,6 @@ class BaseAssistantService: ObservableObject {
     
     @Published var isRecording = false {
         didSet {
-            if isRecording { shouldUnfocusInput.toggle() }
             updateIdleTimerDisabled()
             updateActivateIntent()
             updateLiveActivityStatus()
@@ -49,8 +49,6 @@ class BaseAssistantService: ObservableObject {
     
     // Input Field
     @Published var inputText = ""
-    @Published var shouldFocusInput = false // Toggle to notify
-    @Published var shouldUnfocusInput = false // Toggle to notify
     
     // Callbacks
     var openURL: ((URL) -> Void)?
@@ -240,29 +238,21 @@ class BaseAssistantService: ObservableObject {
                 if inputText.isEmpty {
                     // Reset silence timer
                     speechRecognizer?.setFirstSilenceTimer()
-                    return
                 } else {
                     // If input text exists, confirm it
                     soundEffect.play(.completeRecognition)
                     confirmInput()
-                    return
                 }
             } else {
                 // Resume recognition
                 shouldStartRecognitionFeedback = true
                 resumeRecognize()
-                return
             }
         } else {
-            if userSettings.startWithMicMuted {
-                // Show keyboard
-                shouldFocusInput.toggle()
-                return
-            } else {
+            if !userSettings.startWithMicMuted {
                 // Start recording
                 shouldStartRecognitionFeedback = true
                 startRecording()
-                return
             }
         }
     }

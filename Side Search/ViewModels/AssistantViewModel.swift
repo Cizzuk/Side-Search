@@ -17,9 +17,18 @@ class AssistantViewModel: ObservableObject {
     
     // Assistant State
     @Published var isEnded = false
-    @Published var isRecording = false
+    @Published var isRecording = false {
+        didSet {
+            if isRecording { shouldUnfocusInput.toggle() }
+        }
+    }
     @Published var isRecognizing = false
     @Published var responseIsPreparing = false
+    
+    // Input Field
+    @Published var inputText = ""
+    @Published var shouldFocusInput = false // Toggle to notify
+    @Published var shouldUnfocusInput = false // Toggle to notify
     
     // Web View
     @Published var safariViewURL: URL?
@@ -103,6 +112,11 @@ class AssistantViewModel: ObservableObject {
     func activateAssistant() {
         service.activateAssistant()
         showSafariView = false
+        
+        // Focus input if starting with mic muted
+        if !isRecording && userSettings.startWithMicMuted {
+            shouldFocusInput.toggle()
+        }
     }
     
     func dismissAssistant() {
