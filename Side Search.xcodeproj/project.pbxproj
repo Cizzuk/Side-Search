@@ -139,10 +139,10 @@
 		BEB06C412EFBA9AE0026CC6E = {
 			isa = PBXGroup;
 			children = (
+				BE5046D92F5D8915002CDDB9 /* Constants.swift */,
 				BE5046DC2F5D896A002CDDB9 /* WidgetExtensionExtension.entitlements */,
 				BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */,
 				BEC09CB52F7B59DC005028B7 /* SharedIntents */,
-				BE5046D92F5D8915002CDDB9 /* Constants.swift */,
 				BEB06C4C2EFBA9AE0026CC6E /* Side Search */,
 				BE811A3B2F340E2D00894EA5 /* WidgetExtension */,
 				BE811A362F340E2C00894EA5 /* Frameworks */,
