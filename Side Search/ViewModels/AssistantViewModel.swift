@@ -88,17 +88,8 @@ class AssistantViewModel: ObservableObject {
         
         service.$inputText
             .receive(on: DispatchQueue.main)
-            .removeDuplicates()
             .sink { [weak self] inputText in
                 self?.inputText = inputText
-            }
-            .store(in: &cancellables)
-        
-        $inputText
-            .receive(on: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] inputText in
-                self?.service.inputText = inputText
             }
             .store(in: &cancellables)
         
@@ -139,10 +130,12 @@ class AssistantViewModel: ObservableObject {
     }
     
     func confirmInput() {
+        service.inputText = inputText
         service.confirmInput()
     }
     
     func activateAssistant() {
+        service.inputText = inputText
         service.activateAssistant()
         showSafariView = false
         
