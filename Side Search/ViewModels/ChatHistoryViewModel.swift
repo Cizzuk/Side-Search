@@ -10,26 +10,26 @@ import UIKit
 import SwiftUI
 
 class ChatHistoryViewModel: ObservableObject {
-    @Published var chats: [ChatHistory.Chat] = []
+    @Published var chats: [ChatHistorySupport.Chat] = []
     
     // Search Chat History
-    @Published var searchResults: [ChatHistory.Chat] = []
+    @Published var searchResults: [ChatHistorySupport.Chat] = []
     @Published var searchQuery = "" {
         didSet { updateSearch() }
     }
     
     func loadChats() {
-        chats = ChatHistory.loadChats()
+        chats = ChatHistorySupport.loadChats()
         updateSearch()
     }
     
     func delete(_ chat: UUID) {
-        ChatHistory.delete(chat)
+        ChatHistorySupport.delete(chat)
         loadChats()
     }
     
     func clearAll() {
-        ChatHistory.clearAll()
+        ChatHistorySupport.clearAll()
         loadChats()
     }
     

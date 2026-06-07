@@ -1,5 +1,5 @@
 //
-//  ChatHistory.swift
+//  ChatHistorySupport.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/02/08.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ChatHistory {
+class ChatHistorySupport {
     // MARK: - 'Chat' does NOT conform to 'MergeCodable'.
     // If future changes require merge support, first make this struct conform to 'MergeCodable'.
     struct Chat: Identifiable, Codable {

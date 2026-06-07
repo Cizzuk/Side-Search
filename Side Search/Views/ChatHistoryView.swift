@@ -83,7 +83,7 @@ struct ChatHistoryView: View {
     
     struct ChatLinkList: View {
         @ObservedObject var viewModel: ChatHistoryViewModel
-        var chats: [ChatHistory.Chat]
+        var chats: [ChatHistorySupport.Chat]
         
         var body: some View {
             ForEach(chats) { chat in

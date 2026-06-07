@@ -89,7 +89,7 @@ struct MainView: View {
                 
                 Section {
                     Picker("Sound Effects", selection: $userSettings.soundEffectsMode) {
-                        ForEach(SoundEffect.Mode.allCases) { mode in
+                        ForEach(SoundEffectService.Mode.allCases) { mode in
                             Text(mode.displayName).tag(mode)
                         }
                     }

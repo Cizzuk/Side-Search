@@ -1,5 +1,5 @@
 //
-//  SpeechRecognizer.swift
+//  SpeechRecognizerService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/25.
@@ -10,7 +10,7 @@ import Combine
 import Speech
 import UIKit
 
-class SpeechRecognizer: ObservableObject {
+class SpeechRecognizerService: ObservableObject {
     private let userSettings = UserSettings.shared
     
     @Published var isRecording = false

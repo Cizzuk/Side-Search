@@ -15,7 +15,7 @@ struct SetSoundEffectsMode: AppIntent {
     static let isDiscoverable = true
     
     @Parameter(title: "Mode", default: .always)
-    var mode: SoundEffect.Mode
+    var mode: SoundEffectService.Mode
     
     static var parameterSummary: some ParameterSummary {
         Summary("Set Sound Effects Mode to \(\.$mode)")

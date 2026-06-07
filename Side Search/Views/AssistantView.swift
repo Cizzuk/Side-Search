@@ -23,7 +23,7 @@ struct AssistantView: View {
     private let useNavigationBackButton: Bool
     
     init(
-        chat: ChatHistory.Chat? = nil,
+        chat: ChatHistorySupport.Chat? = nil,
         autoActivate: Bool = true,
         useNavigationBackButton: Bool = false
     ) {

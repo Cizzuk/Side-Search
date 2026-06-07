@@ -168,9 +168,9 @@ final class UserSettings: ObservableObject {
     
     // MARK: - Other Settings
     
-    @Published var soundEffectsMode: SoundEffect.Mode = {
+    @Published var soundEffectsMode: SoundEffectService.Mode = {
         if let rawValue = UserDefaults.standard.string(forKey: Keys.soundEffectsMode),
-           let mode = SoundEffect.Mode(rawValue: rawValue) {
+           let mode = SoundEffectService.Mode(rawValue: rawValue) {
             return mode
         }
         return .default

@@ -11,8 +11,8 @@ import SwiftUI
 import UIKit
 
 class AssistantViewModel: ObservableObject {
-    static func make(chat: ChatHistory.Chat? = nil) -> AssistantViewModel {
-        let chat = chat ?? ChatHistory.Chat(
+    static func make(chat: ChatHistorySupport.Chat? = nil) -> AssistantViewModel {
+        let chat = chat ?? ChatHistorySupport.Chat(
             id: UUID(),
             date: Date(),
             assistantType: UserSettings.shared.currentAssistant,
@@ -26,7 +26,7 @@ class AssistantViewModel: ObservableObject {
     
     // MARK: - Variables
     
-    @Published var chat: ChatHistory.Chat
+    @Published var chat: ChatHistorySupport.Chat
     
     var currentScenePhase: ScenePhase = .active
     var isDismissed = false
@@ -72,15 +72,15 @@ class AssistantViewModel: ObservableObject {
     
     @Published var micLevel: Float = 0.0
     
-    var speechRecognizer: SpeechRecognizer? = SpeechRecognizer()
+    var speechRecognizer: SpeechRecognizerService? = SpeechRecognizerService()
     private var cancellables = Set<AnyCancellable>()
     
-    let soundEffect = SoundEffect.shared
+    let soundEffect = SoundEffectService.shared
     var shouldStartRecognitionFeedback = false
     
     // MARK: - Initialization
     
-    required init(chat: ChatHistory.Chat) {
+    required init(chat: ChatHistorySupport.Chat) {
         self.chat = chat
         
         setupNotificationObservers()
@@ -380,7 +380,7 @@ class AssistantViewModel: ObservableObject {
               !chat.messages.isEmpty
         else { return }
         
-        ChatHistory.save(chat)
+        ChatHistorySupport.save(chat)
     }
     
     // MARK: - Speech Recognizer Actions
