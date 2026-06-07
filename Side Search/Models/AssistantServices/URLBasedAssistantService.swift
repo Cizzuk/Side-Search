@@ -31,8 +31,7 @@ class URLBasedAssistantService: BaseAssistantService {
             )
         } else {
             // Handle invalid URL error
-            self.errorMessage = "Invalid Search URL. Please check your settings."
-            self.showError = true
+            onError?("Invalid Search URL. Please check your settings.")
         }
         
         addMessage(userMessage)

@@ -57,8 +57,7 @@ class BaseAssistantService: ObservableObject {
     @Published var showSafariView = false
     
     // Error Alert
-    @Published var errorMessage: LocalizedStringResource = ""
-    @Published var showError = false
+    var onError: ((String) -> Void)?
     
     @Published var micLevel: Float = 0.0
     
@@ -150,18 +149,6 @@ class BaseAssistantService: ObservableObject {
         speechRecognizer?.$micLevel
             .sink { [weak self] level in
                 self?.micLevel = level
-            }
-            .store(in: &cancellables)
-        
-        speechRecognizer?.$errorMessage
-            .sink { [weak self] message in
-                self?.errorMessage = message
-            }
-            .store(in: &cancellables)
-        
-        speechRecognizer?.$showError
-            .sink { [weak self] show in
-                self?.showError = show
             }
             .store(in: &cancellables)
         
@@ -438,8 +425,7 @@ class BaseAssistantService: ObservableObject {
         
         if !chat.assistantType.DescriptionProviderType.isAvailable() {
             if shouldShowError {
-                errorMessage = "This assistant is not available."
-                showError = true
+                onError?("This assistant is not available.")
             }
             return false
         }
