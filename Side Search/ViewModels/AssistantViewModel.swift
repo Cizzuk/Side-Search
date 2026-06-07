@@ -18,6 +18,10 @@ class AssistantViewModel: ObservableObject {
     @Published var isRecognizing = false
     @Published var responseIsPreparing = false
     
+    // Web View
+    @Published var safariViewURL: URL?
+    @Published var showSafariView = false
+    
     // Error Alert
     @Published var errorMessage: LocalizedStringResource = ""
     @Published var showError = false
@@ -41,6 +45,12 @@ class AssistantViewModel: ObservableObject {
     }
     
     private func setupBindings() {
+        service.openURL = { [weak self] url in
+            DispatchQueue.main.async {
+                self?.openURL(url)
+            }
+        }
+        
         service.onError = { [weak self] message in
             DispatchQueue.main.async {
                 self?.errorMessage = message
@@ -77,5 +87,44 @@ class AssistantViewModel: ObservableObject {
                 self?.micLevel = micLevel
             }
             .store(in: &cancellables)
+    }
+    
+    func openURL(_ url: URL, option: UserSettings.URLOpeningOption? = nil) {
+        if handleMagicLink(url) { return }
+        
+        let openingOption = option ?? userSettings.openURLsIn
+        
+        switch openingOption {
+        case .inAppBrowser:
+            if SafariView.checkAvailability(at: url) {
+                safariViewURL = url
+                showSafariView = true
+            } else {
+                UIApplication.shared.open(url)
+            }
+        case .defaultApp:
+            UIApplication.shared.open(url)
+        }
+    }
+    
+    final func handleMagicLink(_ url: URL) -> Bool {
+        // Scheme & Host check
+        guard url.scheme == "sidesearch",
+              url.host == "magiclink"
+        else { return false }
+        
+        // Example: sidesearch://magiclink/?overrideInput=Hello%20World
+        
+        // Get query items
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        let queryItems = components?.queryItems
+        
+        // overrideInput
+        if let overrideInput = queryItems?.first(where: { $0.name == "overrideInput" })?.value {
+            service.stopRecording()
+            inputText = overrideInput
+        }
+        
+        return true
     }
 }

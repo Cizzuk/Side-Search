@@ -52,11 +52,8 @@ class BaseAssistantService: ObservableObject {
     @Published var shouldFocusInput = false // Toggle to notify
     @Published var shouldUnfocusInput = false // Toggle to notify
     
-    // Web View
-    @Published var safariViewURL: URL?
-    @Published var showSafariView = false
-    
-    // Error Alert
+    // Callbacks
+    var openURL: ((URL) -> Void)?
     var onError: ((LocalizedStringResource) -> Void)?
     
     @Published var micLevel: Float = 0.0
@@ -238,8 +235,6 @@ class BaseAssistantService: ObservableObject {
         
         guard checkAvailability() else { return }
         
-        showSafariView = false
-        
         if isRecording {
             if isRecognizing {
                 if inputText.isEmpty {
@@ -286,45 +281,6 @@ class BaseAssistantService: ObservableObject {
         ActivateIntent.setShouldBackground(false)
         AssistantActivityManager.endAll()
         appFlags.isAssistantActive = false
-    }
-    
-    final func openURL(_ url: URL, option: UserSettings.URLOpeningOption? = nil) {
-        if handleMagicLink(url) { return }
-        
-        let openingOption = option ?? userSettings.openURLsIn
-        
-        switch openingOption {
-        case .inAppBrowser:
-            if SafariView.checkAvailability(at: url) {
-                safariViewURL = url
-                showSafariView = true
-            } else {
-                UIApplication.shared.open(url)
-            }
-        case .defaultApp:
-            UIApplication.shared.open(url)
-        }
-    }
-    
-    final func handleMagicLink(_ url: URL) -> Bool {
-        // Scheme & Host check
-        guard url.scheme == "sidesearch",
-              url.host == "magiclink"
-        else { return false }
-        
-        // Example: sidesearch://magiclink/?overrideInput=Hello%20World
-        
-        // Get query items
-        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        let queryItems = components?.queryItems
-        
-        // overrideInput
-        if let overrideInput = queryItems?.first(where: { $0.name == "overrideInput" })?.value {
-            stopRecording()
-            inputText = overrideInput
-        }
-        
-        return true
     }
     
     // MARK: - Message History Management
