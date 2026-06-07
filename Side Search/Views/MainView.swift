@@ -13,7 +13,7 @@ import TemporaryScreenCurtain
 struct MainView: View {
     @Environment(\.scenePhase) var scenePhase
     
-    @StateObject var viewModel = MainViewModel()
+    @StateObject var vm = MainViewModel()
     @StateObject private var userSettings = UserSettings.shared
     
     @State private var showClearInAppBrowserDataAlert = false
@@ -118,7 +118,7 @@ struct MainView: View {
                 
                 if UIApplication.shared.supportsAlternateIcons {
                     Section {
-                        Button(action: { viewModel.showModal(.changeIcon) }) {
+                        Button(action: { vm.showModal(.changeIcon) }) {
                             Label("Change App Icon", systemImage: "app.dashed")
                         }
                     }
@@ -131,7 +131,7 @@ struct MainView: View {
             .scrollDismissesKeyboard(.interactively)
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: { viewModel.showModal(.switchAssistant) }) {
+                    Button(action: { vm.showModal(.switchAssistant) }) {
                         HStack {
                             userSettings.currentAssistant.DescriptionProviderType.assistantImage
                             Text(userSettings.currentAssistant.displayName)
@@ -140,7 +140,7 @@ struct MainView: View {
                     }
                     .matchedTransitionSource(id: id_switchAssistantViewButton, in: ns_switchAssistantView)
                     
-                    Button(action: { viewModel.activateAssistant() }) {
+                    Button(action: { vm.activateAssistant() }) {
                         Label("Start Assistant", image: "Sidefish")
                             .foregroundStyle(.white)
                     }
@@ -149,13 +149,13 @@ struct MainView: View {
                     .matchedTransitionSource(id: id_activateAssistantButton, in: ns_assistantView)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { viewModel.showModal(.chatHistory) }) {
+                    Button(action: { vm.showModal(.chatHistory) }) {
                         Label("Chat History", systemImage: "clock")
                     }
                     .matchedTransitionSource(id: id_chatHistoryViewButton, in: ns_chatHistoryView)
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: { viewModel.showModal(.help) }) {
+                    Button(action: { vm.showModal(.help) }) {
                         Label("Help", systemImage: "questionmark")
                     }
                     .matchedTransitionSource(id: id_helpViewButton, in: ns_helpView)
@@ -164,50 +164,50 @@ struct MainView: View {
             // MARK: - Events
             .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
                 showClearInAppBrowserDataAlert = false
-                viewModel.activateAssistant(disableAnimations: true)
+                vm.activateAssistant(disableAnimations: true)
             }
-            .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
+            .onChange(of: scenePhase) { vm.onChange(scenePhase: scenePhase) }
         }
         .accessibilityAction(.magicTap) {
             NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
         }
         // MARK: - Sheets
-        .sheet(isPresented: $viewModel.showHelpView) {
+        .sheet(isPresented: $vm.showHelpView) {
             HelpView()
                 .navigationTransition(.zoom(
                     sourceID: id_helpViewButton,
                     in: ns_helpView
                 ))
         }
-        .fullScreenCover(isPresented: $viewModel.showChatHistoryView) {
+        .fullScreenCover(isPresented: $vm.showChatHistoryView) {
             ChatHistoryView()
                 .navigationTransition(.zoom(
                     sourceID: id_chatHistoryViewButton,
                     in: ns_chatHistoryView
                 ))
         }
-        .sheet(isPresented: $viewModel.showChangeIconView) { ChangeIconView() }
-        .sheet(isPresented: $viewModel.showSwitchAssistantView) {
+        .sheet(isPresented: $vm.showChangeIconView) { ChangeIconView() }
+        .sheet(isPresented: $vm.showSwitchAssistantView) {
             SwitchAssistantView(currentAssistant: $userSettings.currentAssistant)
                 .navigationTransition(.zoom(
                     sourceID: id_switchAssistantViewButton,
                     in: ns_switchAssistantView
                 ))
         }
-        .fullScreenCover(isPresented: $viewModel.showAssistant) {
+        .fullScreenCover(isPresented: $vm.showAssistant) {
             NavigationStack { AssistantView() }
                 .navigationTransition(.zoom(
                     sourceID: id_activateAssistantButton,
                     in: ns_assistantView
                 ))
         }
-        .fullScreenCover(isPresented: $viewModel.showSafariView) {
-            if let url = viewModel.safariViewURL {
+        .fullScreenCover(isPresented: $vm.showSafariView) {
+            if let url = vm.safariViewURL {
                 SafariView(url: url)
                     .ignoresSafeArea()
             }
         }
         // MARK: - Temporary Screen Curtain
-        .temporaryScreenCurtain(isPresented: $viewModel.showTmpCurtain)
+        .temporaryScreenCurtain(isPresented: $vm.showTmpCurtain)
     }
 }
