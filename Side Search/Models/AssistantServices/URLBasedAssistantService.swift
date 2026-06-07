@@ -1,5 +1,5 @@
 //
-//  URLBasedAssistantViewModel.swift
+//  URLBasedAssistantService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class URLBasedAssistantViewModel: AssistantViewModel {
+class URLBasedAssistantService: BaseAssistantService {
     
     // MARK: - Assistant Settings
     

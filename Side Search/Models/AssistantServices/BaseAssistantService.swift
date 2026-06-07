@@ -1,5 +1,5 @@
 //
-//  AssistantViewModel.swift
+//  BaseAssistantService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2025/12/24.
@@ -10,15 +10,15 @@ import Combine
 import SwiftUI
 import UIKit
 
-class AssistantViewModel: ObservableObject {
-    static func make(chat: ChatHistorySupport.Chat? = nil) -> AssistantViewModel {
+class BaseAssistantService: ObservableObject {
+    static func make(chat: ChatHistorySupport.Chat? = nil) -> BaseAssistantService {
         let chat = chat ?? ChatHistorySupport.Chat(
             id: UUID(),
             date: Date(),
             assistantType: UserSettings.shared.currentAssistant,
             messages: []
         )
-        return chat.assistantType.AssistantViewModelType.init(chat: chat)
+        return chat.assistantType.AssistantServiceType.init(chat: chat)
     }
     
     private let appFlags = AppFlags.shared
@@ -97,7 +97,7 @@ class AssistantViewModel: ObservableObject {
     
     private static let endAssistantDarwinCallback: CFNotificationCallback = { _, observer, _, _, _ in
         guard let observer else { return }
-        let viewModel = Unmanaged<AssistantViewModel>.fromOpaque(observer).takeUnretainedValue()
+        let viewModel = Unmanaged<BaseAssistantService>.fromOpaque(observer).takeUnretainedValue()
         
         // Check Flag
         if GroupUserDefaults.bool(forKey: CFNotificationFlags.shouldEndAssistant) {
@@ -112,7 +112,7 @@ class AssistantViewModel: ObservableObject {
         CFNotificationCenterAddObserver(
             CFNotificationCenterGetDarwinNotifyCenter(),
             Unmanaged.passUnretained(self).toOpaque(),
-            AssistantViewModel.endAssistantDarwinCallback,
+            BaseAssistantService.endAssistantDarwinCallback,
             CFNotificationName.shouldEndAssistant.rawValue,
             nil,
             .deliverImmediately

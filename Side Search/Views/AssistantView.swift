@@ -17,7 +17,7 @@ struct AssistantView: View {
     @FocusState private var isInputFocused: Bool
     @State private var isKeyboardVisible = false
     
-    @StateObject private var viewModel: AssistantViewModel
+    @StateObject private var viewModel: BaseAssistantService
     
     private let autoActivate: Bool
     private let useNavigationBackButton: Bool
@@ -27,7 +27,7 @@ struct AssistantView: View {
         autoActivate: Bool = true,
         useNavigationBackButton: Bool = false
     ) {
-        _viewModel = StateObject(wrappedValue: AssistantViewModel.make(chat: chat))
+        _viewModel = StateObject(wrappedValue: BaseAssistantService.make(chat: chat))
         self.autoActivate = autoActivate
         self.useNavigationBackButton = useNavigationBackButton
     }

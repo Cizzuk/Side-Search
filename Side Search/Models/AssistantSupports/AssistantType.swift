@@ -59,16 +59,16 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
         }
     }
     
-    var AssistantViewModelType: AssistantViewModel.Type {
+    var AssistantServiceType: BaseAssistantService.Type {
         switch self {
         case .urlBased:
-            return URLBasedAssistantViewModel.self
+            return URLBasedAssistantService.self
         case .appleFoundation:
-            return AppleFoundationAssistantViewModel.self
+            return AppleFoundationAssistantService.self
         case .geminiAPI:
-            return GeminiAPIAssistantViewModel.self
+            return GeminiAPIAssistantService.self
         case .sideBridge:
-            return SideBridgeAssistantViewModel.self
+            return SideBridgeAssistantService.self
         }
     }
     

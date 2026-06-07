@@ -1,5 +1,5 @@
 //
-//  AppleFoundationAssistantViewModel.swift
+//  AppleFoundationAssistantService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/28.
@@ -8,7 +8,7 @@
 import FoundationModels
 import UIKit
 
-class AppleFoundationAssistantViewModel: AssistantViewModel {
+class AppleFoundationAssistantService: BaseAssistantService {
     
     // MARK: - Assistant Settings
     
