@@ -119,9 +119,10 @@ class SpeechRecognizerService: ObservableObject {
     // MARK: - Recording Controls
     
     func startRecording() {
-        Task {
-            guard await checkMicrophoneAuthorization() else { return }
+        Task { [weak self] in
+            guard let self = self else { return }
             
+            guard await checkMicrophoneAuthorization() else { return }
             guard !isRecording else { return }
             
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
