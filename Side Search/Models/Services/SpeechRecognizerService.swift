@@ -19,11 +19,9 @@ class SpeechRecognizerService: ObservableObject {
     @Published var recognizedText = ""
     @Published var micLevel: Float = 0.0 // For UI animation
     
-    @Published var errorMessage: LocalizedStringResource = ""
-    @Published var showError = false
-    
     // Callbacks
     var onSilenceTimeout: (() -> Void)?
+    var onError: ((LocalizedStringResource) -> Void)?
     
     // MARK: - Private Properties
     
@@ -142,7 +140,7 @@ class SpeechRecognizerService: ObservableObject {
                     }
                 } catch {
                     stopRecording()
-                    showErrorMessage("Failed to start recording: \(error.localizedDescription)")
+                    onError?("Failed to start recording: \(error.localizedDescription)")
                 }
             }
         }
@@ -189,13 +187,13 @@ class SpeechRecognizerService: ObservableObject {
         guard isRecording, !isRecognizing else { return }
         
         guard let recognizer = speechRecognizer else {
-            showErrorMessage("Failed to prepare speech recognition.")
+            onError?("Failed to prepare speech recognition.")
             stopRecording()
             return
         }
         
         guard recognizer.isAvailable, recognizer.supportsOnDeviceRecognition else {
-            showErrorMessage("Speech recognition is not available in the selected language or on this device.")
+            onError?("Speech recognition is not available in the selected language or on this device.")
             stopRecording()
             return
         }
@@ -245,7 +243,7 @@ class SpeechRecognizerService: ObservableObject {
                 // Ignore "No speech detected" error
                 if (error as NSError).code == 1110 { return }
                 
-                showErrorMessage("Speech recognition stopped: \(error.localizedDescription)")
+                onError?("Speech recognition stopped: \(error.localizedDescription)")
                 stopRecording()
             }
         }
@@ -260,7 +258,7 @@ class SpeechRecognizerService: ObservableObject {
         case .granted:
             break
         case .denied:
-            showErrorMessage("Microphone access denied. Please enable it in Settings.")
+            onError?("Microphone access denied. Please enable it in Settings.")
             return false
         case .undetermined:
             // Wait for user authorization
@@ -275,11 +273,11 @@ class SpeechRecognizerService: ObservableObject {
                 }
             }
             if !granted {
-                showErrorMessage("Microphone access denied. Please enable it in Settings.")
+                onError?("Microphone access denied. Please enable it in Settings.")
                 return false
             }
         default:
-            showErrorMessage("Unknown microphone authorization status.")
+            onError?("Unknown microphone authorization status.")
             return false
         }
         
@@ -344,13 +342,6 @@ class SpeechRecognizerService: ObservableObject {
     }
     
     // MARK: - Helpers
-    
-    private func showErrorMessage(_ message: LocalizedStringResource) {
-        DispatchQueue.main.async {
-            self.errorMessage = message
-            self.showError = true
-        }
-    }
     
     @objc private func validateMicState(_ notification: Notification? = nil) {
         guard isRecording else { return }
