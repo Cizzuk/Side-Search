@@ -93,6 +93,13 @@ class AssistantViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
+        service.$isEnded
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnded in
+                self?.isEnded = isEnded
+            }
+            .store(in: &cancellables)
+        
         service.$isRecording
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isRecording in
