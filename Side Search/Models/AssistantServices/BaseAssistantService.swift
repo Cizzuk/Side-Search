@@ -46,21 +46,26 @@ class BaseAssistantService: ObservableObject {
         didSet { updateLiveActivityStatus() }
     }
     
+    @Published var micLevel: Float = 0.0
+    
     // Input Field
     @Published var inputText = ""
     
     // Callbacks
     var dismissView: (() -> Void)?
     var openURL: ((URL) -> Void)?
-    var onError: ((LocalizedStringResource) -> Void)?
+    var onError: ((LocalizedStringResource) -> Void)? {
+        didSet { setupSpeechRecognizerErrorHandling() }
+    }
     
-    @Published var micLevel: Float = 0.0
-    
-    private var speechRecognizer: SpeechRecognizerService? = SpeechRecognizerService()
-    private var cancellables = Set<AnyCancellable>()
+    private var speechRecognizer: SpeechRecognizerService? = SpeechRecognizerService() {
+        didSet { setupSpeechRecognizerErrorHandling() }
+    }
     
     private let soundEffect = SoundEffectService.shared
     private var shouldStartRecognitionFeedback = false
+    
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initialization
     
@@ -75,6 +80,12 @@ class BaseAssistantService: ObservableObject {
     
     deinit {
         if !isDismissed { dismissAssistant() }
+    }
+    
+    private func setupSpeechRecognizerErrorHandling() {
+        speechRecognizer?.onError = { [weak self] error in
+            self?.onError?(error)
+        }
     }
     
     // MARK: - Notification Observers
