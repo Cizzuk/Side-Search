@@ -296,6 +296,6 @@ struct AssistantView: View {
     }
 }
 
-#Preview(traits: .assistiveAccess) {
-    AssistantView()
-}
+//#Preview(traits: .assistiveAccess) {
+//    AssistantView()
+//}
