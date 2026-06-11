@@ -1,5 +1,5 @@
 //
-//  URLBasedAssistantViewModel.swift
+//  URLBasedAssistantService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class URLBasedAssistantViewModel: AssistantViewModel {
+class URLBasedAssistantService: BaseAssistantService {
     
     // MARK: - Assistant Settings
     
@@ -25,14 +25,13 @@ class URLBasedAssistantViewModel: AssistantViewModel {
         var userMessage = AssistantMessage(from: .user, content: userInput)
         
         if let url = assistantModel.makeSearchURL(query: userInput) {
-            self.openURL(url)
+            self.openURL?(url)
             userMessage.sources.append(
                 AssistantMessage.Source(title: url.absoluteString, url: url)
             )
         } else {
             // Handle invalid URL error
-            self.errorMessage = "Invalid Search URL. Please check your settings."
-            self.showError = true
+            onError?("Invalid Search URL. Please check your settings.")
         }
         
         addMessage(userMessage)

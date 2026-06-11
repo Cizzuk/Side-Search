@@ -17,29 +17,25 @@ struct AssistantView: View {
     @FocusState private var isInputFocused: Bool
     @State private var isKeyboardVisible = false
     
-    @StateObject private var viewModel: AssistantViewModel
+    @StateObject private var vm: AssistantViewModel
     
     private let autoActivate: Bool
     private let useNavigationBackButton: Bool
     
     init(
-        chat: ChatHistory.Chat? = nil,
+        chat: ChatHistorySupport.Chat? = nil,
         autoActivate: Bool = true,
         useNavigationBackButton: Bool = false
     ) {
-        _viewModel = StateObject(wrappedValue: AssistantViewModel.make(chat: chat))
+        _vm = StateObject(wrappedValue: AssistantViewModel(chat: chat))
         self.autoActivate = autoActivate
         self.useNavigationBackButton = useNavigationBackButton
     }
     
     func dismissView() {
         guard !isAssistiveAccessEnabled else { return }
-        viewModel.dismissAssistant(fromView: true)
+        vm.dismissAssistant()
         dismiss()
-    }
-    
-    private var isAssistantAvailable: Bool {
-        viewModel.checkAvailability(shouldShowError: false)
     }
     
     var body: some View {
@@ -51,16 +47,16 @@ struct AssistantView: View {
                     .padding(.top, 10)
                     .padding(.bottom, 0)
             }
-            .onChange(of: viewModel.inputText) {
-                if viewModel.isRecording {
+            .onChange(of: vm.inputText) {
+                if vm.isRecording {
                     withAnimation {
                         proxy.scrollTo("scrollAnchor", anchor: .bottom)
                     }
                 }
             }
-            .onChange(of: viewModel.chat.messages.count) {
+            .onChange(of: vm.chat.messages.count) {
                 withAnimation {
-                    if let lastMessage = viewModel.chat.messages.last {
+                    if let lastMessage = vm.chat.messages.last {
                         if lastMessage.from == .user {
                             proxy.scrollTo("scrollAnchor", anchor: .bottom)
                         } else {
@@ -70,36 +66,36 @@ struct AssistantView: View {
                 }
             }
         }
-        .animation(.smooth, value: viewModel.inputText)
-        .animation(.smooth, value: viewModel.chat.messages.count)
+        .animation(.smooth, value: vm.inputText)
+        .animation(.smooth, value: vm.chat.messages.count)
         .scrollDismissesKeyboard(.interactively)
         // MARK: - Toolbar
         .toolbar { toolbarContent }
         .safeAreaInset(edge: .bottom) { keyboardToolbar }
         // MARK: - Sheets & Alerts
-        .fullScreenCover(isPresented: $viewModel.showSafariView) {
-            if let url = viewModel.safariViewURL {
+        .fullScreenCover(isPresented: $vm.showSafariView) {
+            if let url = vm.safariViewURL {
                 SafariView(url: url)
                     .ignoresSafeArea()
             }
         }
-        .alert("Error", isPresented: $viewModel.showError) {
+        .alert("Error", isPresented: $vm.showError) {
             Button("OK") { }
         } message: {
-            Text(viewModel.errorMessage)
+            Text(vm.errorMessage)
         }
         // MARK: - Events
         .onAppear {
-            viewModel.currentScenePhase = scenePhase
-            if autoActivate { viewModel.activateAssistant() }
+            vm.scenePhaseUpdate(scenePhase)
+            if autoActivate { vm.activateAssistant() }
         }
         .onDisappear() {
-            viewModel.dismissAssistant(fromView: true)
+            vm.dismissAssistant()
         }
         .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
-            viewModel.activateAssistant()
+            vm.activateAssistant()
         }
-        .onReceive(viewModel.$shouldDismiss) { shouldDismiss in
+        .onReceive(vm.$shouldDismiss) { shouldDismiss in
             if shouldDismiss { dismiss() }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
@@ -108,18 +104,18 @@ struct AssistantView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
             isKeyboardVisible = false
         }
-        .onChange(of: scenePhase) { viewModel.onChange(scenePhase: scenePhase) }
+        .onChange(of: scenePhase) { vm.scenePhaseUpdate(scenePhase) }
         // MARK: - View Styles
         .background(
             AngularGradient(
-                gradient: viewModel.chat.assistantType.DescriptionProviderType.assistantGradient,
+                gradient: vm.chat.assistantType.DescriptionProviderType.assistantGradient,
                 center: .center,
-                angle: .degrees(180*Double(viewModel.micLevel) * (reduceMotion ? 0 : 1))
+                angle: .degrees(180*Double(vm.micLevel) * (reduceMotion ? 0 : 1))
             )
             .ignoresSafeArea()
-            .opacity((0.15 + Double(viewModel.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
+            .opacity((0.15 + Double(vm.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
             .blur(radius: 30)
-            .animation(.smooth, value: viewModel.micLevel)
+            .animation(.smooth, value: vm.micLevel)
         )
         .navigationBarBackButtonHidden(!useNavigationBackButton)
         .accessibilityAction(.escape) { dismissView() }
@@ -133,14 +129,14 @@ struct AssistantView: View {
     @ViewBuilder
     private var assistantScrollContent: some View {
         VStack(alignment: .leading, spacing: 45) {
-            ForEach(viewModel.chat.messages) { message in
+            ForEach(vm.chat.messages) { message in
                 MessagesView(
                     message: message,
-                    openURL: { url in viewModel.openURL(url) },
+                    openURL: { url in vm.openURL(url) },
                 )
             }
             
-            if viewModel.responseIsPreparing {
+            if vm.responseIsPreparing {
                 HStack {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -153,11 +149,11 @@ struct AssistantView: View {
             inputSection
             
             Group {
-                if viewModel.isEnded {
+                if vm.isEnded {
                     Text("The assistant has ended the conversation.")
                 }
                 
-                if viewModel.chat.assistantType.DescriptionProviderType.assistantIsAI {
+                if vm.chat.assistantType.DescriptionProviderType.assistantIsAI {
                     Text("This assistant is AI and can make mistakes.")
                 }
             }
@@ -172,7 +168,7 @@ struct AssistantView: View {
     
     @ViewBuilder
     private var inputSection: some View {
-        if isAssistantAvailable {
+        if vm.isAssistantAvailable {
             VStack(alignment: .leading) {
                 Text(AssistantMessage.From.user.displayName)
                     .font(.headline)
@@ -181,58 +177,50 @@ struct AssistantView: View {
                 Spacer(minLength: 15)
                 
                 let assistantState: LocalizedStringResource = {
-                    if viewModel.isRecognizing {
+                    if vm.isRecognizing {
                         "Listening..."
-                    } else if viewModel.isRecording {
+                    } else if vm.isRecording {
                         "Recognition Paused"
                     } else {
                         "Ask Assistant"
                     }
                 }()
-                TextField(assistantState, text: $viewModel.inputText, axis: .vertical)
+                TextField(assistantState, text: $vm.inputText, axis: .vertical)
                 .bold()
                 .submitLabel(.return)
                 .focused($isInputFocused)
-                .onSubmit {
-                    viewModel.confirmInput()
-                }
+                .onSubmit { vm.confirmInput() }
                 .onChange(of: isInputFocused) {
-                    if isInputFocused {
-                        viewModel.stopRecording()
-                    }
+                    if isInputFocused { vm.stopRecording() }
                 }
-                .onChange(of: viewModel.shouldFocusInput) {
-                    Task {
-                        isInputFocused = true
-                    }
+                .onChange(of: vm.shouldFocusInput) {
+                    Task { isInputFocused = true }
                 }
-                .onChange(of: viewModel.shouldUnfocusInput) {
-                    Task {
-                        isInputFocused = false
-                    }
+                .onChange(of: vm.shouldUnfocusInput) {
+                    Task { isInputFocused = false }
                 }
                 
                 // Assistive Access
                 if isAssistiveAccessEnabled {
                     Spacer(minLength: 30)
-                    Button(action: { viewModel.toggleRecording() }) {
-                        Label(viewModel.isRecording ? "Stop" : "Speak",
-                              systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
+                    Button(action: { vm.toggleRecording() }) {
+                        Label(vm.isRecording ? "Stop" : "Speak",
+                              systemImage: vm.isRecognizing ? "microphone.fill" : "microphone")
                     }
-                    .disabled(viewModel.responseIsPreparing)
+                    .disabled(vm.responseIsPreparing)
                     
                     Button(role: .confirm) {
-                        viewModel.confirmInput()
+                        vm.confirmInput()
                     } label: {
                         Label("OK", systemImage: "checkmark")
                     }
                     .buttonStyle(.glassProminent)
-                    .disabled(viewModel.responseIsPreparing)
+                    .disabled(vm.responseIsPreparing)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityAction(named: "Confirm") {
-                viewModel.confirmInput()
+                vm.confirmInput()
             }
         }
     }
@@ -253,23 +241,23 @@ struct AssistantView: View {
             }
             
             ToolbarItemGroup(placement: .primaryAction) {
-                if isAssistantAvailable {
-                    Button(action: { viewModel.toggleRecording() }) {
-                        Label(viewModel.isRecording ? "Stop Microphone" : "Start Speech Recognition",
-                              systemImage: viewModel.isRecognizing ? "microphone.fill" : "microphone")
+                if vm.isAssistantAvailable {
+                    Button(action: { vm.toggleRecording() }) {
+                        Label(vm.isRecording ? "Stop Microphone" : "Start Speech Recognition",
+                              systemImage: vm.isRecognizing ? "microphone.fill" : "microphone")
                     }
-                    .tint(viewModel.isRecording ? .orange : .primary)
+                    .tint(vm.isRecording ? .orange : .primary)
                     
                     Button(role: .confirm) {
-                        viewModel.confirmInput()
+                        vm.confirmInput()
                     } label: {
                         Label { Text("Confirm") }
-                        icon: { viewModel.chat.assistantType.DescriptionProviderType.assistantImage }
+                        icon: { vm.chat.assistantType.DescriptionProviderType.assistantImage }
                             .foregroundStyle(.white)
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
-                    .disabled(viewModel.responseIsPreparing)
+                    .disabled(vm.responseIsPreparing)
                 }
             }
         }
@@ -291,7 +279,7 @@ struct AssistantView: View {
                 
                 Spacer()
                 Button(role: .confirm) {
-                    viewModel.confirmInput()
+                    vm.confirmInput()
                 } label: {
                     Label("Submit", systemImage: "checkmark")
                         .labelStyle(.iconOnly)
@@ -300,7 +288,7 @@ struct AssistantView: View {
                 }
                 .tint(.dropblue)
                 .buttonStyle(.glassProminent)
-                .disabled(viewModel.responseIsPreparing)
+                .disabled(vm.responseIsPreparing)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
@@ -308,6 +296,6 @@ struct AssistantView: View {
     }
 }
 
-#Preview(traits: .assistiveAccess) {
-    AssistantView()
-}
+//#Preview(traits: .assistiveAccess) {
+//    AssistantView()
+//}

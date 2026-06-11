@@ -2,65 +2,35 @@
 //  AssistantViewModel.swift
 //  Side Search
 //
-//  Created by Cizzuk on 2025/12/24.
+//  Created by Cizzuk on 2026/06/07.
 //
 
-import AVFAudio
 import Combine
 import SwiftUI
 import UIKit
 
 class AssistantViewModel: ObservableObject {
-    static func make(chat: ChatHistory.Chat? = nil) -> AssistantViewModel {
-        let chat = chat ?? ChatHistory.Chat(
-            id: UUID(),
-            date: Date(),
-            assistantType: UserSettings.shared.currentAssistant,
-            messages: []
-        )
-        return chat.assistantType.AssistantViewModelType.init(chat: chat)
-    }
-    
-    private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
     
-    // MARK: - Variables
-    
-    @Published var chat: ChatHistory.Chat
-    
-    var currentScenePhase: ScenePhase = .active
-    var isDismissed = false
-    @Published var shouldDismiss = false
-    
-    // Assistant State
-    @Published var isEnded = false {
-        didSet { if isEnded { stopRecording() } }
-    }
-    
-    @Published var isRecording = false {
-        didSet {
-            if isRecording { shouldUnfocusInput.toggle() }
-            updateIdleTimerDisabled()
-            updateActivateIntent()
-            updateLiveActivityStatus()
-        }
-    }
-    
-    @Published var isRecognizing = false {
-        didSet {
-            handleStartRecognitionFeedback()
-            updateLiveActivityStatus()
-        }
-    }
-    
-    @Published var responseIsPreparing = false {
-        didSet { updateLiveActivityStatus() }
-    }
+    private let service: BaseAssistantService
+    @Published var chat: ChatHistorySupport.Chat
     
     // Input Field
     @Published var inputText = ""
     @Published var shouldFocusInput = false // Toggle to notify
     @Published var shouldUnfocusInput = false // Toggle to notify
+    
+    // View State
+    @Published var shouldDismiss = false
+    var isAssistantAvailable: Bool {
+        service.checkAvailability(shouldShowError: false)
+    }
+    
+    // Assistant State
+    @Published var isEnded = false
+    @Published var isRecording = false
+    @Published var isRecognizing = false
+    @Published var responseIsPreparing = false
     
     // Web View
     @Published var safariViewURL: URL?
@@ -72,246 +42,146 @@ class AssistantViewModel: ObservableObject {
     
     @Published var micLevel: Float = 0.0
     
-    var speechRecognizer: SpeechRecognizer? = SpeechRecognizer()
     private var cancellables = Set<AnyCancellable>()
-    
-    let soundEffect = SoundEffect.shared
-    var shouldStartRecognitionFeedback = false
     
     // MARK: - Initialization
     
-    required init(chat: ChatHistory.Chat) {
+    init(chat: ChatHistorySupport.Chat? = nil) {
+        let chat = chat ?? ChatHistorySupport.Chat(
+            id: UUID(),
+            date: Date(),
+            assistantType: UserSettings.shared.currentAssistant,
+            messages: []
+        )
+        
+        self.service = chat.assistantType.AssistantServiceType.init(chat: chat)
         self.chat = chat
         
-        setupNotificationObservers()
-        setupSpeechRecognizerBindings()
-        assistantInitialize()
-        appFlags.isAssistantActive = true
+        setupBindings()
     }
     
-    deinit {
-        if !isDismissed { dismissAssistant() }
-    }
-    
-    // MARK: - Notification Observers
-    
-    private static let endAssistantDarwinCallback: CFNotificationCallback = { _, observer, _, _, _ in
-        guard let observer else { return }
-        let viewModel = Unmanaged<AssistantViewModel>.fromOpaque(observer).takeUnretainedValue()
-        
-        // Check Flag
-        if GroupUserDefaults.bool(forKey: CFNotificationFlags.shouldEndAssistant) {
-            viewModel.dismissAssistant()
-            GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
+    private func setupBindings() {
+        service.dismissView = { [weak self] in
+            DispatchQueue.main.async {
+                self?.shouldDismiss = true
+            }
         }
-    }
-    
-    private final func setupNotificationObservers() {
-        // Observe Darwin Notification for ending assistant from Live Activity
-        GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
-        CFNotificationCenterAddObserver(
-            CFNotificationCenterGetDarwinNotifyCenter(),
-            Unmanaged.passUnretained(self).toOpaque(),
-            AssistantViewModel.endAssistantDarwinCallback,
-            CFNotificationName.shouldEndAssistant.rawValue,
-            nil,
-            .deliverImmediately
-        )
         
-        // Observe App Termination
-        NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)
-            .sink { [weak self] _ in
-                self?.dismissAssistant()
+        service.openURL = { [weak self] url in
+            DispatchQueue.main.async {
+                self?.openURL(url)
             }
-            .store(in: &cancellables)
-    }
-    
-    private final func removeNotificationObservers() {
-        // Remove All Darwin Notification Observers
-        CFNotificationCenterRemoveObserver(
-            CFNotificationCenterGetDarwinNotifyCenter(),
-            Unmanaged.passUnretained(self).toOpaque(),
-            nil,
-            nil
-        )
-    }
-    
-    // MARK: - Variable Bindings
-    
-    private final func setupSpeechRecognizerBindings() {
-        speechRecognizer?.$recognizedText
-            .sink { [weak self] text in
-                self?.inputText = text
-            }
-            .store(in: &cancellables)
+        }
         
-        speechRecognizer?.$isRecording
-            .sink { [weak self] recording in
-                self?.isRecording = recording
-            }
-            .store(in: &cancellables)
-        
-        speechRecognizer?.$isRecognizing
-            .sink { [weak self] recognizing in
-                self?.isRecognizing = recognizing
-            }
-            .store(in: &cancellables)
-        
-        speechRecognizer?.$micLevel
-            .sink { [weak self] level in
-                self?.micLevel = level
-            }
-            .store(in: &cancellables)
-        
-        speechRecognizer?.$errorMessage
-            .sink { [weak self] message in
+        service.onError = { [weak self] message in
+            DispatchQueue.main.async {
                 self?.errorMessage = message
+                self?.showError = true
+            }
+        }
+        
+        service.$chat
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] chat in
+                self?.chat = chat
             }
             .store(in: &cancellables)
         
-        speechRecognizer?.$showError
-            .sink { [weak self] show in
-                self?.showError = show
+        service.$inputText
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] inputText in
+                self?.inputText = inputText
             }
             .store(in: &cancellables)
         
-        speechRecognizer?.onSilenceTimeout = { [weak self] in
-            self?.handleSilenceTimeout()
-        }
-    }
-    
-    // MARK: - Lifecycle
-    
-    final func onChange(scenePhase: ScenePhase) {
-        currentScenePhase = scenePhase
-        switch scenePhase {
-        case .active:
-            break
-        case .inactive:
-            break
-        case .background:
-            // Background support check
-            Task {
-                if await isBackgroundAvailable() && isRecording {
-                    let _ = await UserNotificationSupport.requestAuthorization()
-                } else {
-                    stopRecording()
-                }
+        service.$isEnded
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnded in
+                self?.isEnded = isEnded
             }
-        @unknown default:
-            break
-        }
+            .store(in: &cancellables)
+        
+        service.$isRecording
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isRecording in
+                self?.isRecording = isRecording
+                if isRecording { self?.shouldUnfocusInput.toggle() }
+            }
+            .store(in: &cancellables)
+        
+        service.$isRecognizing
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isRecognizing in
+                self?.isRecognizing = isRecognizing
+            }
+            .store(in: &cancellables)
+        
+        service.$responseIsPreparing
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] responseIsPreparing in
+                self?.responseIsPreparing = responseIsPreparing
+            }
+            .store(in: &cancellables)
+        
+        service.$micLevel
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] micLevel in
+                self?.micLevel = micLevel
+            }
+            .store(in: &cancellables)
     }
     
-    final func isBackgroundAvailable() async -> Bool {
-        if !userSettings.continueInBackground {
-            return false
-        }
-        if !chat.assistantType.DescriptionProviderType.backgroundSupports {
-            return false
-        }
-        if AccessibilitySettings.isAssistiveAccessEnabled {
-            return false
-        }
-        return true
+    // MARK: - Actions
+    
+    func scenePhaseUpdate(_ scenePhase: ScenePhase) {
+        service.scenePhaseUpdate(scenePhase)
     }
     
-    // MARK: - Override Methods
-    
-    func assistantInitialize() {
-        // MARK: Override in subclass if needed
+    func confirmInput() {
+        service.inputText = inputText
+        service.confirmInput()
     }
     
-    func processInput() {
-        // MARK: Override in subclass
-        guard !responseIsPreparing else { return }
-        responseIsPreparing = true
-        pauseRecognize()
-        
-        // Add user message to history
-        let userInput = inputText
-        let userMessage = AssistantMessage(from: .user, content: userInput)
-        addMessage(userMessage)
-        
-        // Invalid assistant error
-        let assistantResponse = "Error. This assistant is invalid."
-        let assistantMessage = AssistantMessage(from: .system, content: assistantResponse)
-        addMessage(assistantMessage)
-        
-        print("AssistantViewModel: processInput() should be overridden in subclass.")
-        
-        inputText = ""
-        responseIsPreparing = false
-        resumeRecognize()
-    }
-    
-    // MARK: - View Actions
-    
-    final func confirmInput() {
-        guard checkAvailability() else {
-            if isRecording { stopRecording() }
-            return
-        }
-        
-        processInput()
-    }
-    
-    final func activateAssistant() {
-        updateActivateIntent()
-        
-        guard checkAvailability() else { return }
-        
+    func activateAssistant() {
+        service.inputText = inputText
+        service.activateAssistant()
         showSafariView = false
         
-        if isRecording {
-            if isRecognizing {
-                if inputText.isEmpty {
-                    // Reset silence timer
-                    speechRecognizer?.setFirstSilenceTimer()
-                    return
-                } else {
-                    // If input text exists, confirm it
-                    soundEffect.play(.completeRecognition)
-                    confirmInput()
-                    return
-                }
-            } else {
-                // Resume recognition
-                shouldStartRecognitionFeedback = true
-                resumeRecognize()
-                return
-            }
-        } else {
-            if userSettings.startWithMicMuted {
-                // Show keyboard
-                shouldFocusInput.toggle()
-                return
-            } else {
-                // Start recording
-                shouldStartRecognitionFeedback = true
-                startRecording()
-                return
-            }
+        // Focus input if starting with mic muted
+        if !isRecording && userSettings.startWithMicMuted {
+            shouldFocusInput.toggle()
         }
     }
     
-    final func dismissAssistant(fromView: Bool = false) {
-        guard !isDismissed else { return }
-        isDismissed = true
-        
-        if !fromView { shouldDismiss = true }
-        removeNotificationObservers()
-        stopRecording()
-        saveChatHistory()
-        speechRecognizer = nil
-        
-        UIApplication.shared.isIdleTimerDisabled = false
-        ActivateIntent.setShouldBackground(false)
-        AssistantActivityManager.endAll()
-        appFlags.isAssistantActive = false
+    func dismissAssistant() {
+        service.dismissAssistant()
     }
     
-    final func openURL(_ url: URL, option: UserSettings.URLOpeningOption? = nil) {
+    func startRecording() {
+        service.startRecording()
+    }
+    
+    func stopRecording() {
+        service.stopRecording()
+    }
+    
+    func pauseRecognize() {
+        service.pauseRecognize()
+    }
+    
+    func resumeRecognize() {
+        service.resumeRecognize()
+    }
+    
+    func toggleRecording() {
+        if isRecording {
+            service.stopRecording()
+        } else {
+            service.startRecording()
+        }
+    }
+    
+    func openURL(_ url: URL, option: UserSettings.URLOpeningOption? = nil) {
         if handleMagicLink(url) { return }
         
         let openingOption = option ?? userSettings.openURLsIn
@@ -329,7 +199,7 @@ class AssistantViewModel: ObservableObject {
         }
     }
     
-    final func handleMagicLink(_ url: URL) -> Bool {
+    private func handleMagicLink(_ url: URL) -> Bool {
         // Scheme & Host check
         guard url.scheme == "sidesearch",
               url.host == "magiclink"
@@ -343,179 +213,10 @@ class AssistantViewModel: ObservableObject {
         
         // overrideInput
         if let overrideInput = queryItems?.first(where: { $0.name == "overrideInput" })?.value {
-            stopRecording()
+            service.stopRecording()
             inputText = overrideInput
         }
         
         return true
-    }
-    
-    // MARK: - Message History Management
-    
-    final func addMessage(_ message: AssistantMessage) {
-        // If id already exists, replace it, else append
-        if let index = chat.messages.firstIndex(where: { $0.id == message.id }) {
-            chat.messages[index] = message
-        } else {
-            chat.messages.append(message)
-        }
-        
-        // Set last message date as chat date
-        chat.date = Date()
-        
-        saveChatHistory()
-        
-        // Send user notification
-        if message.from != .user && currentScenePhase != .active {
-            Task {
-                if await UserNotificationSupport.requestAuthorization() {
-                    await UserNotificationSupport.sendAssistantMessage(message: message)
-                }
-            }
-        }
-    }
-    
-    final func saveChatHistory() {
-        guard userSettings.chatHistoryEnabled,
-              !chat.messages.isEmpty
-        else { return }
-        
-        ChatHistory.save(chat)
-    }
-    
-    // MARK: - Speech Recognizer Actions
-    
-    final func startRecording() {
-        guard !responseIsPreparing, checkAvailability() else { return }
-        speechRecognizer?.startRecording()
-    }
-    
-    final func stopRecording() {
-        speechRecognizer?.stopRecording()
-    }
-    
-    final func pauseRecognize() {
-        speechRecognizer?.stopRecognize()
-    }
-    
-    final func resumeRecognize() {
-        guard checkAvailability() else { return }
-        speechRecognizer?.startRecognize()
-    }
-    
-    final func toggleRecording() {
-        if isRecording {
-            stopRecording()
-        } else {
-            startRecording()
-        }
-    }
-    
-    // MARK: - Handlers
-    
-    // Handle Speech Recognizer Silence Timeout
-    final func handleSilenceTimeout() {
-        guard !userSettings.manuallyConfirmSpeech else { return }
-        
-        if !inputText.isEmpty {
-            soundEffect.play(.completeRecognition)
-            confirmInput()
-            return
-        }
-        
-        Task {
-            if await isBackgroundAvailable() && currentScenePhase == .background && userSettings.standbyInBackground {
-                // Enter standby in background
-                pauseRecognize()
-            } else {
-                stopRecording()
-            }
-        }
-    }
-    
-    final func handleStartRecognitionFeedback() {
-        guard shouldStartRecognitionFeedback else { return }
-        shouldStartRecognitionFeedback = false
-        if isRecognizing {
-            soundEffect.play(.startRecognition)
-        }
-    }
-    
-    // MARK: - Helpers
-    
-    final func checkAvailability(shouldShowError: Bool = true) -> Bool {
-        if isEnded { return false }
-        
-        if !chat.assistantType.DescriptionProviderType.isAvailable() {
-            if shouldShowError {
-                errorMessage = "This assistant is not available."
-                showError = true
-            }
-            return false
-        }
-        
-        return true
-    }
-    
-    private final func updateIdleTimerDisabled() {
-        if isRecognizing {
-            UIApplication.shared.isIdleTimerDisabled = true
-        } else {
-            UIApplication.shared.isIdleTimerDisabled = false
-        }
-    }
-    
-    private final func updateActivateIntent() {
-        guard chat.assistantType.DescriptionProviderType.backgroundSupports else {
-            ActivateIntent.setShouldBackground(false)
-            return
-        }
-        
-        if isRecording {
-            ActivateIntent.setShouldBackground(true)
-        } else {
-            ActivateIntent.setShouldBackground(false)
-        }
-    }
-    
-    private final func updateLiveActivityStatus() {
-        guard chat.assistantType.DescriptionProviderType.backgroundSupports,
-              !isDismissed
-        else { return }
-        
-        let state = makeLiveActivityState()
-        
-        if AssistantActivityManager.isActive() {
-            // If mic is off, end activity
-            if state.state == .off {
-                AssistantActivityManager.endAll()
-                return
-            }
-            
-            // Else, update activity
-            AssistantActivityManager.update(state: state)
-            return
-        }
-        
-        // If recognizing started, start activity
-        if state.state == .listening {
-            AssistantActivityManager.start(state: state)
-        }
-    }
-    
-    private final func makeLiveActivityState() -> AssistantActivityAttributes.ContentState {
-        if responseIsPreparing {
-            return .init(state: .waitingForResponse)
-        }
-        
-        if isRecording {
-            if isRecognizing {
-                return .init(state: .listening)
-            } else {
-                return .init(state: .pausingRecognition)
-            }
-        }
-        
-        return .init(state: .off)
     }
 }

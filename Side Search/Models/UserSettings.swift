@@ -19,6 +19,7 @@ final class UserSettings: ObservableObject {
         static let speechLocale = "speechLocale"
         static let manuallyConfirmSpeech = "manuallyConfirmSpeech"
         static let startWithMicMuted = "startWithMicMuted"
+        static let allowBluetoothMic = "allowBluetoothMic"
         static let openURLsIn = "openURLsIn"
         static let continueInBackground = "continueInBackground"
         static let standbyInBackground = "standbyInBackground"
@@ -96,6 +97,12 @@ final class UserSettings: ObservableObject {
         }
     }
     
+    @Published var allowBluetoothMic: Bool = UserDefaults.standard.bool(forKey: Keys.allowBluetoothMic) {
+        didSet {
+            UserDefaults.standard.set(allowBluetoothMic, forKey: Keys.allowBluetoothMic)
+        }
+    }
+    
     // MARK: - URL Settings
     
     enum URLOpeningOption: String, CaseIterable, Identifiable, AppEnum {
@@ -127,7 +134,7 @@ final class UserSettings: ObservableObject {
             return option
         }
         
-        if let oldOption = SettingsMigrator.migrateOpenURLsIn() {
+        if let oldOption = SettingsMigration.migrateOpenURLsIn() {
             UserDefaults.standard.set(oldOption.rawValue, forKey: Keys.openURLsIn)
             return oldOption
         }
@@ -161,9 +168,9 @@ final class UserSettings: ObservableObject {
     
     // MARK: - Other Settings
     
-    @Published var soundEffectsMode: SoundEffect.Mode = {
+    @Published var soundEffectsMode: SoundEffectService.Mode = {
         if let rawValue = UserDefaults.standard.string(forKey: Keys.soundEffectsMode),
-           let mode = SoundEffect.Mode(rawValue: rawValue) {
+           let mode = SoundEffectService.Mode(rawValue: rawValue) {
             return mode
         }
         return .default

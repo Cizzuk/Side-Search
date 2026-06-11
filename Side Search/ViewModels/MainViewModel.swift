@@ -67,23 +67,13 @@ class MainViewModel: ObservableObject {
     func onChange(scenePhase: ScenePhase) {
         switch scenePhase {
         case .active:
-            validateAppState()
+            Side_SearchApp.validateAppState()
         case .inactive:
             break
         case .background:
-            validateAppState()
+            Side_SearchApp.validateAppState()
         @unknown default:
             break
-        }
-    }
-    
-    private func validateAppState() {
-        if !appFlags.isAssistantActive {
-            UIApplication.shared.isIdleTimerDisabled = false
-            ActivateIntent.setShouldBackground(false)
-            if AssistantActivityManager.isActive() {
-                AssistantActivityManager.endAll()
-            }
         }
     }
     

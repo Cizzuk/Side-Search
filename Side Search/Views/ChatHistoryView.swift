@@ -10,7 +10,7 @@ import SwiftUI
 struct ChatHistoryView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject var viewModel = ChatHistoryViewModel()
+    @StateObject var vm = ChatHistoryViewModel()
     @StateObject private var userSettings = UserSettings.shared
     
     @State private var showClearAllHistoryAlert = false
@@ -18,14 +18,14 @@ struct ChatHistoryView: View {
     var body: some View {
         NavigationStack {
             List {
-                if viewModel.searchQuery.isEmpty {
+                if vm.searchQuery.isEmpty {
                     // Full history
                     Section {
                         Toggle("Enable Chat History", isOn: $userSettings.chatHistoryEnabled)
                     }
-                    ChatLinkList(viewModel: viewModel, chats: viewModel.chats)
+                    ChatLinkList(vm: vm, chats: vm.chats)
                 } else {
-                    if viewModel.searchResults.isEmpty {
+                    if vm.searchResults.isEmpty {
                         // No search results
                         Section {} footer: {
                             VStack {
@@ -33,19 +33,19 @@ struct ChatHistoryView: View {
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .font(.headline)
                                 Spacer()
-                                Text("for \"\(viewModel.searchQuery)\".")
+                                Text("for \"\(vm.searchQuery)\".")
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .font(.caption)
                             }
                         }
                     } else {
                         // Search results
-                        ChatLinkList(viewModel: viewModel, chats: viewModel.searchResults)
+                        ChatLinkList(vm: vm, chats: vm.searchResults)
                     }
                 }
             }
-            .searchable(text: $viewModel.searchQuery)
-            .animation(.default, value: viewModel.chats.count)
+            .searchable(text: $vm.searchQuery)
+            .animation(.default, value: vm.chats.count)
             .navigationTitle("Chat History")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -65,7 +65,7 @@ struct ChatHistoryView: View {
                     ) {
                         Button("Cancel", role: .cancel) {}
                         Button("Clear", role: .destructive) {
-                            viewModel.clearAll()
+                            vm.clearAll()
                         }
                     } message: {
                         Text("This will clear all chat history. This action cannot be undone.")
@@ -74,7 +74,7 @@ struct ChatHistoryView: View {
             }
             // MARK: - Events
             .onAppear() {
-                viewModel.loadChats()
+                vm.loadChats()
             }
         }
     }
@@ -82,8 +82,8 @@ struct ChatHistoryView: View {
     // MARK: - Chat Link List
     
     struct ChatLinkList: View {
-        @ObservedObject var viewModel: ChatHistoryViewModel
-        var chats: [ChatHistory.Chat]
+        @ObservedObject var vm: ChatHistoryViewModel
+        var chats: [ChatHistorySupport.Chat]
         
         var body: some View {
             ForEach(chats) { chat in
@@ -104,7 +104,7 @@ struct ChatHistoryView: View {
                 }
                 .contextMenu {
                     Button(role: .destructive) {
-                        viewModel.delete(chat.id)
+                        vm.delete(chat.id)
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
@@ -113,7 +113,7 @@ struct ChatHistoryView: View {
             .onDelete { indexSet in
                 for index in indexSet {
                     let chat = chats[index]
-                    viewModel.delete(chat.id)
+                    vm.delete(chat.id)
                 }
             }
         }

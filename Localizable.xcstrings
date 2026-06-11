@@ -1341,7 +1341,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "マイクミュートで開始"
+            "value" : "開始時にマイクをオフ"
           }
         }
       }
@@ -1582,6 +1582,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "URLの設定"
+          }
+        }
+      }
+    },
+    "Use Bluetooth Microphones" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bluetoothマイクを使用"
           }
         }
       }

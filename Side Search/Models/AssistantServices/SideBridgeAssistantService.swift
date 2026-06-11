@@ -1,5 +1,5 @@
 //
-//  SideBridgeAssistantViewModel.swift
+//  SideBridgeAssistantService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/26.
@@ -8,7 +8,7 @@
 import UIKit
 import SideBridge
 
-class SideBridgeAssistantViewModel: AssistantViewModel {
+class SideBridgeAssistantService: BaseAssistantService {
     
     private var currentOptions = SBOptions() {
         didSet {

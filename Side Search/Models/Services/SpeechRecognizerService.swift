@@ -1,5 +1,5 @@
 //
-//  SpeechRecognizer.swift
+//  SpeechRecognizerService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/25.
@@ -10,7 +10,7 @@ import Combine
 import Speech
 import UIKit
 
-class SpeechRecognizer: ObservableObject {
+class SpeechRecognizerService: ObservableObject {
     private let userSettings = UserSettings.shared
     
     @Published var isRecording = false
@@ -19,11 +19,9 @@ class SpeechRecognizer: ObservableObject {
     @Published var recognizedText = ""
     @Published var micLevel: Float = 0.0 // For UI animation
     
-    @Published var errorMessage: LocalizedStringResource = ""
-    @Published var showError = false
-    
     // Callbacks
     var onSilenceTimeout: (() -> Void)?
+    var onError: ((LocalizedStringResource) -> Void)?
     
     // MARK: - Private Properties
     
@@ -121,9 +119,10 @@ class SpeechRecognizer: ObservableObject {
     // MARK: - Recording Controls
     
     func startRecording() {
-        Task {
-            guard await checkMicrophoneAuthorization() else { return }
+        Task { [weak self] in
+            guard let self = self else { return }
             
+            guard await checkMicrophoneAuthorization() else { return }
             guard !isRecording else { return }
             
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -142,7 +141,7 @@ class SpeechRecognizer: ObservableObject {
                     }
                 } catch {
                     stopRecording()
-                    showErrorMessage("Failed to start recording: \(error.localizedDescription)")
+                    onError?("Failed to start recording: \(error.localizedDescription)")
                 }
             }
         }
@@ -189,13 +188,13 @@ class SpeechRecognizer: ObservableObject {
         guard isRecording, !isRecognizing else { return }
         
         guard let recognizer = speechRecognizer else {
-            showErrorMessage("Failed to prepare speech recognition.")
+            onError?("Failed to prepare speech recognition.")
             stopRecording()
             return
         }
         
         guard recognizer.isAvailable, recognizer.supportsOnDeviceRecognition else {
-            showErrorMessage("Speech recognition is not available in the selected language or on this device.")
+            onError?("Speech recognition is not available in the selected language or on this device.")
             stopRecording()
             return
         }
@@ -245,7 +244,7 @@ class SpeechRecognizer: ObservableObject {
                 // Ignore "No speech detected" error
                 if (error as NSError).code == 1110 { return }
                 
-                showErrorMessage("Speech recognition stopped: \(error.localizedDescription)")
+                onError?("Speech recognition stopped: \(error.localizedDescription)")
                 stopRecording()
             }
         }
@@ -260,7 +259,7 @@ class SpeechRecognizer: ObservableObject {
         case .granted:
             break
         case .denied:
-            showErrorMessage("Microphone access denied. Please enable it in Settings.")
+            onError?("Microphone access denied. Please enable it in Settings.")
             return false
         case .undetermined:
             // Wait for user authorization
@@ -275,11 +274,11 @@ class SpeechRecognizer: ObservableObject {
                 }
             }
             if !granted {
-                showErrorMessage("Microphone access denied. Please enable it in Settings.")
+                onError?("Microphone access denied. Please enable it in Settings.")
                 return false
             }
         default:
-            showErrorMessage("Unknown microphone authorization status.")
+            onError?("Unknown microphone authorization status.")
             return false
         }
         
@@ -345,13 +344,6 @@ class SpeechRecognizer: ObservableObject {
     
     // MARK: - Helpers
     
-    private func showErrorMessage(_ message: LocalizedStringResource) {
-        DispatchQueue.main.async {
-            self.errorMessage = message
-            self.showError = true
-        }
-    }
-    
     @objc private func validateMicState(_ notification: Notification? = nil) {
         guard isRecording else { return }
         
@@ -378,6 +370,11 @@ class SpeechRecognizer: ObservableObject {
     
     private func configureAudioSession() throws {
         var options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetoothA2DP]
+        
+        if userSettings.allowBluetoothMic {
+            options.insert([.allowBluetoothHFP, .bluetoothHighQualityRecording])
+        }
+        
         if userSettings.continueInBackground && userSettings.standbyInBackground {
             options.insert(.mixWithOthers)
         } else {

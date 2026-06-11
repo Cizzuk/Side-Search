@@ -1,5 +1,5 @@
 //
-//  GeminiAPIAssistantViewModel.swift
+//  GeminiAPIAssistantService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/28.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GeminiAPIAssistantViewModel: AssistantViewModel {
+class GeminiAPIAssistantService: BaseAssistantService {
     
     // MARK: - Assistant Settings
     

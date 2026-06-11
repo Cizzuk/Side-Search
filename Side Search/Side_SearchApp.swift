@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import UIKit
 
 final class AppFlags: ObservableObject {
     static let shared = AppFlags()
@@ -42,6 +43,16 @@ struct Side_SearchApp: App {
                     Label("Start Assistant", image: "Sidefish")
                 }
                 .keyboardShortcut("N", modifiers: [.command])
+            }
+        }
+    }
+    
+    static func validateAppState() {
+        if !AppFlags.shared.isAssistantActive {
+            UIApplication.shared.isIdleTimerDisabled = false
+            ActivateIntent.setShouldBackground(false)
+            if AssistantActivityManager.isActive() {
+                AssistantActivityManager.endAll()
             }
         }
     }

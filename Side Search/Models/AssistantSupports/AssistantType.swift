@@ -1,5 +1,5 @@
 //
-//  AssistantSupports.swift
+//  AssistantType.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/01/25.
@@ -59,16 +59,16 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
         }
     }
     
-    var AssistantViewModelType: AssistantViewModel.Type {
+    var AssistantServiceType: BaseAssistantService.Type {
         switch self {
         case .urlBased:
-            return URLBasedAssistantViewModel.self
+            return URLBasedAssistantService.self
         case .appleFoundation:
-            return AppleFoundationAssistantViewModel.self
+            return AppleFoundationAssistantService.self
         case .geminiAPI:
-            return GeminiAPIAssistantViewModel.self
+            return GeminiAPIAssistantService.self
         case .sideBridge:
-            return SideBridgeAssistantViewModel.self
+            return SideBridgeAssistantService.self
         }
     }
     
@@ -84,23 +84,4 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return SideBridgeAssistantSettingsView()
         }
     }
-}
-
-protocol AssistantDescriptionProvider {
-    // Metadata
-    static var assistantDescription: LocalizedStringResource { get }
-    static var assistantImage: Image { get }
-    static var assistantGradient: Gradient { get }
-    static var assistantShapeStyle: AnyShapeStyle { get }
-    
-    static var assistantIsAI: Bool { get }
-    static var backgroundSupports: Bool { get }
-    
-    // Availability Check
-    static func isAvailable() -> Bool
-}
-
-protocol AssistantModel: Codable, Equatable {
-    static func load() -> Self
-    func save()
 }

@@ -1,5 +1,5 @@
 //
-//  SoundEffect.swift
+//  SoundEffectService.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2026/03/24.
@@ -10,8 +10,8 @@ import AVFoundation
 import CoreHaptics
 import UIKit
 
-final class SoundEffect {
-    static let shared = SoundEffect()
+final class SoundEffectService {
+    static let shared = SoundEffectService()
     
     var engine: CHHapticEngine?
     
@@ -64,7 +64,7 @@ final class SoundEffect {
         }
     }
     
-    func play(_ sound: SoundEffect.Sounds) {
+    func play(_ sound: SoundEffectService.Sounds) {
         guard let engine = engine else { return }
         
         switch UserSettings.shared.soundEffectsMode {
