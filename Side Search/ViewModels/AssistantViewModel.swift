@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import UIKit
 
 class AssistantViewModel: ObservableObject {
     private let userSettings = UserSettings.shared
