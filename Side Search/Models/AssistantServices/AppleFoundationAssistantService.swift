@@ -72,7 +72,9 @@ class AppleFoundationAssistantService: BaseAssistantService {
         addMessage(userMessage)
         
         // Generate response
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
             let message: AssistantMessage
             do {
                 let response = try await generate(prompt: userInput)
@@ -81,8 +83,7 @@ class AppleFoundationAssistantService: BaseAssistantService {
                 message = AssistantMessage(from: .system, content: error.localizedDescription)
             }
             
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+            DispatchQueue.main.async {
                 self.addMessage(message)
                 self.responseIsPreparing = false
                 self.resumeRecognize()
