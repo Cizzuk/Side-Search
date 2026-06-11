@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import UIKit
 
 final class AppFlags: ObservableObject {
     static let shared = AppFlags()
