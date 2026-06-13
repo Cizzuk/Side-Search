@@ -16,9 +16,20 @@ class AppleFoundationAssistantService: BaseAssistantService {
     
     lazy private var session: LanguageModelSession = {
         if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return LanguageModelSession()
+            if #available(anyAppleOS 27.0, *) {
+                return LanguageModelSession(model: assistantModel.modelType.model)
+            } else {
+                return LanguageModelSession()
+            }
         } else {
-            return LanguageModelSession(instructions: assistantModel.customInstructions)
+            if #available(anyAppleOS 27.0, *) {
+                return LanguageModelSession(
+                    model: assistantModel.modelType.model,
+                    instructions: assistantModel.customInstructions
+                )
+            } else {
+                return LanguageModelSession(instructions: assistantModel.customInstructions)
+            }
         }
     }()
     
@@ -26,7 +37,19 @@ class AppleFoundationAssistantService: BaseAssistantService {
     
     @MainActor
     func generate(prompt: String) async throws -> String {
-        let response = try await session.respond(to: prompt)
+        let response: LanguageModelSession.Response<String>
+        
+        if #available(anyAppleOS 27.0, *),
+           let reasoningLevel = assistantModel.reasoningLevel.reasoningLevel,
+           assistantModel.modelType.model.capabilities.contains(.reasoning) {
+            response = try await session.respond(
+                to: prompt,
+                contextOptions: ContextOptions(reasoningLevel: reasoningLevel)
+            )
+        } else {
+            response = try await session.respond(to: prompt)
+        }
+        
         return response.content
     }
     
@@ -53,7 +76,14 @@ class AppleFoundationAssistantService: BaseAssistantService {
             }
         }
         
-        session = LanguageModelSession(transcript: Transcript(entries: entries))
+        if #available(anyAppleOS 27.0, *) {
+            session = LanguageModelSession(
+                model: assistantModel.modelType.model,
+                transcript: Transcript(entries: entries)
+            )
+        } else {
+            session = LanguageModelSession(transcript: Transcript(entries: entries))
+        }
     }
     
     override func processInput() {
