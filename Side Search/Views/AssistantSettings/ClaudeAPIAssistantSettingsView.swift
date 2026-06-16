@@ -55,23 +55,17 @@ struct ClaudeAPIAssistantSettingsView: View {
             Section {
                 HStack {
                     Text("Max Web Search")
-                    Spacer()
-                    TextField("0", value: $assistantModel.maxWebSearchRequests, format: .number)
-                        .keyboardType(.numberPad)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .multilineTextAlignment(.trailing)
-                        .submitLabel(.done)
-                        .padding(.horizontal, 10)
+                    Stepper(value: $assistantModel.maxWebSearchRequests, in: 0...100) {
+                        Text("\(assistantModel.maxWebSearchRequests)")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
                 }
                 HStack {
                     Text("Max Web Fetch")
-                    Spacer()
-                    TextField("0", value: $assistantModel.maxWebFetchRequests, format: .number)
-                        .keyboardType(.numberPad)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .multilineTextAlignment(.trailing)
-                        .submitLabel(.done)
-                        .padding(.horizontal, 10)
+                    Stepper(value: $assistantModel.maxWebFetchRequests, in: 0...100) {
+                        Text("\(assistantModel.maxWebFetchRequests)")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
                 }
                 Toggle("Allow Code Execution", isOn: $assistantModel.allowCodeExecution)
             } header: { Text("Tools") }
