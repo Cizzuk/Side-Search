@@ -1,25 +1,29 @@
 //
-//  AppleFoundationAssistantService.swift
+//  ClaudeAPIAssistantService.swift
 //  Side Search
 //
-//  Created by Cizzuk on 2026/01/28.
+//  Created by Cizzuk on 2026/06/15.
 //
 
 import FoundationModels
 import UIKit
+import ClaudeForFoundationModels
 
-class AppleFoundationAssistantService: BaseAssistantService {
+class ClaudeAPIAssistantService: BaseAssistantService {
     
     // MARK: - Assistant Settings
     
-    private var assistantModel = AppleFoundationAssistantModel.load()
+    private var assistantModel = ClaudeAPIAssistantModel.load()
+    private var apiKey: String = ClaudeAPIAssistantModel.loadAPIKey()
+    
+    lazy private var model: ClaudeLanguageModel = assistantModel.makeLM(apiKey: apiKey)
     
     lazy private var session: LanguageModelSession = {
         if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return LanguageModelSession(model: assistantModel.modelType.model)
+            return LanguageModelSession(model: model)
         } else {
             return LanguageModelSession(
-                model: assistantModel.modelType.model,
+                model: model,
                 instructions: assistantModel.customInstructions
             )
         }
@@ -31,15 +35,15 @@ class AppleFoundationAssistantService: BaseAssistantService {
     func generate(prompt: String) async throws -> String {
         let response: LanguageModelSession.Response<String>
         
-        if let reasoningLevel = assistantModel.reasoningLevel.reasoningLevel,
-           assistantModel.modelType.model.capabilities.contains(.reasoning) {
+//        if let reasoningLevel = assistantModel.reasoningLevel.reasoningLevel,
+//           model.capabilities.contains(.reasoning) {
             response = try await session.respond(
                 to: prompt,
-                contextOptions: ContextOptions(reasoningLevel: reasoningLevel)
+                contextOptions: ContextOptions(reasoningLevel: .light)
             )
-        } else {
-            response = try await session.respond(to: prompt)
-        }
+//        } else {
+//            response = try await session.respond(to: prompt)
+//        }
         
         return response.content
     }
@@ -68,7 +72,7 @@ class AppleFoundationAssistantService: BaseAssistantService {
         }
         
         session = LanguageModelSession(
-            model: assistantModel.modelType.model,
+            model: model,
             transcript: Transcript(entries: entries)
         )
     }

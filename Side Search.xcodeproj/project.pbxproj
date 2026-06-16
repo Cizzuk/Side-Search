@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A6E653F2FDFF71200A40899 /* ClaudeForFoundationModels in Frameworks */ = {isa = PBXBuildFile; productRef = 7A6E653E2FDFF71200A40899 /* ClaudeForFoundationModels */; };
 		BE26D5152F57B15F00E28B78 /* MergeCodablePackage in Frameworks */ = {isa = PBXBuildFile; productRef = BE26D5142F57B15F00E28B78 /* MergeCodablePackage */; };
 		BE26D7352F57D47200E28B78 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BE8AA7602EFC2EB100C02260 /* Localizable.xcstrings */; };
 		BE4E0E2A2F35CBAC004383AB /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = BE4E0E292F35CBAC004383AB /* Textual */; };
@@ -121,6 +122,7 @@
 				BE4E0E2A2F35CBAC004383AB /* Textual in Frameworks */,
 				BE810EE12F388F4300B0B211 /* TemporaryScreenCurtain in Frameworks */,
 				BE26D5152F57B15F00E28B78 /* MergeCodablePackage in Frameworks */,
+				7A6E653F2FDFF71200A40899 /* ClaudeForFoundationModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +211,7 @@
 				BE810EE02F388F4300B0B211 /* TemporaryScreenCurtain */,
 				BE26D5142F57B15F00E28B78 /* MergeCodablePackage */,
 				BE7FC5132F9A4FD400452820 /* SideBridge */,
+				7A6E653E2FDFF71200A40899 /* ClaudeForFoundationModels */,
 			);
 			productName = "Side Search";
 			productReference = BEB06C4A2EFBA9AE0026CC6E /* Side Search.app */;
@@ -247,6 +250,7 @@
 				BE810EDF2F388F4300B0B211 /* XCRemoteSwiftPackageReference "swiftui-temporary-screen-curtain" */,
 				BE26D5132F57B15F00E28B78 /* XCRemoteSwiftPackageReference "swift-merge-codable" */,
 				BE7FC5122F9A4FD400452820 /* XCRemoteSwiftPackageReference "swift-sidebridge" */,
+				7A6E653D2FDFF71200A40899 /* XCRemoteSwiftPackageReference "ClaudeForFoundationModels" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BEB06C4B2EFBA9AE0026CC6E /* Products */;
@@ -319,6 +323,7 @@
 				INFOPLIST_FILE = WidgetExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -350,6 +355,7 @@
 				INFOPLIST_FILE = WidgetExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -516,6 +522,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -558,6 +565,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -612,6 +620,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7A6E653D2FDFF71200A40899 /* XCRemoteSwiftPackageReference "ClaudeForFoundationModels" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/anthropics/ClaudeForFoundationModels.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
 		BE26D5132F57B15F00E28B78 /* XCRemoteSwiftPackageReference "swift-merge-codable" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Cizzuk/swift-merge-codable";
@@ -647,6 +663,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7A6E653E2FDFF71200A40899 /* ClaudeForFoundationModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A6E653D2FDFF71200A40899 /* XCRemoteSwiftPackageReference "ClaudeForFoundationModels" */;
+			productName = ClaudeForFoundationModels;
+		};
 		BE26D5142F57B15F00E28B78 /* MergeCodablePackage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BE26D5132F57B15F00E28B78 /* XCRemoteSwiftPackageReference "swift-merge-codable" */;

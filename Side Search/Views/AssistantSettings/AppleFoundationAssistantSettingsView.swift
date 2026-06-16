@@ -23,8 +23,7 @@ struct AppleFoundationAssistantSettingsView: View {
                     }
                 }
                 
-                if #available(anyAppleOS 27.0, *),
-                   assistantModel.modelType.model.capabilities.contains(.reasoning) {
+                if assistantModel.modelType.model.capabilities.contains(.reasoning) {
                     Picker("Reasoning Level", selection: $assistantModel.reasoningLevel) {
                         ForEach(AppleFoundationAssistantModel.ReasoningLevel.allCases) { level in
                             Text(level.displayName)
@@ -37,8 +36,7 @@ struct AppleFoundationAssistantSettingsView: View {
             } footer: {
                 VStack(alignment: .leading, spacing: 8) {
                     // PCC Quota Information
-                    if #available(anyAppleOS 27.0, *),
-                       assistantModel.modelType == .pcc {
+                    if assistantModel.modelType == .pcc {
                         let model = PrivateCloudComputeLanguageModel()
                         if model.quotaUsage.isLimitReached {
                             Text("You have reached your quota limit.")

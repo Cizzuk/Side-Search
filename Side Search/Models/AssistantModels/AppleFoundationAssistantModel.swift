@@ -48,15 +48,10 @@ extension AppleFoundationAssistantModel {
             case .system:
                 return SystemLanguageModel().isAvailable
             case .pcc:
-                if #available(anyAppleOS 27.0, *) {
-                    return PrivateCloudComputeLanguageModel().isAvailable
-                } else {
-                    return false
-                }
+                return PrivateCloudComputeLanguageModel().isAvailable
             }
         }
         
-        @available(anyAppleOS 27.0, *)
         var model: any LanguageModel {
             switch self {
             case .system: return SystemLanguageModel()
@@ -80,7 +75,6 @@ extension AppleFoundationAssistantModel {
             }
         }
         
-        @available(anyAppleOS 27.0, *)
         var reasoningLevel: ContextOptions.ReasoningLevel? {
             switch self {
             case .none: return nil
