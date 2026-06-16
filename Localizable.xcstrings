@@ -923,7 +923,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最大Web検索数"
+            "value" : "最大Web取得数"
           }
         }
       }
@@ -935,7 +935,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最大Web取得数"
+            "value" : "最大Web検索数"
           }
         }
       }
