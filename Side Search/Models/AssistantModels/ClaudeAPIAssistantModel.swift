@@ -33,6 +33,13 @@ struct ClaudeAPIAssistantModel: AssistantModel, MergeCodable {
     }
     
     func makeLM(apiKey: String) -> ClaudeLanguageModel {
+        let model = self.modelType.claudeModel
+        
+        var effort: ClaudeModel.Effort? = nil
+        if !model.capabilities.effortLevels.isEmpty {
+            effort = self.effortLevel.claudeEffort
+        }
+        
         var tools: Set<ClaudeServerTool> = []
         if self.maxWebSearchRequests > 0 {
             tools.insert(.webSearch(maxUses: self.maxWebSearchRequests))
@@ -45,8 +52,9 @@ struct ClaudeAPIAssistantModel: AssistantModel, MergeCodable {
         }
         
         return ClaudeLanguageModel(
-            name: self.modelType.claudeModel,
+            name: model,
             auth: .apiKey(apiKey),
+            fixedEffort: effort,
             serverTools: tools,
         )
     }

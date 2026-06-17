@@ -33,18 +33,7 @@ class ClaudeAPIAssistantService: BaseAssistantService {
     
     @MainActor
     func generate(prompt: String) async throws -> String {
-        let response: LanguageModelSession.Response<String>
-        
-//        if let reasoningLevel = assistantModel.reasoningLevel.reasoningLevel,
-//           model.capabilities.contains(.reasoning) {
-            response = try await session.respond(
-                to: prompt,
-                contextOptions: ContextOptions(reasoningLevel: .light)
-            )
-//        } else {
-//            response = try await session.respond(to: prompt)
-//        }
-        
+        let response = try await session.respond(to: prompt)
         return response.content
     }
     
