@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import ClaudeForFoundationModels
 
 struct ClaudeAPIAssistantSettingsView: View {
     @State private var assistantModel = ClaudeAPIAssistantModel.load()
     @State private var apiKey: String = ClaudeAPIAssistantModel.loadAPIKey()
+    
+    private var modelEffortLevels: Set<ClaudeModel.Effort> {
+        assistantModel.modelType.claudeModel.capabilities.effortLevels
+    }
     
     var body: some View {
         Group {
@@ -21,6 +26,9 @@ struct ClaudeAPIAssistantSettingsView: View {
                     .textInputAutocapitalization(.never)
                     .environment(\.layoutDirection, .leftToRight)
                     .submitLabel(.done)
+                    .onChange(of: apiKey) {
+                        ClaudeAPIAssistantModel.saveAPIKey(key: apiKey)
+                    }
             } header: { Text("Claude API Key")
             } footer: {
                 VStack(alignment: .leading) {
@@ -37,6 +45,20 @@ struct ClaudeAPIAssistantSettingsView: View {
                 Picker("Model", selection: $assistantModel.modelType) {
                     ForEach(ClaudeAPIAssistantModel.ModelType.allCases) { type in
                         Text(type.id).tag(type)
+                    }
+                }
+                
+                Picker("Effort", selection: $assistantModel.effortLevel) {
+                    ForEach(ClaudeAPIAssistantModel.EffortLevel.allCases) { level in
+                        Text(level.rawValue)
+                            .tag(level)
+                            .selectionDisabled(!modelEffortLevels.contains(level.claudeEffort))
+                    }
+                }
+                .disabled(modelEffortLevels.isEmpty)
+                .onChange(of: assistantModel.modelType) {
+                    if !modelEffortLevels.isEmpty && !modelEffortLevels.contains(assistantModel.effortLevel.claudeEffort) {
+                        assistantModel.effortLevel = .default
                     }
                 }
             } header: { Text("Model Settings")
@@ -71,7 +93,6 @@ struct ClaudeAPIAssistantSettingsView: View {
             } header: { Text("Tools") }
         }
         .onChange(of: assistantModel) { saveSettings() }
-        .onChange(of: apiKey) { ClaudeAPIAssistantModel.saveAPIKey(key: apiKey) }
         .onAppear { saveSettings() }
     }
     

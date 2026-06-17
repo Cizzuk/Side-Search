@@ -16,7 +16,7 @@ struct ClaudeAPIAssistantModel: AssistantModel, MergeCodable {
     // Model Settings
     var customInstructions: String = ""
     var modelType: ModelType = .default
-    var effortLevel: String = ""
+    var effortLevel: EffortLevel = .default
     var maxWebSearchRequests: Int = 3
     var maxWebFetchRequests: Int = 3
     var allowCodeExecution: Bool = false
@@ -89,6 +89,23 @@ extension ClaudeAPIAssistantModel {
             case .opus4_6: return .opus4_6
             case .sonnet4_6: return .sonnet4_6
             case .haiku4_5: return .haiku4_5
+            }
+        }
+    }
+    
+    enum EffortLevel: String, CaseIterable, Identifiable, Codable {
+        case low, medium, high, xhigh, max
+        
+        var id: String { self.rawValue }
+        static var `default` = Self.medium
+        
+        var claudeEffort: ClaudeModel.Effort {
+            switch self {
+            case .low: return .low
+            case .medium: return .medium
+            case .high: return .high
+            case .xhigh: return .xhigh
+            case .max: return .max
             }
         }
     }
