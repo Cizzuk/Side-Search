@@ -91,6 +91,13 @@ struct ClaudeAPIAssistantSettingsView: View {
                 }
                 Toggle("Allow Code Execution", isOn: $assistantModel.allowCodeExecution)
             } header: { Text("Tools") }
+            
+            // Custom Instructions Section
+            Section {
+                TextEditor(text: $assistantModel.customInstructions)
+                    .submitLabel(.return)
+                    .frame(minHeight: 50, maxHeight: 200)
+            } header: { Text("Custom Instructions") }
         }
         .onChange(of: assistantModel) { saveSettings() }
         .onAppear { saveSettings() }
