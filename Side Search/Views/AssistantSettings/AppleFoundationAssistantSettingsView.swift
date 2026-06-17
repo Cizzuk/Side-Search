@@ -57,7 +57,7 @@ struct AppleFoundationAssistantSettingsView: View {
             Section {
                 TextEditor(text: $assistantModel.customInstructions)
                     .submitLabel(.return)
-                    .frame(maxHeight: 200)
+                    .frame(minHeight: 50, maxHeight: 200)
             } header: { Text("Custom Instructions") }
         }
         .onChange(of: assistantModel) { saveSettings() }
