@@ -32,6 +32,10 @@ struct GeminiAPIAssistantSettingsView: View {
                 }
                 .padding(.bottom, 10)
             }
+            .onChange(of: apiKey) {
+                GeminiAPIAssistantModel.saveAPIKey(key: apiKey)
+                Task { await updateAvailableModels() }
+            }
             
             // Model Selection
             Section {
@@ -60,13 +64,7 @@ struct GeminiAPIAssistantSettingsView: View {
                 Toggle("Enable Web Search", isOn: $assistantModel.webSearch)
             } header: { Text("Tools") }
         }
-        .onChange(of: assistantModel) {
-            saveSettings()
-        }
-        .onChange(of: apiKey) {
-            GeminiAPIAssistantModel.saveAPIKey(key: apiKey)
-            Task { await updateAvailableModels() }
-        }
+        .onChange(of: assistantModel) { saveSettings() }
         .onAppear {
             saveSettings()
             Task { await updateAvailableModels() }
