@@ -1125,17 +1125,6 @@
         }
       }
     },
-    "Perplexity" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Perplexity"
-          }
-        }
-      }
-    },
     "Please check the available models and features for your plan." : {
       "localizations" : {
         "ja" : {
