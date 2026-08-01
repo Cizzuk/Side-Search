@@ -13,15 +13,13 @@ struct HelpView: View {
     @ObservedObject private var userSettings = UserSettings.shared
     
     private var canOpenSettingsURL: Bool {
-        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return false }
-        return UIApplication.shared.canOpenURL(settingsURL)
+        guard URL(string: UIApplication.openSettingsURLString) != nil else { return false }
+        return true
     }
     
     private func openSettingsURL() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-        if UIApplication.shared.canOpenURL(settingsURL) {
-            UIApplication.shared.open(settingsURL)
-        }
+        UIApplication.shared.open(settingsURL)
     }
     
     @State var unAuthorizationStatus: UNAuthorizationStatus?
@@ -104,8 +102,7 @@ struct HelpView: View {
                         Label("Create a new personal automation in Shortcuts", systemImage: "book")
                     }
                     Button() {
-                        guard let shortcutsURL = URL(string: "shortcuts://") else { return }
-                        if UIApplication.shared.canOpenURL(shortcutsURL) {
+                        if let shortcutsURL = URL(string: "shortcuts://") {
                             UIApplication.shared.open(shortcutsURL)
                         }
                     } label: {

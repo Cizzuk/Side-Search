@@ -1126,6 +1126,7 @@
       }
     },
     "Perplexity" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
