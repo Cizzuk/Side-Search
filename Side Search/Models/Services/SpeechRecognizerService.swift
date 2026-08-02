@@ -64,8 +64,8 @@ class SpeechRecognizerService: ObservableObject {
     init() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleInterruption(_:)),
-            name: AVAudioSession.interruptionNotification,
+            selector: #selector(handleDidBecomeInactiveNotification),
+            name: AVAudioSession.didBecomeInactiveNotification,
             object: nil
         )
         
@@ -321,16 +321,8 @@ class SpeechRecognizerService: ObservableObject {
     
     // MARK: - Handlers
     
-    @objc private func handleInterruption(_ notification: Notification) {
-        guard isRecording,
-              let userInfo = notification.userInfo,
-              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
-              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
-        else { return }
-        
-        if type == .began {
-            stopRecording()
-        }
+    @objc private func handleDidBecomeInactiveNotification() {
+        stopRecording()
     }
     
     @objc private func handleMediaServicesReset() {
