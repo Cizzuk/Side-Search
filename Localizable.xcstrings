@@ -1685,16 +1685,6 @@
         }
       }
     },
-    "This assistant is in beta and may have some issues." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このアシスタントはベータ版です。何らかの問題が発生する可能性があります。"
-          }
-        }
-      }
-    },
     "This assistant is not available." : {
       "localizations" : {
         "ja" : {
