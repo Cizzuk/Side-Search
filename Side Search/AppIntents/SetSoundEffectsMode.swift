@@ -14,7 +14,7 @@ struct SetSoundEffectsMode: AppIntent {
     static let openAppWhenRun = false
     static let isDiscoverable = true
     
-    @Parameter(title: "Mode", default: .always)
+    @Parameter(title: "Mode", default: .backgroundOnly)
     var mode: SoundEffectService.Mode
     
     static var parameterSummary: some ParameterSummary {
