@@ -24,6 +24,13 @@ struct SwitchAssistantView: View {
                                 HStack {
                                     Text(type.displayName)
                                         .font(.title3)
+                                    if type.DescriptionProviderType.isBeta {
+                                        Text("Beta")
+                                            .font(.caption)
+                                            .bold()
+                                            .foregroundStyle(.accent)
+                                            .padding(.horizontal, 4)
+                                    }
                                     Spacer()
                                     type.DescriptionProviderType.assistantImage
                                         .font(.title3)

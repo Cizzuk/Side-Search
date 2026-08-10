@@ -14,6 +14,7 @@ protocol AssistantDescriptionProvider {
     static var assistantGradient: Gradient { get }
     static var assistantShapeStyle: AnyShapeStyle { get }
     
+    static var isBeta: Bool { get }
     static var assistantIsAI: Bool { get }
     static var backgroundSupports: Bool { get }
     
