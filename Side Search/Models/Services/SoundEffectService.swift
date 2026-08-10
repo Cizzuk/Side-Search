@@ -23,7 +23,7 @@ final class SoundEffectService {
         var id: String { self.rawValue }
         
         static var `default`: Mode {
-            return .always
+            return .backgroundOnly
         }
         
         static var typeDisplayRepresentation: TypeDisplayRepresentation {
