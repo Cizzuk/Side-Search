@@ -23,7 +23,7 @@ final class SoundEffectService {
         var id: String { self.rawValue }
         
         static var `default`: Mode {
-            return .always
+            return .backgroundOnly
         }
         
         static var typeDisplayRepresentation: TypeDisplayRepresentation {
@@ -53,6 +53,15 @@ final class SoundEffectService {
                 return "completeRecognition"
             }
         }
+        
+        var filename_nosound: String {
+            switch self {
+            case .startRecognition:
+                return "startRecognition_nosound"
+            case .completeRecognition:
+                return "completeRecognition_nosound"
+            }
+        }
     }
     
     private init() {
@@ -67,24 +76,31 @@ final class SoundEffectService {
     func play(_ sound: SoundEffectService.Sounds) {
         guard let engine = engine else { return }
         
-        switch UserSettings.shared.soundEffectsMode {
+        let mode = UserSettings.shared.soundEffectsMode
+        let filepath: String?
+        
+        switch mode {
         case .always:
-            break
+            filepath = Bundle.main.path(forResource: sound.filename, ofType: "ahap")
         case .backgroundOnly:
-            guard UIApplication.shared.applicationState == .background else { return }
+            if UIApplication.shared.applicationState == .background {
+                filepath = Bundle.main.path(forResource: sound.filename, ofType: "ahap")
+            } else {
+                filepath = Bundle.main.path(forResource: sound.filename_nosound, ofType: "ahap")
+            }
         case .off:
+            filepath = Bundle.main.path(forResource: sound.filename_nosound, ofType: "ahap")
+        }
+        
+        guard let filepath else {
+            print("AHAP file not found for sound: \(sound).")
             return
         }
         
         DispatchQueue.global(qos: .userInitiated).async {
-            guard let path = Bundle.main.path(forResource: sound.filename, ofType: "ahap") else {
-                print("AHAP file not found for sound: \(sound).")
-                return
-            }
-            
             do {
                 try engine.start()
-                try engine.playPattern(from: URL(fileURLWithPath: path))
+                try engine.playPattern(from: URL(fileURLWithPath: filepath))
             } catch {
                 print("Failed to play AHAP (\(sound)): \(error).")
             }
