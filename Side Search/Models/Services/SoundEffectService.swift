@@ -77,28 +77,27 @@ final class SoundEffectService {
         guard let engine = engine else { return }
         
         let mode = UserSettings.shared.soundEffectsMode
+        let filepath: String?
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            let filepath: String?
-            
-            switch mode {
-            case .always:
+        switch mode {
+        case .always:
+            filepath = Bundle.main.path(forResource: sound.filename, ofType: "ahap")
+        case .backgroundOnly:
+            if UIApplication.shared.applicationState == .background {
                 filepath = Bundle.main.path(forResource: sound.filename, ofType: "ahap")
-            case .backgroundOnly:
-                if UIApplication.shared.applicationState == .background {
-                    filepath = Bundle.main.path(forResource: sound.filename, ofType: "ahap")
-                } else {
-                    filepath = Bundle.main.path(forResource: sound.filename_nosound, ofType: "ahap")
-                }
-            case .off:
+            } else {
                 filepath = Bundle.main.path(forResource: sound.filename_nosound, ofType: "ahap")
             }
-            
-            guard let filepath else {
-                print("AHAP file not found for sound: \(sound).")
-                return
-            }
-            
+        case .off:
+            filepath = Bundle.main.path(forResource: sound.filename_nosound, ofType: "ahap")
+        }
+        
+        guard let filepath else {
+            print("AHAP file not found for sound: \(sound).")
+            return
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async {
             do {
                 try engine.start()
                 try engine.playPattern(from: URL(fileURLWithPath: filepath))
