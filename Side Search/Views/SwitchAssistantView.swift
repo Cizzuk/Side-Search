@@ -38,7 +38,7 @@ struct SwitchAssistantView: View {
                                 }
                                 Text(type.DescriptionProviderType.assistantDescription)
                                     .font(.subheadline)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(.foreground.opacity(0.75))
                                     .accessibilityHidden(true)
                             }
                         }
@@ -51,6 +51,7 @@ struct SwitchAssistantView: View {
             }
             .navigationTitle("Switch Assistant")
             .navigationBarTitleDisplayMode(.inline)
+            .scrollEdgeEffectStyle(.soft, for: .top)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(action: { dismiss() }) {
