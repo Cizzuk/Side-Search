@@ -18,6 +18,10 @@ final class AppFlags: ObservableObject {
 
 @main
 struct Side_SearchApp: App {
+    init() {
+        SettingsMigration.migrateChatHistory()
+    }
+    
     var body: some Scene {
         AssistiveAccess {
             NavigationStack {
