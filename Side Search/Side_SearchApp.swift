@@ -26,10 +26,12 @@ struct Side_SearchApp: App {
         AssistiveAccess {
             NavigationStack {
                 AssistantView(autoActivate: false)
+                    .scrollDismissesKeyboard(.interactively)
             }
         }
         WindowGroup {
             MainView()
+                .scrollDismissesKeyboard(.interactively)
                 .onOpenURL { url in
                     switch url.host {
                     case "assistant":

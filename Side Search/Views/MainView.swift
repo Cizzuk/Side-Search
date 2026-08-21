@@ -128,7 +128,6 @@ struct MainView: View {
             .animation(.default, value: userSettings.continueInBackground)
             .navigationTitle("Side Search")
             .navigationBarTitleDisplayMode(.inline)
-            .scrollDismissesKeyboard(.interactively)
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { vm.showModal(.switchAssistant) }) {
