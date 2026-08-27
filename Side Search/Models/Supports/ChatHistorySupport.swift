@@ -27,19 +27,24 @@ final class ChatHistorySupport {
         @Attribute(.unique) var id: UUID
         var date: Date
         var assistantType: AssistantType
-        var messages: [AssistantMessage]
+        var messages: Data // Store as Data (JSON)
         
         // Convert from Chat
         init(from chat: Chat) {
             self.id = chat.id
             self.date = chat.date
             self.assistantType = chat.assistantType
-            self.messages = chat.messages
+            self.messages = (try? JSONEncoder().encode(chat.messages)) ?? Data()
         }
         
         // Convert to Chat
         func toChat() -> Chat {
-            return Chat(id: self.id, date: self.date, assistantType: self.assistantType, messages: self.messages)
+            return Chat(
+                id: self.id,
+                date: self.date,
+                assistantType: self.assistantType,
+                messages: (try? JSONDecoder().decode([AssistantMessage].self, from: self.messages)) ?? []
+            )
         }
     }
     
