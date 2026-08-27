@@ -62,6 +62,7 @@ struct GeminiAPIAssistantSettingsView: View {
             // Tools Section
             Section {
                 Toggle("Enable Web Search", isOn: $assistantModel.webSearch)
+                    .tint(.accent)
             } header: { Text("Tools") }
         }
         .onChange(of: assistantModel) { saveSettings() }

@@ -22,6 +22,7 @@ struct ChatHistoryView: View {
                     // Full history
                     Section {
                         Toggle("Enable Chat History", isOn: $userSettings.chatHistoryEnabled)
+                            .tint(.accent)
                     }
                     ChatLinkList(vm: vm, chats: vm.chats)
                 } else {

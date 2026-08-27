@@ -90,6 +90,7 @@ struct ClaudeAPIAssistantSettingsView: View {
                     }
                 }
                 Toggle("Allow Code Execution", isOn: $assistantModel.allowCodeExecution)
+                    .tint(.accent)
             } header: { Text("Tools") }
             
             // Custom Instructions Section

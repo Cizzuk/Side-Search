@@ -50,10 +50,13 @@ struct MainView: View {
                     }
                     
                     Toggle("Manually Confirm", isOn: $userSettings.manuallyConfirmSpeech)
+                        .tint(.accent)
                     
                     Toggle("Start with Mic Muted", isOn: $userSettings.startWithMicMuted)
+                        .tint(.accent)
                     
                     Toggle("Use Bluetooth Microphones", isOn: $userSettings.allowBluetoothMic)
+                        .tint(.accent)
                 } header: { Text("Speech Settings") }
                 
                 // URL Settings
@@ -74,9 +77,11 @@ struct MainView: View {
                 if userSettings.currentAssistant.DescriptionProviderType.backgroundSupports {
                     Section {
                         Toggle("Continue in Background", isOn: $userSettings.continueInBackground)
+                            .tint(.accent)
                         
                         if userSettings.continueInBackground {
                             Toggle("Keep on Standby", isOn: $userSettings.standbyInBackground)
+                                .tint(.accent)
                         }
                     } header: {
                         Text("Background Settings")
@@ -97,6 +102,7 @@ struct MainView: View {
                 
                 Section {
                     Toggle("Disable Markdown Rendering", isOn: $userSettings.disableMarkdownRendering)
+                        .tint(.accent)
                 }
                 
                 Section {
