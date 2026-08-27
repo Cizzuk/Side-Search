@@ -43,8 +43,11 @@ final class ChatHistorySupport {
         }
     }
     
+    private static let container: ModelContainer? = try? ModelContainer(for: ChatEntity.self)
+    
     private static func makeContext() -> ModelContext? {
-        return try? ModelContext(ModelContainer(for: ChatEntity.self))
+        guard let container else { return nil }
+        return ModelContext(container)
     }
     
     private static func fetchRecords(in context: ModelContext) -> [ChatEntity] {
