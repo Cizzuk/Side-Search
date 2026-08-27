@@ -64,7 +64,7 @@ class SpeechRecognizerService: ObservableObject {
     init() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleDidBecomeInactiveNotification),
+            selector: #selector(handleDidBecomeInactiveNotification(_:)),
             name: AVAudioSession.didBecomeInactiveNotification,
             object: nil
         )
@@ -321,7 +321,7 @@ class SpeechRecognizerService: ObservableObject {
     
     // MARK: - Handlers
     
-    @objc private func handleDidBecomeInactiveNotification() {
+    @objc private func handleDidBecomeInactiveNotification(_ notification: Notification? = nil) {
         stopRecording()
     }
     
