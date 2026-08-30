@@ -322,10 +322,12 @@ class SpeechRecognizerService: ObservableObject {
     // MARK: - Handlers
     
     @objc private func handleDidBecomeInactiveNotification(_ notification: Notification? = nil) {
+        guard isRecording else { return }
         stopRecording()
     }
     
     @objc private func handleMediaServicesReset() {
+        guard isRecording else { return }
         stopRecording()
     }
     
