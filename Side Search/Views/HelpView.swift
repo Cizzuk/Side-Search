@@ -10,16 +10,6 @@ import SwiftUI
 struct HelpView: View {
     @ObservedObject private var userSettings = UserSettings.shared
     
-    private var canOpenSettingsURL: Bool {
-        guard URL(string: UIApplication.openSettingsURLString) != nil else { return false }
-        return true
-    }
-    
-    private func openSettingsURL() {
-        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-        UIApplication.shared.open(settingsURL)
-    }
-    
     @State var unAuthorizationStatus: UNAuthorizationStatus?
     
     private func updateUNAuthorizationStatus() async {
@@ -37,8 +27,8 @@ struct HelpView: View {
                     Text("If you are in a region where Side Button customization is enabled, you can quickly launch the Side Search assistant by pressing and holding the Side Button.")
                     Text("You can set it up by going to Settings → Apps → Side Search and turning on \"Press Side Button for Side Search\".")
                     Text("The confirmed supported region is Japan only.")
-                    if canOpenSettingsURL {
-                        Button(action: { openSettingsURL() }) {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        Button(action: { UIApplication.shared.open(url) }) {
                             Label("Open Settings", systemImage: "gear")
                         }
                     }
@@ -74,8 +64,8 @@ struct HelpView: View {
                             Label("Allow Notifications", systemImage: "app.badge")
                         }
                     } else if unAuthorizationStatus == .denied {
-                        if canOpenSettingsURL {
-                            Button(action: { openSettingsURL() }) {
+                        if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+                            Button(action: { UIApplication.shared.open(url) }) {
                                 Label("Allow in Settings", systemImage: "gear")
                             }
                         }
