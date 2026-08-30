@@ -194,16 +194,6 @@
         }
       }
     },
-    "Beta" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ベータ版"
-          }
-        }
-      }
-    },
     "Bing" : {
       "localizations" : {
         "ja" : {
@@ -412,16 +402,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アプリ内ブラウザのデータを削除"
-          }
-        }
-      }
-    },
-    "Close" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "閉じる"
           }
         }
       }
@@ -1607,16 +1587,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "送信"
-          }
-        }
-      }
-    },
-    "Switch Assistant" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アシスタントの切り替え"
           }
         }
       }

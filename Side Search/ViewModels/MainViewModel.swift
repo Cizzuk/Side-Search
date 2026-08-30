@@ -13,38 +13,30 @@ class MainViewModel: ObservableObject {
     private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
 
-    @Published var showSwitchAssistantView = false
     @Published var showAssistant = false
-    @Published var showChatHistoryView = false
-    @Published var showHelpView = false
-    @Published var showChangeIconView = false
     @Published var showSafariView = false
     @Published var safariViewURL: URL?
     @Published var showTmpCurtain = false
+    
+    @Published var path: Route? = .assistantSettings
 
     enum Modals {
-        case switchAssistant
         case assistant
-        case chatHistory
-        case help
-        case changeIcon
         case safari
         case tmpCurtain
+    }
+    
+    enum Route: Hashable {
+        case assistantSettings
+        case help, chatHistory
+        case about, changeIcon
     }
     
     func showModal(_ modal: Modals) {
         closeAllModals()
         switch modal {
-        case .switchAssistant:
-            showSwitchAssistantView = true
         case .assistant:
             showAssistant = true
-        case .chatHistory:
-            showChatHistoryView = true
-        case .help:
-            showHelpView = true
-        case .changeIcon:
-            showChangeIconView = true
         case .safari:
             showSafariView = true
         case .tmpCurtain:
@@ -53,11 +45,7 @@ class MainViewModel: ObservableObject {
     }
 
     func closeAllModals() {
-        showSwitchAssistantView = false
         showAssistant = false
-        showChatHistoryView = false
-        showHelpView = false
-        showChangeIconView = false
         showSafariView = false
         showTmpCurtain = false
     }

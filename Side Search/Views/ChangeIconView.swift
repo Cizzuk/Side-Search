@@ -23,15 +23,7 @@ struct ChangeIconView: View {
             }
             .navigationTitle("Change App Icon")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(action: { dismiss() }) {
-                        Label("Close", systemImage: "xmark")
-                    }
-                }
-            }
         }
-        .presentationDetents([.fraction(0.9)])
     }
     
     private func iconItem(iconName: String, iconID: String) -> some View {
