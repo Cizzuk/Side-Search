@@ -56,7 +56,10 @@ final class ChatHistorySupport {
     }
     
     private static func fetchRecords(in context: ModelContext) -> [ChatEntity] {
-        let descriptor = FetchDescriptor<ChatEntity>()
+        let descriptor = FetchDescriptor<ChatEntity>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        
         return (try? context.fetch(descriptor)) ?? []
     }
     
@@ -71,9 +74,7 @@ final class ChatHistorySupport {
         
         let records = fetchRecords(in: context)
         
-        return records
-            .compactMap { $0.toChat() }
-            .sorted(by: { $0.date > $1.date })
+        return records.compactMap { $0.toChat() }
     }
     
     static func save(_ chat: Chat) {
