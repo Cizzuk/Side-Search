@@ -24,7 +24,6 @@ struct GeminiAPIAssistant: AssistantDescriptionProvider {
         ))
     }
     
-    static var isBeta: Bool = false
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true
     

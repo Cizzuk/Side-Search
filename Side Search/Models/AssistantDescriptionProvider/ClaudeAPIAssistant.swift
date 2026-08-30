@@ -27,7 +27,6 @@ struct ClaudeAPIAssistant: AssistantDescriptionProvider {
         ))
     }
     
-    static var isBeta: Bool = true
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true
     

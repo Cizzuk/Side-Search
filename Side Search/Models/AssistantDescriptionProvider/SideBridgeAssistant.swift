@@ -26,7 +26,6 @@ struct SideBridgeAssistant: AssistantDescriptionProvider {
         ))
     }
     
-    static var isBeta: Bool = false
     static var assistantIsAI: Bool = false
     static var backgroundSupports: Bool = true
     
