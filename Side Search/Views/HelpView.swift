@@ -84,6 +84,7 @@ struct HelpView: View {
                 } footer: {
                     if unAuthorizationStatus == .authorized {
                         Text("Notifications allowed.")
+                            .padding(.bottom, 20)
                     }
                 }
                 .task {
