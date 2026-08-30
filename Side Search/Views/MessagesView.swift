@@ -14,6 +14,7 @@ struct MessagesView: View {
     var openURL: (URL) -> Void
     
     @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
+    @Environment(\.accessibilityShowBorders) private var showBorders
     
     @ObservedObject private var userSettings = UserSettings.shared
     
@@ -79,9 +80,12 @@ struct MessagesView: View {
                     Button(action: { openURL(source.url) }) {
                         Label(source.title, systemImage: "link")
                             .font(.subheadline)
+                            .underline(showBorders)
                             .padding(.vertical, 1)
                             .padding(.trailing, 20)
                     }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.accent)
                     .contextMenu {
                         // Copy URL
                         Button(action: { UIPasteboard.general.string = source.url.absoluteString }) {
