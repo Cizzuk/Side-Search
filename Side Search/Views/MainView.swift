@@ -11,6 +11,7 @@ import SwiftUI
 import TemporaryScreenCurtain
 
 struct MainView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.scenePhase) var scenePhase
     
     @StateObject var vm = MainViewModel()
@@ -29,12 +30,19 @@ struct MainView: View {
                 Text(type.displayName)
                     .font(.title3)
                     .bold(isSelected)
-                    .foregroundStyle(isSelected ? .accent : .primary)
+                
                 Spacer()
-                type.DescriptionProviderType.assistantImage
-                    .font(.title3)
-                    .foregroundStyle(type.DescriptionProviderType.assistantShapeStyle)
+                
+                if horizontalSizeClass == .regular && isSelected && vm.path == .assistantSettings {
+                    type.DescriptionProviderType.assistantImage
+                        .font(.title3)
+                } else {
+                    type.DescriptionProviderType.assistantImage
+                        .font(.title3)
+                        .foregroundStyle(type.DescriptionProviderType.assistantShapeStyle)
+                }
             }
+            
             Text(type.DescriptionProviderType.assistantDescription)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
