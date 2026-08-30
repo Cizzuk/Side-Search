@@ -8,6 +8,28 @@
 import Foundation
 
 final class SettingsMigration {
+    static func migrateChatHistory() {
+        let legacyUserDefaultsKey = "ChatHistory"
+        
+        // Check if legacy data exists
+        guard UserDefaults.standard.data(forKey: legacyUserDefaultsKey) != nil else { return }
+        
+        guard let data = UserDefaults.standard.data(forKey: legacyUserDefaultsKey),
+              let chats = try? JSONDecoder().decode([ChatHistorySupport.Chat].self, from: data)
+        else { return }
+        
+        let legacyChats = chats.sorted { $0.date > $1.date }
+        
+        guard !legacyChats.isEmpty else {
+            UserDefaults.standard.removeObject(forKey: legacyUserDefaultsKey)
+            return
+        }
+        
+        // Migrate legacy chats to SwiftData
+        legacyChats.forEach { ChatHistorySupport.save($0) }
+        UserDefaults.standard.removeObject(forKey: legacyUserDefaultsKey)
+    }
+    
     static func migrateOpenURLsIn() -> UserSettings.URLOpeningOption? {
         var assistantModel = URLBasedAssistantModel.load()
         

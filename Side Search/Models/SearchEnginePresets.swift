@@ -49,10 +49,6 @@ class SearchEnginePresets {
                     url: "https://google.com/?q=%s&udm=50",
                 ),
                 Preset(
-                    name: "Perplexity",
-                    url: "https://www.perplexity.ai/?q=%s",
-                ),
-                Preset(
                     name: "Gemini",
                     url: "https://gemini.google.com/app",
                 )

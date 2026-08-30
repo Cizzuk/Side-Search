@@ -18,14 +18,20 @@ final class AppFlags: ObservableObject {
 
 @main
 struct Side_SearchApp: App {
+    init() {
+        SettingsMigration.migrateChatHistory()
+    }
+    
     var body: some Scene {
         AssistiveAccess {
             NavigationStack {
                 AssistantView(autoActivate: false)
+                    .scrollDismissesKeyboard(.interactively)
             }
         }
         WindowGroup {
             MainView()
+                .scrollDismissesKeyboard(.interactively)
                 .onOpenURL { url in
                     switch url.host {
                     case "assistant":

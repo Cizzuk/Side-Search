@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import SwiftData
 
-class ChatHistorySupport {
-    // MARK: - 'Chat' does NOT conform to 'MergeCodable'.
-    // If future changes require merge support, first make this struct conform to 'MergeCodable'.
+final class ChatHistorySupport {
+    // MARK: - Chat Model
+    // To migrate from UserDefaults to SwiftData and make it easier to use in views.
     struct Chat: Identifiable, Codable {
         var id = UUID()
         var date: Date = Date()
@@ -20,40 +21,88 @@ class ChatHistorySupport {
         }
     }
     
-    static let userDefaultsKey = "ChatHistory"
+    // MARK: - SwiftData Model
+    @Model
+    final class ChatEntity {
+        @Attribute(.unique) var id: UUID
+        var date: Date
+        var assistantType: AssistantType
+        var messages: Data // Store as Data (JSON)
+        
+        // Convert from Chat
+        init(from chat: Chat) {
+            self.id = chat.id
+            self.date = chat.date
+            self.assistantType = chat.assistantType
+            self.messages = (try? JSONEncoder().encode(chat.messages)) ?? Data()
+        }
+        
+        // Convert to Chat
+        func toChat() -> Chat {
+            return Chat(
+                id: self.id,
+                date: self.date,
+                assistantType: self.assistantType,
+                messages: (try? JSONDecoder().decode([AssistantMessage].self, from: self.messages)) ?? []
+            )
+        }
+    }
+    
+    private static let container: ModelContainer? = try? ModelContainer(for: ChatEntity.self)
+    
+    private static func makeContext() -> ModelContext? {
+        guard let container else { return nil }
+        return ModelContext(container)
+    }
+    
+    private static func fetchRecords(in context: ModelContext) -> [ChatEntity] {
+        let descriptor = FetchDescriptor<ChatEntity>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        
+        return (try? context.fetch(descriptor)) ?? []
+    }
+    
+    private static func getRecord(_ id: UUID, in context: ModelContext) -> ChatEntity? {
+        return fetchRecords(in: context).first(where: { $0.id == id })
+    }
+    
+    // MARK: - Public Methods
     
     static func loadChats() -> [Chat] {
-        guard let data = UserDefaults.standard.data(forKey: userDefaultsKey),
-              let chats = try? JSONDecoder().decode([Chat].self, from: data) else {
-            return []
-        }
-        return chats.sorted { $0.date > $1.date }
+        guard let context = makeContext() else { return [] }
+        
+        let records = fetchRecords(in: context)
+        
+        return records.compactMap { $0.toChat() }
     }
     
     static func save(_ chat: Chat) {
-        var chats = loadChats()
+        guard let context = makeContext() else { return }
+        let newRecord = ChatEntity(from: chat)
         
-        // If id already exists, replace it, else append
-        if let index = chats.firstIndex(where: { $0.id == chat.id }) {
-            chats[index] = chat
-        } else {
-            chats.append(chat)
+        // If id already exists, delete the old record
+        if let oldRecord = getRecord(newRecord.id, in: context) {
+            context.delete(oldRecord)
         }
         
-        if let data = try? JSONEncoder().encode(chats) {
-            UserDefaults.standard.set(data, forKey: userDefaultsKey)
-        }
+        context.insert(newRecord)
+        try? context.save()
     }
     
     static func delete(_ chat: UUID) {
-        var chats = loadChats()
-        chats.removeAll { $0.id == chat }
-        if let data = try? JSONEncoder().encode(chats) {
-            UserDefaults.standard.set(data, forKey: userDefaultsKey)
+        guard let context = makeContext() else { return }
+        
+        if let record = getRecord(chat, in: context) {
+            context.delete(record)
+            try? context.save()
         }
     }
     
     static func clearAll() {
-        UserDefaults.standard.removeObject(forKey: userDefaultsKey)
+        guard let context = makeContext() else { return }
+        
+        fetchRecords(in: context).forEach { context.delete($0) }
+        try? context.save()
     }
 }

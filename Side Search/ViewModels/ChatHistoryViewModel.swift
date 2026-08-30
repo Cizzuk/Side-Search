@@ -53,6 +53,6 @@ class ChatHistoryViewModel: ObservableObject {
             return matchesAssistant || matchesMessages
         }
         
-        searchResults = filtered.sorted { $0.date > $1.date }
+        searchResults = filtered
     }
 }

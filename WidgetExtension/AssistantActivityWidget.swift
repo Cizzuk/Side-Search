@@ -41,20 +41,20 @@ struct AssistantActivityWidget: Widget {
     }
     
     struct DescriptionText: View {
-        var showSubtitle: Bool = true
-        var description: LocalizedStringResource? = nil
+        var description: LocalizedStringResource
+        var small: Bool = false
         
         var body: some View {
             VStack(alignment: .leading) {
-                Text("Side Search")
-                    .font(.headline)
-                    .bold()
-                    .foregroundStyle(.dropblue)
-                if let description = description, showSubtitle {
-                    Text(description)
-                        .font(.subheadline)
-                        .foregroundStyle(.dropblue.opacity(0.8))
+                if !small {
+                    Text("Side Search")
+                        .font(.headline)
+                        .bold()
+                        .foregroundStyle(.dropblue)
                 }
+                Text(description)
+                    .font(.subheadline)
+                    .foregroundStyle(.dropblue.opacity(0.8))
             }
         }
     }
@@ -82,7 +82,7 @@ struct AssistantActivityWidget: Widget {
                 HStack(spacing: 10) {
                     IconImage(size: 30)
                         .accessibilityHidden(true)
-                    DescriptionText(showSubtitle: false)
+                    DescriptionText(description: context.state.state.description, small: true)
                 }
             case .medium:
                 HStack(spacing: 15) {

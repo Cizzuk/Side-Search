@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ChatHistoryView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     @StateObject var vm = ChatHistoryViewModel()
     @StateObject private var userSettings = UserSettings.shared
     
@@ -22,6 +20,7 @@ struct ChatHistoryView: View {
                     // Full history
                     Section {
                         Toggle("Enable Chat History", isOn: $userSettings.chatHistoryEnabled)
+                            .tint(.accent)
                     }
                     ChatLinkList(vm: vm, chats: vm.chats)
                 } else {
@@ -49,11 +48,6 @@ struct ChatHistoryView: View {
             .navigationTitle("Chat History")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(action: { dismiss() }) {
-                        Label("Close", systemImage: "xmark")
-                    }
-                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: { showClearAllHistoryAlert = true }) {
                         Label("Clear All", systemImage: "minus.circle")

@@ -1,4 +1,7 @@
 {
+  "features" : [
+    "specular-location"
+  ],
   "fill" : "automatic",
   "groups" : [
     {
@@ -14,20 +17,7 @@
             {
               "appearance" : "dark",
               "value" : {
-                "linear-gradient" : [
-                  "srgb:0.20000,0.40000,1.00000,1.00000",
-                  "srgb:0.20000,0.60000,1.00000,1.00000"
-                ],
-                "orientation" : {
-                  "start" : {
-                    "x" : 0.5,
-                    "y" : 0
-                  },
-                  "stop" : {
-                    "x" : 0.5,
-                    "y" : 0.7
-                  }
-                }
+                "solid" : "srgb:0.20000,0.40000,1.00000,1.00000"
               }
             },
             {
@@ -56,9 +46,10 @@
         ]
       },
       "shadow" : {
-        "kind" : "layer-color",
+        "kind" : "neutral",
         "opacity" : 0.5
       },
+      "specular" : "inside",
       "translucency-specializations" : [
         {
           "value" : {
@@ -87,20 +78,7 @@
             {
               "appearance" : "dark",
               "value" : {
-                "linear-gradient" : [
-                  "srgb:0.20000,0.40000,1.00000,1.00000",
-                  "srgb:0.20000,0.60000,1.00000,1.00000"
-                ],
-                "orientation" : {
-                  "start" : {
-                    "x" : 0.5,
-                    "y" : 0
-                  },
-                  "stop" : {
-                    "x" : 0.5,
-                    "y" : 0.7
-                  }
-                }
+                "solid" : "srgb:0.20000,0.40000,1.00000,1.00000"
               }
             },
             {
@@ -123,9 +101,10 @@
         }
       ],
       "shadow" : {
-        "kind" : "layer-color",
+        "kind" : "neutral",
         "opacity" : 0.5
       },
+      "specular" : "inside",
       "translucency-specializations" : [
         {
           "value" : {

@@ -68,7 +68,6 @@ struct AssistantView: View {
         }
         .animation(.smooth, value: vm.inputText)
         .animation(.smooth, value: vm.chat.messages.count)
-        .scrollDismissesKeyboard(.interactively)
         // MARK: - Toolbar
         .toolbar { toolbarContent }
         .safeAreaInset(edge: .bottom) { keyboardToolbar }

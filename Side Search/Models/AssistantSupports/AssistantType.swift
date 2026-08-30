@@ -11,6 +11,7 @@ import SwiftUI
 enum AssistantType: String, CaseIterable, Codable, AppEnum {
     case urlBased
     case appleFoundation
+    case claudeAPI
     case geminiAPI
     case sideBridge
     
@@ -25,6 +26,7 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
     static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
         .urlBased: "URL Based Assistant",
         .appleFoundation: "Apple Foundation Models",
+        .claudeAPI: "Claude API",
         .geminiAPI: "Google Gemini API",
         .sideBridge: "Side Bridge"
     ]
@@ -39,6 +41,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return URLBasedAssistant.self
         case .appleFoundation:
             return AppleFoundationAssistant.self
+        case .claudeAPI:
+            return ClaudeAPIAssistant.self
         case .geminiAPI:
             return GeminiAPIAssistant.self
         case .sideBridge:
@@ -52,6 +56,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return URLBasedAssistantModel.self
         case .appleFoundation:
             return AppleFoundationAssistantModel.self
+        case .claudeAPI:
+            return ClaudeAPIAssistantModel.self
         case .geminiAPI:
             return GeminiAPIAssistantModel.self
         case .sideBridge:
@@ -65,6 +71,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return URLBasedAssistantService.self
         case .appleFoundation:
             return AppleFoundationAssistantService.self
+        case .claudeAPI:
+            return ClaudeAPIAssistantService.self
         case .geminiAPI:
             return GeminiAPIAssistantService.self
         case .sideBridge:
@@ -78,6 +86,8 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return URLBasedAssistantSettingsView()
         case .appleFoundation:
             return AppleFoundationAssistantSettingsView()
+        case .claudeAPI:
+            return ClaudeAPIAssistantSettingsView()
         case .geminiAPI:
             return GeminiAPIAssistantSettingsView()
         case .sideBridge:

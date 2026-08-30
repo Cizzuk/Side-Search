@@ -25,6 +25,10 @@
 
 Apple Intelligenceに対応しているデバイスで、プライバシー重視のモデルと会話をすることができます。
 
+### Claude API
+
+ご自身のAPIキーを使用して、ClaudeにWeb検索を頼んだり、質問をすることができます。
+
 #### Google Gemini API
 
 ご自身のAPIキーを使用して、Geminiと会話をしたり、Web検索を頼むことができます。
