@@ -106,6 +106,7 @@ extension MainView {
                 }
             }
         }
+        .animation(.default, value: userSettings.currentAssistant)
         .animation(.default, value: userSettings.continueInBackground)
         .navigationTitle(userSettings.currentAssistant.displayName)
         .navigationBarTitleDisplayMode(.inline)
