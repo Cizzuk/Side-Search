@@ -102,7 +102,7 @@ struct MainView: View {
         // MARK: - Events
         .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
             showClearInAppBrowserDataAlert = false
-            vm.activateAssistant(disableAnimations: true)
+            vm.activateAssistant()
         }
         .onChange(of: scenePhase) { vm.onChange(scenePhase: scenePhase) }
         .accessibilityAction(.magicTap) {

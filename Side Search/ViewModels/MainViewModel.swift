@@ -12,14 +12,14 @@ import SwiftUI
 class MainViewModel: ObservableObject {
     private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
-
+    
     @Published var showAssistant = false
     @Published var showSafariView = false
     @Published var safariViewURL: URL?
     @Published var showTmpCurtain = false
     
     @Published var path: Route? = .assistantSettings
-
+    
     enum Modals {
         case assistant
         case safari
@@ -43,7 +43,7 @@ class MainViewModel: ObservableObject {
             showTmpCurtain = true
         }
     }
-
+    
     func closeAllModals() {
         showAssistant = false
         showSafariView = false
@@ -67,45 +67,39 @@ class MainViewModel: ObservableObject {
     
     // MARK: - Assistant
     
-    func activateAssistant(disableAnimations: Bool = false) {
+    func activateAssistant() {
         guard !appFlags.isAssistantActive else { return }
+        // Close sheets and covers
+        closeAllModals()
         
-        var transaction = Transaction()
-        transaction.disablesAnimations = disableAnimations || UIApplication.shared.applicationState != .active
+        // Check current assistant type
+        if userSettings.currentAssistant != .urlBased {
+            showModal(.assistant)
+            return
+        }
         
-        withTransaction(transaction) {
-            // Close sheets and covers
-            closeAllModals()
-            
-            // Check current assistant type
-            if userSettings.currentAssistant != .urlBased {
-                showModal(.assistant)
-                return
-            }
-            
-            let searchEngine = URLBasedAssistantModel.load()
-            
-            // Check if query input is needed
-            if searchEngine.needQueryInput() {
-                showModal(.assistant)
-                return
-            }
-            
-            if let url = searchEngine.makeSearchURL() {
-                switch userSettings.openURLsIn {
-                case .inAppBrowser:
-                    if SafariView.checkAvailability(at: url) {
-                        safariViewURL = url
-                        showModal(.safari)
-                    } else {
-                        // Fallback
-                        showModal(.tmpCurtain)
-                        UIApplication.shared.open(url)
-                    }
-                case .defaultApp:
+        let searchEngine = URLBasedAssistantModel.load()
+        
+        // Check if query input is needed
+        if searchEngine.needQueryInput() {
+            showModal(.assistant)
+            return
+        }
+        
+        if let url = searchEngine.makeSearchURL() {
+            switch userSettings.openURLsIn {
+            case .inAppBrowser:
+                if SafariView.checkAvailability(at: url) {
+                    safariViewURL = url
+                    showModal(.safari)
+                } else {
+                    // Fallback
                     showModal(.tmpCurtain)
                     UIApplication.shared.open(url)
                 }
+            case .defaultApp:
+                showModal(.tmpCurtain)
+                UIApplication.shared.open(url)
             }
         }
     }
