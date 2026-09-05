@@ -113,7 +113,7 @@ extension MainView {
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button(action: { vm.activateAssistant() }) {
-                    Label("Start Assistant", image: "Sidefish")
+                    Label("Start Assistant", image: "sidefish")
                         .foregroundStyle(.white)
                 }
                 .tint(.dropblue)

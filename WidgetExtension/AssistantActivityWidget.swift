@@ -17,7 +17,7 @@ struct AssistantActivityWidget: Widget {
         var size: CGFloat? = nil
 
         var body: some View {
-            Image("Sidefish")
+            Image("sidefish")
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)

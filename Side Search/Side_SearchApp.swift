@@ -46,7 +46,7 @@ struct Side_SearchApp: App {
                 Button {
                     NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
                 } label: {
-                    Label("Start Assistant", image: "Sidefish")
+                    Label("Start Assistant", image: "sidefish")
                 }
                 .keyboardShortcut("N", modifiers: [.command])
             }
