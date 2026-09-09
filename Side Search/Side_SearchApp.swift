@@ -18,14 +18,20 @@ final class AppFlags: ObservableObject {
 
 @main
 struct Side_SearchApp: App {
+    init() {
+        SettingsMigration.migrateChatHistory()
+    }
+    
     var body: some Scene {
         AssistiveAccess {
             NavigationStack {
                 AssistantView(autoActivate: false)
+                    .scrollDismissesKeyboard(.interactively)
             }
         }
         WindowGroup {
             MainView()
+                .scrollDismissesKeyboard(.interactively)
                 .onOpenURL { url in
                     switch url.host {
                     case "assistant":
@@ -40,7 +46,7 @@ struct Side_SearchApp: App {
                 Button {
                     NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
                 } label: {
-                    Label("Start Assistant", image: "Sidefish")
+                    Label("Start Assistant", image: "sidefish")
                 }
                 .keyboardShortcut("N", modifiers: [.command])
             }

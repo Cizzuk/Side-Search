@@ -282,6 +282,7 @@ class BaseAssistantService: ObservableObject {
         ActivateIntent.setShouldBackground(false)
         AssistantActivityManager.endAll()
         appFlags.isAssistantActive = false
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
     
     // MARK: - Message History Management

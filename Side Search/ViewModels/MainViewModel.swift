@@ -12,52 +12,40 @@ import SwiftUI
 class MainViewModel: ObservableObject {
     private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
-
-    @Published var showSwitchAssistantView = false
+    
     @Published var showAssistant = false
-    @Published var showChatHistoryView = false
-    @Published var showHelpView = false
-    @Published var showChangeIconView = false
     @Published var showSafariView = false
     @Published var safariViewURL: URL?
     @Published var showTmpCurtain = false
-
+    
+    @Published var path: Route? = .assistantSettings
+    
     enum Modals {
-        case switchAssistant
         case assistant
-        case chatHistory
-        case help
-        case changeIcon
         case safari
         case tmpCurtain
+    }
+    
+    enum Route: Hashable {
+        case assistantSettings
+        case help, chatHistory
+        case about, changeIcon
     }
     
     func showModal(_ modal: Modals) {
         closeAllModals()
         switch modal {
-        case .switchAssistant:
-            showSwitchAssistantView = true
         case .assistant:
             showAssistant = true
-        case .chatHistory:
-            showChatHistoryView = true
-        case .help:
-            showHelpView = true
-        case .changeIcon:
-            showChangeIconView = true
         case .safari:
             showSafariView = true
         case .tmpCurtain:
             showTmpCurtain = true
         }
     }
-
+    
     func closeAllModals() {
-        showSwitchAssistantView = false
         showAssistant = false
-        showChatHistoryView = false
-        showHelpView = false
-        showChangeIconView = false
         showSafariView = false
         showTmpCurtain = false
     }
@@ -79,45 +67,39 @@ class MainViewModel: ObservableObject {
     
     // MARK: - Assistant
     
-    func activateAssistant(disableAnimations: Bool = false) {
+    func activateAssistant() {
         guard !appFlags.isAssistantActive else { return }
+        // Close sheets and covers
+        closeAllModals()
         
-        var transaction = Transaction()
-        transaction.disablesAnimations = disableAnimations || UIApplication.shared.applicationState != .active
+        // Check current assistant type
+        if userSettings.currentAssistant != .urlBased {
+            showModal(.assistant)
+            return
+        }
         
-        withTransaction(transaction) {
-            // Close sheets and covers
-            closeAllModals()
-            
-            // Check current assistant type
-            if userSettings.currentAssistant != .urlBased {
-                showModal(.assistant)
-                return
-            }
-            
-            let searchEngine = URLBasedAssistantModel.load()
-            
-            // Check if query input is needed
-            if searchEngine.needQueryInput() {
-                showModal(.assistant)
-                return
-            }
-            
-            if let url = searchEngine.makeSearchURL() {
-                switch userSettings.openURLsIn {
-                case .inAppBrowser:
-                    if SafariView.checkAvailability(at: url) {
-                        safariViewURL = url
-                        showModal(.safari)
-                    } else {
-                        // Fallback
-                        showModal(.tmpCurtain)
-                        UIApplication.shared.open(url)
-                    }
-                case .defaultApp:
+        let searchEngine = URLBasedAssistantModel.load()
+        
+        // Check if query input is needed
+        if searchEngine.needQueryInput() {
+            showModal(.assistant)
+            return
+        }
+        
+        if let url = searchEngine.makeSearchURL() {
+            switch userSettings.openURLsIn {
+            case .inAppBrowser:
+                if SafariView.checkAvailability(at: url) {
+                    safariViewURL = url
+                    showModal(.safari)
+                } else {
+                    // Fallback
                     showModal(.tmpCurtain)
                     UIApplication.shared.open(url)
                 }
+            case .defaultApp:
+                showModal(.tmpCurtain)
+                UIApplication.shared.open(url)
             }
         }
     }

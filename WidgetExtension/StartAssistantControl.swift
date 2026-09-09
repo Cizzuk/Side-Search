@@ -16,7 +16,7 @@ struct StartAssistantControl: ControlWidget {
     var body: some ControlWidgetConfiguration {
         StaticControlConfiguration(kind: StartAssistantControl.kind) {
             ControlWidgetButton(action: ActivateIntent()) {
-                Label(StartAssistantControl.title, image: "Sidefish")
+                Label(StartAssistantControl.title, image: "sidefish")
             }
         }
         .displayName(StartAssistantControl.title)
