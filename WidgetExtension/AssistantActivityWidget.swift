@@ -21,7 +21,7 @@ struct AssistantActivityWidget: Widget {
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
-                .padding(.vertical, 1.5)
+                .padding(.vertical, 1)
                 .foregroundStyle(.dropblue)
         }
     }
@@ -127,7 +127,7 @@ struct AssistantActivityWidget: Widget {
                 }
             } compactLeading: {
                 IconImage()
-                    .padding(.leading, 1.5)
+                    .padding(.horizontal, 1)
                     .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             } compactTrailing: {
