@@ -21,7 +21,6 @@ struct AssistantActivityWidget: Widget {
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
-                .padding(.vertical, 1)
                 .foregroundStyle(.dropblue)
         }
     }
@@ -34,8 +33,8 @@ struct AssistantActivityWidget: Widget {
             Image(systemName: systemName)
                 .resizable()
                 .scaledToFit()
+                .aspectRatio(contentMode: .fit)
                 .frame(width: size, height: size)
-                .padding(.vertical, 2)
                 .foregroundStyle(.dropblue)
         }
     }
@@ -126,18 +125,18 @@ struct AssistantActivityWidget: Widget {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             } compactLeading: {
-                IconImage()
+                IconImage(size: 20)
                     .padding(.horizontal, 1)
                     .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             } compactTrailing: {
-                StateImage(systemName: context.state.state.systemImage)
-                    .padding(.horizontal, context.state.state.imageHPadding)
+                StateImage(size: 20, systemName: context.state.state.systemImage)
+                    .padding(.vertical, 2)
                     .opacity(activeOpacity)
                     .accessibilityHidden(true)
             } minimal: {
-                StateImage(systemName: context.state.state.systemImage)
-                    .padding(.horizontal, context.state.state.imageHPadding)
+                StateImage(size: 20, systemName: context.state.state.systemImage)
+                    .padding(.vertical, 2)
                     .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             }
