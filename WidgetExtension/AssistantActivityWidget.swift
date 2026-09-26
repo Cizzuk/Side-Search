@@ -125,17 +125,17 @@ struct AssistantActivityWidget: Widget {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             } compactLeading: {
-                IconImage(size: 20)
+                IconImage(size: 18)
                     .padding(.horizontal, 1)
                     .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             } compactTrailing: {
-                StateImage(size: 20, systemName: context.state.state.systemImage)
+                StateImage(size: 18, systemName: context.state.state.systemImage)
                     .padding(.vertical, 2)
                     .opacity(activeOpacity)
                     .accessibilityHidden(true)
             } minimal: {
-                StateImage(size: 20, systemName: context.state.state.systemImage)
+                StateImage(size: 18, systemName: context.state.state.systemImage)
                     .padding(.vertical, 2)
                     .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
