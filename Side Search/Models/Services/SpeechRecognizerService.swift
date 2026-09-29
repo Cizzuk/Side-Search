@@ -350,7 +350,11 @@ class SpeechRecognizerService: ObservableObject {
     }
     
     private func calcMicLevel(from buffer: AVAudioPCMBuffer) async {
-        // Only calc in foreground
+        guard !ProcessInfo.processInfo.isLowPowerModeEnabled else { return }
+        switch ProcessInfo.processInfo.thermalState {
+        case .serious, .critical: return
+        default: break
+        }
         guard !isInBackground && isRecognizing else { return }
         
         guard let channelData = buffer.floatChannelData?[0] else { return }
