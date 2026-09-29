@@ -94,6 +94,9 @@ struct AssistantView: View {
         .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
             vm.activateAssistant()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .shouldEndAssistant)) { _ in
+            vm.dismissAssistant()
+        }
         .onReceive(vm.$shouldDismiss) { shouldDismiss in
             if shouldDismiss { dismiss() }
         }
