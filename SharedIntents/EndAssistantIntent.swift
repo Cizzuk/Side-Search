@@ -16,7 +16,6 @@ struct EndAssistantIntent: AppIntent {
     @MainActor
     func perform() async throws -> some IntentResult {
         NotificationCenter.default.post(name: .shouldEndAssistant, object: nil)
-        
         return .result()
     }
 }
