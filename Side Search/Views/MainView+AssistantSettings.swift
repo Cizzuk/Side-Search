@@ -71,7 +71,7 @@ extension MainView {
                     Text("Background Settings")
                 } footer: {
                     if userSettings.continueInBackground {
-                        Text("By keeping the microphone on, you can have the assistant standby in the background. While in standby, you can use the Side Button or Action Button to resume the assistant without opening the app.")
+                        Text("By keeping the microphone on, you can keep the assistant on standby in the background. While in standby, you can use the Side Button or Action Button to resume the assistant without opening the app.")
                     }
                 }
             }

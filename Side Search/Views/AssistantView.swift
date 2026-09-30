@@ -156,7 +156,7 @@ struct AssistantView: View {
                 }
                 
                 if vm.chat.assistantType.DescriptionProviderType.assistantIsAI {
-                    Text("This assistant is AI and can make mistakes.")
+                    Text("This assistant is an AI and can make mistakes.")
                 }
             }
             .font(.footnote)

@@ -214,7 +214,7 @@
         }
       }
     },
-    "By keeping the microphone on, you can have the assistant standby in the background. While in standby, you can use the Side Button or Action Button to resume the assistant without opening the app." : {
+    "By keeping the microphone on, you can keep the assistant on standby in the background. While in standby, you can use the Side Button or Action Button to resume the assistant without opening the app." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -1643,7 +1643,7 @@
         }
       }
     },
-    "This assistant is AI and can make mistakes." : {
+    "This assistant is an AI and can make mistakes." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
