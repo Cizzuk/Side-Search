@@ -93,7 +93,7 @@ class ClaudeAPIAssistantService: BaseAssistantService {
                 message = AssistantMessage(from: .system, content: error.localizedDescription)
             }
             
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.addMessage(message)
                 self.responseIsPreparing = false
                 self.resumeRecognize()

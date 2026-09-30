@@ -11,12 +11,5 @@ let GroupUserDefaults = UserDefaults(suiteName: "group.net.cizzuk.sidesearch")!
 
 extension Notification.Name {
     static let assistantDidActivate = Notification.Name("assistantDidActivate")
-}
-
-enum CFNotificationFlags {
-    static let shouldEndAssistant = "CFNotification.shouldEndAssistant"
-}
-
-extension CFNotificationName {
-    static let shouldEndAssistant = CFNotificationName("net.cizzuk.sidesearch.CFNotification.shouldEndAssistant" as CFString)
+    static let shouldEndAssistant = Notification.Name("shouldEndAssistant")
 }

@@ -72,7 +72,6 @@ class BaseAssistantService: ObservableObject {
     required init(chat: ChatHistorySupport.Chat) {
         self.chat = chat
         
-        setupNotificationObservers()
         setupSpeechRecognizerBindings()
         assistantInitialize()
         appFlags.isAssistantActive = true
@@ -86,49 +85,6 @@ class BaseAssistantService: ObservableObject {
         speechRecognizer?.onError = { [weak self] error in
             self?.onError?(error)
         }
-    }
-    
-    // MARK: - Notification Observers
-    
-    private static let endAssistantDarwinCallback: CFNotificationCallback = { _, observer, _, _, _ in
-        guard let observer else { return }
-        let instance = Unmanaged<BaseAssistantService>.fromOpaque(observer).takeUnretainedValue()
-        
-        // Check Flag
-        if GroupUserDefaults.bool(forKey: CFNotificationFlags.shouldEndAssistant) {
-            instance.dismissAssistant()
-            GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
-        }
-    }
-    
-    private final func setupNotificationObservers() {
-        // Observe Darwin Notification for ending assistant from Live Activity
-        GroupUserDefaults.set(false, forKey: CFNotificationFlags.shouldEndAssistant)
-        CFNotificationCenterAddObserver(
-            CFNotificationCenterGetDarwinNotifyCenter(),
-            Unmanaged.passUnretained(self).toOpaque(),
-            BaseAssistantService.endAssistantDarwinCallback,
-            CFNotificationName.shouldEndAssistant.rawValue,
-            nil,
-            .deliverImmediately
-        )
-        
-        // Observe App Termination
-        NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)
-            .sink { [weak self] _ in
-                self?.dismissAssistant()
-            }
-            .store(in: &cancellables)
-    }
-    
-    private final func removeNotificationObservers() {
-        // Remove All Darwin Notification Observers
-        CFNotificationCenterRemoveObserver(
-            CFNotificationCenterGetDarwinNotifyCenter(),
-            Unmanaged.passUnretained(self).toOpaque(),
-            nil,
-            nil
-        )
     }
     
     // MARK: - Variable Bindings
@@ -273,7 +229,6 @@ class BaseAssistantService: ObservableObject {
         isDismissed = true
         
         dismissView?()
-        removeNotificationObservers()
         stopRecording()
         saveChatHistory()
         speechRecognizer = nil

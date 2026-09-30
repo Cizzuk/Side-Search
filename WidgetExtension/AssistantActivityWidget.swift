@@ -21,7 +21,6 @@ struct AssistantActivityWidget: Widget {
                 .resizable()
                 .scaledToFit()
                 .frame(width: size, height: size)
-                .padding(.vertical, 1.5)
                 .foregroundStyle(.dropblue)
         }
     }
@@ -34,8 +33,8 @@ struct AssistantActivityWidget: Widget {
             Image(systemName: systemName)
                 .resizable()
                 .scaledToFit()
+                .aspectRatio(contentMode: .fit)
                 .frame(width: size, height: size)
-                .padding(.vertical, 2)
                 .foregroundStyle(.dropblue)
         }
     }
@@ -50,11 +49,11 @@ struct AssistantActivityWidget: Widget {
                     Text("Side Search")
                         .font(.headline)
                         .bold()
-                        .foregroundStyle(.dropblue)
+                        .foregroundStyle(.primary)
                 }
                 Text(description)
                     .font(.subheadline)
-                    .foregroundStyle(.dropblue.opacity(0.8))
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -65,9 +64,11 @@ struct AssistantActivityWidget: Widget {
                 Label("End Assistant", systemImage: "xmark")
                     .labelStyle(.iconOnly)
                     .font(.system(size: 30, weight: .bold))
-                    .padding(5)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
             }
-            .tint(.dropblue)
+            .buttonStyle(.plain)
+            .tint(.primary)
             .padding(5)
         }
     }
@@ -103,7 +104,7 @@ struct AssistantActivityWidget: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: AssistantActivityAttributes.self) { context in
             MainActivityView(context: context)
-                .activitySystemActionForegroundColor(.dropblue)
+                .activityBackgroundTint(.clear)
             
         } dynamicIsland: { context in
             let activeOpacity = context.state.state.isActive ? 1.0 : 0.75
@@ -119,6 +120,7 @@ struct AssistantActivityWidget: Widget {
                 }
                 DynamicIslandExpandedRegion(.center) {
                     DescriptionText(description: context.state.state.description)
+                        .padding(.leading, 5)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
@@ -126,18 +128,18 @@ struct AssistantActivityWidget: Widget {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             } compactLeading: {
-                IconImage()
-                    .padding(.leading, 1.5)
+                IconImage(size: 18)
+                    .padding(.horizontal, 1)
                     .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             } compactTrailing: {
-                StateImage(systemName: context.state.state.systemImage)
-                    .padding(.horizontal, context.state.state.imageHPadding)
+                StateImage(size: 18, systemName: context.state.state.systemImage)
+                    .padding(.vertical, 2)
                     .opacity(activeOpacity)
                     .accessibilityHidden(true)
             } minimal: {
-                StateImage(systemName: context.state.state.systemImage)
-                    .padding(.horizontal, context.state.state.imageHPadding)
+                StateImage(size: 18, systemName: context.state.state.systemImage)
+                    .padding(.vertical, 2)
                     .opacity(activeOpacity)
                     .accessibilityLabel(compactA11yLabel)
             }

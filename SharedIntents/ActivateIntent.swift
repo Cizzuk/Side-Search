@@ -16,11 +16,7 @@ struct ActivateIntent: AppIntent {
     
     @MainActor
     static func setShouldBackground(_ value: Bool) {
-        if value {
-            Self.supportedModes = .background
-        } else {
-            Self.supportedModes = .foreground
-        }
+        Self.supportedModes = value ? .background : .foreground
     }
     
     @MainActor
