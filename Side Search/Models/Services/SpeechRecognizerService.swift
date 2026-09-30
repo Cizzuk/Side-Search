@@ -106,21 +106,21 @@ class SpeechRecognizerService: ObservableObject {
     }
     
     deinit {
-        Task { [weak self] in
-            guard let self = self else { return }
-            await stopSilenceTimer()
-            
-            await recognitionRequest?.endAudio()
-            await recognitionTask?.cancel()
-            await MainActor.run {
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
-            }
-            
-            await stopAudioEngine()
-            await deactivateAudioSession()
-            NotificationCenter.default.removeObserver(self)
+        stopSilenceTimer()
+        recognitionRequest?.endAudio()
+        recognitionRequest = nil
+        recognitionTask?.cancel()
+        recognitionTask = nil
+        audioEngine.stop()
+        audioEngine.reset()
+        if isInputTapInstalled {
+            audioEngine.inputNode.removeTap(onBus: 0)
+            isInputTapInstalled = false
         }
+        if isAudioSessionActive {
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+        }
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Recording Controls
@@ -434,17 +434,13 @@ class SpeechRecognizerService: ObservableObject {
     private func deactivateAudioSession() async {
         guard isAudioSessionActive else { return }
         
-        Task { [weak self] in
-            guard let self = self else { return }
-            
-            do {
-                try await audioSession.deactivate(options: .notifyOthersOnDeactivation)
-                await MainActor.run {
-                    self.isAudioSessionActive = false
-                }
-            } catch {
-                print("Failed to deactivate audio session: \(error)")
+        do {
+            try await audioSession.deactivate(options: .notifyOthersOnDeactivation)
+            await MainActor.run {
+                self.isAudioSessionActive = false
             }
+        } catch {
+            print("Failed to deactivate audio session: \(error)")
         }
     }
 }
