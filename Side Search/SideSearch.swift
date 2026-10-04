@@ -1,5 +1,5 @@
 //
-//  Side_SearchApp.swift
+//  SideSearch.swift
 //  Side Search
 //
 //  Created by Cizzuk on 2025/12/24.
@@ -17,7 +17,7 @@ final class AppFlags: ObservableObject {
 }
 
 @main
-struct Side_SearchApp: App {
+struct SideSearch: App {
     init() {
         SettingsMigration.migrateChatHistory()
     }

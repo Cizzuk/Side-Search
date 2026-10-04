@@ -1,6 +1,6 @@
 //
 //  WidgetExtensionBundle.swift
-//  WidgetExtension
+//  Side Search Widget Extension
 //
 //  Created by Cizzuk on 2026/02/05.
 //
