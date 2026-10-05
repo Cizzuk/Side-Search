@@ -55,11 +55,11 @@ class MainViewModel: ObservableObject {
     func onChange(scenePhase: ScenePhase) {
         switch scenePhase {
         case .active:
-            Side_SearchApp.validateAppState()
+            SideSearch.validateAppState()
         case .inactive:
             break
         case .background:
-            Side_SearchApp.validateAppState()
+            SideSearch.validateAppState()
         @unknown default:
             break
         }

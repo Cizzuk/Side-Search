@@ -94,6 +94,9 @@ struct AssistantView: View {
         .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
             vm.activateAssistant()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .shouldEndAssistant)) { _ in
+            vm.dismissAssistant()
+        }
         .onReceive(vm.$shouldDismiss) { shouldDismiss in
             if shouldDismiss { dismiss() }
         }
@@ -153,7 +156,7 @@ struct AssistantView: View {
                 }
                 
                 if vm.chat.assistantType.DescriptionProviderType.assistantIsAI {
-                    Text("This assistant is AI and can make mistakes.")
+                    Text("This assistant is an AI and can make mistakes.")
                 }
             }
             .font(.footnote)

@@ -111,8 +111,15 @@ class SpeechRecognizerService: ObservableObject {
         recognitionRequest = nil
         recognitionTask?.cancel()
         recognitionTask = nil
-        stopAudioEngine()
-        deactivateAudioSession()
+        audioEngine.stop()
+        audioEngine.reset()
+        if isInputTapInstalled {
+            audioEngine.inputNode.removeTap(onBus: 0)
+            isInputTapInstalled = false
+        }
+        if isAudioSessionActive {
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+        }
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -125,36 +132,35 @@ class SpeechRecognizerService: ObservableObject {
             guard await checkMicrophoneAuthorization() else { return }
             guard !isRecording else { return }
             
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            Task.detached(priority: .userInitiated) { [weak self] in
                 guard let self = self else { return }
                 
-                stopRecognize()
-                
                 do {
-                    try configureAudioSession()
-                    try configureAudioEngine()
-                    try audioEngine.start()
+                    await stopRecognize()
+                    try await configureAudioSession()
+                    try await configureAudioEngine()
+                    try await audioEngine.start()
                     
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.isRecording = true
                         self.startRecognize()
                     }
                 } catch {
-                    stopRecording()
-                    onError?("Failed to start recording: \(error.localizedDescription)")
+                    await stopRecording()
+                    await onError?("Failed to start recording: \(error.localizedDescription)")
                 }
             }
         }
     }
     
     func stopRecording() {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        Task.detached(priority: .userInitiated) { [weak self] in
             guard let self = self else { return }
             
-            stopAudioEngine()
-            deactivateAudioSession()
+            await stopAudioEngine()
+            await deactivateAudioSession()
             
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.stopRecognize()
                 self.isRecording = false
                 self.micLevel = 0.0
@@ -265,8 +271,8 @@ class SpeechRecognizerService: ObservableObject {
             // Wait for user authorization
             let granted = await withCheckedContinuation { continuation in
                 AVAudioApplication.requestRecordPermission { granted in
-                    DispatchQueue.main.async {
-                        if !granted {
+                    if !granted {
+                        DispatchQueue.main.async {
                             UserSettings.shared.startWithMicMuted = true
                         }
                     }
@@ -296,11 +302,8 @@ class SpeechRecognizerService: ObservableObject {
     private func startSilenceTimer(timeout: Double) {
         stopSilenceTimer()
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            silenceTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { _ in
-                self.silenceTimerFired()
-            }
+        silenceTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { _ in
+            self.silenceTimerFired()
         }
     }
     
@@ -346,8 +349,12 @@ class SpeechRecognizerService: ObservableObject {
         }
     }
     
-    private func calcMicLevel(from buffer: AVAudioPCMBuffer) {
-        // Only calc in foreground
+    private func calcMicLevel(from buffer: AVAudioPCMBuffer) async {
+        guard !ProcessInfo.processInfo.isLowPowerModeEnabled else { return }
+        switch ProcessInfo.processInfo.thermalState {
+        case .serious, .critical: return
+        default: break
+        }
         guard !isInBackground && isRecognizing else { return }
         
         guard let channelData = buffer.floatChannelData?[0] else { return }
@@ -357,12 +364,12 @@ class SpeechRecognizerService: ObservableObject {
         let minDb: Float = -80.0
         let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
         
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.micLevel = normalizedPower
         }
     }
     
-    private func configureAudioSession() throws {
+    private func configureAudioSession() async throws {
         var options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetoothA2DP]
         
         if userSettings.allowBluetoothMic {
@@ -377,11 +384,11 @@ class SpeechRecognizerService: ObservableObject {
         
         try audioSession.setCategory(.playAndRecord, options: options)
         try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-        try audioSession.setActive(true)
+        try await audioSession.activate()
         isAudioSessionActive = true
     }
     
-    private func configureAudioEngine() throws {
+    private func configureAudioEngine() async throws {
         guard isMicrophoneAvailable() else {
             throw RecognizerError.microphoneUnavailable
         }
@@ -407,14 +414,14 @@ class SpeechRecognizerService: ObservableObject {
         ) { [weak self] buffer, _ in
             guard let self = self else { return }
             recognitionRequest?.append(buffer)
-            calcMicLevel(from: buffer)
+            Task { await self.calcMicLevel(from: buffer) }
         }
         
         isInputTapInstalled = true
         audioEngine.prepare()
     }
     
-    private func stopAudioEngine() {
+    private func stopAudioEngine() async {
         audioEngine.stop()
         audioEngine.reset()
         
@@ -424,20 +431,16 @@ class SpeechRecognizerService: ObservableObject {
         }
     }
     
-    private func deactivateAudioSession() {
+    private func deactivateAudioSession() async {
         guard isAudioSessionActive else { return }
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            
-            do {
-                try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-                DispatchQueue.main.async {
-                    self.isAudioSessionActive = false
-                }
-            } catch {
-                print("Failed to deactivate audio session: \(error)")
+        do {
+            try await audioSession.deactivate(options: .notifyOthersOnDeactivation)
+            await MainActor.run {
+                self.isAudioSessionActive = false
             }
+        } catch {
+            print("Failed to deactivate audio session: \(error)")
         }
     }
 }

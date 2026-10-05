@@ -1,0 +1,112 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "Assistant is Off" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントオフ"
+          }
+        }
+      }
+    },
+    "Close Curtain" : {
+      "comment" : "TemporaryScreenCurtain",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カーテンを閉じる"
+          }
+        }
+      }
+    },
+    "End Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを終了"
+          }
+        }
+      }
+    },
+    "End the Side Search assistant if it's active." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Searchのアシスタントを使用中の場合、終了します。"
+          }
+        }
+      }
+    },
+    "Listening..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "聞いています…"
+          }
+        }
+      }
+    },
+    "Recognition Paused" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音声認識停止中"
+          }
+        }
+      }
+    },
+    "Side Search" : {
+      "shouldTranslate" : false
+    },
+    "Start Assistant" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを開始"
+          }
+        }
+      }
+    },
+    "Start the Side Search assistant." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Side Searchのアシスタントを開始します。"
+          }
+        }
+      }
+    },
+    "Waiting for Assistant..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アシスタントを待機中…"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

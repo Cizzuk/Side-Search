@@ -49,19 +49,6 @@ nonisolated struct AssistantActivityAttributes: ActivityAttributes {
                 return "microphone.badge.xmark"
             }
         }
-        
-        var imageHPadding: CGFloat {
-            switch self {
-            case .listening:
-                return 3
-            case .waitingForResponse:
-                return 0
-            case .pausingRecognition:
-                return 1
-            case .off:
-                return 0
-            }
-        }
     }
     
     struct ContentState: Codable, Hashable {
@@ -121,17 +108,10 @@ class AssistantActivityManager {
     static func endAll() {
         let activities = Activity<AssistantActivityAttributes>.activities
         
-        let contentState = AssistantActivityAttributes.ContentState()
-        
-        let content = ActivityContent(
-            state: contentState,
-            staleDate: nil
-        )
-        
         let semaphore = DispatchSemaphore(value: 0)
         Task.detached(priority: .userInitiated) {
             for activity in activities {
-                await activity.end(content, dismissalPolicy: .immediate)
+                await activity.end(nil, dismissalPolicy: .immediate)
             }
             semaphore.signal()
         }
