@@ -97,6 +97,17 @@ class SideBridgeAssistantService: BaseAssistantService {
                 responseHandler(sbResponse: response)
             } catch { } // Ignore errors for initial request
         }
+        
+        #if targetEnvironment(simulator)
+        // Demo message
+        let isJapanese = Locale.current.language.languageCode?.identifier == "ja"
+        let userContent = isJapanese ? "東京の今日の天気は？" : "What's the weather like in Tokyo today?"
+        let userMessage = AssistantMessage(from: .user, content: userContent)
+        addMessage(userMessage)
+        let assistantContent = isJapanese ? "今日の東京の天気は、朝は快晴ですが夕方から夜にかけて雷を伴う激しい雨が予想されています。降水確率は80%です。\n\n予想最高気温は21°Cから24°C、最低気温は15°Cから18°Cです。\n\nお出かけの際は傘をお持ちになることをおすすめします。" : "Today's weather in Tokyo is clear in the morning, but heavy rain with thunderstorms is expected from evening into the night. The chance of precipitation is 80%.\n\nThe expected maximum temperature is 21°C to 24°C, and the minimum temperature is 15°C to 18°C.\n\nI recommend taking an umbrella with you if you go out."
+        let assistantMessage = AssistantMessage(from: .assistant, content: assistantContent)
+        addMessage(assistantMessage)
+        #endif
     }
     
     override func processInput() {
