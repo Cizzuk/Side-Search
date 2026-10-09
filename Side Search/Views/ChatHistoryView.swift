@@ -48,8 +48,8 @@ struct ChatHistoryView: View {
             .navigationTitle("Chat History")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { showClearAllHistoryAlert = true }) {
+                ToolbarItem(placement: .destructiveAction) {
+                    Button(role: .destructive, action: { showClearAllHistoryAlert = true }) {
                         Label("Clear All", systemImage: "minus.circle")
                     }
                     .tint(.red)
@@ -57,7 +57,7 @@ struct ChatHistoryView: View {
                         "Clear All Chat History",
                         isPresented: $showClearAllHistoryAlert
                     ) {
-                        Button("Cancel", role: .cancel) {}
+                        Button(role: .cancel) {}
                         Button("Clear", role: .destructive) {
                             vm.clearAll()
                         }

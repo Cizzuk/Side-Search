@@ -45,9 +45,7 @@ struct SearchEnginePresetsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark") {
-                        dismiss()
-                    }
+                    Button(role: .cancel, action: { dismiss() })
                 }
             }
         }
