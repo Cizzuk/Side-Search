@@ -6,7 +6,7 @@
 
 **[App Storeからダウンロード](https://apps.apple.com/app/side-search/id6756973793)**
 
-**[AltStore PAL ソース](https://i.cizzuk.net/altstore/)**
+**[AltStore PAL ソース](https://cizzuk.net/altstore/)**
 
 ## 機能
 
