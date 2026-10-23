@@ -42,7 +42,7 @@ class SpeechRecognizerService: ObservableObject {
         return SFSpeechRecognizer()
     }
     
-    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    nonisolated(unsafe) private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     
     // Silence Detection Settings
@@ -407,14 +407,15 @@ class SpeechRecognizerService: ObservableObject {
             throw RecognizerError.microphoneUnavailable
         }
         
-        inputNode.installTap(
+        try inputNode.installAudioTap(
             onBus: 0,
             bufferSize: 1024,
             format: format
         ) { [weak self] buffer, _ in
-            guard let self = self else { return }
-            recognitionRequest?.append(buffer)
-            Task { await self.calcMicLevel(from: buffer) }
+            guard let self else { return }
+            let pcmBuffer = AVAudioPCMBuffer(copying: buffer)
+            self.recognitionRequest?.append(pcmBuffer)
+            Task { await self.calcMicLevel(from: pcmBuffer) }
         }
         
         isInputTapInstalled = true
