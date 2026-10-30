@@ -11,96 +11,98 @@ import UIKit
 
 class AssistantViewModel: ObservableObject {
     private let userSettings = UserSettings.shared
-    
+
     private let service: BaseAssistantService
     @Published var chat: ChatHistorySupport.Chat
-    
+
     // Input Field
     @Published var inputText = ""
-    @Published var shouldFocusInput = false // Toggle to notify
-    @Published var shouldUnfocusInput = false // Toggle to notify
-    
+    @Published var shouldFocusInput = false  // Toggle to notify
+    @Published var shouldUnfocusInput = false  // Toggle to notify
+
     // View State
     @Published var shouldDismiss = false
     var isAssistantAvailable: Bool {
         service.checkAvailability(shouldShowError: false)
     }
-    
+
     // Assistant State
     @Published var isEnded = false
     @Published var isRecording = false
     @Published var isRecognizing = false
     @Published var responseIsPreparing = false
-    
+
     // Web View
     @Published var safariViewURL: URL?
     @Published var showSafariView = false
-    
+
     // Error Alert
     @Published var errorMessage: LocalizedStringResource = ""
     @Published var showError = false
-    
+
     @Published var micLevel: Float = 0.0
-    
+
     private var cancellables = Set<AnyCancellable>()
-    
+
     // MARK: - Initialization
-    
+
     init(chat: ChatHistorySupport.Chat? = nil) {
-        let chat = chat ?? ChatHistorySupport.Chat(
-            id: UUID(),
-            date: Date(),
-            assistantType: UserSettings.shared.currentAssistant,
-            messages: []
-        )
-        
+        let chat =
+            chat
+            ?? ChatHistorySupport.Chat(
+                id: UUID(),
+                date: Date(),
+                assistantType: UserSettings.shared.currentAssistant,
+                messages: []
+            )
+
         self.service = chat.assistantType.AssistantServiceType.init(chat: chat)
         self.chat = chat
-        
+
         setupBindings()
     }
-    
+
     private func setupBindings() {
         service.dismissView = { [weak self] in
             DispatchQueue.main.async {
                 self?.shouldDismiss = true
             }
         }
-        
+
         service.openURL = { [weak self] url in
             DispatchQueue.main.async {
                 self?.openURL(url)
             }
         }
-        
+
         service.onError = { [weak self] message in
             DispatchQueue.main.async {
                 self?.errorMessage = message
                 self?.showError = true
             }
         }
-        
+
         service.$chat
             .receive(on: DispatchQueue.main)
             .sink { [weak self] chat in
                 self?.chat = chat
             }
             .store(in: &cancellables)
-        
+
         service.$inputText
             .receive(on: DispatchQueue.main)
             .sink { [weak self] inputText in
                 self?.inputText = inputText
             }
             .store(in: &cancellables)
-        
+
         service.$isEnded
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isEnded in
                 self?.isEnded = isEnded
             }
             .store(in: &cancellables)
-        
+
         service.$isRecording
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isRecording in
@@ -108,21 +110,21 @@ class AssistantViewModel: ObservableObject {
                 if isRecording { self?.shouldUnfocusInput.toggle() }
             }
             .store(in: &cancellables)
-        
+
         service.$isRecognizing
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isRecognizing in
                 self?.isRecognizing = isRecognizing
             }
             .store(in: &cancellables)
-        
+
         service.$responseIsPreparing
             .receive(on: DispatchQueue.main)
             .sink { [weak self] responseIsPreparing in
                 self?.responseIsPreparing = responseIsPreparing
             }
             .store(in: &cancellables)
-        
+
         service.$micLevel
             .receive(on: DispatchQueue.main)
             .sink { [weak self] micLevel in
@@ -130,49 +132,49 @@ class AssistantViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     // MARK: - Actions
-    
+
     func scenePhaseUpdate(_ scenePhase: ScenePhase) {
         service.scenePhaseUpdate(scenePhase)
     }
-    
+
     func confirmInput() {
         service.inputText = inputText
         service.confirmInput()
     }
-    
+
     func activateAssistant() {
         service.inputText = inputText
         service.activateAssistant()
         showSafariView = false
-        
+
         // Focus input if starting with mic muted
         if !isRecording && userSettings.startWithMicMuted {
             shouldFocusInput.toggle()
         }
     }
-    
+
     func dismissAssistant() {
         service.dismissAssistant()
     }
-    
+
     func startRecording() {
         service.startRecording()
     }
-    
+
     func stopRecording() {
         service.stopRecording()
     }
-    
+
     func pauseRecognize() {
         service.pauseRecognize()
     }
-    
+
     func resumeRecognize() {
         service.resumeRecognize()
     }
-    
+
     func toggleRecording() {
         if isRecording {
             service.stopRecording()
@@ -180,12 +182,12 @@ class AssistantViewModel: ObservableObject {
             service.startRecording()
         }
     }
-    
+
     func openURL(_ url: URL, option: UserSettings.URLOpeningOption? = nil) {
         if handleMagicLink(url) { return }
-        
+
         let openingOption = option ?? userSettings.openURLsIn
-        
+
         switch openingOption {
         case .inAppBrowser:
             if SafariView.checkAvailability(at: url) {
@@ -198,25 +200,25 @@ class AssistantViewModel: ObservableObject {
             UIApplication.shared.open(url)
         }
     }
-    
+
     private func handleMagicLink(_ url: URL) -> Bool {
         // Scheme & Host check
         guard url.scheme == "sidesearch",
-              url.host == "magiclink"
+            url.host == "magiclink"
         else { return false }
-        
+
         // Example: sidesearch://magiclink/?overrideInput=Hello%20World
-        
+
         // Get query items
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         let queryItems = components?.queryItems
-        
+
         // overrideInput
         if let overrideInput = queryItems?.first(where: { $0.name == "overrideInput" })?.value {
             service.stopRecording()
             inputText = overrideInput
         }
-        
+
         return true
     }
 }

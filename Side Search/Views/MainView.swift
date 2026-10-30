@@ -13,15 +13,15 @@ import TemporaryScreenCurtain
 struct MainView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.scenePhase) var scenePhase
-    
+
     @StateObject var vm = MainViewModel()
     @StateObject var userSettings = UserSettings.shared
-    
+
     @State var showClearInAppBrowserDataAlert = false
-    
+
     @Namespace var ns_assistantView
     let id_activateAssistantButton = "activateAssistantButton"
-    
+
     @ViewBuilder
     func AssistantListRow(type: AssistantType) -> some View {
         let isSelected = userSettings.currentAssistant == type
@@ -30,9 +30,9 @@ struct MainView: View {
                 Text(type.displayName)
                     .font(.title3)
                     .bold(isSelected)
-                
+
                 Spacer()
-                
+
                 if horizontalSizeClass == .regular && isSelected && vm.path == .assistantSettings {
                     type.DescriptionProviderType.assistantImage
                         .font(.title3)
@@ -42,7 +42,7 @@ struct MainView: View {
                         .foregroundStyle(type.DescriptionProviderType.assistantShapeStyle)
                 }
             }
-            
+
             Text(type.DescriptionProviderType.assistantDescription)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -51,7 +51,7 @@ struct MainView: View {
         .accessibilityAddTraits(isSelected ? .isSelected : [])
         .accessibilityHint(type.DescriptionProviderType.assistantDescription)
     }
-    
+
     var body: some View {
         NavigationSplitView(columnVisibility: .constant(.doubleColumn)) {
             List(selection: $vm.path) {
@@ -63,7 +63,7 @@ struct MainView: View {
                         Label("Help", systemImage: "questionmark.circle")
                     }
                 }
-                
+
                 Section("Assistants") {
                     ForEach(AssistantType.allCases, id: \.self) { type in
                         if userSettings.currentAssistant == type && vm.path == .assistantSettings {
@@ -82,7 +82,7 @@ struct MainView: View {
                     }
                 }
                 .navigationLinkIndicatorVisibility(.hidden)
-                
+
                 Section {
                     NavigationLink(value: MainViewModel.Route.about) {
                         Label("About", systemImage: "info.circle")
@@ -119,10 +119,11 @@ struct MainView: View {
         // MARK: - Sheets
         .fullScreenCover(isPresented: $vm.showAssistant) {
             NavigationStack { AssistantView() }
-                .navigationTransition(.zoom(
-                    sourceID: id_activateAssistantButton,
-                    in: ns_assistantView
-                ))
+                .navigationTransition(
+                    .zoom(
+                        sourceID: id_activateAssistantButton,
+                        in: ns_assistantView
+                    ))
         }
         .fullScreenCover(isPresented: $vm.showSafariView) {
             if let url = vm.safariViewURL {

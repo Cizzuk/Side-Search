@@ -8,98 +8,98 @@
 import UIKit
 
 class GeminiAPIAssistantService: BaseAssistantService {
-    
+
     // MARK: - Assistant Settings
-    
+
     private var assistantModel = GeminiAPIAssistantModel.load()
     private var apiKey: String = GeminiAPIAssistantModel.loadAPIKey()
-    
+
     // MARK: - Gemini API Types for JSON
     // contents -> role, parts -> text
     // tools -> google_search
-    
+
     private struct GeminiContent: Codable {
         let role: String
         let parts: [GeminiPart]
     }
-    
+
     private struct GeminiPart: Codable {
         let text: String
     }
-    
+
     // For config
     private struct GeminiTool: Codable {
         var google_search: GeminiGoogleSearch? = nil
     }
-    
-    private struct GeminiGoogleSearch: Codable { }
-    
+
+    private struct GeminiGoogleSearch: Codable {}
+
     private struct GeminiRequest: Codable {
         let contents: [GeminiContent]
         var tools: [GeminiTool] = []
     }
-    
+
     // For response parsing
     private struct GeminiResponse: Codable {
         let candidates: [GeminiCandidate]?
     }
-    
+
     private struct GeminiCandidate: Codable {
         let content: GeminiContent
         let groundingMetadata: GeminiGroundingMetadata?
     }
-    
+
     // For sources
     private struct GeminiGroundingMetadata: Codable {
         let groundingChunks: [GeminiGroundingChunk]?
     }
-    
+
     private struct GeminiGroundingChunk: Codable {
         let web: GeminiWebSource?
     }
-    
+
     private struct GeminiWebSource: Codable {
         let uri: String
         let title: String
     }
-    
+
     // MARK: - Chat History
-    
+
     private var chatHistory: [GeminiContent] = []
-    
+
     // MARK: - Helper Methods
-    
+
     @MainActor
     func generate(prompt: String) async {
         // Add user message to history
         addMessage(AssistantMessage(from: .user, content: prompt))
         chatHistory.append(GeminiContent(role: "user", parts: [GeminiPart(text: prompt)]))
-        
+
         guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(assistantModel.model):generateContent")
         else {
             addMessage(AssistantMessage(from: .system, content: "Invalid URL"))
             return
         }
-        
+
         // Prepare request
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         // Create request body
         var geminiRequest = GeminiRequest(contents: chatHistory)
         if assistantModel.webSearch {
             geminiRequest.tools.append(GeminiTool(google_search: GeminiGoogleSearch()))
         }
-        
+
         do {
             request.httpBody = try JSONEncoder().encode(geminiRequest)
         } catch {
             addMessage(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
-        
+
         // Send request
         let data: Data
         do {
@@ -108,7 +108,7 @@ class GeminiAPIAssistantService: BaseAssistantService {
             addMessage(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
-        
+
         // Parse response
         let response: GeminiResponse
         do {
@@ -117,14 +117,16 @@ class GeminiAPIAssistantService: BaseAssistantService {
             addMessage(AssistantMessage(from: .system, content: error.localizedDescription))
             return
         }
-        
+
         // Extract response text
         guard let candidate = response.candidates?.first,
-              let text = candidate.content.parts.first?.text else {
+            let text = candidate.content.parts.first?.text
+        else {
             // Error
             if let dict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-               let error = dict["error"] as? [String: Any],
-               let message = error["message"] as? String {
+                let error = dict["error"] as? [String: Any],
+                let message = error["message"] as? String
+            {
                 // Try to extract error message
                 addMessage(AssistantMessage(from: .system, content: message))
             } else if let errorString = String(data: data, encoding: .utf8) {
@@ -136,7 +138,7 @@ class GeminiAPIAssistantService: BaseAssistantService {
             }
             return
         }
-        
+
         // Extract sources
         var sources: [AssistantMessage.Source] = []
         if let groundingChunks = candidate.groundingMetadata?.groundingChunks {
@@ -148,13 +150,13 @@ class GeminiAPIAssistantService: BaseAssistantService {
                 }
             }
         }
-        
+
         // Add assistant message to history
         chatHistory.append(GeminiContent(role: "model", parts: [GeminiPart(text: text)]))
         let message = AssistantMessage(from: .assistant, content: text, sources: sources)
         addMessage(message)
     }
-    
+
     // MARK: - Override Methods
 
     override func assistantInitialize() {
@@ -173,26 +175,26 @@ class GeminiAPIAssistantService: BaseAssistantService {
             case .unknown:
                 return nil
             }
-            
+
             return GeminiContent(
                 role: role,
                 parts: [GeminiPart(text: message.content)]
             )
         }
     }
-    
+
     override func processInput() {
         // Prevent empty input
         guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         else { return }
-        
+
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
         pauseRecognize()
-        
+
         let userInput = inputText
         inputText = ""
-        
+
         Task {
             await generate(prompt: userInput)
             responseIsPreparing = false

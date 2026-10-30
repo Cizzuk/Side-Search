@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ChangeIconView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -25,7 +25,7 @@ struct ChangeIconView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
-    
+
     private func iconItem(iconName: String, iconID: String) -> some View {
         HStack {
             Image(iconID + "-pre")

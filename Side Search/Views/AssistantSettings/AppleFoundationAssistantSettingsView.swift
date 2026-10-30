@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AppleFoundationAssistantSettingsView: View {
     @State private var assistantModel = AppleFoundationAssistantModel.load()
-    
+
     var body: some View {
         Group {
             // Model Settings Section
@@ -22,7 +22,7 @@ struct AppleFoundationAssistantSettingsView: View {
                             .selectionDisabled(!type.isAvailable)
                     }
                 }
-                
+
                 if assistantModel.modelType.model.capabilities.contains(.reasoning) {
                     Picker("Reasoning Level", selection: $assistantModel.reasoningLevel) {
                         ForEach(AppleFoundationAssistantModel.ReasoningLevel.allCases) { level in
@@ -52,18 +52,20 @@ struct AppleFoundationAssistantSettingsView: View {
                     }
                 }
             }
-            
+
             // Custom Instructions Section
             Section {
                 TextEditor(text: $assistantModel.customInstructions)
                     .submitLabel(.return)
                     .frame(minHeight: 50, maxHeight: 200)
-            } header: { Text("Custom Instructions") }
+            } header: {
+                Text("Custom Instructions")
+            }
         }
         .onChange(of: assistantModel) { saveSettings() }
         .onAppear { saveSettings() }
     }
-    
+
     private func saveSettings() {
         assistantModel.save()
     }

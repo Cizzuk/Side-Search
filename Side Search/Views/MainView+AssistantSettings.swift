@@ -16,33 +16,38 @@ extension MainView {
         List {
             // MARK: Assistant Settings
             AnyView(userSettings.currentAssistant.makeSettingsView())
-            
+
             // MARK: - Shared Settings
-            
+
             // Speech Recognition Settings
             Section {
-                Picker("Language", selection: Binding(
-                    get: { userSettings.speechLocale },
-                    set: { newValue in
-                        userSettings.speechLocale = newValue
-                    }
-                )) {
+                Picker(
+                    "Language",
+                    selection: Binding(
+                        get: { userSettings.speechLocale },
+                        set: { newValue in
+                            userSettings.speechLocale = newValue
+                        }
+                    )
+                ) {
                     ForEach(SFSpeechRecognizer.supportedLocales().sorted(by: { $0.identifier < $1.identifier }), id: \.self) { locale in
                         Text("\(locale.localizedString(forIdentifier: locale.identifier) ?? locale.identifier)")
                             .tag(locale)
                     }
                 }
-                
+
                 Toggle("Manually Confirm", isOn: $userSettings.manuallyConfirmSpeech)
                     .tint(.accent)
-                
+
                 Toggle("Start with Mic Muted", isOn: $userSettings.startWithMicMuted)
                     .tint(.accent)
-                
+
                 Toggle("Use Bluetooth Microphones", isOn: $userSettings.allowBluetoothMic)
                     .tint(.accent)
-            } header: { Text("Speech Settings") }
-            
+            } header: {
+                Text("Speech Settings")
+            }
+
             // URL Settings
             Section {
                 Picker("Open URLs in", selection: $userSettings.openURLsIn) {
@@ -56,13 +61,13 @@ extension MainView {
                 Text("If you select Default App, the app associated with the URL or your default browser will open.")
                     .padding(.bottom, 10)
             }
-            
+
             // Background Settings
             if userSettings.currentAssistant.DescriptionProviderType.backgroundSupports {
                 Section {
                     Toggle("Continue in Background", isOn: $userSettings.continueInBackground)
                         .tint(.accent)
-                    
+
                     if userSettings.continueInBackground {
                         Toggle("Keep on Standby", isOn: $userSettings.standbyInBackground)
                             .tint(.accent)
@@ -75,7 +80,7 @@ extension MainView {
                     }
                 }
             }
-            
+
             Section {
                 Picker("Sound Effects", selection: $userSettings.soundEffectsMode) {
                     ForEach(SoundEffectService.Mode.allCases) { mode in
@@ -83,12 +88,12 @@ extension MainView {
                     }
                 }
             }
-            
+
             Section {
                 Toggle("Disable Markdown Rendering", isOn: $userSettings.disableMarkdownRendering)
                     .tint(.accent)
             }
-            
+
             Section {
                 Button(action: { showClearInAppBrowserDataAlert = true }) {
                     Label("Clear In-App Browser Data", systemImage: "xmark.circle")

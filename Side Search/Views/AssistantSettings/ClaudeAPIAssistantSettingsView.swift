@@ -5,17 +5,17 @@
 //  Created by Cizzuk on 2026/06/16.
 //
 
-import SwiftUI
 import ClaudeForFoundationModels
+import SwiftUI
 
 struct ClaudeAPIAssistantSettingsView: View {
     @State private var assistantModel = ClaudeAPIAssistantModel.load()
     @State private var apiKey: String = ClaudeAPIAssistantModel.loadAPIKey()
-    
+
     private var modelEffortLevels: Set<ClaudeModel.Effort> {
         assistantModel.modelType.claudeModel.capabilities.effortLevels
     }
-    
+
     var body: some View {
         Group {
             // API Key
@@ -29,7 +29,8 @@ struct ClaudeAPIAssistantSettingsView: View {
                     .onChange(of: apiKey) {
                         ClaudeAPIAssistantModel.saveAPIKey(key: apiKey)
                     }
-            } header: { Text("Claude API Key")
+            } header: {
+                Text("Claude API Key")
             } footer: {
                 VStack(alignment: .leading) {
                     Text("Please get and enter your API key from Claude Platform.")
@@ -39,7 +40,7 @@ struct ClaudeAPIAssistantSettingsView: View {
                 }
                 .padding(.bottom, 10)
             }
-            
+
             // Model Selection
             Section {
                 Picker("Model", selection: $assistantModel.modelType) {
@@ -47,7 +48,7 @@ struct ClaudeAPIAssistantSettingsView: View {
                         Text(type.id).tag(type)
                     }
                 }
-                
+
                 Picker("Effort", selection: $assistantModel.effortLevel) {
                     ForEach(ClaudeAPIAssistantModel.EffortLevel.allCases) { level in
                         Text(level.rawValue)
@@ -61,7 +62,8 @@ struct ClaudeAPIAssistantSettingsView: View {
                         assistantModel.effortLevel = .default
                     }
                 }
-            } header: { Text("Model Settings")
+            } header: {
+                Text("Model Settings")
             } footer: {
                 VStack(alignment: .leading) {
                     Link("Check pricing and available models...", destination: URL(string: "https://platform.claude.com/docs/en/about-claude/models/overview")!)
@@ -72,7 +74,7 @@ struct ClaudeAPIAssistantSettingsView: View {
                 }
                 .padding(.bottom, 10)
             }
-            
+
             // Tools Section
             Section {
                 HStack {
@@ -91,19 +93,23 @@ struct ClaudeAPIAssistantSettingsView: View {
                 }
                 Toggle("Allow Code Execution", isOn: $assistantModel.allowCodeExecution)
                     .tint(.accent)
-            } header: { Text("Tools") }
-            
+            } header: {
+                Text("Tools")
+            }
+
             // Custom Instructions Section
             Section {
                 TextEditor(text: $assistantModel.customInstructions)
                     .submitLabel(.return)
                     .frame(minHeight: 50, maxHeight: 200)
-            } header: { Text("Custom Instructions") }
+            } header: {
+                Text("Custom Instructions")
+            }
         }
         .onChange(of: assistantModel) { saveSettings() }
         .onAppear { saveSettings() }
     }
-    
+
     private func saveSettings() {
         assistantModel.save()
     }

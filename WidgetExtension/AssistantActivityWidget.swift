@@ -12,7 +12,7 @@ import WidgetKit
 
 struct AssistantActivityWidget: Widget {
     static let kind = "net.cizzuk.sidesearch.WidgetExtension.AssistantActivityWidget"
-    
+
     struct IconImage: View {
         var size: CGFloat? = nil
 
@@ -24,7 +24,7 @@ struct AssistantActivityWidget: Widget {
                 .foregroundStyle(.dropblue)
         }
     }
-    
+
     struct StateImage: View {
         var size: CGFloat? = nil
         var systemName: String
@@ -38,11 +38,11 @@ struct AssistantActivityWidget: Widget {
                 .foregroundStyle(.dropblue)
         }
     }
-    
+
     struct DescriptionText: View {
         var description: LocalizedStringResource
         var small: Bool = false
-        
+
         var body: some View {
             VStack(alignment: .leading) {
                 if !small {
@@ -57,7 +57,7 @@ struct AssistantActivityWidget: Widget {
             }
         }
     }
-    
+
     struct EndAssistantButton: View {
         var body: some View {
             Button(intent: EndAssistantIntent()) {
@@ -72,11 +72,11 @@ struct AssistantActivityWidget: Widget {
             .padding(5)
         }
     }
-    
+
     struct MainActivityView: View {
         @Environment(\.activityFamily) var activityFamily
         var context: ActivityViewContext<AssistantActivityAttributes>
-        
+
         var body: some View {
             switch activityFamily {
             case .small:
@@ -100,16 +100,16 @@ struct AssistantActivityWidget: Widget {
             }
         }
     }
-    
+
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: AssistantActivityAttributes.self) { context in
             MainActivityView(context: context)
                 .activityBackgroundTint(.clear)
-            
+
         } dynamicIsland: { context in
             let activeOpacity = context.state.state.isActive ? 1.0 : 0.75
             let compactA11yLabel: LocalizedStringResource = "\(context.state.state.description), \("Side Search")"
-            
+
             return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     IconImage(size: 55)

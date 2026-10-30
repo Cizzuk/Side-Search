@@ -9,11 +9,11 @@ import FoundationModels
 import UIKit
 
 class AppleFoundationAssistantService: BaseAssistantService {
-    
+
     // MARK: - Assistant Settings
-    
+
     private var assistantModel = AppleFoundationAssistantModel.load()
-    
+
     lazy private var session: LanguageModelSession = {
         if assistantModel.customInstructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return LanguageModelSession(model: assistantModel.modelType.model)
@@ -24,15 +24,16 @@ class AppleFoundationAssistantService: BaseAssistantService {
             )
         }
     }()
-    
+
     // MARK: - Helper Methods
-    
+
     @MainActor
     func generate(prompt: String) async throws -> String {
         let response: LanguageModelSession.Response<String>
-        
+
         if let reasoningLevel = assistantModel.reasoningLevel.reasoningLevel,
-           assistantModel.modelType.model.capabilities.contains(.reasoning) {
+            assistantModel.modelType.model.capabilities.contains(.reasoning)
+        {
             response = try await session.respond(
                 to: prompt,
                 contextOptions: ContextOptions(reasoningLevel: reasoningLevel)
@@ -40,19 +41,19 @@ class AppleFoundationAssistantService: BaseAssistantService {
         } else {
             response = try await session.respond(to: prompt)
         }
-        
+
         return response.content
     }
-    
+
     // MARK: - Override Methods
-    
+
     override func assistantInitialize() {
         guard !chat.messages.isEmpty else { return }
-        
+
         // Restore chat history
         let entries: some Sequence<Transcript.Entry> = chat.messages.compactMap { message in
             let textSegment = Transcript.TextSegment(content: message.content)
-            
+
             switch message.from {
             case .user:
                 let prompt = Transcript.Prompt(segments: [.text(textSegment)])
@@ -66,32 +67,32 @@ class AppleFoundationAssistantService: BaseAssistantService {
                 return nil
             }
         }
-        
+
         session = LanguageModelSession(
             model: assistantModel.modelType.model,
             transcript: Transcript(entries: entries)
         )
     }
-    
+
     override func processInput() {
         // Prevent empty input
         guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         else { return }
-        
+
         guard !responseIsPreparing else { return }
         responseIsPreparing = true
         pauseRecognize()
-        
+
         // Add user message to history
         let userInput = inputText
         inputText = ""
         let userMessage = AssistantMessage(from: .user, content: userInput)
         addMessage(userMessage)
-        
+
         // Generate response
         Task { [weak self] in
             guard let self = self else { return }
-            
+
             let message: AssistantMessage
             do {
                 let response = try await generate(prompt: userInput)
@@ -99,7 +100,7 @@ class AppleFoundationAssistantService: BaseAssistantService {
             } catch {
                 message = AssistantMessage(from: .system, content: error.localizedDescription)
             }
-            
+
             await MainActor.run {
                 self.addMessage(message)
                 self.responseIsPreparing = false

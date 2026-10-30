@@ -9,9 +9,9 @@ import SwiftUI
 
 struct URLBasedAssistantSettingsView: View {
     @State private var assistantModel = URLBasedAssistantModel.load()
-    
+
     @State private var showPresets = false
-    
+
     var body: some View {
         Group {
             // URL Section
@@ -27,7 +27,7 @@ struct URLBasedAssistantSettingsView: View {
             } footer: {
                 Text("By setting the query part to \"%s\", you can use Side Search's speech recognition.")
             }
-            
+
             Section {
                 Button(action: { showPresets = true }) {
                     Label("Search URL Presets", systemImage: "sparkle.magnifyingglass")

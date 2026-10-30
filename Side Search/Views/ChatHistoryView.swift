@@ -10,9 +10,9 @@ import SwiftUI
 struct ChatHistoryView: View {
     @StateObject var vm = ChatHistoryViewModel()
     @StateObject private var userSettings = UserSettings.shared
-    
+
     @State private var showClearAllHistoryAlert = false
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -26,7 +26,8 @@ struct ChatHistoryView: View {
                 } else {
                     if vm.searchResults.isEmpty {
                         // No search results
-                        Section {} footer: {
+                        Section {
+                        } footer: {
                             VStack {
                                 Label("No Results", systemImage: "magnifyingglass")
                                     .frame(maxWidth: .infinity, alignment: .center)
@@ -67,18 +68,18 @@ struct ChatHistoryView: View {
                 }
             }
             // MARK: - Events
-            .onAppear() {
+            .onAppear {
                 vm.loadChats()
             }
         }
     }
-    
+
     // MARK: - Chat Link List
-    
+
     struct ChatLinkList: View {
         @ObservedObject var vm: ChatHistoryViewModel
         var chats: [ChatHistorySupport.Chat]
-        
+
         var body: some View {
             ForEach(chats) { chat in
                 NavigationLink(destination: AssistantView(chat: chat, autoActivate: false, useNavigationBackButton: true)) {

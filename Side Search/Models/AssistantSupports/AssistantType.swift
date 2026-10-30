@@ -14,27 +14,27 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
     case claudeAPI
     case geminiAPI
     case sideBridge
-    
+
     static var `default`: AssistantType {
         return .urlBased
     }
-    
+
     static var typeDisplayRepresentation: TypeDisplayRepresentation {
         TypeDisplayRepresentation(name: "Assistants")
     }
-    
-    static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
+
+    static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
         .urlBased: "URL Based Assistant",
         .appleFoundation: "Apple Foundation Models",
         .claudeAPI: "Claude API",
         .geminiAPI: "Google Gemini API",
-        .sideBridge: "Side Bridge"
+        .sideBridge: "Side Bridge",
     ]
-    
+
     var displayName: LocalizedStringResource {
         return Self.caseDisplayRepresentations[self]?.title ?? ""
     }
-    
+
     var DescriptionProviderType: any AssistantDescriptionProvider.Type {
         switch self {
         case .urlBased:
@@ -49,7 +49,7 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return SideBridgeAssistant.self
         }
     }
-    
+
     var ModelType: any AssistantModel.Type {
         switch self {
         case .urlBased:
@@ -64,7 +64,7 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return SideBridgeAssistantModel.self
         }
     }
-    
+
     var AssistantServiceType: BaseAssistantService.Type {
         switch self {
         case .urlBased:
@@ -79,7 +79,7 @@ enum AssistantType: String, CaseIterable, Codable, AppEnum {
             return SideBridgeAssistantService.self
         }
     }
-    
+
     func makeSettingsView() -> any View {
         switch self {
         case .urlBased:

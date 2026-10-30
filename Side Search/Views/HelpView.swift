@@ -9,13 +9,13 @@ import SwiftUI
 
 struct HelpView: View {
     @ObservedObject private var userSettings = UserSettings.shared
-    
+
     @State var unAuthorizationStatus: UNAuthorizationStatus?
-    
+
     private func updateUNAuthorizationStatus() async {
         unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
     }
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -32,8 +32,10 @@ struct HelpView: View {
                             Label("Open Settings", systemImage: "gear")
                         }
                     }
-                } header: { Label("Side Button Tip", systemImage: "button.vertical.right.press") }
-                
+                } header: {
+                    Label("Side Button Tip", systemImage: "button.vertical.right.press")
+                }
+
                 if userSettings.currentAssistant == .urlBased {
                     // MARK: - Search URL Tip
                     Section {
@@ -46,9 +48,11 @@ struct HelpView: View {
                         Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios")!) {
                             Label("Run a shortcut using a URL scheme", systemImage: "book")
                         }
-                    } header: { Label("Search URL Tip", systemImage: "magnifyingglass") }
+                    } header: {
+                        Label("Search URL Tip", systemImage: "magnifyingglass")
+                    }
                 }
-                
+
                 Section {
                     // 対応するアシスタントでは、音声認識中にアプリを閉じてもバックグラウンドで会話を続けることができます。
                     // 通知を許可すれば、アシスタントの返事を通知で確認することができます。
@@ -70,7 +74,8 @@ struct HelpView: View {
                             }
                         }
                     }
-                } header: { Label("Background Tip", systemImage: "arrow.clockwise")
+                } header: {
+                    Label("Background Tip", systemImage: "arrow.clockwise")
                 } footer: {
                     if unAuthorizationStatus == .authorized {
                         Text("Notifications allowed.")
@@ -80,7 +85,7 @@ struct HelpView: View {
                 .task {
                     unAuthorizationStatus = await UserNotificationSupport.authorizationStatus()
                 }
-                
+
                 // MARK: - Shortcut Tip
                 Section {
                     // ショートカットを使ってSide Searchのアシスタントを起動することができます。
@@ -90,14 +95,16 @@ struct HelpView: View {
                     Link(destination: URL(string: "https://support.apple.com/guide/shortcuts/create-a-new-personal-automation-apdfbdbd7123/ios")!) {
                         Label("Create a new personal automation in Shortcuts", systemImage: "book")
                     }
-                    Button() {
+                    Button {
                         if let shortcutsURL = URL(string: "shortcuts://") {
                             UIApplication.shared.open(shortcutsURL)
                         }
                     } label: {
                         Label("Open Shortcuts App", systemImage: "square.2.layers.3d")
                     }
-                } header: { Label("Shortcut Tip", systemImage: "square.2.layers.3d") }
+                } header: {
+                    Label("Shortcut Tip", systemImage: "square.2.layers.3d")
+                }
             }
             .navigationTitle("Help")
             .navigationBarTitleDisplayMode(.inline)

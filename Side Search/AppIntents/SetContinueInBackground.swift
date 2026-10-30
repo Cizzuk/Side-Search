@@ -10,17 +10,17 @@ import AppIntents
 struct SetContinueInBackground: AppIntent {
     static let title: LocalizedStringResource = "Set Continue in Background"
     static let description: LocalizedStringResource = "Sets the Side Search setting."
-    
+
     static let openAppWhenRun = false
     static let isDiscoverable = true
-    
+
     @Parameter(title: "Continue in Background", default: true)
     var value: Bool
-    
+
     static var parameterSummary: some ParameterSummary {
         Summary("Set Continue in Background to \(\.$value)")
     }
-    
+
     @MainActor
     func perform() async throws -> some IntentResult {
         UserSettings.shared.continueInBackground = value

@@ -11,17 +11,17 @@ struct AssistantView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
-    
+
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dismiss) var dismiss
     @FocusState private var isInputFocused: Bool
     @State private var isKeyboardVisible = false
-    
+
     @StateObject private var vm: AssistantViewModel
-    
+
     private let autoActivate: Bool
     private let useNavigationBackButton: Bool
-    
+
     init(
         chat: ChatHistorySupport.Chat? = nil,
         autoActivate: Bool = true,
@@ -31,13 +31,13 @@ struct AssistantView: View {
         self.autoActivate = autoActivate
         self.useNavigationBackButton = useNavigationBackButton
     }
-    
+
     func dismissView() {
         guard !isAssistiveAccessEnabled else { return }
         vm.dismissAssistant()
         dismiss()
     }
-    
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -79,7 +79,7 @@ struct AssistantView: View {
             }
         }
         .alert("Error", isPresented: $vm.showError) {
-            Button("OK") { }
+            Button("OK") {}
         } message: {
             Text(vm.errorMessage)
         }
@@ -88,7 +88,7 @@ struct AssistantView: View {
             vm.scenePhaseUpdate(scenePhase)
             if autoActivate { vm.activateAssistant() }
         }
-        .onDisappear() {
+        .onDisappear {
             vm.dismissAssistant()
         }
         .onReceive(NotificationCenter.default.publisher(for: .assistantDidActivate)) { _ in
@@ -112,10 +112,10 @@ struct AssistantView: View {
             AngularGradient(
                 gradient: vm.chat.assistantType.DescriptionProviderType.assistantGradient,
                 center: .center,
-                angle: .degrees(180*Double(vm.micLevel) * (reduceMotion ? 0 : 1))
+                angle: .degrees(180 * Double(vm.micLevel) * (reduceMotion ? 0 : 1))
             )
             .ignoresSafeArea()
-            .opacity((0.15 + Double(vm.micLevel)/4) * (colorSchemeContrast == .increased ? 0.5 : 1))
+            .opacity((0.15 + Double(vm.micLevel) / 4) * (colorSchemeContrast == .increased ? 0.5 : 1))
             .blur(radius: 30)
             .animation(.smooth, value: vm.micLevel)
         )
@@ -125,9 +125,9 @@ struct AssistantView: View {
             NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
         }
     }
-    
+
     // MARK: - Subviews
-    
+
     @ViewBuilder
     private var assistantScrollContent: some View {
         VStack(alignment: .leading, spacing: 45) {
@@ -137,7 +137,7 @@ struct AssistantView: View {
                     openURL: { url in vm.openURL(url) },
                 )
             }
-            
+
             if vm.responseIsPreparing {
                 HStack {
                     ProgressView()
@@ -147,14 +147,14 @@ struct AssistantView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            
+
             inputSection
-            
+
             Group {
                 if vm.isEnded {
                     Text("The assistant has ended the conversation.")
                 }
-                
+
                 if vm.chat.assistantType.DescriptionProviderType.assistantIsAI {
                     Text("This assistant is an AI and can make mistakes.")
                 }
@@ -163,11 +163,11 @@ struct AssistantView: View {
             .foregroundStyle(.secondary)
             .opacity(0.7)
             .frame(maxWidth: .infinity, alignment: .center)
-            
+
             Spacer(minLength: 50)
         }
     }
-    
+
     @ViewBuilder
     private var inputSection: some View {
         if vm.isAssistantAvailable {
@@ -175,9 +175,9 @@ struct AssistantView: View {
                 Text(AssistantMessage.From.user.displayName)
                     .font(.headline)
                     .foregroundStyle(.secondary)
-                
+
                 Spacer(minLength: 15)
-                
+
                 let assistantState: LocalizedStringResource = {
                     if vm.isRecognizing {
                         "Listening..."
@@ -188,29 +188,30 @@ struct AssistantView: View {
                     }
                 }()
                 TextField(assistantState, text: $vm.inputText, axis: .vertical)
-                .bold()
-                .submitLabel(.return)
-                .focused($isInputFocused)
-                .onSubmit { vm.confirmInput() }
-                .onChange(of: isInputFocused) {
-                    if isInputFocused { vm.stopRecording() }
-                }
-                .onChange(of: vm.shouldFocusInput) {
-                    Task { isInputFocused = true }
-                }
-                .onChange(of: vm.shouldUnfocusInput) {
-                    Task { isInputFocused = false }
-                }
-                
+                    .bold()
+                    .submitLabel(.return)
+                    .focused($isInputFocused)
+                    .onSubmit { vm.confirmInput() }
+                    .onChange(of: isInputFocused) {
+                        if isInputFocused { vm.stopRecording() }
+                    }
+                    .onChange(of: vm.shouldFocusInput) {
+                        Task { isInputFocused = true }
+                    }
+                    .onChange(of: vm.shouldUnfocusInput) {
+                        Task { isInputFocused = false }
+                    }
+
                 // Assistive Access
                 if isAssistiveAccessEnabled {
                     Spacer(minLength: 30)
                     Button(action: { vm.toggleRecording() }) {
-                        Label(vm.isRecording ? "Stop" : "Speak",
-                              systemImage: vm.isRecognizing ? "microphone.fill" : "microphone")
+                        Label(
+                            vm.isRecording ? "Stop" : "Speak",
+                            systemImage: vm.isRecognizing ? "microphone.fill" : "microphone")
                     }
                     .disabled(vm.responseIsPreparing)
-                    
+
                     Button(role: .confirm) {
                         vm.confirmInput()
                     } label: {
@@ -226,9 +227,9 @@ struct AssistantView: View {
             }
         }
     }
-    
+
     // MARK: - Toolbars
-    
+
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         if !isAssistiveAccessEnabled {
@@ -241,21 +242,25 @@ struct AssistantView: View {
                     }
                 }
             }
-            
+
             ToolbarItemGroup(placement: .primaryAction) {
                 if vm.isAssistantAvailable {
                     Button(action: { vm.toggleRecording() }) {
-                        Label(vm.isRecording ? "Stop Microphone" : "Start Speech Recognition",
-                              systemImage: vm.isRecognizing ? "microphone.fill" : "microphone")
+                        Label(
+                            vm.isRecording ? "Stop Microphone" : "Start Speech Recognition",
+                            systemImage: vm.isRecognizing ? "microphone.fill" : "microphone")
                     }
                     .tint(vm.isRecording ? .orange : .primary)
-                    
+
                     Button(role: .confirm) {
                         vm.confirmInput()
                     } label: {
-                        Label { Text("Confirm") }
-                        icon: { vm.chat.assistantType.DescriptionProviderType.assistantImage }
-                            .foregroundStyle(.white)
+                        Label {
+                            Text("Confirm")
+                        } icon: {
+                            vm.chat.assistantType.DescriptionProviderType.assistantImage
+                        }
+                        .foregroundStyle(.white)
                     }
                     .tint(.dropblue)
                     .buttonStyle(.glassProminent)
@@ -264,7 +269,7 @@ struct AssistantView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private var keyboardToolbar: some View {
         if isKeyboardVisible && !isAssistiveAccessEnabled {
@@ -278,7 +283,7 @@ struct AssistantView: View {
                         .frame(minWidth: 30, minHeight: 30)
                 }
                 .buttonStyle(.glass)
-                
+
                 Spacer()
                 Button(role: .confirm) {
                     vm.confirmInput()

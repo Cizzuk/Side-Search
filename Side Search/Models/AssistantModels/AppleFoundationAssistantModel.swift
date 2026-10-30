@@ -11,17 +11,17 @@ import MergeCodablePackage
 
 struct AppleFoundationAssistantModel: AssistantModel, MergeCodable {
     private static let userDefaultsKey = "appleFoundationAssistantSettings"
-    
+
     // Model Settings
     var customInstructions: String = ""
     var modelType: ModelType = .default
     var reasoningLevel: ReasoningLevel = .default
-    
+
     static func load() -> Self {
         guard let rawData = UserDefaults.standard.data(forKey: Self.userDefaultsKey) else { return Self() }
         return decode(from: rawData)
     }
-    
+
     func save() {
         if let data = encode() {
             UserDefaults.standard.set(data, forKey: Self.userDefaultsKey)
@@ -32,17 +32,17 @@ struct AppleFoundationAssistantModel: AssistantModel, MergeCodable {
 extension AppleFoundationAssistantModel {
     enum ModelType: String, CaseIterable, Identifiable, Codable {
         case system, pcc
-        
+
         static var `default` = Self.system
         var id: String { self.rawValue }
-        
+
         var displayName: LocalizedStringResource {
             switch self {
             case .system: return "On-Device Model"
             case .pcc: return "Private Cloud Compute"
             }
         }
-        
+
         var isAvailable: Bool {
             switch self {
             case .system:
@@ -51,7 +51,7 @@ extension AppleFoundationAssistantModel {
                 return PrivateCloudComputeLanguageModel().isAvailable
             }
         }
-        
+
         var model: any LanguageModel {
             switch self {
             case .system: return SystemLanguageModel()
@@ -59,13 +59,13 @@ extension AppleFoundationAssistantModel {
             }
         }
     }
-    
+
     enum ReasoningLevel: String, CaseIterable, Identifiable, Codable {
         case none, light, moderate, deep
-        
+
         static var `default` = Self.none
         var id: String { self.rawValue }
-        
+
         var displayName: LocalizedStringResource {
             switch self {
             case .none: return "None"
@@ -74,7 +74,7 @@ extension AppleFoundationAssistantModel {
             case .deep: return "Deep"
             }
         }
-        
+
         var reasoningLevel: ContextOptions.ReasoningLevel? {
             switch self {
             case .none: return nil

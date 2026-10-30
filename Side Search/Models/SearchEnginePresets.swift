@@ -13,7 +13,7 @@ class SearchEnginePresets {
         let name: LocalizedStringResource
         let url: String
     }
-    
+
     static var defaultSearchEngine: Preset {
         if GeoHelper.currentRegion == "CN" {
             return Preset(
@@ -27,7 +27,7 @@ class SearchEnginePresets {
             )
         }
     }
-    
+
     static var aiAssistants: [Preset] {
         var aiCSEs: [Preset] = []
         if GeoHelper.currentRegion != "CN" {
@@ -51,23 +51,24 @@ class SearchEnginePresets {
                 Preset(
                     name: "Gemini",
                     url: "https://gemini.google.com/app",
-                )
+                ),
             ])
         }
-        
+
         if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
-            aiCSEs.append(Preset(
-                name: "百度AI搜索",
-                url: "https://chat.baidu.com/search?query=%s",
-            ))
+            aiCSEs.append(
+                Preset(
+                    name: "百度AI搜索",
+                    url: "https://chat.baidu.com/search?query=%s",
+                ))
         }
-        
+
         return aiCSEs
     }
-    
+
     static var normalSearchEngines: [Preset] {
         var normalCSEs: [Preset] = []
-        
+
         let localizedYahoo: Preset
         if GeoHelper.preferredLanguages.first == "ja-JP" {
             localizedYahoo = Preset(
@@ -80,8 +81,8 @@ class SearchEnginePresets {
                 url: "https://search.yahoo.com/search?p=%s",
             )
         }
-        
-        normalCSEs.append(contentsOf:[
+
+        normalCSEs.append(contentsOf: [
             Preset(
                 name: "Google",
                 url: "https://www.google.com/search?q=%s&client=safari",
@@ -100,22 +101,24 @@ class SearchEnginePresets {
                 url: "https://www.ecosia.org/search?q=%s",
             ),
         ])
-        
+
         if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
-            normalCSEs.append(Preset(
-                name: "百度",
-                url: "https://www.baidu.com/s?wd=%s",
-            ))
+            normalCSEs.append(
+                Preset(
+                    name: "百度",
+                    url: "https://www.baidu.com/s?wd=%s",
+                ))
         }
-        
+
         if GeoHelper.currentRegion == "RU" || GeoHelper.containsLanguage("ru") {
-            normalCSEs.append(Preset(
-                name: "Яндекс",
-                url: "https://yandex.ru/search/?text=%s",
-            ))
+            normalCSEs.append(
+                Preset(
+                    name: "Яндекс",
+                    url: "https://yandex.ru/search/?text=%s",
+                ))
         }
-        
-        normalCSEs.append(contentsOf:[
+
+        normalCSEs.append(contentsOf: [
             Preset(
                 name: "Startpage",
                 url: "https://www.startpage.com/sp/search?query=%s",
@@ -129,7 +132,7 @@ class SearchEnginePresets {
                 url: "https://kagi.com/search?q=%s",
             ),
         ])
-        
+
         return normalCSEs
     }
 }
