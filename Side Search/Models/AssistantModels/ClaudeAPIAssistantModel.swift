@@ -81,6 +81,13 @@ extension ClaudeAPIAssistantModel {
     }
 
     enum ModelType: String, CaseIterable, Identifiable, Codable {
+        case haiku5_5 = "claude-haiku-5-5"
+        case sonnet5_5 = "claude-sonnet-5-5"
+        case opus5_5 = "claude-opus-5-5"
+        case fable5_1 = "claude-fable-5-1"
+        case fable5 = "claude-fable-5"
+        case opus5 = "claude-opus-5"
+        case sonnet5 = "claude-sonnet-5"
         case opus4_8 = "claude-opus-4-8"
         case opus4_7 = "claude-opus-4-7"
         case opus4_6 = "claude-opus-4-6"
@@ -92,6 +99,13 @@ extension ClaudeAPIAssistantModel {
 
         var claudeModel: ClaudeModel {
             switch self {
+            case .haiku5_5: return .haiku5_5
+            case .sonnet5_5: return .sonnet5_5
+            case .opus5_5: return .opus5_5
+            case .fable5_1: return .fable5_1
+            case .fable5: return .fable5
+            case .opus5: return .opus5
+            case .sonnet5: return .sonnet5
             case .opus4_8: return .opus4_8
             case .opus4_7: return .opus4_7
             case .opus4_6: return .opus4_6
