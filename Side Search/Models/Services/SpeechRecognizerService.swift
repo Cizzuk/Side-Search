@@ -412,7 +412,7 @@ class SpeechRecognizerService: ObservableObject {
         guard count > 0 else { return }
 
         let rms = sqrt(sum / Float(count))
-        let avgPower = 20 * log10(rms)
+        let avgPower = 20 * log10(max(rms, 1e-8))
         let minDb: Float = -80.0
         let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
 
