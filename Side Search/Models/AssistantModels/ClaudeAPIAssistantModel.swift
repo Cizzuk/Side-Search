@@ -95,7 +95,7 @@ extension ClaudeAPIAssistantModel {
         case haiku4_5 = "claude-haiku-4-5"
 
         var id: String { self.rawValue }
-        static var `default` = Self.haiku4_5
+        static var `default` = Self.opus5_5
 
         var claudeModel: ClaudeModel {
             switch self {
