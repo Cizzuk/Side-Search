@@ -43,7 +43,9 @@ class SpeechRecognizerService: ObservableObject {
     }
 
     nonisolated(unsafe) private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private let recognitionRequestLock = NSLock()
     private var recognitionTask: SFSpeechRecognitionTask?
+    nonisolated(unsafe) private var lastMicLevelUpdate: CFTimeInterval = 0
 
     // Silence Detection Settings
     private var silenceTimer: Timer?
@@ -107,16 +109,13 @@ class SpeechRecognizerService: ObservableObject {
 
     deinit {
         stopSilenceTimer()
+        removeInputTap()
         recognitionRequest?.endAudio()
         recognitionRequest = nil
         recognitionTask?.cancel()
         recognitionTask = nil
         audioEngine.stop()
         audioEngine.reset()
-        if isInputTapInstalled {
-            audioEngine.inputNode.removeTap(onBus: 0)
-            isInputTapInstalled = false
-        }
         if isAudioSessionActive {
             try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
         }
@@ -172,11 +171,13 @@ class SpeechRecognizerService: ObservableObject {
 
     func stopRecognize() {
         stopSilenceTimer()
+        removeInputTap()
 
-        if let request = recognitionRequest {
-            request.endAudio()
-            recognitionRequest = nil
-        }
+        recognitionRequestLock.lock()
+        let request = recognitionRequest
+        recognitionRequest = nil
+        recognitionRequestLock.unlock()
+        request?.endAudio()
 
         if let task = recognitionTask {
             task.cancel()
@@ -205,15 +206,30 @@ class SpeechRecognizerService: ObservableObject {
             return
         }
 
-        DispatchQueue.main.async {
-            self.isRecognizing = true
-        }
-
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.requiresOnDeviceRecognition = true
         request.shouldReportPartialResults = true
         request.taskHint = .dictation
+
+        recognitionRequestLock.lock()
         recognitionRequest = request
+        recognitionRequestLock.unlock()
+
+        do {
+            try installInputTap()
+        } catch {
+            recognitionRequestLock.lock()
+            recognitionRequest = nil
+            recognitionRequestLock.unlock()
+            request.endAudio()
+            onError?("Failed to prepare speech recognition.")
+            stopRecording()
+            return
+        }
+
+        DispatchQueue.main.async {
+            self.isRecognizing = true
+        }
 
         startRecognitionTask(request: request, recognizer: recognizer)
         setFirstSilenceTimer()
@@ -349,22 +365,59 @@ class SpeechRecognizerService: ObservableObject {
         }
     }
 
-    private func calcMicLevel(from buffer: AVAudioPCMBuffer) async {
+    nonisolated private func handleAudioTap(_ buffer: AVReadOnlyAudioPCMBuffer) {
+        recognitionRequestLock.lock()
+        let request = recognitionRequest
+        recognitionRequestLock.unlock()
+        guard let request else { return }
+
+        let pcmBuffer = AVAudioPCMBuffer(copying: buffer)
+
+        recognitionRequestLock.lock()
+        let stillCurrent = recognitionRequest === request
+        if stillCurrent {
+            request.append(pcmBuffer)
+        }
+        recognitionRequestLock.unlock()
+        guard stillCurrent else { return }
+
+        updateMicLevelIfNeeded(from: pcmBuffer)
+    }
+
+    nonisolated private func updateMicLevelIfNeeded(from buffer: AVAudioPCMBuffer) {
+        let now = CACurrentMediaTime()
+        guard now - lastMicLevelUpdate >= 0.1 else { return }
+        lastMicLevelUpdate = now
+
         guard !ProcessInfo.processInfo.isLowPowerModeEnabled else { return }
         switch ProcessInfo.processInfo.thermalState {
         case .serious, .critical: return
         default: break
         }
-        guard !isInBackground && isRecognizing else { return }
 
         guard let channelData = buffer.floatChannelData?[0] else { return }
-        let channelDataValueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map { channelData[$0] }
-        let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
+        let frameCount = Int(buffer.frameLength)
+        guard frameCount > 0 else { return }
+
+        var sum: Float = 0
+        var count = 0
+        var index = 0
+        let step = max(buffer.stride, 1)
+        while index < frameCount {
+            let sample = channelData[index]
+            sum += sample * sample
+            count += 1
+            index += step
+        }
+        guard count > 0 else { return }
+
+        let rms = sqrt(sum / Float(count))
         let avgPower = 20 * log10(rms)
         let minDb: Float = -80.0
         let normalizedPower = max(0.0, (avgPower - minDb) / -minDb)
 
-        await MainActor.run {
+        Task { @MainActor [weak self] in
+            guard let self, !self.isInBackground, self.isRecognizing else { return }
             self.micLevel = normalizedPower
         }
     }
@@ -395,11 +448,17 @@ class SpeechRecognizerService: ObservableObject {
 
         audioEngine.stop()
         audioEngine.reset()
+        removeInputTap()
 
-        if isInputTapInstalled {
-            audioEngine.inputNode.removeTap(onBus: 0)
-            isInputTapInstalled = false
+        guard audioEngine.inputNode.inputFormat(forBus: 0).channelCount > 0 else {
+            throw RecognizerError.microphoneUnavailable
         }
+
+        audioEngine.prepare()
+    }
+
+    private func installInputTap() throws {
+        guard !isInputTapInstalled else { return }
 
         let inputNode = audioEngine.inputNode
         let format = inputNode.inputFormat(forBus: 0)
@@ -412,24 +471,22 @@ class SpeechRecognizerService: ObservableObject {
             bufferSize: 1024,
             format: format
         ) { [weak self] buffer, _ in
-            guard let self else { return }
-            let pcmBuffer = AVAudioPCMBuffer(copying: buffer)
-            self.recognitionRequest?.append(pcmBuffer)
-            Task { await self.calcMicLevel(from: pcmBuffer) }
+            self?.handleAudioTap(buffer)
         }
 
         isInputTapInstalled = true
-        audioEngine.prepare()
+    }
+
+    private func removeInputTap() {
+        guard isInputTapInstalled else { return }
+        audioEngine.inputNode.removeTap(onBus: 0)
+        isInputTapInstalled = false
     }
 
     private func stopAudioEngine() async {
+        removeInputTap()
         audioEngine.stop()
         audioEngine.reset()
-
-        if isInputTapInstalled {
-            audioEngine.inputNode.removeTap(onBus: 0)
-            isInputTapInstalled = false
-        }
     }
 
     private func deactivateAudioSession() async {
