@@ -17,8 +17,8 @@ class SearchEnginePresets {
     static var defaultSearchEngine: Preset {
         if GeoHelper.currentRegion == "CN" {
             return Preset(
-                name: "百度AI搜索",
-                url: "https://chat.baidu.com/search?query=%s",
+                name: "百度文心助手",
+                url: "https://wenxin.baidu.com/search?query=%s",
             )
         } else {
             return Preset(
@@ -41,16 +41,16 @@ class SearchEnginePresets {
                     url: "https://claude.ai/new?q=%s",
                 ),
                 Preset(
-                    name: "Copilot Search",
-                    url: "https://www.bing.com/copilotsearch?q=%s",
+                    name: "Duck.ai",
+                    url: "https://duck.ai/chat?home=1&prompt=1&q=%s",
                 ),
                 Preset(
                     name: "Google AI Mode",
                     url: "https://google.com/?q=%s&udm=50",
                 ),
                 Preset(
-                    name: "Gemini",
-                    url: "https://gemini.google.com/app",
+                    name: "Copilot Search",
+                    url: "https://www.bing.com/copilotsearch?q=%s",
                 ),
             ])
         }
@@ -58,9 +58,10 @@ class SearchEnginePresets {
         if GeoHelper.currentRegion == "CN" || GeoHelper.containsLanguage("zh-Hans") {
             aiCSEs.append(
                 Preset(
-                    name: "百度AI搜索",
-                    url: "https://chat.baidu.com/search?query=%s",
-                ))
+                    name: "百度文心助手",
+                    url: "https://wenxin.baidu.com/search?query=%s",
+                )
+            )
         }
 
         return aiCSEs
