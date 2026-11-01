@@ -41,8 +41,12 @@ extension URLBasedAssistantModel {
 
         // Handle query if provided
         if let searchQuery = query {
-            // Replace the placeholder with the query
-            urlString = urlString.replacingOccurrences(of: "%s", with: searchQuery)
+            var allowed = CharacterSet.urlQueryAllowed
+            allowed.remove(charactersIn: "&+?=")
+            guard let encoded = searchQuery.addingPercentEncoding(withAllowedCharacters: allowed) else {
+                return nil
+            }
+            urlString = urlString.replacingOccurrences(of: "%s", with: encoded)
         }
 
         // Create the URL
