@@ -29,7 +29,6 @@ class BaseAssistantService: ObservableObject {
 
     @Published var isRecording = false {
         didSet {
-            updateIdleTimerDisabled()
             updateActivateIntent()
             updateLiveActivityStatus()
         }
@@ -38,6 +37,7 @@ class BaseAssistantService: ObservableObject {
     @Published var isRecognizing = false {
         didSet {
             handleStartRecognitionFeedback()
+            updateIdleTimerDisabled()
             updateLiveActivityStatus()
         }
     }
