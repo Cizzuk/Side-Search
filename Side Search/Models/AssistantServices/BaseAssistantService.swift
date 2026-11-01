@@ -270,7 +270,7 @@ class BaseAssistantService: ObservableObject {
             !chat.messages.isEmpty
         else { return }
 
-        ChatHistorySupport.save(chat)
+        try? ChatHistorySupport.save(chat)
     }
 
     // MARK: - Speech Recognizer Actions

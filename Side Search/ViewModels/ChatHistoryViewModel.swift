@@ -24,12 +24,12 @@ class ChatHistoryViewModel: ObservableObject {
     }
 
     func delete(_ chat: UUID) {
-        ChatHistorySupport.delete(chat)
+        try? ChatHistorySupport.delete(chat)
         loadChats()
     }
 
     func clearAll() {
-        ChatHistorySupport.clearAll()
+        try? ChatHistorySupport.clearAll()
         loadChats()
     }
 

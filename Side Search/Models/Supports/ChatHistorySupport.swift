@@ -77,7 +77,7 @@ final class ChatHistorySupport {
         return records.compactMap { $0.toChat() }
     }
 
-    static func save(_ chat: Chat) {
+    static func save(_ chat: Chat) throws {
         guard let context = makeContext() else { return }
         let newRecord = ChatEntity(from: chat)
 
@@ -87,22 +87,22 @@ final class ChatHistorySupport {
         }
 
         context.insert(newRecord)
-        try? context.save()
+        try context.save()
     }
 
-    static func delete(_ chat: UUID) {
+    static func delete(_ chat: UUID) throws {
         guard let context = makeContext() else { return }
 
         if let record = getRecord(chat, in: context) {
             context.delete(record)
-            try? context.save()
+            try context.save()
         }
     }
 
-    static func clearAll() {
+    static func clearAll() throws {
         guard let context = makeContext() else { return }
 
         fetchRecords(in: context).forEach { context.delete($0) }
-        try? context.save()
+        try context.save()
     }
 }

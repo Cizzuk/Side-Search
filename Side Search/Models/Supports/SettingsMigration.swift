@@ -26,8 +26,12 @@ final class SettingsMigration {
         }
 
         // Migrate legacy chats to SwiftData
-        legacyChats.forEach { ChatHistorySupport.save($0) }
-        UserDefaults.standard.removeObject(forKey: legacyUserDefaultsKey)
+        do {
+            try legacyChats.forEach {
+                try ChatHistorySupport.save($0)
+            }
+            UserDefaults.standard.removeObject(forKey: legacyUserDefaultsKey)
+        } catch {}
     }
 
     static func migrateOpenURLsIn() -> UserSettings.URLOpeningOption? {
