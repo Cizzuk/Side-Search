@@ -8,22 +8,22 @@
 import UIKit
 
 class URLBasedAssistantService: BaseAssistantService {
-    
+
     // MARK: - Assistant Settings
-    
+
     private var assistantModel = URLBasedAssistantModel.load()
-    
+
     // MARK: - Override Methods
-    
+
     override func processInput() {
         // Stop recording before searching
         stopRecording()
-        
+
         // Add user message to history
         let userInput = inputText
         inputText = ""
         var userMessage = AssistantMessage(from: .user, content: userInput)
-        
+
         if let url = assistantModel.makeSearchURL(query: userInput) {
             self.openURL?(url)
             userMessage.sources.append(
@@ -33,7 +33,7 @@ class URLBasedAssistantService: BaseAssistantService {
             // Handle invalid URL error
             onError?("Invalid Search URL. Please check your settings.")
         }
-        
+
         addMessage(userMessage)
     }
 }

@@ -13,12 +13,12 @@ struct ActivateIntent: AppIntent {
     static let description: LocalizedStringResource = "Start the Side Search assistant."
     static let isDiscoverable = true
     static var supportedModes: IntentModes = .foreground
-    
+
     @MainActor
     static func setShouldBackground(_ value: Bool) {
         Self.supportedModes = value ? .background : .foreground
     }
-    
+
     @MainActor
     func perform() async throws -> some IntentResult {
         NotificationCenter.default.post(name: .assistantDidActivate, object: nil)

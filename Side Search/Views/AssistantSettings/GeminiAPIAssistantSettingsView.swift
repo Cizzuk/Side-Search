@@ -11,7 +11,7 @@ struct GeminiAPIAssistantSettingsView: View {
     @State private var assistantModel = GeminiAPIAssistantModel.load()
     @State private var apiKey: String = GeminiAPIAssistantModel.loadAPIKey()
     @State private var availableModels: [String] = GeminiAPIAssistantModel.availableModels
-    
+
     var body: some View {
         Group {
             // API Key
@@ -22,7 +22,8 @@ struct GeminiAPIAssistantSettingsView: View {
                     .textInputAutocapitalization(.never)
                     .environment(\.layoutDirection, .leftToRight)
                     .submitLabel(.done)
-            } header: { Text("Gemini API Key")
+            } header: {
+                Text("Gemini API Key")
             } footer: {
                 VStack(alignment: .leading) {
                     Text("Please get and enter your API key from Google AI Studio. You can also use a free tier API key.")
@@ -36,7 +37,7 @@ struct GeminiAPIAssistantSettingsView: View {
                 GeminiAPIAssistantModel.saveAPIKey(key: apiKey)
                 Task { await updateAvailableModels() }
             }
-            
+
             // Model Selection
             Section {
                 Picker("Model", selection: $assistantModel.model) {
@@ -45,7 +46,8 @@ struct GeminiAPIAssistantSettingsView: View {
                         Text(model).tag(model)
                     }
                 }
-            } header: { Text("Model")
+            } header: {
+                Text("Model")
             } footer: {
                 VStack(alignment: .leading) {
                     Text("Please check the available models and features for your plan.")
@@ -58,12 +60,14 @@ struct GeminiAPIAssistantSettingsView: View {
                 }
                 .padding(.bottom, 10)
             }
-            
+
             // Tools Section
             Section {
                 Toggle("Enable Web Search", isOn: $assistantModel.webSearch)
                     .tint(.accent)
-            } header: { Text("Tools") }
+            } header: {
+                Text("Tools")
+            }
         }
         .onChange(of: assistantModel) { saveSettings() }
         .onAppear {
@@ -71,11 +75,11 @@ struct GeminiAPIAssistantSettingsView: View {
             Task { await updateAvailableModels() }
         }
     }
-    
+
     private func saveSettings() {
         assistantModel.save()
     }
-    
+
     private func updateAvailableModels() async {
         await GeminiAPIAssistantModel.getModels()
         availableModels = GeminiAPIAssistantModel.availableModels

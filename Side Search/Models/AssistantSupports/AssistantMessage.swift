@@ -16,7 +16,7 @@ struct AssistantMessage: Identifiable, Codable {
         case assistant
         case system
         case unknown
-        
+
         var displayName: LocalizedStringResource {
             switch self {
             case .user:
@@ -30,12 +30,12 @@ struct AssistantMessage: Identifiable, Codable {
             }
         }
     }
-    
+
     struct Source: Codable {
         var title: String
         var url: URL
     }
-    
+
     var id = UUID()
     var from: From
     var content: String
@@ -55,7 +55,7 @@ extension AssistantMessage.From {
             return .unknown
         }
     }
-    
+
     static func fromSBMessageFrom(_ sbFrom: SBMessage.From) -> AssistantMessage.From {
         switch sbFrom {
         case .user:
@@ -76,12 +76,14 @@ extension AssistantMessage {
             id: id,
             from: from.toSBMessageFrom(),
             content: content,
-            sources: sources.isEmpty ? nil : sources.map { source in
-                SBMessage.Source(title: source.title, url: source.url)
-            }
+            sources: sources.isEmpty
+                ? nil
+                : sources.map { source in
+                    SBMessage.Source(title: source.title, url: source.url)
+                }
         )
     }
-    
+
     static func fromSBMessage(_ sbMessage: SBMessage) -> AssistantMessage {
         AssistantMessage(
             id: sbMessage.id,

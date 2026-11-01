@@ -11,7 +11,7 @@ import Speech
 
 final class UserSettings: ObservableObject {
     static let shared = UserSettings()
-    private init() { }
+    private init() {}
 
     private enum Keys {
         static let currentAssistant = "currentAssistant"
@@ -29,22 +29,24 @@ final class UserSettings: ObservableObject {
 
     @Published var currentAssistant: AssistantType = {
         if let rawValue = UserDefaults.standard.string(forKey: Keys.currentAssistant),
-           let storedAssistant = AssistantType(rawValue: rawValue) {
+            let storedAssistant = AssistantType(rawValue: rawValue)
+        {
             return storedAssistant
         }
         return .default
-    }() {
+    }()
+    {
         didSet {
             UserDefaults.standard.set(currentAssistant.rawValue, forKey: Keys.currentAssistant)
         }
     }
-    
+
     @Published var chatHistoryEnabled: Bool = UserDefaults.standard.bool(forKey: Keys.chatHistoryEnabled) {
         didSet {
             UserDefaults.standard.set(chatHistoryEnabled, forKey: Keys.chatHistoryEnabled)
         }
     }
-    
+
     // MARK: - Speech Recognition Settings
 
     @Published var speechLocale: Locale? = {
@@ -65,7 +67,8 @@ final class UserSettings: ObservableObject {
             }
 
             if let languageCode = preferredLocale.language.languageCode?.identifier,
-               languageCode == "en" {
+                languageCode == "en"
+            {
                 let enUSLocale = Locale(identifier: "en-US")
                 if supportedLocales.contains(enUSLocale) {
                     UserDefaults.standard.set(enUSLocale.identifier, forKey: Keys.speechLocale)
@@ -75,7 +78,8 @@ final class UserSettings: ObservableObject {
         }
 
         return nil
-    }() {
+    }()
+    {
         didSet {
             if let locale = speechLocale {
                 UserDefaults.standard.set(locale.identifier, forKey: Keys.speechLocale)
@@ -96,56 +100,58 @@ final class UserSettings: ObservableObject {
             UserDefaults.standard.set(startWithMicMuted, forKey: Keys.startWithMicMuted)
         }
     }
-    
+
     @Published var allowBluetoothMic: Bool = UserDefaults.standard.bool(forKey: Keys.allowBluetoothMic) {
         didSet {
             UserDefaults.standard.set(allowBluetoothMic, forKey: Keys.allowBluetoothMic)
         }
     }
-    
+
     // MARK: - URL Settings
-    
+
     enum URLOpeningOption: String, CaseIterable, Identifiable, AppEnum {
         case inAppBrowser, defaultApp
-        
+
         var id: String { self.rawValue }
-        
+
         static var `default`: Self {
             return .inAppBrowser
         }
-        
+
         static var typeDisplayRepresentation: TypeDisplayRepresentation {
             TypeDisplayRepresentation(name: "URL Opening Option")
         }
-        
-        static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
+
+        static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
             .inAppBrowser: "In-App Browser",
-            .defaultApp: "Default App"
+            .defaultApp: "Default App",
         ]
-        
+
         var displayName: LocalizedStringResource {
             return Self.caseDisplayRepresentations[self]?.title ?? ""
         }
     }
-    
+
     @Published var openURLsIn: URLOpeningOption = {
         if let rawValue = UserDefaults.standard.string(forKey: Keys.openURLsIn),
-           let option = URLOpeningOption(rawValue: rawValue) {
+            let option = URLOpeningOption(rawValue: rawValue)
+        {
             return option
         }
-        
+
         if let oldOption = SettingsMigration.migrateOpenURLsIn() {
             UserDefaults.standard.set(oldOption.rawValue, forKey: Keys.openURLsIn)
             return oldOption
         }
-        
+
         return .default
-    }() {
+    }()
+    {
         didSet {
             UserDefaults.standard.set(openURLsIn.rawValue, forKey: Keys.openURLsIn)
         }
     }
-    
+
     // MARK: - Background Settings
 
     @Published var continueInBackground: Bool = {
@@ -154,7 +160,8 @@ final class UserSettings: ObservableObject {
             return true
         }
         return UserDefaults.standard.bool(forKey: Keys.continueInBackground)
-    }() {
+    }()
+    {
         didSet {
             UserDefaults.standard.set(continueInBackground, forKey: Keys.continueInBackground)
         }
@@ -165,21 +172,23 @@ final class UserSettings: ObservableObject {
             UserDefaults.standard.set(standbyInBackground, forKey: Keys.standbyInBackground)
         }
     }
-    
+
     // MARK: - Other Settings
-    
+
     @Published var soundEffectsMode: SoundEffectService.Mode = {
         if let rawValue = UserDefaults.standard.string(forKey: Keys.soundEffectsMode),
-           let mode = SoundEffectService.Mode(rawValue: rawValue) {
+            let mode = SoundEffectService.Mode(rawValue: rawValue)
+        {
             return mode
         }
         return .default
-    }() {
+    }()
+    {
         didSet {
             UserDefaults.standard.set(soundEffectsMode.rawValue, forKey: Keys.soundEffectsMode)
         }
     }
-    
+
     @Published var disableMarkdownRendering: Bool = UserDefaults.standard.bool(forKey: Keys.disableMarkdownRendering) {
         didSet {
             UserDefaults.standard.set(disableMarkdownRendering, forKey: Keys.disableMarkdownRendering)

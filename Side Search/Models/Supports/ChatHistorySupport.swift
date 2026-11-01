@@ -20,23 +20,23 @@ final class ChatHistorySupport {
             messages.first?.content ?? ""
         }
     }
-    
+
     // MARK: - SwiftData Model
     @Model
     final class ChatEntity {
         @Attribute(.unique) var id: UUID
         var date: Date
         var assistantType: AssistantType
-        var messages: Data // Store as Data (JSON)
-        
+        var messages: Data  // Store as Data (JSON)
+
         // Convert from Chat
-        init(from chat: Chat) {
+        init(from chat: Chat) throws {
             self.id = chat.id
             self.date = chat.date
             self.assistantType = chat.assistantType
-            self.messages = (try? JSONEncoder().encode(chat.messages)) ?? Data()
+            self.messages = try JSONEncoder().encode(chat.messages)
         }
-        
+
         // Convert to Chat
         func toChat() -> Chat {
             return Chat(
@@ -47,62 +47,65 @@ final class ChatHistorySupport {
             )
         }
     }
-    
+
     private static let container: ModelContainer? = try? ModelContainer(for: ChatEntity.self)
-    
-    private static func makeContext() -> ModelContext? {
-        guard let container else { return nil }
-        return ModelContext(container)
+
+    private static var context: ModelContext? {
+        container?.mainContext
     }
-    
+
     private static func fetchRecords(in context: ModelContext) -> [ChatEntity] {
         let descriptor = FetchDescriptor<ChatEntity>(
             sortBy: [SortDescriptor(\.date, order: .reverse)]
         )
-        
+
         return (try? context.fetch(descriptor)) ?? []
     }
-    
-    private static func getRecord(_ id: UUID, in context: ModelContext) -> ChatEntity? {
-        return fetchRecords(in: context).first(where: { $0.id == id })
+
+    private static func getRecord(_ id: UUID, in context: ModelContext) throws -> ChatEntity? {
+        let chatID = id
+        var descriptor = FetchDescriptor<ChatEntity>(
+            predicate: #Predicate { $0.id == chatID }
+        )
+        descriptor.fetchLimit = 1
+        return try context.fetch(descriptor).first
     }
-    
+
     // MARK: - Public Methods
-    
+
     static func loadChats() -> [Chat] {
-        guard let context = makeContext() else { return [] }
-        
+        guard let context else { return [] }
+
         let records = fetchRecords(in: context)
-        
+
         return records.compactMap { $0.toChat() }
     }
-    
-    static func save(_ chat: Chat) {
-        guard let context = makeContext() else { return }
-        let newRecord = ChatEntity(from: chat)
-        
-        // If id already exists, delete the old record
-        if let oldRecord = getRecord(newRecord.id, in: context) {
+
+    static func save(_ chat: Chat) throws {
+        guard let context else { return }
+        let newRecord = try ChatEntity(from: chat)
+
+        if let oldRecord = try getRecord(newRecord.id, in: context) {
             context.delete(oldRecord)
         }
-        
+
         context.insert(newRecord)
-        try? context.save()
+        try context.save()
     }
-    
-    static func delete(_ chat: UUID) {
-        guard let context = makeContext() else { return }
-        
-        if let record = getRecord(chat, in: context) {
+
+    static func delete(_ chat: UUID) throws {
+        guard let context else { return }
+
+        if let record = try getRecord(chat, in: context) {
             context.delete(record)
-            try? context.save()
+            try context.save()
         }
     }
-    
-    static func clearAll() {
-        guard let context = makeContext() else { return }
-        
+
+    static func clearAll() throws {
+        guard let context else { return }
+
         fetchRecords(in: context).forEach { context.delete($0) }
-        try? context.save()
+        try context.save()
     }
 }

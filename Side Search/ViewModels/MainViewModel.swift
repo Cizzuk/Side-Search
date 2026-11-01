@@ -6,32 +6,32 @@
 //
 
 import Combine
-import UIKit
 import SwiftUI
+import UIKit
 
 class MainViewModel: ObservableObject {
     private let appFlags = AppFlags.shared
     private let userSettings = UserSettings.shared
-    
+
     @Published var showAssistant = false
     @Published var showSafariView = false
     @Published var safariViewURL: URL?
     @Published var showTmpCurtain = false
-    
+
     @Published var path: Route? = .assistantSettings
-    
+
     enum Modals {
         case assistant
         case safari
         case tmpCurtain
     }
-    
+
     enum Route: Hashable {
         case assistantSettings
         case help, chatHistory
         case about, changeIcon
     }
-    
+
     func showModal(_ modal: Modals) {
         closeAllModals()
         switch modal {
@@ -43,15 +43,15 @@ class MainViewModel: ObservableObject {
             showTmpCurtain = true
         }
     }
-    
+
     func closeAllModals() {
         showAssistant = false
         showSafariView = false
         showTmpCurtain = false
     }
-    
+
     // MARK: - Lifecycle
-    
+
     func onChange(scenePhase: ScenePhase) {
         switch scenePhase {
         case .active:
@@ -64,28 +64,28 @@ class MainViewModel: ObservableObject {
             break
         }
     }
-    
+
     // MARK: - Assistant
-    
+
     func activateAssistant() {
         guard !appFlags.isAssistantActive else { return }
         // Close sheets and covers
         closeAllModals()
-        
+
         // Check current assistant type
         if userSettings.currentAssistant != .urlBased {
             showModal(.assistant)
             return
         }
-        
+
         let searchEngine = URLBasedAssistantModel.load()
-        
+
         // Check if query input is needed
         if searchEngine.needQueryInput() {
             showModal(.assistant)
             return
         }
-        
+
         if let url = searchEngine.makeSearchURL() {
             switch userSettings.openURLsIn {
             case .inAppBrowser:

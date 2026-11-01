@@ -12,22 +12,23 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     static var assistantDescription = LocalizedStringResource("This is an assistant that can converse using Foundation Models provided by Apple. To use it, Apple Intelligence must be available on your device. This assistant cannot search the internet.")
     static var assistantImage = Image(systemName: "apple.intelligence")
     static var assistantGradient = Gradient(colors: [
-        Color(red: 201/255, green: 89/255,  blue: 221/255),
-        Color(red: 8/255,   green: 148/255, blue: 255/255),
-        Color(red: 255/255, green: 144/255, blue: 4/255),
-        Color(red: 255/255, green: 46/255,  blue: 84/255),
-        Color(red: 201/255, green: 89/255,  blue: 221/255),
+        Color(red: 201 / 255, green: 89 / 255, blue: 221 / 255),
+        Color(red: 8 / 255, green: 148 / 255, blue: 255 / 255),
+        Color(red: 255 / 255, green: 144 / 255, blue: 4 / 255),
+        Color(red: 255 / 255, green: 46 / 255, blue: 84 / 255),
+        Color(red: 201 / 255, green: 89 / 255, blue: 221 / 255),
     ])
     static var assistantShapeStyle: AnyShapeStyle {
-        AnyShapeStyle(AngularGradient(
-            gradient: Self.assistantGradient,
-            center: .center
-        ))
+        AnyShapeStyle(
+            AngularGradient(
+                gradient: Self.assistantGradient,
+                center: .center
+            ))
     }
-    
+
     static var assistantIsAI: Bool = true
     static var backgroundSupports: Bool = true
-    
+
     static func isAvailable() -> Bool {
         switch SystemLanguageModel.default.availability {
         case .available:

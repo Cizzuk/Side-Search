@@ -12,7 +12,7 @@ import UIKit
 final class AppFlags: ObservableObject {
     static let shared = AppFlags()
     private init() {}
-    
+
     @Published var isAssistantActive: Bool = false
 }
 
@@ -21,7 +21,7 @@ struct SideSearch: App {
     init() {
         SettingsMigration.migrateChatHistory()
     }
-    
+
     var body: some Scene {
         AssistiveAccess {
             NavigationStack {
@@ -52,7 +52,7 @@ struct SideSearch: App {
             }
         }
     }
-    
+
     static func validateAppState() {
         if !AppFlags.shared.isAssistantActive {
             UIApplication.shared.isIdleTimerDisabled = false

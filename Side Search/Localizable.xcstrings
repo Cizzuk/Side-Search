@@ -539,6 +539,16 @@
         }
       }
     },
+    "Duck.ai" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duck.ai"
+          }
+        }
+      }
+    },
     "DuckDuckGo" : {
       "localizations" : {
         "ja" : {
@@ -677,16 +687,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "対象: \"%@\""
-          }
-        }
-      }
-    },
-    "Gemini" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gemini"
           }
         }
       }
@@ -1924,12 +1924,12 @@
         }
       }
     },
-    "百度AI搜索" : {
+    "百度文心助手" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "バイドゥAI検索"
+            "value" : "百度文心助手"
           }
         }
       }

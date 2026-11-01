@@ -6,21 +6,21 @@
 //
 
 import SwiftUI
-import Translation
 import Textual
+import Translation
 
 struct MessagesView: View {
     var message: AssistantMessage
     var openURL: (URL) -> Void
-    
+
     @Environment(\.accessibilityAssistiveAccessEnabled) private var isAssistiveAccessEnabled
     @Environment(\.accessibilityShowBorders) private var showBorders
-    
+
     @ObservedObject private var userSettings = UserSettings.shared
-    
+
     @State private var isCopied: Bool = false
     @State private var showTranslation: Bool = false
-    
+
     func copyMessage() {
         UIPasteboard.general.string = message.content
         UINotificationFeedbackGenerator().notificationOccurred(.success)
@@ -29,23 +29,24 @@ struct MessagesView: View {
             isCopied = false
         }
     }
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 Text(message.from.displayName)
                     .font(.headline)
                 Spacer()
-                
+
                 if !isAssistiveAccessEnabled {
                     HStack(spacing: 20) {
                         Button(action: { copyMessage() }) {
-                            Label("Copy Message to Clipboard",
-                                  systemImage: isCopied ? "checkmark" : "document.on.document")
+                            Label(
+                                "Copy Message to Clipboard",
+                                systemImage: isCopied ? "checkmark" : "document.on.document")
                         }
                         .disabled(isCopied)
                         .animation(.default, value: isCopied)
-                        
+
                         Button(action: { showTranslation = true }) {
                             Label("Translate Message", systemImage: "translate")
                         }
@@ -55,9 +56,9 @@ struct MessagesView: View {
                 }
             }
             .foregroundStyle(.secondary)
-            
+
             Spacer(minLength: 15)
-            
+
             if userSettings.disableMarkdownRendering {
                 Text(message.content)
                     .textSelection(.enabled)
@@ -65,17 +66,19 @@ struct MessagesView: View {
                 StructuredText(markdown: message.content, syntaxExtensions: [.math])
                     .textual.textSelection(.enabled)
                     .textual.structuredTextStyle(TextualSideStyle())
-                    .environment(\.openURL, OpenURLAction { url in
-                        openURL(url)
-                        return .handled
-                    })
+                    .environment(
+                        \.openURL,
+                        OpenURLAction { url in
+                            openURL(url)
+                            return .handled
+                        })
             }
-            
+
             // MARK: - Sources
-            
+
             if !message.sources.isEmpty && !isAssistiveAccessEnabled {
                 Spacer(minLength: 15)
-                
+
                 ForEach(message.sources, id: \.url) { source in
                     Button(action: { openURL(source.url) }) {
                         Label(source.title, systemImage: "link")
@@ -91,12 +94,12 @@ struct MessagesView: View {
                         Button(action: { UIPasteboard.general.string = source.url.absoluteString }) {
                             Label("Copy URL", systemImage: "document.on.document")
                         }
-                        
+
                         // Share URL
                         ShareLink(item: source.url) {
                             Label("Share URL", systemImage: "square.and.arrow.up")
                         }
-                        
+
                         // Default Browser
                         Button(action: { UIApplication.shared.open(source.url) }) {
                             Label("Open in Default App", systemImage: "arrow.up.forward.app")

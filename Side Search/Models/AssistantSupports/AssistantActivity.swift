@@ -10,11 +10,11 @@ import Foundation
 
 nonisolated struct AssistantActivityAttributes: ActivityAttributes {
     enum AssistantState: String, Codable, Hashable {
-        case listening          // Speech recognition is active
-        case waitingForResponse // Waiting for assistant's response
-        case pausingRecognition // Speech recognition is paused but microphone is still active
-        case off                // Microphone is off and not listening
-        
+        case listening  // Speech recognition is active
+        case waitingForResponse  // Waiting for assistant's response
+        case pausingRecognition  // Speech recognition is paused but microphone is still active
+        case off  // Microphone is off and not listening
+
         var description: LocalizedStringResource {
             switch self {
             case .listening:
@@ -27,7 +27,7 @@ nonisolated struct AssistantActivityAttributes: ActivityAttributes {
                 return "Assistant is Off"
             }
         }
-        
+
         var isActive: Bool {
             switch self {
             case .listening, .waitingForResponse:
@@ -36,7 +36,7 @@ nonisolated struct AssistantActivityAttributes: ActivityAttributes {
                 return false
             }
         }
-        
+
         var systemImage: String {
             switch self {
             case .listening:
@@ -50,7 +50,7 @@ nonisolated struct AssistantActivityAttributes: ActivityAttributes {
             }
         }
     }
-    
+
     struct ContentState: Codable, Hashable {
         var state: AssistantState = .listening
     }
@@ -60,7 +60,7 @@ class AssistantActivityManager {
     static func isActive() -> Bool {
         return !Activity<AssistantActivityAttributes>.activities.isEmpty
     }
-    
+
     static func start(
         endDate: Date? = nil,
         state: AssistantActivityAttributes.ContentState
@@ -70,14 +70,14 @@ class AssistantActivityManager {
             return
         }
         endAll()
-        
+
         let attributes = AssistantActivityAttributes()
-        
+
         let content = ActivityContent(
             state: state,
             staleDate: endDate
         )
-        
+
         do {
             let _ = try Activity.request(
                 attributes: attributes,
@@ -88,15 +88,15 @@ class AssistantActivityManager {
             print("Failed to start assistant activity: \(error)")
         }
     }
-    
+
     static func update(state: AssistantActivityAttributes.ContentState) {
         let activities = Activity<AssistantActivityAttributes>.activities
-        
+
         let content = ActivityContent(
             state: state,
             staleDate: nil
         )
-        
+
         Task {
             for activity in activities {
                 guard activity.content.state != state else { continue }
@@ -104,10 +104,10 @@ class AssistantActivityManager {
             }
         }
     }
-    
+
     static func endAll() {
         let activities = Activity<AssistantActivityAttributes>.activities
-        
+
         let semaphore = DispatchSemaphore(value: 0)
         Task.detached(priority: .userInitiated) {
             for activity in activities {

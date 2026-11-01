@@ -13,21 +13,21 @@ class UserNotificationSupport {
         let settings = await center.notificationSettings()
         return settings.authorizationStatus
     }
-    
+
     static func isAvailable() async -> Bool {
         let authorizationStatus = await authorizationStatus()
-        
+
         if authorizationStatus == .notDetermined || authorizationStatus == .authorized {
             return true
         }
-        
+
         return false
     }
-    
+
     static func requestAuthorization() async -> Bool {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
-        
+
         if settings.authorizationStatus == .notDetermined {
             do {
                 try await center.requestAuthorization(options: [.alert])
@@ -44,16 +44,16 @@ class UserNotificationSupport {
 
         return false
     }
-    
+
     static func sendAssistantMessage(message: AssistantMessage) async {
         let content = UNMutableNotificationContent()
         content.title = String(localized: message.from.displayName)
         content.body = message.content
         content.sound = .none
         content.interruptionLevel = .timeSensitive
-        
+
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-        
+
         let notificationCenter = UNUserNotificationCenter.current()
         do {
             try await notificationCenter.add(request)

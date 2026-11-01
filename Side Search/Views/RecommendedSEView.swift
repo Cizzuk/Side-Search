@@ -10,53 +10,61 @@ import SwiftUI
 struct SearchEnginePresetsView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var searchEngine: URLBasedAssistantModel
-    
+
     private let aiCSEList = SearchEnginePresets.aiAssistants
     private let normalCSEList = SearchEnginePresets.normalSearchEngines
-    
+
     var body: some View {
         NavigationStack {
             List {
                 // AI Assistant List
                 if !aiCSEList.isEmpty {
                     Section {
-                        ForEach(aiCSEList.indices, id: \.self, content: { index in
-                            let cse = aiCSEList[index]
-                            PresetSEButton(action: {
-                                searchEngine.url = cse.url
-                                dismiss()
-                            }, cse: cse)
-                        })
-                    } header: { Text("AI Assistants") }
+                        ForEach(
+                            aiCSEList.indices, id: \.self,
+                            content: { index in
+                                let cse = aiCSEList[index]
+                                PresetSEButton(
+                                    action: {
+                                        searchEngine.url = cse.url
+                                        dismiss()
+                                    }, cse: cse)
+                            })
+                    } header: {
+                        Text("AI Assistants")
+                    }
                 }
-                
+
                 // Normal Search Engine List
                 Section {
-                    ForEach(normalCSEList.indices, id: \.self, content: { index in
-                        let cse = normalCSEList[index]
-                        PresetSEButton(action: {
-                            searchEngine.url = cse.url
-                            dismiss()
-                        }, cse: cse)
-                    })
-                } header: { Text("Search Engines") }
+                    ForEach(
+                        normalCSEList.indices, id: \.self,
+                        content: { index in
+                            let cse = normalCSEList[index]
+                            PresetSEButton(
+                                action: {
+                                    searchEngine.url = cse.url
+                                    dismiss()
+                                }, cse: cse)
+                        })
+                } header: {
+                    Text("Search Engines")
+                }
             }
             .navigationTitle("Search URL Presets")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", systemImage: "xmark") {
-                        dismiss()
-                    }
+                    Button(role: .cancel, action: { dismiss() })
                 }
             }
         }
     }
-    
+
     struct PresetSEButton: View {
         let action: () -> Void
         let cse: SearchEnginePresets.Preset
-        
+
         var body: some View {
             Button {
                 action()
@@ -75,4 +83,3 @@ struct SearchEnginePresetsView: View {
         }
     }
 }
-

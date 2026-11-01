@@ -10,7 +10,7 @@ import SwiftUI
 struct SideBridgeAssistantSettingsView: View {
     @State private var assistantModel = SideBridgeAssistantModel.load()
     @State private var authKey: String = SideBridgeAssistantModel.loadAuthKey()
-    
+
     var body: some View {
         Group {
             // Endpoint
@@ -32,7 +32,7 @@ struct SideBridgeAssistantSettingsView: View {
                 }
                 .padding(.bottom, 10)
             }
-            
+
             // Auth Key
             Section {
                 SecureField("Authentication Key", text: $authKey)
@@ -41,7 +41,8 @@ struct SideBridgeAssistantSettingsView: View {
                     .textInputAutocapitalization(.never)
                     .environment(\.layoutDirection, .leftToRight)
                     .submitLabel(.done)
-            } header: { Text("Authentication Key")
+            } header: {
+                Text("Authentication Key")
             } footer: {
                 Text("Enter the authentication key if the endpoint requires authentication. Leave it blank if not required.")
                     .padding(.bottom, 10)
@@ -57,7 +58,7 @@ struct SideBridgeAssistantSettingsView: View {
             saveSettings()
         }
     }
-    
+
     private func saveSettings() {
         assistantModel.save()
     }

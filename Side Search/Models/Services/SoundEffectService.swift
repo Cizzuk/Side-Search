@@ -5,46 +5,46 @@
 //  Created by Cizzuk on 2026/03/24.
 //
 
-import AppIntents
 import AVFoundation
+import AppIntents
 import CoreHaptics
 import UIKit
 
 final class SoundEffectService {
     static let shared = SoundEffectService()
-    
+
     var engine: CHHapticEngine?
-    
+
     enum Mode: String, CaseIterable, Identifiable, AppEnum {
         case always
         case backgroundOnly
         case off
-        
+
         var id: String { self.rawValue }
-        
+
         static var `default`: Mode {
             return .backgroundOnly
         }
-        
+
         static var typeDisplayRepresentation: TypeDisplayRepresentation {
             TypeDisplayRepresentation(name: "Sound Effects Mode")
         }
-        
-        static let caseDisplayRepresentations: [Self : DisplayRepresentation] = [
+
+        static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
             .always: "Always On",
             .backgroundOnly: "Background Only",
-            .off: "Off"
+            .off: "Off",
         ]
-        
+
         var displayName: LocalizedStringResource {
             return Self.caseDisplayRepresentations[self]?.title ?? ""
         }
     }
-    
+
     enum Sounds {
         case startRecognition
         case completeRecognition
-        
+
         var filename: String {
             switch self {
             case .startRecognition:
@@ -53,7 +53,7 @@ final class SoundEffectService {
                 return "completeRecognition"
             }
         }
-        
+
         var filename_nosound: String {
             switch self {
             case .startRecognition:
@@ -63,7 +63,7 @@ final class SoundEffectService {
             }
         }
     }
-    
+
     private init() {
         do {
             let session = AVAudioSession.sharedInstance()
@@ -72,14 +72,14 @@ final class SoundEffectService {
             print("CHHapticEngine Creation Error: \(error)")
         }
     }
-    
+
     func play(_ sound: SoundEffectService.Sounds) {
         Task {
             guard let engine = engine else { return }
-            
+
             let mode = UserSettings.shared.soundEffectsMode
             let filepath: String?
-            
+
             switch mode {
             case .always:
                 filepath = Bundle.main.path(forResource: sound.filename, ofType: "ahap")
@@ -92,12 +92,12 @@ final class SoundEffectService {
             case .off:
                 filepath = Bundle.main.path(forResource: sound.filename_nosound, ofType: "ahap")
             }
-            
+
             guard let filepath else {
                 print("AHAP file not found for sound: \(sound).")
                 return
             }
-            
+
             do {
                 try engine.start()
                 try engine.playPattern(from: URL(fileURLWithPath: filepath))
