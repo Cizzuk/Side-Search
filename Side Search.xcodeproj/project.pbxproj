@@ -616,8 +616,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/anthropics/ClaudeForFoundationModels.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.3;
 			};
 		};
 		BE26D5132F57B15F00E28B78 /* XCRemoteSwiftPackageReference "swift-merge-codable" */ = {
@@ -633,7 +633,7 @@
 			repositoryURL = "https://github.com/gonzalezreal/textual";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.3.1;
+				minimumVersion = 0.5.0;
 			};
 		};
 		BE7FC5122F9A4FD400452820 /* XCRemoteSwiftPackageReference "swift-sidebridge" */ = {
