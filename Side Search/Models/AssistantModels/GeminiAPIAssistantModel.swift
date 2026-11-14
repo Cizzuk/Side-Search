@@ -86,7 +86,9 @@ extension GeminiAPIAssistantModel {
                 availableModels = modelNames.sorted()
             }
         } catch {
-            print("Error fetching Gemini models: \(error)")
+            #if DEBUG
+                print("Error fetching Gemini models: \(error)")
+            #endif
             await MainActor.run {
                 availableModels = []
             }
