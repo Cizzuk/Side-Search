@@ -91,6 +91,15 @@ class SideBridgeAssistantService: BaseAssistantService {
     // MARK: - Override Methods
 
     override func assistantInitialize() {
+        guard let scheme = URL(string: assistantModel.endpoint)?.scheme?.lowercased(),
+            scheme == "http" || scheme == "https"
+        else {
+            let errorMessage = "Only http and https are allowed."
+            addMessage(AssistantMessage(from: .system, content: errorMessage))
+            currentOptions.endSession = true
+            return
+        }
+
         Task { @MainActor in
             do {
                 let request = createRequest()
