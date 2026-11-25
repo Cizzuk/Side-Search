@@ -20,4 +20,16 @@ class GeoHelper {
             return locale.language.languageCode?.identifier == languageCode
         }
     }
+
+    static func isChinaMainlandStrictly() -> Bool {
+        if currentRegion?.lowercased() == "cn" {
+            return true
+        }
+
+        if StorefrontHelper.shared.currentRegion?.lowercased() == "chn" {
+            return true
+        }
+
+        return false
+    }
 }

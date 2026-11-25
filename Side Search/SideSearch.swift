@@ -20,6 +20,7 @@ final class AppFlags: ObservableObject {
 struct SideSearch: App {
     init() {
         SettingsMigration.migrateChatHistory()
+        _ = StorefrontHelper.shared  // init
     }
 
     var body: some Scene {
