@@ -15,7 +15,7 @@ class SearchEnginePresets {
     }
 
     static var defaultSearchEngine: Preset {
-        if GeoHelper.currentRegion == "CN" {
+        if GeoHelper.isChinaMainlandStrictly() {
             return Preset(
                 name: "百度文心助手",
                 url: "https://wenxin.baidu.com/search?query=%s",
@@ -30,7 +30,7 @@ class SearchEnginePresets {
 
     static var aiAssistants: [Preset] {
         var aiCSEs: [Preset] = []
-        if GeoHelper.currentRegion != "CN" {
+        if GeoHelper.isChinaMainlandStrictly() {
             aiCSEs.append(contentsOf: [
                 Preset(
                     name: "ChatGPT",
