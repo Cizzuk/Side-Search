@@ -21,8 +21,23 @@ struct SetAssistant: AppIntent {
         Summary("Set Assistant to \(\.$type)")
     }
 
+    enum PerformError: LocalizedError {
+        case notAvailable
+
+        var errorDescription: String? {
+            switch self {
+            case .notAvailable:
+                return String(localized: "This assistant is not available.")
+            }
+        }
+    }
+
     @MainActor
     func perform() async throws -> some IntentResult {
+        guard type.DescriptionProviderType.isAvailable() else {
+            throw PerformError.notAvailable
+        }
+
         UserSettings.shared.currentAssistant = type
         return .result()
     }

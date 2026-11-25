@@ -20,6 +20,7 @@ final class AppFlags: ObservableObject {
 struct SideSearch: App {
     init() {
         SettingsMigration.migrateChatHistory()
+        _ = StorefrontHelper.shared  // init
     }
 
     var body: some Scene {
@@ -32,14 +33,6 @@ struct SideSearch: App {
         WindowGroup {
             MainView()
                 .scrollDismissesKeyboard(.interactively)
-                .onOpenURL { url in
-                    switch url.host {
-                    case "assistant":
-                        NotificationCenter.default.post(name: .assistantDidActivate, object: nil)
-                    default:
-                        break
-                    }
-                }
         }
         .commands {
             CommandGroup(replacing: .newItem) {

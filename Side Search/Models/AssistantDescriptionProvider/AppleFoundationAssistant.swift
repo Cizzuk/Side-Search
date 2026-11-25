@@ -30,6 +30,10 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     static var backgroundSupports: Bool = true
 
     static func isAvailable() -> Bool {
+        if GeoHelper.isChinaMainland() {
+            return false
+        }
+
         switch SystemLanguageModel.default.availability {
         case .available:
             return true

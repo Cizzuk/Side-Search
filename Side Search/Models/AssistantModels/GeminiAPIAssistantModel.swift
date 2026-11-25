@@ -50,9 +50,14 @@ extension GeminiAPIAssistantModel {
     }
 
     static func getModels(force: Bool = false) async {
+        guard GeminiAPIAssistant.isAvailable() else {
+            availableModels = []
+            return
+        }
+
         let apiKey = loadAPIKey()
         guard !apiKey.isEmpty,
-            let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models?key=\(apiKey)")
+            let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models")
         else {
             availableModels = []
             return
@@ -62,9 +67,12 @@ extension GeminiAPIAssistantModel {
             return
         }
 
+        var request = URLRequest(url: url)
+        request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
+
         do {
             // Fetch models
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let (data, _) = try await URLSession.shared.data(for: request)
             guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                 let models = json["models"] as? [[String: Any]]
             else { return }
@@ -83,7 +91,9 @@ extension GeminiAPIAssistantModel {
                 availableModels = modelNames.sorted()
             }
         } catch {
-            print("Error fetching Gemini models: \(error)")
+            #if DEBUG
+                print("Error fetching Gemini models: \(error)")
+            #endif
             await MainActor.run {
                 availableModels = []
             }

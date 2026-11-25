@@ -32,7 +32,7 @@ struct ClaudeAPIAssistant: AssistantDescriptionProvider {
     static var backgroundSupports: Bool = true
 
     static func isAvailable() -> Bool {
-        if GeoHelper.currentRegion == "CN" {
+        if GeoHelper.isChinaMainland() {
             return false
         }
 
