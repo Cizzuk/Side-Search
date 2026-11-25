@@ -50,7 +50,7 @@ extension GeminiAPIAssistantModel {
     }
 
     static func getModels(force: Bool = false) async {
-        guard !GeoHelper.isChinaMainlandStrictly() else {
+        guard !GeoHelper.isChinaMainland() else {
             availableModels = []
             return
         }

@@ -30,7 +30,7 @@ struct AppleFoundationAssistant: AssistantDescriptionProvider {
     static var backgroundSupports: Bool = true
 
     static func isAvailable() -> Bool {
-        if GeoHelper.isChinaMainlandStrictly() {
+        if GeoHelper.isChinaMainland() {
             return false
         }
 

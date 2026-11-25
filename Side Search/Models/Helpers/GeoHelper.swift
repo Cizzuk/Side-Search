@@ -21,7 +21,7 @@ class GeoHelper {
         }
     }
 
-    static func isChinaMainlandStrictly() -> Bool {
+    static func isChinaMainland() -> Bool {
         if currentRegion?.lowercased() == "cn" {
             return true
         }
