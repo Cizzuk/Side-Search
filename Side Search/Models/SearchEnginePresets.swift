@@ -30,7 +30,7 @@ class SearchEnginePresets {
 
     static var aiAssistants: [Preset] {
         var aiCSEs: [Preset] = []
-        if GeoHelper.isChinaMainland() {
+        if !GeoHelper.isChinaMainland() {
             aiCSEs.append(contentsOf: [
                 Preset(
                     name: "ChatGPT",
