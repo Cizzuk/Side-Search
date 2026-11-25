@@ -29,11 +29,7 @@ final class StorefrontHelper {
         }
     }
 
-    deinit {
-        self.storefrontObserver?.cancel()
-    }
-
-    var currentRegion: String? {
+    private(set) var currentRegion: String? {
         didSet {
             if let currentRegion, currentRegion != oldValue {
                 UserDefaults.standard.set(currentRegion, forKey: Self.lastStorefrontUserDefaultsKey)
