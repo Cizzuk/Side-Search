@@ -50,6 +50,11 @@ extension GeminiAPIAssistantModel {
     }
 
     static func getModels(force: Bool = false) async {
+        guard !GeoHelper.isChinaMainlandStrictly() else {
+            availableModels = []
+            return
+        }
+
         let apiKey = loadAPIKey()
         guard !apiKey.isEmpty,
             let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models")
